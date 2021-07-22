@@ -242,12 +242,12 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
                 message.channel.send("The game has been resetted, The impostor was " + Amogus.getSussier())
                 Amogus.reset()
             } else {
-                message.channel.send("I need you to confirm this, type `%crew reset yes`")
+                message.channel.send("I need you to confirm this, type `&crew reset yes`")
             }
             return
         } 
         default: {
-            message.channel.send("`%crew examine (color)` to examine a crewmate, the impostor might find you though...\n`%crew eject (color)` to eject a crewmate out, you can only eject once\n`%crew reset yes` to reset the game")
+            message.channel.send("`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n`&crew eject (color)` to eject a crewmate out, you can only eject once\n`&crew reset yes` to reset the game")
             return
         }
     }
@@ -258,6 +258,6 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
     } else {
         message.channel.send(Amogus.turns + " turns left.")
     }
-}, [new RequiredArg(0, "`%crew examine (color)` to examine a crewmate, the impostor might find you though...\n`%crew eject (color)` to eject a crewmate out, you can only eject once\n`%crew reset yes` to reset the game"),
+}, [new RequiredArg(0, "`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n`&crew eject (color)` to eject a crewmate out, you can only eject once\n`&crew reset yes` to reset the game"),
 new RequiredArg(1, "You need to choose the color of the crewmate if you want to do anything to them, " +
     "possible options are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.")])
