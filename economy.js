@@ -5,10 +5,6 @@ class EconomySystem {
         this.user = username
     }
 
-    check() {
-
-    }
-
     give(amount, message) {
         this.money = this.money + amount
         if (message) {
@@ -34,7 +30,13 @@ class EconomySystem {
 
 Economy = {
     list: {},
-    check: (user) => {
+    getEconomySystem(user) {
+        if (!Economy.list[user.id]){
+            Economy.list[user.id] = new getEconomySystem(user.username)
+        }
+        return Economy.list[user.id]
+    }
+    /*check: (user) => {
         if (!Economy.list[user.id]) {
             Economy.list[user.id] = new EconomySystem(user.username)
         }
@@ -50,5 +52,5 @@ Economy = {
         if (Economy.list[user.id].check()) {
             Economy.list[user.id].take(amount, message)
         }
-    } 
+    }*/
 }

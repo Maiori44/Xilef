@@ -136,7 +136,7 @@ Commands.uwu = new Command("Sends a super cute kawaii image ^w^", (message, args
 let Amogus = {
     turns: 0,
     crew: {},
-    reset: () => {
+    reset() {
         Amogus.turns = 7
         Amogus.crew.red = Math.ceil(Math.random() * 10)
         Amogus.crew.blue = Math.ceil(Math.random() * 10)
@@ -149,7 +149,7 @@ let Amogus = {
         Amogus.crew.purple = Math.ceil(Math.random() * 10)
         Amogus.crew.cyan = Math.ceil(Math.random() * 10)
     },
-    getSussier: () => {
+    getSussier() {
         let sussier = 0
         let crewname = ""
         for (let crew in Amogus.crew) {
