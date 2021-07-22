@@ -75,7 +75,7 @@ Commands.dice = new Command("Gives you a number from 1 to 6, and maybe judge you
 
 Commands.clown = new Command("Given a person or a thing, the bot will say how much of a clown it is", (message, args) => {
     let name = args[0] || message.author.username
-    let clownvalue = name.length + (Date.now() % 1500)
+    let clownvalue = name.length + (Date.now() % 50)
     for (var i = 0; i < name.length; i++) {
         clownvalue = clownvalue + name.charCodeAt(i)
     }
