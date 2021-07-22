@@ -1,0 +1,15 @@
+{
+  "name": "funi",
+  "version": "1.0.0",
+  "description": "a funi bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Felix44",
+  "license": "gpl3",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0"
+  }
+}
