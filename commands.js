@@ -245,7 +245,7 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
                 message.channel.send("I need you to confirm this, type `%crew reset yes`")
             }
             return
-        }
+        } 
         default: {
             message.channel.send("`%crew examine (color)` to examine a crewmate, the impostor might find you though...\n`%crew eject (color)` to eject a crewmate out, you can only eject once\n`%crew reset yes` to reset the game")
             return
