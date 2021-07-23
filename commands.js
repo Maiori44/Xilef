@@ -166,6 +166,7 @@ let Amogus = {
 Amogus.reset()
 
 Commands.crew = new Command("Find the imposter!", (message, args) => {
+    let aturn = Amogus.turns
     args[1] = args[1].toLowerCase()
     switch (args[0]) {
         case "examine": {
@@ -231,7 +232,7 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
             else if (args[1] == impostor || Amogus.crew[args[1]] == 10) {
                 message.channel.send(args[1] + " was the impostor! congrats!")
                 let EconomySystem = Economy.getEconomySystem(message.author)
-                EconomySystem.give(50 + (Amogus.turns * 10), message)
+                EconomySystem.give(150 - (10 * aturn), message)
                 Amogus.reset()
                 return
             } else {
@@ -257,6 +258,8 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
     Amogus.turns = Math.max(Amogus.turns - 1, 0)
     if (Amogus.turns == 0) {
         message.channel.send("The impostor killed you!\nThe impostor was " + Amogus.getSussier() + ".\nGame over.")
+        let EconomySystem = Economy.getEconomySystem(message.author)
+        EconomySystem.steal(100 - (10 * aturn), message)
         Amogus.reset()
     } else {
         message.channel.send(Amogus.turns + " turns left.")
@@ -279,7 +282,24 @@ Commands.stats = new Command("Gets your amount of money and your rank", (message
 Commands.rankup = new Command("Increases your rank if you have enough money", (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
     let needed = 100 * EconomySystem.rank
-    if (EconomySystem.take(needed, message, EconomySystem.user + " is now rank " + (EconomySystem.rank + 1) + "!", EconomySystem.user + " needs " + (needed-EconomySystem.money) + " more DogeCoins for rank " + (EconomySystem.rank + 1))) {
+    if (EconomySystem.buy(needed, message, EconomySystem.user + " is now rank " + (EconomySystem.rank + 1) + "!", EconomySystem.user + " needs " + (needed - EconomySystem.money) + " more DogeCoins for rank " + (EconomySystem.rank + 1))) {
         EconomySystem.rank = EconomySystem.rank + 1
     }
 })
+
+Commands.gamble = new Command("Gamble your money away cause you have a terrible life", (message, args) => {
+    let gamble = parseInt(args[0])
+    if (isNaN(gamble)) {
+        throw ("That is definitively not a number")
+    }
+    let EconomySystem = Economy.getEconomySystem(message.author)
+    if (EconomySystem.buy(gamble, message, null, "You don't have enough DogeCoins to gamble " + gamble)) {
+        let chance = Math.ceil(Math.random() * (gamble * 2))
+        if (chance > gamble + 5) {
+            message.channel.send("Oh wow you're lucky")
+            EconomySystem.give(gamble * 3, message)
+        } else {
+            message.channel.send("Nope, you lost.")
+        }
+    }
+}, [new RequiredArg(0, "You can't gamble air, choose an amount")])

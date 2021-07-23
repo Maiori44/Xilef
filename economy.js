@@ -12,7 +12,14 @@ class EconomySystem {
         }
     }
 
-    take(amount, message, tmsg, fmsg) {
+    steal(amount, message) {
+        this.money = Math.max(this.money - amount, 0)
+        if (message) {
+            message.channel.send(this.user + " lost " + amount + " DogeCoins!")
+        }
+    }
+
+    buy(amount, message, tmsg, fmsg) {
         if (this.money >= amount) {
             this.money = this.money - amount
             if (message && tmsg) {
@@ -27,13 +34,20 @@ class EconomySystem {
     }
 }
 
+const fs = require('fs')
+
 Economy = {
-    list: {},
+    list: JSON.parse(fs.readFileSync('money.json', 'utf8')),
     getEconomySystem(user) {
         if (!Economy.list[user.id]) {
             Economy.list[user.id] = new EconomySystem(user.username)
         }
         return Economy.list[user.id]
+    },
+    save() {
+        let json = JSON.parse(fs.readFileSync("./money.json", "utf8"));
+        json = {...json, ...Economy.list}
+        fs.writeFileSync("./money.json", JSON.stringify(json, null, 4), "utf8")
     }
 }
 
