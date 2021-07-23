@@ -1,7 +1,7 @@
 class EconomySystem {
     constructor(username) {
         this.money = 0
-        this.rank = 0
+        this.rank = 1
         this.user = username
     }
 
@@ -12,18 +12,24 @@ class EconomySystem {
         }
     }
 
-    take(amount) {
-        this.money = Math.max(this.money - amount, 0)
+    take(amount, message, tmsg, fmsg) {
+        if (this.money <= needed) {
+            this.money = this.money - amount
+            if (message && tmsg) {
+                message.channel.send(tmsg)
+            }
+            return true
+        }
+        if (message && fmsg) {
+            message.channel.send(fmsg)
+        }
+        return false
     }
 
     rankup(message) {
-        let needed = 100 + (100 * this.rank)
-        if (this.money >= needed) {
+        let needed = 100 * this.rank
+        if (this.take(needed, message, this.user + " is now " + (this.rank + 1), this.name + " needs " + (needed-this.money) + " more DogeCoins for rank " + (this.rank + 1))) {
             this.rank = this.rank + 1
-            this.take(needed)
-            if (message) {
-                message.channel.send(this.user + " is now rank " + this.rank + "")
-            }
         }
     }
 }
@@ -31,26 +37,10 @@ class EconomySystem {
 Economy = {
     list: {},
     getEconomySystem(user) {
-        if (!Economy.list[user.id]){
+        if (!Economy.list[user.id]) {
             Economy.list[user.id] = new getEconomySystem(user.username)
         }
         return Economy.list[user.id]
     }
-    /*check: (user) => {
-        if (!Economy.list[user.id]) {
-            Economy.list[user.id] = new EconomySystem(user.username)
-        }
-    },
-    give: (amount, message) => {
-        let user = message.author
-        Economy.check(user)
-        Economy.list[user.id].give(amount, message)
-    },
-    take: (amount, message) => {
-        let user = message.author
-        Economy.check(user)
-        if (Economy.list[user.id].check()) {
-            Economy.list[user.id].take(amount, message)
-        }
-    }*/
 }
+

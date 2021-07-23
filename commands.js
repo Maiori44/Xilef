@@ -261,3 +261,10 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
 }, [new RequiredArg(0, "`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n`&crew eject (color)` to eject a crewmate out, you can only eject once\n`&crew reset yes` to reset the game"),
 new RequiredArg(1, "You need to choose the color of the crewmate if you want to do anything to them, " +
     "possible options are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.")])
+
+//economy commands
+
+Commands.stats = new Command("Gets your amount of money and your rank", (message) => {
+    let EconomySystem = Economy.getEconomySystem(message.author)
+    message.channel.send(EconomySystem.user + " has " + EconomySystem.money + " DogeCoins, and is rank " + this.rank)
+})

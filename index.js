@@ -6,7 +6,7 @@ client.login(process.env.TOKEN); //logins in the client
 
 const prefix = "&" //defines the bot prefix
 
-//require("./economy.js")
+require("./economy.js")
 require("./commands.js")
 
 client.on("ready", () => console.log("Bot ready"));
