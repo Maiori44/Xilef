@@ -134,28 +134,32 @@ Commands.uwu = new Command("Sends a super cute kawaii image ^w^", (message, args
 
 //Among us minigame
 
-let Amogus = {
-    turns: 0,
-    crew: {},
+class AmogusGame {
+    constructor() {
+        this.turns =  0
+        this.crew = {}
+    }
+
     reset() {
-        Amogus.turns = 7
-        Amogus.crew.red = Math.ceil(Math.random() * 10)
-        Amogus.crew.blue = Math.ceil(Math.random() * 10)
-        Amogus.crew.green = Math.ceil(Math.random() * 10)
-        Amogus.crew.pink = Math.ceil(Math.random() * 10)
-        Amogus.crew.orange = Math.ceil(Math.random() * 10)
-        Amogus.crew.yellow = Math.ceil(Math.random() * 10)
-        Amogus.crew.black = Math.ceil(Math.random() * 10)
-        Amogus.crew.white = Math.ceil(Math.random() * 10)
-        Amogus.crew.purple = Math.ceil(Math.random() * 10)
-        Amogus.crew.cyan = Math.ceil(Math.random() * 10)
-    },
+        this.turns = 7
+        this.crew.red = Math.ceil(Math.random() * 10)
+        this.crew.blue = Math.ceil(Math.random() * 10)
+        this.crew.green = Math.ceil(Math.random() * 10)
+        this.crew.pink = Math.ceil(Math.random() * 10)
+        this.crew.orange = Math.ceil(Math.random() * 10)
+        this.crew.yellow = Math.ceil(Math.random() * 10)
+        this.crew.black = Math.ceil(Math.random() * 10)
+        this.crew.white = Math.ceil(Math.random() * 10)
+        this.crew.purple = Math.ceil(Math.random() * 10)
+        this.crew.cyan = Math.ceil(Math.random() * 10)
+    }
+
     getSussier() {
         let sussier = 0
         let crewname = ""
-        for (let crew in Amogus.crew) {
-            if (Amogus.crew[crew] > sussier) {
-                sussier = Amogus.crew[crew]
+        for (let crew in this.crew) {
+            if (this.crew[crew] > sussier) {
+                sussier = this.crew[crew]
                 crewname = crew
             }
         }
@@ -163,9 +167,19 @@ let Amogus = {
     }
 }
 
-Amogus.reset()
+Amongus = {
+    list: {},
+    getGame(id) {
+        if (!Amongus.list[id]) {
+            Amongus.list[id] = new AmogusGame()
+            Amongus.list[id].reset()
+        }
+        return Amongus.list[id]
+    }
+}
 
 Commands.crew = new Command("Find the imposter!", (message, args) => {
+    let Amogus = Amongus.getGame(message.author.id)
     let aturn = Amogus.turns
     args[1] = args[1].toLowerCase()
     switch (args[0]) {
