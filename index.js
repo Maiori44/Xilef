@@ -18,16 +18,14 @@ client.on("message", (message) => { //function called when a message is sent
         if (command == "") {
             message.channel.send('Wow great command, " ", makes complete sense')
             return
-        }
-        else if (Commands[command]) {
+        } else if (Commands[command]) {
             try {
                 Commands[command].call(message, args)
             } catch (errormsg) {
                 message.channel.send(errormsg.toString().slice(0, 1900))
                 console.error(errormsg)
             }
-        }
-        else {
+        } else {
             message.channel.send("Breaking news " + message.author.username + " is officially an idiot, that command doesn't exist")
         }
     }
