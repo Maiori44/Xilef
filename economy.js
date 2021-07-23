@@ -25,13 +25,6 @@ class EconomySystem {
         }
         return false
     }
-
-    rankup(message) {
-        let needed = 100 * this.rank
-        if (this.take(needed, message, this.user + " is now rank " + (this.rank + 1) + "!", this.user + " needs " + (needed-this.money) + " more DogeCoins for rank " + (this.rank + 1))) {
-            this.rank = this.rank + 1
-        }
-    }
 }
 
 Economy = {

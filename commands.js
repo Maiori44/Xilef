@@ -278,5 +278,8 @@ Commands.stats = new Command("Gets your amount of money and your rank", (message
 
 Commands.rankup = new Command("Increases your rank if you have enough money", (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
-    EconomySystem.rankup(message)
+    let needed = 100 * EconomySystem.rank
+    if (EconomySystem.take(needed, message, EconomySystem.user + " is now rank " + (EconomySystem.rank + 1) + "!", EconomySystem.user + " needs " + (needed-EconomySystem.money) + " more DogeCoins for rank " + (EconomySystem.rank + 1))) {
+        EconomySystem.rank = EconomySystem.rank + 1
+    }
 })
