@@ -52,6 +52,7 @@ Commands.comfort = new Command("Comforts the person you want", (message, args) =
 Commands.say = new Command("Says whatever you want", (message, args) => {
     if (!args.join(" ")) { args[0] = "** **" }
     message.channel.send(args.join(" ").slice(0, 1900))
+    message.delete()
 }, [new RequiredArg(0, "** **")])
 
 Commands.hentai = new Command("Totally sends you hentai", (message, args) => {
@@ -229,6 +230,8 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
             if (!Amogus.crew[args[1]]) { message.channel.send(args[1] + " does not exist, lol"); return }
             else if (args[1] == impostor || Amogus.crew[args[1]] == 10) {
                 message.channel.send(args[1] + " was the impostor! congrats!")
+                let EconomySystem = Economy.getEconomySystem(message.author)
+                EconomySystem.give(50 + (Amogus.turns * 10), message)
                 Amogus.reset()
                 return
             } else {
@@ -245,7 +248,7 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
                 message.channel.send("I need you to confirm this, type `&crew reset yes`")
             }
             return
-        } 
+        }
         default: {
             message.channel.send("`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n`&crew eject (color)` to eject a crewmate out, you can only eject once\n`&crew reset yes` to reset the game")
             return
@@ -264,7 +267,16 @@ new RequiredArg(1, "You need to choose the color of the crewmate if you want to 
 
 //economy commands
 
-Commands.stats = new Command("Gets your amount of money and your rank", (message) => {
+Commands.stats = new Command("Gets your amount of money and your rank", (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
-    message.channel.send(EconomySystem.user + " has " + EconomySystem.money + " DogeCoins, and is rank " + this.rank)
+    if (args[0] != "debug") {
+        message.channel.send(EconomySystem.user + " has " + EconomySystem.money + " DogeCoins, and is rank " + EconomySystem.rank)
+    } else {
+        message.channel.send(JSON.stringify(Economy.list))
+    }
+})
+
+Commands.rankup = new Command("Increases your rank if you have enough money", (message, args) => {
+    let EconomySystem = Economy.getEconomySystem(message.author)
+    EconomySystem.rankup(message)
 })

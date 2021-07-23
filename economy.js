@@ -13,7 +13,7 @@ class EconomySystem {
     }
 
     take(amount, message, tmsg, fmsg) {
-        if (this.money <= needed) {
+        if (this.money >= amount) {
             this.money = this.money - amount
             if (message && tmsg) {
                 message.channel.send(tmsg)
@@ -28,7 +28,7 @@ class EconomySystem {
 
     rankup(message) {
         let needed = 100 * this.rank
-        if (this.take(needed, message, this.user + " is now " + (this.rank + 1), this.name + " needs " + (needed-this.money) + " more DogeCoins for rank " + (this.rank + 1))) {
+        if (this.take(needed, message, this.user + " is now rank " + (this.rank + 1) + "!", this.user + " needs " + (needed-this.money) + " more DogeCoins for rank " + (this.rank + 1))) {
             this.rank = this.rank + 1
         }
     }
@@ -38,7 +38,7 @@ Economy = {
     list: {},
     getEconomySystem(user) {
         if (!Economy.list[user.id]) {
-            Economy.list[user.id] = new getEconomySystem(user.username)
+            Economy.list[user.id] = new EconomySystem(user.username)
         }
         return Economy.list[user.id]
     }
