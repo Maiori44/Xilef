@@ -291,6 +291,8 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
     let gamble = parseInt(args[0])
     if (isNaN(gamble)) {
         throw ("That is definitively not a number")
+    } else if (gamble < 1) {
+        throw ("That is not a valid number.")
     }
     let EconomySystem = Economy.getEconomySystem(message.author)
     if (EconomySystem.buy(gamble, message, null, "You don't have enough DogeCoins to gamble " + gamble)) {
