@@ -132,6 +132,16 @@ Commands.uwu = new Command("Sends a super cute kawaii image ^w^", (message, args
     message.channel.send(uwuimage)
 })
 
+Commands.whoasked = new Command("Finds out the person who asked", (message, args) => {
+    message.channel.send("https://tenor.com/view/meme-who-asked-satellite-looking-radar-gif-17171784")
+    message.channel.send("Asking neighbours if they know who asked...")
+    setTimeout(() => {message.channel.send("Asking the government if they know who asked...")}, 3000)
+    setTimeout(() => {message.channel.send("Asking the aliens if they know who asked...")}, 6000)
+    setTimeout(() => {message.channel.send("Asking god if they know who asked...")}, 9000)
+    setTimeout(() => {message.channel.send("Asking google if they know who asked...")}, 12000)
+    setTimeout(() => {message.channel.send("Yeah no, nobody asked.")}, 15000)
+})
+
 //Among us minigame
 
 class AmogusGame {

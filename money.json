@@ -5,18 +5,28 @@
         "user": "Felix44"
     },
     "276363003270791168": {
-        "money": 330,
-        "rank": 2,
+        "money": 250,
+        "rank": 3,
         "user": "AliFurkan"
     },
     "602651056320675840": {
         "money": 0,
-        "rank": 1,
+        "rank": 2,
         "user": "Sebo2205"
     },
     "393501189788139520": {
         "money": 0,
         "rank": 1,
         "user": "Rem"
+    },
+    "365289087864668160": {
+        "money": 0,
+        "rank": 1,
+        "user": "Helvetica"
+    },
+    "819577272276484107": {
+        "money": 0,
+        "rank": 1,
+        "user": "escapevelocity"
     }
 }
