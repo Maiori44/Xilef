@@ -1,7 +1,7 @@
 class EconomySystem {
-    constructor(username) {
-        this.money = 0
-        this.rank = 1
+    constructor(username, money, rank) {
+        this.money = money || 0
+        this.rank = rank || 1
         this.user = username
     }
 
@@ -37,7 +37,7 @@ class EconomySystem {
 const fs = require('fs')
 
 Economy = {
-    list: JSON.parse(fs.readFileSync('money.json', 'utf8')),
+    list: JSON.parse(fs.readFileSync("money.json", "utf8")),
     getEconomySystem(user) {
         if (!Economy.list[user.id]) {
             Economy.list[user.id] = new EconomySystem(user.username)
@@ -51,3 +51,6 @@ Economy = {
     }
 }
 
+for (let ID of Object.keys(Economy.list)) {
+    Economy.list[ID] = new EconomySystem(Economy.list[ID].user, Economy.list[ID].money, Economy.list[ID].rank)
+}
