@@ -265,7 +265,7 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
             else if (args[1] == impostor || Amogus.crew[args[1]] == 10) {
                 message.channel.send(args[1] + " was the impostor! congrats!")
                 let EconomySystem = Economy.getEconomySystem(message.author)
-                EconomySystem.give(150 - (10 * aturn), message)
+                EconomySystem.give(250 - (5 * aturn), message)
                 Amogus.reset()
                 return
             } else {
@@ -283,7 +283,7 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
     if (Amogus.turns == 0) {
         message.channel.send("The impostor killed you!\nThe impostor was " + Amogus.getSussier() + ".\nGame over.")
         let EconomySystem = Economy.getEconomySystem(message.author)
-        EconomySystem.steal(100 - (10 * aturn), message)
+        EconomySystem.steal(80 - (10 * aturn), message)
         Amogus.reset()
     } else {
         message.channel.send(Amogus.turns + " turns left.")
@@ -299,10 +299,7 @@ class DrillerGame {
         this.hp = 100
     }
 
-    reset(EconomySystem) {
-        if (EconomySystem) {
-            EconomySystem.give(this.cash)
-        }
+    reset() {
         this.depth = 0
         this.cash = 0
         this.hp = 100
@@ -338,16 +335,16 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
                 return
             }
             DrillerGame.depth++
-            let hurtchance = (Math.random() * 15)
-                if (hurtchance > DrillerGame.depth) {
+            let hurtchance = (Math.random() * 20)
+            if (hurtchance > DrillerGame.depth) {
                 message.channel.send("Your driller digs deeper..and finds " + DrillerTreasures[DrillerGame.depth - 1] + "!")
-                DrillerGame.cash = DrillerGame.cash + (50 * DrillerGame.depth)
+                DrillerGame.cash = DrillerGame.cash + (20 * DrillerGame.depth)
                 if (DrillerGame.depth > 9) {
-                    DrillerGame.cash = DrillerGame.cash + 500
+                    DrillerGame.cash = DrillerGame.cash + 200
                 }
             } else {
                 message.channel.send("Your driller digs deeper..and finds lava! Your driller got damaged!")
-                DrillerGame.hp = DrillerGame.hp - (15 * DrillerGame.depth)
+                DrillerGame.hp = DrillerGame.hp - (10 * DrillerGame.depth)
             }
             if (DrillerGame.depth > 9) {
                 message.channel.send("Your driller reached bedrock, it can't dig any further!")
@@ -364,19 +361,21 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
         }
         case "cashin": {
             message.channel.send("Your driller comes back, and gives you all the DogeCoins it had collected.")
-            DrillerGame.reset(EconomySystem)
+            EconomySystem.give(DrillerGame.cash, message)
+            DrillerGame.reset()
             break
         }
         default: {
-            message.channel.send("`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or traps!\n`&driller repair` repairs the driller, it won't be free though\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")
+            message.channel.send("`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or traps!\n`&driller repair` repairs the driller, it won't be free though (costs 50 DogeCoins)\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")
             return
         }
     }
     if (DrillerGame.hp < 1) {
         message.channel.send("Your driller broke! It lost whatever it had collected.")
+        EconomySystem.steal(150 - (10 * aturn), message)
         DrillerGame.reset()
     }
-}, [new RequiredArg(0, "`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n`&driller repair` repairs the driller, it won't be free though\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")])
+}, [new RequiredArg(0, "`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n`&driller repair` repairs the driller, it won't be free though (costs 50 DogeCoins)\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")])
 
 //economy commands
 
@@ -415,3 +414,12 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
         }
     }
 }, [new RequiredArg(0, "You can't gamble air, choose an amount")])
+
+Commands.leaderboard = new Command("See the users with the highest ranks", (message, args) => {
+    let leaderboard = Object.keys(Economy.list).sort((a, b) => { return Economy.list[b].rank - Economy.list[a].rank })
+    let lbstring = ""
+    for (let ID of leaderboard) {
+        lbstring = lbstring + Economy.list[ID].user + ": rank " + Economy.list[ID].rank + " (" + Economy.list[ID].money + " DogeCoins)\n"
+    }
+    message.channel.send(lbstring)
+})
