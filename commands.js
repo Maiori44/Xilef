@@ -377,6 +377,39 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
     }
 }, [new RequiredArg(0, "`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n`&driller repair` repairs the driller, it won't be free though (costs 50 DogeCoins)\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")])
 
+/*
+T1 (lava chance 8%, 1 durability loss, drill cost 0, depth 0-9)
+Copper - 10
+Tin - 15
+Iron - 20
+Lead - 30
+Silver - 30
+Tungsten - 45
+Gold - 50
+Platinum - 75
+T2 (lava chance 16%, 2-3 durability loss, drill cost 1000, depth 10-19)
+Amethyst - 100
+Topaz - 110
+Saphire - 125 (forgot if saphire or emerald is rarer lol)
+Emerald - 135
+Ruby - 150
+Diamond - 160
+Amber - 175
+T3 (lava chance 32%, durability loss 4-9, drill cost 5000, depth 20-29)
+Cobalt - 250
+Palladium - 300
+Mythrill - 400
+Orichalcum - 450
+Adamantite - 500
+Titanium - 600
+T4 (lava chance 64%, durability loss 8-27%, drill cost 16000, depth 30+)
+Hallowed ore - 750
+Chlorophyte - 1000
+Shroomite - 1100
+Spectre ore - 1200
+Luminite - 2500
+*/
+
 //economy commands
 
 Commands.stats = new Command("Gets your amount of money and your rank", (message, args) => {
