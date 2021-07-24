@@ -354,8 +354,8 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
         case "repair": {
             if (DrillerGame.hp == 100) {
                 message.channel.send("Your driller is arleady in perfect condition.")
-            } else if (EconomySystem.buy(50, message, "Your driller recovered 25 hp! (50 DogeCoins spent)", "You don't have enough DogeCoins to repair your driller (50 DogeCoins needed)")) {
-                DrillerGame.hp = Math.min(DrillerGame.hp + 25, 100)
+            } else if (EconomySystem.buy(50, message, "Your driller recovered 50 hp! (50 DogeCoins spent)", "You don't have enough DogeCoins to repair your driller (50 DogeCoins needed)")) {
+                DrillerGame.hp = Math.min(DrillerGame.hp + 50, 100)
             }
             break
         }
@@ -372,7 +372,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
     }
     if (DrillerGame.hp < 1) {
         message.channel.send("Your driller broke! It lost whatever it had collected.")
-        EconomySystem.steal(150 - (10 * aturn), message)
+        EconomySystem.steal(150, message)
         DrillerGame.reset()
     }
 }, [new RequiredArg(0, "`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n`&driller repair` repairs the driller, it won't be free though (costs 50 DogeCoins)\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")])
@@ -400,15 +400,16 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
     let gamble = parseInt(args[0])
     if (isNaN(gamble)) {
         throw ("That is definitively not a number")
-    } else if (gamble < 1) {
-        throw ("That is not a valid number.")
+    } else if (gamble <= 5) {
+        throw ("That number is a bit too low.")
     }
     let EconomySystem = Economy.getEconomySystem(message.author)
     if (EconomySystem.buy(gamble, message, null, "You don't have enough DogeCoins to gamble " + gamble)) {
         let chance = Math.ceil(Math.random() * (gamble * 2))
         if (chance > gamble + 5) {
             message.channel.send("Oh wow you're lucky")
-            EconomySystem.give(gamble * 3, message)
+            EconomySystem.give(gamble)
+            EconomySystem.give(gamble * 2, message)
         } else {
             message.channel.send("Nope, you lost.")
         }
@@ -419,7 +420,7 @@ Commands.leaderboard = new Command("See the users with the highest ranks", (mess
     let leaderboard = Object.keys(Economy.list).sort((a, b) => { return Economy.list[b].rank - Economy.list[a].rank })
     let lbstring = ""
     for (let ID of leaderboard) {
-        lbstring = lbstring + Economy.list[ID].user + ": rank " + Economy.list[ID].rank + " (" + Economy.list[ID].money + " DogeCoins)\n"
+        lbstring = lbstring + "`" + Economy.list[ID].user + "`" + ": rank **" + Economy.list[ID].rank + "** (" + Economy.list[ID].money + " DogeCoins)\n"
     }
     message.channel.send(lbstring)
 })
