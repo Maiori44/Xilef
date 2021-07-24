@@ -135,18 +135,32 @@ Commands.uwu = new Command("Sends a super cute kawaii image ^w^", (message, args
 Commands.whoasked = new Command("Finds out the person who asked", (message, args) => {
     message.channel.send("https://tenor.com/view/meme-who-asked-satellite-looking-radar-gif-17171784")
     message.channel.send("Asking neighbours if they know who asked...")
-    setTimeout(() => {message.channel.send("Asking the government if they know who asked...")}, 3000)
-    setTimeout(() => {message.channel.send("Asking the aliens if they know who asked...")}, 6000)
-    setTimeout(() => {message.channel.send("Asking god if they know who asked...")}, 9000)
-    setTimeout(() => {message.channel.send("Asking google if they know who asked...")}, 12000)
-    setTimeout(() => {message.channel.send("Yeah no, nobody asked.")}, 15000)
+    setTimeout(() => { message.channel.send("Asking the government if they know who asked...") }, 3000)
+    setTimeout(() => { message.channel.send("Asking the aliens if they know who asked...") }, 6000)
+    setTimeout(() => { message.channel.send("Asking god if they know who asked...") }, 9000)
+    setTimeout(() => { message.channel.send("Asking google if they know who asked...") }, 12000)
+    setTimeout(() => { message.channel.send("Yeah no, nobody asked.") }, 15000)
 })
 
-//Among us minigame
+//minigame commands
+
+class Game {
+    constructor(gamemaker) {
+        this.list = {}
+        this.makeGame = gamemaker
+    }
+
+    getGame(id) {
+        if (!this.list[id]) {
+            this.list[id] = this.makeGame()
+        }
+        return this.list[id]
+    }
+}
 
 class AmogusGame {
     constructor() {
-        this.turns =  0
+        this.turns = 0
         this.crew = {}
     }
 
@@ -177,16 +191,11 @@ class AmogusGame {
     }
 }
 
-Amongus = {
-    list: {},
-    getGame(id) {
-        if (!Amongus.list[id]) {
-            Amongus.list[id] = new AmogusGame()
-            Amongus.list[id].reset()
-        }
-        return Amongus.list[id]
-    }
-}
+Amongus = new Game(() => {
+    let Amogus = new AmogusGame()
+    Amogus.reset()
+    return Amogus
+})
 
 Commands.crew = new Command("Find the imposter!", (message, args) => {
     let Amogus = Amongus.getGame(message.author.id)
@@ -265,17 +274,8 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
             }
             break
         }
-        case "reset": {
-            if (args[1] == "yes") {
-                message.channel.send("The game has been resetted, The impostor was " + Amogus.getSussier())
-                Amogus.reset()
-            } else {
-                message.channel.send("I need you to confirm this, type `&crew reset yes`")
-            }
-            return
-        }
         default: {
-            message.channel.send("`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n`&crew eject (color)` to eject a crewmate out, you can only eject once\n`&crew reset yes` to reset the game")
+            message.channel.send("`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n`&crew eject (color)` to eject a crewmate out, you can only eject once")
             return
         }
     }
@@ -288,9 +288,95 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
     } else {
         message.channel.send(Amogus.turns + " turns left.")
     }
-}, [new RequiredArg(0, "`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n`&crew eject (color)` to eject a crewmate out, you can only eject once\n`&crew reset yes` to reset the game"),
+}, [new RequiredArg(0, "`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n`&crew eject (color)` to eject a crewmate out, you can only eject once"),
 new RequiredArg(1, "You need to choose the color of the crewmate if you want to do anything to them, " +
     "possible options are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.")])
+
+class DrillerGame {
+    constructor() {
+        this.depth = 0
+        this.cash = 0
+        this.hp = 100
+    }
+
+    reset(EconomySystem) {
+        if (EconomySystem) {
+            EconomySystem.give(this.cash)
+        }
+        this.depth = 0
+        this.cash = 0
+        this.hp = 100
+    }
+}
+
+Driller = new Game(() => { return new DrillerGame() })
+const DrillerTreasures = [
+    "Coal",
+    "Tin",
+    "Bronze",
+    "Iron",
+    "Silver",
+    "Tungsten",
+    "Gold",
+    "Platinum",
+    "Diamond",
+    "a ton of DogeCoins"
+]
+
+Commands.driller = new Command("Dig deeper and deeper to find the treasures", (message, args) => {
+    let DrillerGame = Driller.getGame(message.author.id)
+    let EconomySystem = Economy.getEconomySystem(message.author)
+    args[0] = args[0].toLowerCase()
+    switch (args[0]) {
+        case "stats": {
+            message.channel.send("Your driller stats:\ndepth: " + DrillerGame.depth + "\ncash found: " + DrillerGame.cash + "\nhealth: " + DrillerGame.hp)
+            break
+        }
+        case "dig": {
+            if (DrillerGame.depth > 9) {
+                message.channel.send("Your driller reached bedrock, it can't dig any further!")
+                return
+            }
+            DrillerGame.depth++
+            let hurtchance = (Math.random() * 15)
+                if (hurtchance > DrillerGame.depth) {
+                message.channel.send("Your driller digs deeper..and finds " + DrillerTreasures[DrillerGame.depth - 1] + "!")
+                DrillerGame.cash = DrillerGame.cash + (50 * DrillerGame.depth)
+                if (DrillerGame.depth > 9) {
+                    DrillerGame.cash = DrillerGame.cash + 500
+                }
+            } else {
+                message.channel.send("Your driller digs deeper..and finds lava! Your driller got damaged!")
+                DrillerGame.hp = DrillerGame.hp - (15 * DrillerGame.depth)
+            }
+            if (DrillerGame.depth > 9) {
+                message.channel.send("Your driller reached bedrock, it can't dig any further!")
+            }
+            break
+        }
+        case "repair": {
+            if (DrillerGame.hp == 100) {
+                message.channel.send("Your driller is arleady in perfect condition.")
+            } else if (EconomySystem.buy(50, message, "Your driller recovered 25 hp! (50 DogeCoins spent)", "You don't have enough DogeCoins to repair your driller (50 DogeCoins needed)")) {
+                DrillerGame.hp = Math.min(DrillerGame.hp + 25, 100)
+            }
+            break
+        }
+        case "cashin": {
+            message.channel.send("Your driller comes back, and gives you all the DogeCoins it had collected.")
+            DrillerGame.reset(EconomySystem)
+            break
+        }
+        default: {
+            message.channel.send("`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or traps!\n`&driller repair` repairs the driller, it won't be free though\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")
+            return
+        }
+    }
+    if (DrillerGame.hp < 1) {
+        message.channel.send("Your driller broke! It lost whatever it had collected.")
+        DrillerGame.reset()
+    }
+}, [new RequiredArg(0, "`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n`&driller repair` repairs the driller, it won't be free though\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")])
 
 //economy commands
 
