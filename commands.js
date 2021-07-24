@@ -337,7 +337,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
             DrillerGame.depth++
             let hurtchance = (Math.random() * 20)
             if (hurtchance > DrillerGame.depth) {
-                message.channel.send("Your driller digs deeper..and finds " + DrillerTreasures[DrillerGame.depth - 1] + "!")
+                message.channel.send("Your driller digs deeper..and finds " + DrillerTreasures[DrillerGame.depth - 1] + "! (worth " + 20 * DrillerGame.depth + ")")
                 DrillerGame.cash = DrillerGame.cash + (20 * DrillerGame.depth)
                 if (DrillerGame.depth > 9) {
                     DrillerGame.cash = DrillerGame.cash + 200
@@ -406,7 +406,10 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
     let EconomySystem = Economy.getEconomySystem(message.author)
     if (EconomySystem.buy(gamble, message, null, "You don't have enough DogeCoins to gamble " + gamble)) {
         let chance = Math.ceil(Math.random() * (gamble * 2))
-        if (chance > gamble + 5) {
+        if (gamble >= 2500) {
+            chance = chance - (gamble / 2)
+        }
+        if (chance > gamble + (5 + gamble/100)) {
             message.channel.send("Oh wow you're lucky")
             EconomySystem.give(gamble)
             EconomySystem.give(gamble * 2, message)
