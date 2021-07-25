@@ -412,13 +412,19 @@ Luminite - 2500
 
 //economy commands
 
-Commands.stats = new Command("Gets your amount of money and your rank", (message, args) => {
-    let EconomySystem = Economy.getEconomySystem(message.author)
-    if (args[0] != "debug") {
-        message.channel.send(EconomySystem.user + " has " + EconomySystem.money + " DogeCoins, and is rank " + EconomySystem.rank)
+/*function FindUser(user1, user2) {
+    let targetId = args[0]?.match(/<@!?([0-9]{18})>/)?[1]
+    if (client.users.cache.get(targetId)) {
+      // user exists
     } else {
-        message.channel.send(JSON.stringify(Economy.list))
+      // user doesnt exist
     }
+}*/
+
+Commands.stats = new Command("Gets your amount of money and your rank", (message, args) => {
+    let user = message.mentions.users.first() || message.author
+    let EconomySystem = Economy.getEconomySystem(user)
+    message.channel.send(EconomySystem.user + " has " + EconomySystem.money + " DogeCoins, and is rank " + EconomySystem.rank)
 })
 
 Commands.rankup = new Command("Increases your rank if you have enough money", (message, args) => {
@@ -444,8 +450,8 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
         }
         if (chance > gamble + (5 + gamble/100)) {
             message.channel.send("Oh wow you're lucky")
-            EconomySystem.give(gamble)
-            EconomySystem.give(gamble * 2, message)
+            EconomySystem.give(gamble, null, true)
+            EconomySystem.give(gamble * 2, message, true)
         } else {
             message.channel.send("Nope, you lost.")
         }

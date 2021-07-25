@@ -5,10 +5,14 @@ class EconomySystem {
         this.user = username
     }
 
-    give(amount, message) {
-        this.money = this.money + amount
+    give(amount, message, nobonus) {
+        this.money = nobonus ? this.money + amount : this.money + amount + Math.floor(((amount/100)*(this.rank-1)))
         if (message) {
-            message.channel.send(this.user + " gained " + amount + " DogeCoins!")
+            let msg = this.user + " gained " + amount + " DogeCoins!"
+            if (!nobonus) {
+                msg = msg + " (+ " + Math.floor(((amount/100)*(this.rank-1))) + " bonus)"
+            }
+            message.channel.send(msg)
         }
     }
 
