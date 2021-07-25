@@ -1,8 +1,9 @@
 class EconomySystem {
-    constructor(username, money, rank) {
+    constructor(username, money, rank, flags) {
         this.money = money || 0
         this.rank = rank || 1
         this.user = username
+        this.flags = flags || {driller: 1}
     }
 
     give(amount, message, nobonus) {
@@ -56,5 +57,5 @@ Economy = {
 }
 
 for (let ID of Object.keys(Economy.list)) {
-    Economy.list[ID] = new EconomySystem(Economy.list[ID].user, Economy.list[ID].money, Economy.list[ID].rank)
+    Economy.list[ID] = new EconomySystem(Economy.list[ID].user, Economy.list[ID].money, Economy.list[ID].rank, Economy.list[ID].flags)
 }

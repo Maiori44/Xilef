@@ -150,9 +150,9 @@ class Game {
         this.makeGame = gamemaker
     }
 
-    getGame(id) {
+    getGame(id, EconomySystem) {
         if (!this.list[id]) {
-            this.list[id] = this.makeGame()
+            this.list[id] = this.makeGame(EconomySystem)
         }
         return this.list[id]
     }
@@ -293,122 +293,120 @@ new RequiredArg(1, "You need to choose the color of the crewmate if you want to 
     "possible options are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.")])
 
 class DrillerGame {
-    constructor() {
+    constructor(EconomySystem) {
         this.depth = 0
         this.cash = 0
-        this.hp = 100
+        this.hp = 100 * EconomySystem.flags.driller
     }
 
-    reset() {
+    reset(EconomySystem) {
         this.depth = 0
         this.cash = 0
-        this.hp = 100
+        this.hp = 100 * EconomySystem.flags.driller
     }
 }
 
-Driller = new Game(() => { return new DrillerGame() })
-const DrillerTreasures = [
-    "Coal",
-    "Tin",
-    "Bronze",
-    "Iron",
-    "Silver",
-    "Tungsten",
-    "Gold",
-    "Platinum",
-    "Diamond",
-    "a ton of DogeCoins"
+class DrillerOre {
+    constructor(name, value, lavachance, tier) {
+        this.name = name
+        this.value = value
+        this.lavachance = lavachance
+        this.tier = tier
+    }
+}
+
+Driller = new Game((EconomySystem) => { return new DrillerGame(EconomySystem) })
+const DrillerOres = [
+    new DrillerOre("Copper", 10, 8, 1),
+    new DrillerOre("Tin", 15, 9, 1),
+    new DrillerOre("Iron", 20, 10, 1),
+    new DrillerOre("Lead", 30, 11, 1),
+    new DrillerOre("Silver", 35, 12, 1),
+    new DrillerOre("Tungsten", 45, 13, 1),
+    new DrillerOre("Gold", 50, 14, 1),
+    new DrillerOre("Platinum", 75, 15, 1),
+    new DrillerOre("Amethyst", 100, 16, 2),
+    new DrillerOre("Topaz", 110, 17, 2),
+    new DrillerOre("Sapphire", 125, 18, 2),
+    new DrillerOre("Emerald", 135, 19, 2),
+    new DrillerOre("Ruby", 150, 20, 2),
+    new DrillerOre("Diamond", 160, 21, 2),
+    new DrillerOre("Amber", 175, 22, 2),
+    new DrillerOre("Cobalt", 250, 32, 3),
+    new DrillerOre("Palladium", 300, 33, 3),
+    new DrillerOre("Mythrill", 400, 34, 3),
+    new DrillerOre("Orichalcum", 450, 35, 3),
+    new DrillerOre("Adamantite", 500, 36, 3),
+    new DrillerOre("Titanium", 600, 37, 3),
+    new DrillerOre("Hallowite", 750, 64, 4),
+    new DrillerOre("Chrlorophyte", 1000, 65, 4),
+    new DrillerOre("Shroomite", 1100, 66, 4),
+    new DrillerOre("Spectrite", 1200, 67, 4),
+    new DrillerOre("Luminite", 2500, 68, 4),
+    new DrillerOre("absolutely nothing, cheater", -999999999, 100, 5),
 ]
 
 Commands.driller = new Command("Dig deeper and deeper to find the treasures", (message, args) => {
-    let DrillerGame = Driller.getGame(message.author.id)
     let EconomySystem = Economy.getEconomySystem(message.author)
+    let DrillerGame = Driller.getGame(message.author.id, EconomySystem)
     args[0] = args[0].toLowerCase()
     switch (args[0]) {
         case "stats": {
-            message.channel.send("Your driller stats:\ndepth: " + DrillerGame.depth + "\ncash found: " + DrillerGame.cash + "\nhealth: " + DrillerGame.hp)
+            message.channel.send("Your driller stats:\ndepth: " + DrillerGame.depth + "\ntier: " + EconomySystem.flags.driller + "\ncash found: " + DrillerGame.cash + "\nhealth: " + DrillerGame.hp)
             break
         }
         case "dig": {
-            if (DrillerGame.depth > 9) {
-                message.channel.send("Your driller reached bedrock, it can't dig any further!")
+            if (DrillerOres[DrillerGame.depth].tier > EconomySystem.flags.driller) {
+                message.channel.send("Your driller is too weak to dig any further!")
                 return
             }
-            DrillerGame.depth++
-            let hurtchance = (Math.random() * 20)
-            if (hurtchance > DrillerGame.depth) {
-                message.channel.send("Your driller digs deeper..and finds " + DrillerTreasures[DrillerGame.depth - 1] + "! (worth " + 20 * DrillerGame.depth + ")")
-                DrillerGame.cash = DrillerGame.cash + (20 * DrillerGame.depth)
-                if (DrillerGame.depth > 9) {
-                    DrillerGame.cash = DrillerGame.cash + 200
-                }
-            } else {
+            let hurtchance = Math.floor(Math.random() * 101)
+            if (hurtchance <= DrillerOres[DrillerGame.depth].lavachance) {
                 message.channel.send("Your driller digs deeper..and finds lava! Your driller got damaged!")
                 DrillerGame.hp = DrillerGame.hp - (10 * DrillerGame.depth)
-            }
-            if (DrillerGame.depth > 9) {
-                message.channel.send("Your driller reached bedrock, it can't dig any further!")
+            } else {
+                message.channel.send("Your driller digs deeper..and finds " + DrillerOres[DrillerGame.depth].name + "! (worth " + DrillerOres[DrillerGame.depth].value + ")")
+                DrillerGame.cash = DrillerGame.cash + DrillerOres[DrillerGame.depth].value
+                DrillerGame.depth++
+                if (DrillerOres[DrillerGame.depth].tier > EconomySystem.flags.driller) {
+                    message.channel.send("Your driller is struggling to dig any further, you might need to upgrade it")
+                }
             }
             break
         }
         case "repair": {
-            if (DrillerGame.hp == 100) {
+            if (DrillerGame.hp == 100 * EconomySystem.flags.driller) {
                 message.channel.send("Your driller is arleady in perfect condition.")
             } else if (EconomySystem.buy(50, message, "Your driller recovered 50 hp! (50 DogeCoins spent)", "You don't have enough DogeCoins to repair your driller (50 DogeCoins needed)")) {
-                DrillerGame.hp = Math.min(DrillerGame.hp + 50, 100)
+                DrillerGame.hp = Math.min(DrillerGame.hp + 50, 100 * EconomySystem.flags.driller)
+            }
+            break
+        }
+        case "upgrade": {
+            if (EconomySystem.flags.driller == 4) {
+                message.channel.send("Your driller arleady reached max tier.")
+            } else if (EconomySystem.buy(1500 * EconomySystem.flags.driller, message, "Your driller reached tier " + (EconomySystem.flags.driller + 1) + "! (" + (1500 * EconomySystem.flags.driller) + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + (1500 * EconomySystem.flags.driller) + " DogeCoins needed)")) {
+                EconomySystem.flags.driller = EconomySystem.flags.driller + 1
             }
             break
         }
         case "cashin": {
             message.channel.send("Your driller comes back, and gives you all the DogeCoins it had collected.")
             EconomySystem.give(DrillerGame.cash, message)
-            DrillerGame.reset()
+            DrillerGame.reset(EconomySystem)
             break
         }
         default: {
-            message.channel.send("`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or traps!\n`&driller repair` repairs the driller, it won't be free though (costs 50 DogeCoins)\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")
+            message.channel.send("`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or traps!\n`&driller repair` repairs the driller, it won't be free though (costs 50 DogeCoins)\n`&driller upgrade` upgrades your driller forever, very expensive.\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")
             return
         }
     }
     if (DrillerGame.hp < 1) {
         message.channel.send("Your driller broke! It lost whatever it had collected.")
-        EconomySystem.steal(150, message)
-        DrillerGame.reset()
+        EconomySystem.steal(25 * DrillerGame.depth, message)
+        DrillerGame.reset(EconomySystem)
     }
-}, [new RequiredArg(0, "`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n`&driller repair` repairs the driller, it won't be free though (costs 50 DogeCoins)\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")])
-
-/*
-T1 (lava chance 8%, 1 durability loss, drill cost 0, depth 0-9)
-Copper - 10
-Tin - 15
-Iron - 20
-Lead - 30
-Silver - 30
-Tungsten - 45
-Gold - 50
-Platinum - 75
-T2 (lava chance 16%, 2-3 durability loss, drill cost 1000, depth 10-19)
-Amethyst - 100
-Topaz - 110
-Saphire - 125 (forgot if saphire or emerald is rarer lol)
-Emerald - 135
-Ruby - 150
-Diamond - 160
-Amber - 175
-T3 (lava chance 32%, durability loss 4-9, drill cost 5000, depth 20-29)
-Cobalt - 250
-Palladium - 300
-Mythrill - 400
-Orichalcum - 450
-Adamantite - 500
-Titanium - 600
-T4 (lava chance 64%, durability loss 8-27%, drill cost 16000, depth 30+)
-Hallowed ore - 750
-Chlorophyte - 1000
-Shroomite - 1100
-Spectre ore - 1200
-Luminite - 2500
-*/
+}, [new RequiredArg(0, "`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n`&driller repair` repairs the driller, it won't be free though (costs 50 DogeCoins)\n`&driller upgrade` upgrades your driller forever, very expensive.\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")])
 
 //economy commands
 
@@ -448,7 +446,7 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
         if (gamble >= 2500) {
             chance = chance - (gamble / 2)
         }
-        if (chance > gamble + (5 + gamble/100)) {
+        if (chance > gamble + (5 + gamble / 100)) {
             message.channel.send("Oh wow you're lucky")
             EconomySystem.give(gamble, null, true)
             EconomySystem.give(gamble, message, true)

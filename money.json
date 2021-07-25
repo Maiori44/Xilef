@@ -1,82 +1,130 @@
 {
     "621307633718132746": {
-        "money": 352,
+        "money": 2818,
         "rank": 26,
-        "user": "Felix44"
+        "user": "Felix44",
+        "flags": {
+            "driller": 3
+        }
     },
     "276363003270791168": {
         "money": 322378,
         "rank": 217,
-        "user": "AliFurkan"
+        "user": "AliFurkan",
+        "flags": {
+            "driller": 1
+        }
     },
     "602651056320675840": {
         "money": 240,
         "rank": 18,
-        "user": "Sebo2205"
+        "user": "Sebo2205",
+        "flags": {
+            "driller": 1
+        }
     },
     "393501189788139520": {
         "money": 0,
         "rank": 1,
-        "user": "Rem"
+        "user": "Rem",
+        "flags": {
+            "driller": 1
+        }
     },
     "365289087864668160": {
         "money": 0,
         "rank": 1,
-        "user": "Helvetica"
+        "user": "Helvetica",
+        "flags": {
+            "driller": 1
+        }
     },
     "819577272276484107": {
         "money": 0,
         "rank": 1,
-        "user": "escapevelocity"
+        "user": "escapevelocity",
+        "flags": {
+            "driller": 1
+        }
     },
     "367769458804129794": {
         "money": 80,
         "rank": 1,
-        "user": "Bobmcboblin"
+        "user": "Bobmcboblin",
+        "flags": {
+            "driller": 1
+        }
     },
     "484682433925611542": {
         "money": 52630,
         "rank": 111,
-        "user": "Dark_Brick"
+        "user": "Dark_Brick",
+        "flags": {
+            "driller": 1
+        }
     },
     "642719190288957450": {
         "money": 0,
         "rank": 1,
-        "user": "Бумер/Пламя"
+        "user": "Бумер/Пламя",
+        "flags": {
+            "driller": 1
+        }
     },
     "242179187983515650": {
         "money": 100,
         "rank": 1,
-        "user": "Kira_46"
+        "user": "Kira_46",
+        "flags": {
+            "driller": 1
+        }
     },
     "724232875238621204": {
         "money": 265,
         "rank": 18,
-        "user": "Fele88"
+        "user": "Fele88",
+        "flags": {
+            "driller": 1
+        }
     },
     "638380713506242576": {
         "money": 0,
         "rank": 1,
-        "user": "goth15"
+        "user": "goth15",
+        "flags": {
+            "driller": 1
+        }
     },
     "604213801927180295": {
-        "money": 748,
-        "rank": 4,
-        "user": "Syphon"
+        "money": 258,
+        "rank": 6,
+        "user": "Syphon",
+        "flags": {
+            "driller": 1
+        }
     },
     "483715787467653122": {
-        "money": 110,
+        "money": 174,
         "rank": 8,
-        "user": "poly translator*"
+        "user": "poly translator*",
+        "flags": {
+            "driller": 1
+        }
     },
     "850867485263527956": {
         "money": 0,
         "rank": 1,
-        "user": "Roots"
+        "user": "Roots",
+        "flags": {
+            "driller": 1
+        }
     },
     "335311591778287617": {
         "money": 300,
         "rank": 1,
-        "user": "Lami"
+        "user": "Lami",
+        "flags": {
+            "driller": 1
+        }
     }
 }
