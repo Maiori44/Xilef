@@ -132,6 +132,20 @@ Commands.uwu = new Command("Sends a super cute kawaii image ^w^", (message, args
     message.channel.send(uwuimage)
 })
 
+const horseimages = [
+    new Discord.MessageAttachment("Horse/horse1.jpg"),
+    new Discord.MessageAttachment("Horse/horse2.jpg"),
+    new Discord.MessageAttachment("Horse/horse3.jpg"),
+    new Discord.MessageAttachment("Horse/horse4.jpg"),
+    new Discord.MessageAttachment("Horse/horse5.jpg"),
+]
+
+Commands.horse = new Command("Sends a random horse photo, idk why I made this", (message, args) => {
+    message.channel.send("have a horse I guess")
+    let horse = Math.floor(Math.random() * 6)
+    message.channel.send(horseimages[horse])
+})
+
 Commands.whoasked = new Command("Finds out the person who asked", (message, args) => {
     message.channel.send("https://tenor.com/view/meme-who-asked-satellite-looking-radar-gif-17171784")
     message.channel.send("Asking neighbours if they know who asked...")
@@ -363,7 +377,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
             let hurtchance = Math.floor(Math.random() * 101)
             if (hurtchance <= DrillerOres[DrillerGame.depth].lavachance) {
                 message.channel.send("Your driller digs deeper..and finds lava! Your driller got damaged!")
-                DrillerGame.hp = DrillerGame.hp - (10 * DrillerGame.depth)
+                DrillerGame.hp = DrillerGame.hp - Math.max((10 * DrillerGame.depth), 1)
             } else {
                 message.channel.send("Your driller digs deeper..and finds " + DrillerOres[DrillerGame.depth].name + "! (worth " + DrillerOres[DrillerGame.depth].value + ")")
                 DrillerGame.cash = DrillerGame.cash + DrillerOres[DrillerGame.depth].value
@@ -375,10 +389,14 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
             break
         }
         case "repair": {
+            let cost = parseInt(args[1])
+            if (isNaN(cost)) {
+                throw ("I need to know how much you want to repair,\nexample: `&driller repair 50` will restore 50 hp of the drill, and will cost 50 DogeCoins")
+            }
             if (DrillerGame.hp == 100 * EconomySystem.flags.driller) {
                 message.channel.send("Your driller is arleady in perfect condition.")
-            } else if (EconomySystem.buy(50, message, "Your driller recovered 50 hp! (50 DogeCoins spent)", "You don't have enough DogeCoins to repair your driller (50 DogeCoins needed)")) {
-                DrillerGame.hp = Math.min(DrillerGame.hp + 50, 100 * EconomySystem.flags.driller)
+            } else if (EconomySystem.buy(cost, message, "Your driller recovered " + cost +" hp! (" + cost +" DogeCoins spent)", "You need " + (cost - EconomySystem.money) + " more DogeCoins for this.")) {
+                DrillerGame.hp = Math.min(DrillerGame.hp + cost, 100 * EconomySystem.flags.driller)
             }
             break
         }
