@@ -451,7 +451,7 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
         if (chance > gamble + (5 + gamble/100)) {
             message.channel.send("Oh wow you're lucky")
             EconomySystem.give(gamble, null, true)
-            EconomySystem.give(gamble * 2, message, true)
+            EconomySystem.give(gamble, message, true)
         } else {
             message.channel.send("Nope, you lost.")
         }

@@ -1,11 +1,11 @@
 {
     "621307633718132746": {
-        "money": 2758,
-        "rank": 25,
+        "money": 352,
+        "rank": 26,
         "user": "Felix44"
     },
     "276363003270791168": {
-        "money": 12925,
+        "money": 322378,
         "rank": 217,
         "user": "AliFurkan"
     },
@@ -35,7 +35,7 @@
         "user": "Bobmcboblin"
     },
     "484682433925611542": {
-        "money": 48794,
+        "money": 52630,
         "rank": 111,
         "user": "Dark_Brick"
     },
@@ -73,5 +73,10 @@
         "money": 0,
         "rank": 1,
         "user": "Roots"
+    },
+    "335311591778287617": {
+        "money": 300,
+        "rank": 1,
+        "user": "Lami"
     }
 }
