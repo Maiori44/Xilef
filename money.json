@@ -1,11 +1,11 @@
 {
     "621307633718132746": {
-        "money": 2056,
+        "money": 2326,
         "rank": 27,
         "user": "Felix44",
         "flags": {
             "driller": 4,
-            "day": 26
+            "day": 27
         }
     },
     "276363003270791168": {
@@ -18,12 +18,12 @@
         }
     },
     "602651056320675840": {
-        "money": 1004,
+        "money": 1204,
         "rank": 20,
         "user": "Sebo2205",
         "flags": {
             "driller": 4,
-            "day": -1
+            "day": 27
         }
     },
     "393501189788139520": {
@@ -150,6 +150,33 @@
         "flags": {
             "driller": 1,
             "day": 26
+        }
+    },
+    "760566354918113320": {
+        "money": 10,
+        "rank": 1,
+        "user": "I’m in the",
+        "flags": {
+            "driller": 1,
+            "day": 26
+        }
+    },
+    "602691289733136404": {
+        "money": 10,
+        "rank": 1,
+        "user": "AnoyingShulkerMC",
+        "flags": {
+            "driller": 1,
+            "day": 27
+        }
+    },
+    "528309195116642314": {
+        "money": 10,
+        "rank": 1,
+        "user": "Keanu",
+        "flags": {
+            "driller": 1,
+            "day": 27
         }
     }
 }

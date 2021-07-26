@@ -434,16 +434,29 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
     }
 }, [new RequiredArg(0, "`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n`&driller repair` repairs the driller, it won't be free though (costs 50 DogeCoins)\n`&driller upgrade` upgrades your driller forever, very expensive.\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")])
 
-//economy commands
-
-/*function FindUser(user1, user2) {
-    let targetId = args[0]?.match(/<@!?([0-9]{18})>/)?[1]
-    if (client.users.cache.get(targetId)) {
-      // user exists
-    } else {
-      // user doesnt exist
+class ReversiGame {
+    constructor() {
+        this.map = []
+        for (var i = 0; i < 8; i++) {
+            this.map[i] = [Reversi.emptyTile]
+        }
     }
-}*/
+}
+
+Commands.test = new Command("test", (message, args) => {
+    message.channel.send(
+        "\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\n" +
+        "\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\n" +
+        "\\🟩\\🟩\\⚪\\🟩\\🟩\\🟩\\🟩\\🟩\n" +
+        "\\🟩\\🟩\\⚪\\🟩\\🟩\\🟩\\⚫\\🟩\n" +
+        "\\🟩\\🟩\\⚪\\🟩\\🟩\\⚫\\🟩\\🟩\n" +
+        "\\🟩\\🟩\\🟩\\🟩\\⚫\\🟩\\🟩\\🟩\n" +
+        "\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\n" +
+        "\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\n"
+    )
+})
+
+//economy commands
 
 Commands.stats = new Command("Gets your amount of money and your rank", (message, args) => {
     let user = message.mentions.users.first() || message.author
