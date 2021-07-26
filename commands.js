@@ -477,8 +477,11 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
 Commands.leaderboard = new Command("See the users with the highest ranks", (message, args) => {
     let leaderboard = Object.keys(Economy.list).sort((a, b) => { return Economy.list[b].rank - Economy.list[a].rank })
     let lbstring = ""
+    let lbnum = 1
     for (let ID of leaderboard) {
-        lbstring = lbstring + "`" + Economy.list[ID].user + "`" + ": rank **" + Economy.list[ID].rank + "** (" + Economy.list[ID].money + " DogeCoins)\n"
+        lbstring = lbstring + lbnum + ": `" + Economy.list[ID].user + "`" + ": rank **" + Economy.list[ID].rank + "** (" + Economy.list[ID].money + " DogeCoins)\n"
+        lbnum++
+        if (lbnum > 10) { break }
     }
     message.channel.send(lbstring)
 })
