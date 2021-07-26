@@ -331,33 +331,41 @@ class DrillerOre {
 
 Driller = new Game((EconomySystem) => { return new DrillerGame(EconomySystem) })
 const DrillerOres = [
-    new DrillerOre("Copper", 10, 8, 1),
-    new DrillerOre("Tin", 15, 9, 1),
-    new DrillerOre("Iron", 20, 10, 1),
-    new DrillerOre("Lead", 30, 11, 1),
-    new DrillerOre("Silver", 35, 12, 1),
-    new DrillerOre("Tungsten", 45, 13, 1),
-    new DrillerOre("Gold", 50, 14, 1),
-    new DrillerOre("Platinum", 75, 15, 1),
-    new DrillerOre("Amethyst", 100, 16, 2),
-    new DrillerOre("Topaz", 110, 17, 2),
-    new DrillerOre("Sapphire", 125, 18, 2),
-    new DrillerOre("Emerald", 135, 19, 2),
-    new DrillerOre("Ruby", 150, 20, 2),
-    new DrillerOre("Diamond", 160, 21, 2),
+    new DrillerOre("Copper", 10, 1, 1),
+    new DrillerOre("Tin", 15, 2, 1),
+    new DrillerOre("Iron", 20, 3, 1),
+    new DrillerOre("Lead", 30, 4, 1),
+    new DrillerOre("Silver", 35, 5, 1),
+    new DrillerOre("Tungsten", 45, 6, 1),
+    new DrillerOre("Gold", 50, 7, 1),
+    new DrillerOre("Platinum", 75, 8, 1),
+    new DrillerOre("Amethyst", 100, 10, 2),
+    new DrillerOre("Topaz", 110, 12, 2),
+    new DrillerOre("Sapphire", 125, 14, 2),
+    new DrillerOre("Emerald", 135, 16, 2),
+    new DrillerOre("Ruby", 150, 18, 2),
+    new DrillerOre("Diamond", 160, 20, 2),
     new DrillerOre("Amber", 175, 22, 2),
-    new DrillerOre("Cobalt", 250, 32, 3),
-    new DrillerOre("Palladium", 300, 33, 3),
-    new DrillerOre("Mythrill", 400, 34, 3),
-    new DrillerOre("Orichalcum", 450, 35, 3),
-    new DrillerOre("Adamantite", 500, 36, 3),
-    new DrillerOre("Titanium", 600, 37, 3),
-    new DrillerOre("Hallowite", 750, 64, 4),
-    new DrillerOre("Chrlorophyte", 1000, 65, 4),
-    new DrillerOre("Shroomite", 1100, 66, 4),
-    new DrillerOre("Spectrite", 1200, 67, 4),
-    new DrillerOre("Luminite", 2500, 68, 4),
-    new DrillerOre("absolutely nothing, cheater", -999999999, 100, 5),
+    new DrillerOre("Cobalt", 250, 25, 3),
+    new DrillerOre("Palladium", 300, 28, 3),
+    new DrillerOre("Mythrill", 400, 31, 3),
+    new DrillerOre("Orichalcum", 450, 34, 3),
+    new DrillerOre("Adamantite", 500, 37, 3),
+    new DrillerOre("Titanium", 600, 40, 3),
+    new DrillerOre("Hallowite", 750, 43, 4),
+    new DrillerOre("Chrlorophyte", 900, 46, 4),
+    new DrillerOre("Shroomite", 1000, 49, 4),
+    new DrillerOre("Spectrite", 1100, 52, 4),
+    new DrillerOre("Luminite", 1500, 55, 4),
+    new DrillerOre("Cryonite", 1600, 58, 5),
+    new DrillerOre("Charred ore", 1700, 61, 5),
+    new DrillerOre("Perennial ore", 1800, 64, 5),
+    new DrillerOre("Scorite", 1900, 67, 5),
+    new DrillerOre("Astralite", 2000, 70, 5),
+    new DrillerOre("Exodium", 2500, 73, 5),   
+    new DrillerOre("Uelibloom ore", 2800, 76, 5),
+    new DrillerOre("Auric ore", 3000, 79, 5),
+    new DrillerOre("absolutely nothing, cheater", -999999999, 0, 6),
 ]
 
 Commands.driller = new Command("Dig deeper and deeper to find the treasures", (message, args) => {
@@ -401,7 +409,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
             break
         }
         case "upgrade": {
-            if (EconomySystem.flags.driller == 4) {
+            if (EconomySystem.flags.driller == 5) {
                 message.channel.send("Your driller arleady reached max tier.")
             } else if (EconomySystem.buy(1500 * EconomySystem.flags.driller, message, "Your driller reached tier " + (EconomySystem.flags.driller + 1) + "! (" + (1500 * EconomySystem.flags.driller) + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + (1500 * EconomySystem.flags.driller) + " DogeCoins needed)")) {
                 EconomySystem.flags.driller = EconomySystem.flags.driller + 1
@@ -495,4 +503,17 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
             message.channel.send("Nope, you lost.")
         }
     }
+
 }, [new RequiredArg(0, "You can't gamble air, choose an amount")])
+
+Commands.leaderboard = new Command("See the users with the highest ranks", (message, args) => {
+    let leaderboard = Object.keys(Economy.list).sort((a, b) => { return Economy.list[b].rank - Economy.list[a].rank })
+    let lbstring = ""
+    let lbnum = 1
+    for (let ID of leaderboard) {
+        lbstring = lbstring + lbnum + ": `" + Economy.list[ID].user + "`" + ": rank **" + Economy.list[ID].rank + "** (" + Economy.list[ID].money + " DogeCoins)\n"
+        lbnum++
+        if (lbnum > 10) { break }
+    }
+    message.channel.send(lbstring)
+})
