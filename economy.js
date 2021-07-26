@@ -3,7 +3,11 @@ class EconomySystem {
         this.money = money || 0
         this.rank = rank || 1
         this.user = username
-        this.flags = flags || {driller: 1}
+        flags = flags || {}
+        this.flags = {
+            driller: flags.driller || 1,
+            day: flags.day || -1,
+        }
     }
 
     give(amount, message, nobonus) {
@@ -11,7 +15,7 @@ class EconomySystem {
         if (message) {
             let msg = this.user + " gained " + amount + " DogeCoins!"
             if (!nobonus) {
-                msg = msg + " (+ " + Math.floor(((amount/100)*(this.rank-1))) + " bonus)"
+                msg = msg + " (+" + Math.floor(((amount/100)*(this.rank-1))) + " bonus)"
             }
             message.channel.send(msg)
         }
@@ -40,6 +44,7 @@ class EconomySystem {
 }
 
 const fs = require('fs')
+const { setFlagsFromString } = require('v8')
 
 Economy = {
     list: JSON.parse(fs.readFileSync("money.json", "utf8")),
