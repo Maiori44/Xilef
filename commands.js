@@ -363,8 +363,8 @@ const DrillerOres = [
     new DrillerOre("Scorite", 1900, 67, 5),
     new DrillerOre("Astralite", 2000, 70, 5),
     new DrillerOre("Exodium", 2500, 73, 5),   
-    new DrillerOre("Uelibloom ore", 2800, 76, 5),
-    new DrillerOre("Auric ore", 3000, 79, 5),
+    new DrillerOre("Uelibloomite", 2800, 76, 5),
+    new DrillerOre("Auricite", 3000, 79, 5),
     new DrillerOre("absolutely nothing, cheater", -999999999, 0, 6),
 ]
 
