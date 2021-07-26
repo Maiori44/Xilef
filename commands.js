@@ -403,7 +403,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
             }
             if (DrillerGame.hp == 100 * EconomySystem.flags.driller) {
                 message.channel.send("Your driller is arleady in perfect condition.")
-            } else if (EconomySystem.buy(cost, message, "Your driller recovered " + cost +" hp! (" + cost +" DogeCoins spent)", "You need " + (cost - EconomySystem.money) + " more DogeCoins for this.")) {
+            } else if (EconomySystem.buy(cost, message, "Your driller recovered " + cost + " hp! (" + cost + " DogeCoins spent)", "You need " + (cost - EconomySystem.money) + " more DogeCoins for this.")) {
                 DrillerGame.hp = Math.min(DrillerGame.hp + cost, 100 * EconomySystem.flags.driller)
             }
             break
@@ -451,6 +451,29 @@ Commands.stats = new Command("Gets your amount of money and your rank", (message
     message.channel.send(EconomySystem.user + " has " + EconomySystem.money + " DogeCoins, and is rank " + EconomySystem.rank)
 })
 
+Commands.leaderboard = new Command("See the users with the highest ranks", (message, args) => {
+    let leaderboard = Object.keys(Economy.list).sort((a, b) => { return Economy.list[b].rank - Economy.list[a].rank })
+    let lbstring = ""
+    let lbnum = 1
+    for (let ID of leaderboard) {
+        lbstring = lbstring + lbnum + ": `" + Economy.list[ID].user + "`" + ": rank **" + Economy.list[ID].rank + "** (" + Economy.list[ID].money + " DogeCoins)\n"
+        lbnum++
+        if (lbnum > 10) { break }
+    }
+    message.channel.send(lbstring)
+})
+
+Commands.daily = new Command("Get some free DogeCoins, works only once per day", (message, args) => {
+    let day = new Date().getDate()
+    let EconomySystem = Economy.getEconomySystem(message.author)
+    if (day != EconomySystem.flags.day) {
+        EconomySystem.give(10 * EconomySystem.rank, message, true)
+        EconomySystem.flags.day = day
+    } else {
+        message.channel.send("Pretty sure you arleady got your reward today.")
+    }
+})
+
 Commands.rankup = new Command("Increases your rank if you have enough money", (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
     let needed = 100 * EconomySystem.rank
@@ -474,12 +497,13 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
         }
         if (chance > gamble + (5 + gamble / 100)) {
             message.channel.send("Oh wow you're lucky")
-            EconomySystem.give(gamble, null, true)
+            EconomySystem.give(gamble, undefined, true)
             EconomySystem.give(gamble, message, true)
         } else {
             message.channel.send("Nope, you lost.")
         }
     }
+
 }, [new RequiredArg(0, "You can't gamble air, choose an amount")])
 
 Commands.leaderboard = new Command("See the users with the highest ranks", (message, args) => {

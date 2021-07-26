@@ -27,7 +27,7 @@ client.on("message", (message) => { //function called when a message is sent
                 console.error(errormsg)
             }
         } else {
-            message.channel.send("Breaking news " + message.author.username + " is officially an idiot, that command doesn't exist")
+            message.channel.send("That command doesn't exist buddy, use `&help` for a list of commands")
         }
     }
 })
