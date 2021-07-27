@@ -530,31 +530,59 @@ class ReversiGame {
         return board
     }
 
-    checkLine(tile, startx, starty, dirx, diry) {
+    checkLine(tile, startx, starty, dirx, diry, dontfill) {
         let checktile = tile == Reversi.whiteTile ? Reversi.blackTile : Reversi.whiteTile
-        let cx = startx+dirx
-        let cy = starty+diry
+        let cx = startx + dirx
+        let cy = starty + diry
         let tilestochange = []
         while (this.board[cy] && this.board[cy][cx]) {
             if (this.board[cy][cx] == checktile) {
                 tilestochange.push([cy, cx])
             } else if (tilestochange.length > 0 && this.board[cy][cx] == tile) {
-                for (let tileinfo of tilestochange) {
-                    this.board[tileinfo[0]][tileinfo[1]] = tile
+                if (!dontfill) {
+                    for (let tileinfo of tilestochange) {
+                        this.board[tileinfo[0]][tileinfo[1]] = tile
+                    }
                 }
                 return true
             } else {
                 return false
             }
-            cx = cx+dirx
-            cy = cy+diry
+            cx = cx + dirx
+            cy = cy + diry
         }
         return false
     }
 
-    /*checkDirections(tile, startx, starty) {
+    findValidPositions(tile) {
+        let valids = 0
+        for (var y = 0; y < 8; y++) {
+            for (var x = 0; x < 8; x++) {
+                if ((this.board[y][x] == Reversi.emptyTile || this.board[y][x] == Reversi.validTile) && (this.checkLine(tile, x, y, 1, 0, true) || this.checkLine(tile, x, y, 1, 1, true) || this.checkLine(tile, x, y, 0, 1, true) || this.checkLine(tile, x, y, -1, 1, true) || this.checkLine(tile, x, y, -1, 0, true) || this.checkLine(tile, x, y, -1, -1, true) || this.checkLine(tile, x, y, 0, -1, true) || this.checkLine(tile, x, y, 1, -1, true))) {
+                    valids = valids + 1
+                    this.board[y][x] = Reversi.validTile
+                } else if (this.board[y][x] == Reversi.validTile) {
+                    this.board[y][x] = Reversi.emptyTile
+                }
+            }
+        }
+        return valids
+    }
 
-    }*/
+    getTotalDiscs() {
+        let blackdiscs = 0
+        let whitediscs = 0
+        for (var y = 0; y < 8; y++) {
+            for (var x = 0; x < 8; x++) {
+                if (this.board[y][x] == Reversi.blackTile) {
+                    blackdiscs = blackdiscs + 1
+                } else if (this.board[y][x] == Reversi.whiteTile) {
+                    whitediscs = whitediscs + 1
+                }
+            }
+        }
+        return [blackdiscs, whitediscs]
+    }
 }
 
 Reversi = new MPGame((message) => {
@@ -562,17 +590,19 @@ Reversi = new MPGame((message) => {
         throw ("You arleady are in someone else's match.")
     }
     Reversi.hosts[message.author.id] = new ReversiGame(message.author)
+    Reversi.hosts[message.author.id].findValidPositions(Reversi.blackTile)
     message.channel.send("Successfully created a match.")
 })
 Reversi.emptyTile = "\\🟩"
+Reversi.validTile = "\\🟧"
 Reversi.whiteTile = "\\⚪"
 Reversi.blackTile = "\\⚫"
-Reversi.help = 
-"`&reversi host` will make you host a match, the person who hosts a match is always white\n" +
-"`&reversi join (@user)` will make you join the pinged user's match if they are hosting\n" +
-"`&reversi quit` will make you leave the current match, if you are the host the joiner will be kicked too\n" +
-"`&reversi place (x) (y)` will try to place a disk in the given location\n" +
-"`&reversi board` shows the board of the current match, the users playing and who's turn it is"
+Reversi.help =
+    "`&reversi host` will make you host a match, the person who hosts a match is always white\n" +
+    "`&reversi join (@user)` will make you join the pinged user's match if they are hosting\n" +
+    "`&reversi quit` will make you leave the current match, if you are the host the joiner will be kicked too\n" +
+    "`&reversi place (x) (y)` will try to place a disk in the given location\n" +
+    "`&reversi board` shows the board of the current match, the users playing and who's turn it is"
 
 Commands.reversi = new Command("Defeat your opponent in this classic board game (warning: you need a friend)", (message, args) => {
     args[0] = args[0].toLowerCase()
@@ -600,20 +630,36 @@ Commands.reversi = new Command("Defeat your opponent in this classic board game 
                 throw ("You need to give valid coordinates for where to place your piece\nExample: `&reversi place 0 0` will place your piece in the top left corner")
             }
             if (ReversiGame.board[y] && ReversiGame.board[y][x]) {
-                let tile = ReversiGame.turn == 1 ? Reversi.whiteTile : Reversi.blackTile
-                let valid = false
-                if (ReversiGame.checkLine(tile, x, y, 1, 0)) valid = true
-                if (ReversiGame.checkLine(tile, x, y, 1, 1)) valid = true
-                if (ReversiGame.checkLine(tile, x, y, 0, 1)) valid = true
-                if (ReversiGame.checkLine(tile, x, y, -1, 1)) valid = true
-                if (ReversiGame.checkLine(tile, x, y, -1, 0)) valid = true
-                if (ReversiGame.checkLine(tile, x, y, -1, -1)) valid = true
-                if (ReversiGame.checkLine(tile, x, y, 0, -1)) valid = true
-                if (ReversiGame.checkLine(tile, x, y, 1, -1)) valid = true
-                if (ReversiGame.board[y][x] == Reversi.emptyTile && valid) {
+                let tile = ReversiGame.turn == 1 ? Reversi.blackTile : Reversi.whiteTile
+                if (ReversiGame.board[y][x] == Reversi.validTile) {
                     ReversiGame.board[y][x] = tile
+                    ReversiGame.checkLine(tile, x, y, 1, 0)
+                    ReversiGame.checkLine(tile, x, y, 1, 1)
+                    ReversiGame.checkLine(tile, x, y, 0, 1)
+                    ReversiGame.checkLine(tile, x, y, -1, 1)
+                    ReversiGame.checkLine(tile, x, y, -1, 0)
+                    ReversiGame.checkLine(tile, x, y, -1, -1)
+                    ReversiGame.checkLine(tile, x, y, 0, -1)
+                    ReversiGame.checkLine(tile, x, y, 1, -1)
                     ReversiGame.turn = (ReversiGame.turn % 2) + 1
+                    let validmoves = ReversiGame.findValidPositions(tile == Reversi.whiteTile ? Reversi.blackTile : Reversi.whiteTile)
                     message.channel.send(ReversiGame.getBoard())
+                    if (validmoves == 0) {
+                        message.channel.send("No valid moves found! Skipping turn...")
+                        validmoves = ReversiGame.findValidPositions(tile)
+                        ReversiGame.turn = (ReversiGame.turn % 2) + 1
+                        if (validmoves == 0) {
+                            let [blackdiscs, whitediscs] = ReversiGame.getTotalDiscs()
+                            message.channel.send("No valid moves found for either player! Game over!\nBlack discs: " + blackdiscs + "\nWhite discs: " + whitediscs)
+                            if (blackdiscs > whitediscs) {
+                                message.channel.send("The host wins!")
+                            } else if (blackdiscs < whitediscs) {
+                                message.channel.send("The joiner wins!")
+                            } else {
+                                message.channel.send("It's a tie!")
+                            }
+                        }
+                    }
                     break
                 }
                 throw ("That is not a valid position.")
@@ -624,7 +670,7 @@ Commands.reversi = new Command("Defeat your opponent in this classic board game 
         case "board": {
             let [ReversiGame, playernum] = Reversi.getGame(message.author.id)
             let board = ReversiGame.getBoard()
-            board = board + "Host (white): " + ReversiGame.hostname + "\nJoiner (black): " + ReversiGame.joinername
+            board = board + "Host (black): " + ReversiGame.hostname + "\nJoiner (white)): " + ReversiGame.joinername
             board = board + (ReversiGame.turn == 1 ? "\nIt's the host turn" : "\nIt's the joiner turn")
             message.channel.send(board)
             break
