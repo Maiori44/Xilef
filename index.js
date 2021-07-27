@@ -20,7 +20,7 @@ client.on("message", (message) => { //function called when a message is sent
             return
         } else if (Commands[command]) {
             try {
-                Commands[command].call(message, args)
+                Commands[command.toLowerCase()].call(message, args)
                 Economy.save()
             } catch (errormsg) {
                 message.channel.send(errormsg.toString().slice(0, 1900))

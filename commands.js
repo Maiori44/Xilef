@@ -362,7 +362,7 @@ const DrillerOres = [
     new DrillerOre("Perennial ore", 1800, 52, 5),
     new DrillerOre("Scorite", 1900, 53, 5),
     new DrillerOre("Astralite", 2000, 54, 5),
-    new DrillerOre("Exodium", 2500, 55, 5),   
+    new DrillerOre("Exodium", 2500, 55, 5),
     new DrillerOre("Uelibloomite", 2800, 56, 5),
     new DrillerOre("Auricite", 3000, 57, 5),
     new DrillerOre("absolutely nothing, cheater", -999999999, 0, 6),
@@ -440,48 +440,201 @@ class MPGame {
         this.joiners = {}
         this.makeGame = gamemaker
     }
-    
+
     getGame(id) {
         if (this.hosts[id]) {
             return [this.hosts[id], 1]
         } else if (this.joiners[id]) {
             return [this.joiners[id], 2]
+        } else {
+            throw ("Could not find the match.")
         }
     }
 
-    connectGame(id, hostid) {
-        this.joiners[id] = this.hosts[hostid]
+    connectGame(message) {
+        if (this.hosts[message.author.id]) {
+            throw ("You are arleady hosting a match yourself.")
+        }
+        let host = message.mentions.users.first()
+        if (!host) {
+            throw ("You need to ping the person you want to join.")
+        }
+        if (!this.hosts[host.id]) {
+            throw ("Could not find the match.")
+        } else if (this.hosts[host.id].joinername != "`none`") {
+            throw ("Someone is arleady inside this match.")
+        }
+        this.joiners[message.author.id] = this.hosts[host.id]
+        this.hosts[host.id].joinername = message.author.username
+        message.channel.send("Successfully joined " + host.username + "'s match.")
+    }
+
+    leaveGame(id) {
+        let quitmsg = "Successfully left the match."
+        if (this.hosts[id]) {
+            quitmsg = "Successfully closed the match."
+        }
+        if (this.hosts[id]) {
+            for (let key in this.joiners) {
+                if (this.joiners[key] == this.hosts[id]) {
+                    this.joiners[key] = undefined
+                }
+            }
+            this.hosts[id] = undefined
+            return quitmsg
+        } else if (this.joiners[id]) {
+            this.joiners[id].joinername = "`none`"
+            this.joiners[id] = undefined
+            return quitmsg
+        } else {
+            throw ("You are not inside any match.")
+        }
     }
 }
 
 class ReversiGame {
     constructor(user) {
-        this.map = []
-        for (var i = 0; i < 8; i++) {
-            this.map[i] = [Reversi.emptyTile]
+        this.board = []
+        for (var y = 0; y < 8; y++) {
+            this.board[y] = []
+            for (var x = 0; x < 8; x++) {
+                this.board[y][x] = Reversi.emptyTile
+            }
         }
-        this.map[3][3] = Reversi.whiteTile
-        this.map[3][4] = Reversi.blackTile
-        this.map[4][3] = Reversi.blackTile
-        this.map[4][4] = Reversi.whiteTile
-        this.username = user.username
+        this.board[3][3] = Reversi.whiteTile
+        this.board[3][4] = Reversi.blackTile
+        this.board[4][3] = Reversi.blackTile
+        this.board[4][4] = Reversi.whiteTile
+        this.hostname = user.username
+        this.joinername = "`none`"
+        this.turn = 1
     }
+
+    getBoard() {
+        let board = ""
+        for (var y = 0; y < 8; y++) {
+            for (var x = 0; x < 8; x++) {
+                board = board + this.board[y][x]
+            }
+            board = board + y + "\n"
+        }
+        board = board + ":zero::one::two::three::four::five::six::seven:\n"
+        board = board.replace("0", ":zero:")
+        board = board.replace("1", ":one:")
+        board = board.replace("2", ":two:")
+        board = board.replace("3", ":three:")
+        board = board.replace("4", ":four:")
+        board = board.replace("5", ":five:")
+        board = board.replace("6", ":six:")
+        board = board.replace("7", ":seven:")
+        return board
+    }
+
+    checkLine(tile, startx, starty, dirx, diry) {
+        let checktile = tile == Reversi.whiteTile ? Reversi.blackTile : Reversi.whiteTile
+        let cx = startx+dirx
+        let cy = starty+diry
+        let tilestochange = []
+        while (this.board[cy] && this.board[cy][cx]) {
+            if (this.board[cy][cx] == checktile) {
+                tilestochange.push([cy, cx])
+            } else if (tilestochange.length > 0 && this.board[cy][cx] == tile) {
+                for (let tileinfo of tilestochange) {
+                    this.board[tileinfo[0]][tileinfo[1]] = tile
+                }
+                return true
+            } else {
+                return false
+            }
+            cx = cx+dirx
+            cy = cy+diry
+        }
+        return false
+    }
+
+    /*checkDirections(tile, startx, starty) {
+
+    }*/
 }
 
-Reversi = new MPGame((user) => { Reversi.hosts[user.id] = new ReversiGame(user) })
-
-Commands.test = new Command("test", (message, args) => {
-    message.channel.send(
-        "\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\n" +
-        "\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\n" +
-        "\\🟩\\🟩\\⚪\\🟩\\🟩\\🟩\\🟩\\🟩\n" +
-        "\\🟩\\🟩\\⚪\\🟩\\🟩\\🟩\\⚫\\🟩\n" +
-        "\\🟩\\🟩\\⚪\\🟩\\🟩\\⚫\\🟩\\🟩\n" +
-        "\\🟩\\🟩\\🟩\\🟩\\⚫\\🟩\\🟩\\🟩\n" +
-        "\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\n" +
-        "\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\\🟩\n"
-    )
+Reversi = new MPGame((message) => {
+    if (Reversi.joiners[message.author.id]) {
+        throw ("You arleady are in someone else's match.")
+    }
+    Reversi.hosts[message.author.id] = new ReversiGame(message.author)
+    message.channel.send("Successfully created a match.")
 })
+Reversi.emptyTile = "\\🟩"
+Reversi.whiteTile = "\\⚪"
+Reversi.blackTile = "\\⚫"
+Reversi.help = 
+"`&reversi host` will make you host a match, the person who hosts a match is always white\n" +
+"`&reversi join (@user)` will make you join the pinged user's match if they are hosting\n" +
+"`&reversi quit` will make you leave the current match, if you are the host the joiner will be kicked too\n" +
+"`&reversi place (x) (y)` will try to place a disk in the given location\n" +
+"`&reversi board` shows the board of the current match, the users playing and who's turn it is"
+
+Commands.reversi = new Command("Defeat your opponent in this classic board game (warning: you need a friend)", (message, args) => {
+    args[0] = args[0].toLowerCase()
+    switch (args[0]) {
+        case "host": {
+            Reversi.makeGame(message)
+            break
+        }
+        case "join": {
+            Reversi.connectGame(message)
+            break
+        }
+        case "quit": {
+            message.channel.send(Reversi.leaveGame(message.author.id))
+            break
+        }
+        case "place": {
+            let [ReversiGame, playernum] = Reversi.getGame(message.author.id)
+            if (playernum != ReversiGame.turn) {
+                throw ("It's not your turn yet.")
+            }
+            let x = parseInt(args[1])
+            let y = parseInt(args[2])
+            if (isNaN(x) || isNaN(y)) {
+                throw ("You need to give valid coordinates for where to place your piece\nExample: `&reversi place 0 0` will place your piece in the top left corner")
+            }
+            if (ReversiGame.board[y] && ReversiGame.board[y][x]) {
+                let tile = ReversiGame.turn == 1 ? Reversi.whiteTile : Reversi.blackTile
+                let valid = false
+                if (ReversiGame.checkLine(tile, x, y, 1, 0)) valid = true
+                if (ReversiGame.checkLine(tile, x, y, 1, 1)) valid = true
+                if (ReversiGame.checkLine(tile, x, y, 0, 1)) valid = true
+                if (ReversiGame.checkLine(tile, x, y, -1, 1)) valid = true
+                if (ReversiGame.checkLine(tile, x, y, -1, 0)) valid = true
+                if (ReversiGame.checkLine(tile, x, y, -1, -1)) valid = true
+                if (ReversiGame.checkLine(tile, x, y, 0, -1)) valid = true
+                if (ReversiGame.checkLine(tile, x, y, 1, -1)) valid = true
+                if (ReversiGame.board[y][x] == Reversi.emptyTile && valid) {
+                    ReversiGame.board[y][x] = tile
+                    ReversiGame.turn = (ReversiGame.turn % 2) + 1
+                    message.channel.send(ReversiGame.getBoard())
+                    break
+                }
+                throw ("That is not a valid position.")
+            } else {
+                throw ("Your given location is off bounds.")
+            }
+        }
+        case "board": {
+            let [ReversiGame, playernum] = Reversi.getGame(message.author.id)
+            let board = ReversiGame.getBoard()
+            board = board + "Host (white): " + ReversiGame.hostname + "\nJoiner (black): " + ReversiGame.joinername
+            board = board + (ReversiGame.turn == 1 ? "\nIt's the host turn" : "\nIt's the joiner turn")
+            message.channel.send(board)
+            break
+        }
+        default: {
+            message.channel.send(Reversi.help)
+            return
+        }
+    }
+}, [new RequiredArg(0, Reversi.help)])
 
 //economy commands
 

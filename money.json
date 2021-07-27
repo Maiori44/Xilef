@@ -1,10 +1,10 @@
 {
     "621307633718132746": {
-        "money": 2326,
-        "rank": 27,
+        "money": 1704,
+        "rank": 29,
         "user": "Felix44",
         "flags": {
-            "driller": 4,
+            "driller": 5,
             "day": 27
         }
     },
@@ -63,7 +63,7 @@
         }
     },
     "484682433925611542": {
-        "money": 20192,
+        "money": 73396,
         "rank": 120,
         "user": "Dark_Brick",
         "flags": {
@@ -72,12 +72,12 @@
         }
     },
     "642719190288957450": {
-        "money": 0,
+        "money": 10,
         "rank": 1,
         "user": "Бумер/Пламя",
         "flags": {
             "driller": 1,
-            "day": -1
+            "day": 27
         }
     },
     "242179187983515650": {
@@ -108,21 +108,21 @@
         }
     },
     "604213801927180295": {
-        "money": 258,
+        "money": 318,
         "rank": 6,
         "user": "Syphon",
         "flags": {
             "driller": 1,
-            "day": -1
+            "day": 27
         }
     },
     "483715787467653122": {
-        "money": 484,
+        "money": 564,
         "rank": 8,
         "user": "poly translator*",
         "flags": {
             "driller": 1,
-            "day": -1
+            "day": 27
         }
     },
     "850867485263527956": {
@@ -177,6 +177,33 @@
         "flags": {
             "driller": 1,
             "day": 27
+        }
+    },
+    "570503517832478720": {
+        "money": 10,
+        "rank": 1,
+        "user": "Oh God Not The Belt",
+        "flags": {
+            "driller": 1,
+            "day": 27
+        }
+    },
+    "799228822889037824": {
+        "money": 0,
+        "rank": 1,
+        "user": "ARJr",
+        "flags": {
+            "driller": 1,
+            "day": -1
+        }
+    },
+    "747506529405763654": {
+        "money": 0,
+        "rank": 1,
+        "user": "Nekos|Ftw",
+        "flags": {
+            "driller": 1,
+            "day": -1
         }
     }
 }
