@@ -434,14 +434,41 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
     }
 }, [new RequiredArg(0, "`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n`&driller repair` repairs the driller, it won't be free though (costs 50 DogeCoins)\n`&driller upgrade` upgrades your driller forever, very expensive.\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")])
 
+class MPGame {
+    constructor(gamemaker) {
+        this.hosts = {}
+        this.joiners = {}
+        this.makeGame = gamemaker
+    }
+    
+    getGame(id) {
+        if (this.hosts[id]) {
+            return [this.hosts[id], 1]
+        } else if (this.joiners[id]) {
+            return [this.joiners[id], 2]
+        }
+    }
+
+    connectGame(id, hostid) {
+        this.joiners[id] = this.hosts[hostid]
+    }
+}
+
 class ReversiGame {
-    constructor() {
+    constructor(user) {
         this.map = []
         for (var i = 0; i < 8; i++) {
             this.map[i] = [Reversi.emptyTile]
         }
+        this.map[3][3] = Reversi.whiteTile
+        this.map[3][4] = Reversi.blackTile
+        this.map[4][3] = Reversi.blackTile
+        this.map[4][4] = Reversi.whiteTile
+        this.username = user.username
     }
 }
+
+Reversi = new MPGame((user) => { Reversi.hosts[user.id] = new ReversiGame(user) })
 
 Commands.test = new Command("test", (message, args) => {
     message.channel.send(
