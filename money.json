@@ -1,6 +1,6 @@
 {
     "621307633718132746": {
-        "money": 1704,
+        "money": 1604,
         "rank": 29,
         "user": "Felix44",
         "flags": {
@@ -81,8 +81,8 @@
         }
     },
     "242179187983515650": {
-        "money": 100,
-        "rank": 1,
+        "money": 35,
+        "rank": 5,
         "user": "Kira_46",
         "flags": {
             "driller": 1,
@@ -90,11 +90,11 @@
         }
     },
     "724232875238621204": {
-        "money": 1286,
-        "rank": 18,
+        "money": 1625,
+        "rank": 40,
         "user": "Fele88",
         "flags": {
-            "driller": 1,
+            "driller": 5,
             "day": -1
         }
     },
