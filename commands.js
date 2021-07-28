@@ -510,7 +510,7 @@ class ReversiGame {
         this.turn = 1
     }
 
-    getBoard() {
+    getMatchInfo() {
         let board = ""
         for (var y = 0; y < 8; y++) {
             for (var x = 0; x < 8; x++) {
@@ -519,15 +519,25 @@ class ReversiGame {
             board = board + y + "\n"
         }
         board = board + ":zero::one::two::three::four::five::six::seven:\n"
-        board = board.replace("0", ":zero:")
-        board = board.replace("1", ":one:")
-        board = board.replace("2", ":two:")
-        board = board.replace("3", ":three:")
-        board = board.replace("4", ":four:")
-        board = board.replace("5", ":five:")
-        board = board.replace("6", ":six:")
-        board = board.replace("7", ":seven:")
-        return board
+        board = board.replace("0\n", ":zero:\n")
+        board = board.replace("1\n", ":one:\n")
+        board = board.replace("2\n", ":two:\n")
+        board = board.replace("3\n", ":three:\n")
+        board = board.replace("4\n", ":four:\n")
+        board = board.replace("5\n", ":five:\n")
+        board = board.replace("6\n", ":six:\n")
+        board = board.replace("7\n", ":seven:\n")
+        let [blackdiscs, whitediscs] = this.getTotalDiscs()
+        return new Discord.MessageEmbed()
+        .setColor("#009900")
+        .setTitle("Reversi match")
+        .setDescription(board)
+        .addFields(
+            { name: "Host (black)", value: this.hostname + "\n" + blackdiscs + " discs", inline: true },
+            { name: "Joiner (white)", value: this.joinername + "\n" + whitediscs + " discs", inline: true },
+        )
+        .setTimestamp()
+        .setFooter(this.turn == 1 ? "\nIt's the host turn" : "\nIt's the joiner turn")
     }
 
     checkLine(tile, startx, starty, dirx, diry, dontfill) {
@@ -593,10 +603,10 @@ Reversi = new MPGame((message) => {
     Reversi.hosts[message.author.id].findValidPositions(Reversi.blackTile)
     message.channel.send("Successfully created a match.")
 })
-Reversi.emptyTile = "\\🟩"
-Reversi.validTile = "\\🟧"
-Reversi.whiteTile = "\\⚪"
-Reversi.blackTile = "\\⚫"
+Reversi.emptyTile = "<:green_square:869976853090271323>"
+Reversi.validTile = "<:orange_square:869976862615543818>"
+Reversi.blackTile = "<:black_circle:869976829811884103>"
+Reversi.whiteTile = "<:white_circle:869976843263045642>"
 Reversi.help =
     "`&reversi host` will make you host a match, the person who hosts a match is always white\n" +
     "`&reversi join (@user)` will make you join the pinged user's match if they are hosting\n" +
@@ -643,9 +653,8 @@ Commands.reversi = new Command("Defeat your opponent in this classic board game 
                     ReversiGame.checkLine(tile, x, y, 1, -1)
                     ReversiGame.turn = (ReversiGame.turn % 2) + 1
                     let validmoves = ReversiGame.findValidPositions(tile == Reversi.whiteTile ? Reversi.blackTile : Reversi.whiteTile)
-                    message.channel.send(ReversiGame.getBoard())
+                    message.channel.send(ReversiGame.getMatchInfo())
                     if (validmoves == 0) {
-                        message.channel.send("No valid moves found! Skipping turn...")
                         validmoves = ReversiGame.findValidPositions(tile)
                         ReversiGame.turn = (ReversiGame.turn % 2) + 1
                         if (validmoves == 0) {
@@ -658,6 +667,9 @@ Commands.reversi = new Command("Defeat your opponent in this classic board game 
                             } else {
                                 message.channel.send("It's a tie!")
                             }
+                        } else {
+                            message.channel.send("No valid moves found! Skipping turn...")
+                            message.channel.send(ReversiGame.getMatchInfo())
                         }
                     }
                     break
@@ -669,10 +681,7 @@ Commands.reversi = new Command("Defeat your opponent in this classic board game 
         }
         case "board": {
             let [ReversiGame, playernum] = Reversi.getGame(message.author.id)
-            let board = ReversiGame.getBoard()
-            board = board + "Host (black): " + ReversiGame.hostname + "\nJoiner (white)): " + ReversiGame.joinername
-            board = board + (ReversiGame.turn == 1 ? "\nIt's the host turn" : "\nIt's the joiner turn")
-            message.channel.send(board)
+            message.channel.send(ReversiGame.getMatchInfo())
             break
         }
         default: {
