@@ -459,6 +459,7 @@ class MPGame {
         Game.joiner = undefined
         Game.hostname = message.author.username
         Game.joinername = "`none`"
+        Game.turn = 1
         message.channel.send("Successfully created a match.")
     }
 
@@ -516,7 +517,7 @@ class MPGame {
 }
 
 class ReversiGame {
-    constructor(user) {
+    constructor() {
         this.board = []
         for (var y = 0; y < 8; y++) {
             this.board[y] = []
@@ -528,7 +529,6 @@ class ReversiGame {
         this.board[3][4] = Reversi.darkTile
         this.board[4][3] = Reversi.darkTile
         this.board[4][4] = Reversi.lightTile
-        this.turn = 1
     }
 
     getMatchInfo() {
@@ -617,7 +617,7 @@ class ReversiGame {
 }
 
 Reversi = new MPGame((message) => {
-    Reversi.hosts[message.author.id] = new ReversiGame(message.author)
+    Reversi.hosts[message.author.id] = new ReversiGame()
     Reversi.hosts[message.author.id].findValidPositions(Reversi.darkTile)
     return Reversi.hosts[message.author.id]
 })
@@ -716,6 +716,22 @@ Commands.reversi = new Command("Defeat your opponent in this classic board game 
         }
     }
 }, [new RequiredArg(0, Reversi.help)])
+
+class Connect4Game {
+    constructor() {
+        this.board = []
+        for (var y = 0; y < 6; y++) {
+            this.board[y] = []
+            for (var x = 0; x < 7; x++) {
+                this.board[y][x] = Connect4.emptyTile
+            }
+        }
+    }
+}
+
+Connect4 = new MPGame((message) => {
+    Connect4.hosts[message.author.id] = new Connect4Game()
+})
 
 //economy commands
 
