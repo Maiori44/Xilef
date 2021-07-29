@@ -1,6 +1,6 @@
 {
     "621307633718132746": {
-        "money": 2130,
+        "money": 0,
         "rank": 29,
         "user": "Felix44",
         "flags": {
@@ -120,18 +120,18 @@
         }
     },
     "604213801927180295": {
-        "money": 318,
+        "money": 1400,
         "rank": 6,
         "user": "Syphon",
         "flags": {
             "driller": 1,
             "day": 27,
-            "reversi": 0
+            "reversi": 3
         }
     },
     "483715787467653122": {
-        "money": 564,
-        "rank": 8,
+        "money": 864,
+        "rank": 9,
         "user": "poly translator*",
         "flags": {
             "driller": 1,
