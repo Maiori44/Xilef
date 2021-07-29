@@ -524,10 +524,10 @@ class ReversiGame {
                 this.board[y][x] = Reversi.emptyTile
             }
         }
-        this.board[3][3] = Reversi.whiteTile
-        this.board[3][4] = Reversi.blackTile
-        this.board[4][3] = Reversi.blackTile
-        this.board[4][4] = Reversi.whiteTile
+        this.board[3][3] = Reversi.lightTile
+        this.board[3][4] = Reversi.darkTile
+        this.board[4][3] = Reversi.darkTile
+        this.board[4][4] = Reversi.lightTile
         this.turn = 1
     }
 
@@ -554,15 +554,15 @@ class ReversiGame {
             .setTitle("Reversi match")
             .setDescription(board)
             .addFields(
-                { name: "Host (black)", value: this.hostname + "\n" + blackdiscs + " discs", inline: true },
-                { name: "Joiner (white)", value: this.joinername + "\n" + whitediscs + " discs", inline: true },
+                { name: "Host (dark)", value: this.hostname + "\n" + blackdiscs + " disks", inline: true },
+                { name: "Joiner (light)", value: this.joinername + "\n" + whitediscs + " disks", inline: true },
             )
             .setTimestamp()
             .setFooter(this.turn == 1 ? "\nIt's the host turn" : "\nIt's the joiner turn")
     }
 
     checkLine(tile, startx, starty, dirx, diry, dontfill) {
-        let checktile = tile == Reversi.whiteTile ? Reversi.blackTile : Reversi.whiteTile
+        let checktile = tile == Reversi.lightTile ? Reversi.darkTile : Reversi.lightTile
         let cx = startx + dirx
         let cy = starty + diry
         let tilestochange = []
@@ -605,9 +605,9 @@ class ReversiGame {
         let whitediscs = 0
         for (var y = 0; y < 8; y++) {
             for (var x = 0; x < 8; x++) {
-                if (this.board[y][x] == Reversi.blackTile) {
+                if (this.board[y][x] == Reversi.darkTile) {
                     blackdiscs = blackdiscs + 1
-                } else if (this.board[y][x] == Reversi.whiteTile) {
+                } else if (this.board[y][x] == Reversi.lightTile) {
                     whitediscs = whitediscs + 1
                 }
             }
@@ -618,13 +618,13 @@ class ReversiGame {
 
 Reversi = new MPGame((message) => {
     Reversi.hosts[message.author.id] = new ReversiGame(message.author)
-    Reversi.hosts[message.author.id].findValidPositions(Reversi.blackTile)
+    Reversi.hosts[message.author.id].findValidPositions(Reversi.darkTile)
     return Reversi.hosts[message.author.id]
 })
 Reversi.emptyTile = "<:green_square:869976853090271323>"
 Reversi.validTile = "<:orange_square:869976862615543818>"
-Reversi.blackTile = "<:black_circle:869976829811884103>"
-Reversi.whiteTile = "<:white_circle:869976843263045642>"
+Reversi.darkTile = "<:black_circle:869976829811884103>"
+Reversi.lightTile = "<:white_circle:869976843263045642>"
 Reversi.help =
     "`&reversi host` will make you host a match, the person who hosts a match is always white\n" +
     "`&reversi join (@user)` will make you join the pinged user's match if they are hosting\n" +
@@ -658,7 +658,7 @@ Commands.reversi = new Command("Defeat your opponent in this classic board game 
                 throw ("You need to give valid coordinates for where to place your piece\nExample: `&reversi place 0 0` will place your piece in the top left corner")
             }
             if (ReversiGame.board[y] && ReversiGame.board[y][x]) {
-                let tile = ReversiGame.turn == 1 ? Reversi.blackTile : Reversi.whiteTile
+                let tile = ReversiGame.turn == 1 ? Reversi.darkTile : Reversi.lightTile
                 if (ReversiGame.board[y][x] == Reversi.validTile) {
                     ReversiGame.board[y][x] = tile
                     ReversiGame.checkLine(tile, x, y, 1, 0)
@@ -670,23 +670,25 @@ Commands.reversi = new Command("Defeat your opponent in this classic board game 
                     ReversiGame.checkLine(tile, x, y, 0, -1)
                     ReversiGame.checkLine(tile, x, y, 1, -1)
                     ReversiGame.turn = (ReversiGame.turn % 2) + 1
-                    let validmoves = ReversiGame.findValidPositions(tile == Reversi.whiteTile ? Reversi.blackTile : Reversi.whiteTile)
+                    let validmoves = ReversiGame.findValidPositions(tile == Reversi.lightTile ? Reversi.darkTile : Reversi.lightTile)
                     message.channel.send(ReversiGame.getMatchInfo())
                     if (validmoves == 0) {
                         validmoves = ReversiGame.findValidPositions(tile)
                         ReversiGame.turn = (ReversiGame.turn % 2) + 1
                         if (validmoves == 0) {
                             let [blackdiscs, whitediscs] = ReversiGame.getTotalDiscs()
-                            message.channel.send("No valid moves found for either player! Game over!\nBlack discs: " + blackdiscs + "\nWhite discs: " + whitediscs)
+                            message.channel.send("No valid moves found for either player! Game over!")
                             if (blackdiscs > whitediscs) {
                                 message.channel.send("The host wins!")
                                 let EconomySystem = Economy.getEconomySystem({ id: ReversiGame.host, username: ReversiGame.hostname })
                                 EconomySystem.give(200, message)
+                                EconomySystem.alterFlag("reversi", 1)
                             } else if (blackdiscs < whitediscs) {
                                 message.channel.send("The joiner wins!")
                                 if (ReversiGame.joiner) {
                                     let EconomySystem = Economy.getEconomySystem({ id: ReversiGame.joiner, username: ReversiGame.joinername })
                                     EconomySystem.give(200, message)
+                                    EconomySystem.alterFlag("reversi", 1)
                                 }
                             } else {
                                 message.channel.send("It's a tie!")

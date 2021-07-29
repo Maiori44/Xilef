@@ -11,6 +11,10 @@ class EconomySystem {
         }
     }
 
+    alterFlag(flagname, amount, max) {
+        this.flags[flagname] = Math.min(this.flags[flagname] + amount, max || Infinity)
+    }
+
     give(amount, message, nobonus) {
         this.money = nobonus ? this.money + amount : this.money + amount + Math.floor(((amount/100)*(this.rank-1)))
         if (message) {
