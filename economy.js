@@ -7,6 +7,7 @@ class EconomySystem {
         this.flags = {
             driller: flags.driller || 1,
             day: flags.day || -1,
+            reversi: flags.reversi || 0,
         }
     }
 

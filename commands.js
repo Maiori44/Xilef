@@ -210,6 +210,9 @@ Amongus = new Game(() => {
     Amogus.reset()
     return Amogus
 })
+Amongus.help =
+    "`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n" +
+    "`&crew eject (color)` to eject a crewmate out, you can only eject once"
 
 Commands.crew = new Command("Find the imposter!", (message, args) => {
     let Amogus = Amongus.getGame(message.author.id)
@@ -289,7 +292,7 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
             break
         }
         default: {
-            message.channel.send("`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n`&crew eject (color)` to eject a crewmate out, you can only eject once")
+            message.channel.send(Amongus.help)
             return
         }
     }
@@ -302,7 +305,7 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
     } else {
         message.channel.send(Amogus.turns + " turns left.")
     }
-}, [new RequiredArg(0, "`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n`&crew eject (color)` to eject a crewmate out, you can only eject once"),
+}, [new RequiredArg(0, Amongus.help),
 new RequiredArg(1, "You need to choose the color of the crewmate if you want to do anything to them, " +
     "possible options are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.")])
 
@@ -330,7 +333,7 @@ class DrillerOre {
 }
 
 Driller = new Game((EconomySystem) => { return new DrillerGame(EconomySystem) })
-const DrillerOres = [
+Driller.Ores = [
     new DrillerOre("Copper", 10, 10, 1),
     new DrillerOre("Tin", 15, 11, 1),
     new DrillerOre("Iron", 20, 12, 1),
@@ -367,6 +370,12 @@ const DrillerOres = [
     new DrillerOre("Auricite", 3000, 57, 5),
     new DrillerOre("absolutely nothing, cheater", -999999999, 0, 6),
 ]
+Driller.help =
+    "`&driller stats` says the stats of your driller\n" +
+    "`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n" +
+    "`&driller repair (amount)` repairs the driller, it won't be free though\n" +
+    "`&driller upgrade` upgrades your driller forever, very expensive\n" +
+    "`&driller cashin` get all the DogeCoins the driller got, and reset the game"
 
 Commands.driller = new Command("Dig deeper and deeper to find the treasures", (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
@@ -378,19 +387,19 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
             break
         }
         case "dig": {
-            if (DrillerOres[DrillerGame.depth].tier > EconomySystem.flags.driller) {
+            if (Driller.Ores[DrillerGame.depth].tier > EconomySystem.flags.driller) {
                 message.channel.send("Your driller is too weak to dig any further!")
                 return
             }
             let hurtchance = Math.floor(Math.random() * 101)
-            if (hurtchance <= DrillerOres[DrillerGame.depth].lavachance) {
+            if (hurtchance <= Driller.Ores[DrillerGame.depth].lavachance) {
                 message.channel.send("Your driller digs deeper..and finds lava! Your driller got damaged!")
                 DrillerGame.hp = DrillerGame.hp - Math.max((10 * DrillerGame.depth), 1)
             } else {
-                message.channel.send("Your driller digs deeper..and finds " + DrillerOres[DrillerGame.depth].name + "! (worth " + DrillerOres[DrillerGame.depth].value + ")")
-                DrillerGame.cash = DrillerGame.cash + DrillerOres[DrillerGame.depth].value
+                message.channel.send("Your driller digs deeper..and finds " + Driller.Ores[DrillerGame.depth].name + "! (worth " + Driller.Ores[DrillerGame.depth].value + ")")
+                DrillerGame.cash = DrillerGame.cash + Driller.Ores[DrillerGame.depth].value
                 DrillerGame.depth++
-                if (DrillerOres[DrillerGame.depth].tier > EconomySystem.flags.driller) {
+                if (Driller.Ores[DrillerGame.depth].tier > EconomySystem.flags.driller) {
                     message.channel.send("Your driller is struggling to dig any further, you might need to upgrade it")
                 }
             }
@@ -423,7 +432,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
             break
         }
         default: {
-            message.channel.send("`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or traps!\n`&driller repair` repairs the driller, it won't be free though (costs 50 DogeCoins)\n`&driller upgrade` upgrades your driller forever, very expensive.\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")
+            message.channel.send(Driller.help)
             return
         }
     }
@@ -432,13 +441,25 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
         EconomySystem.steal(25 * DrillerGame.depth, message)
         DrillerGame.reset(EconomySystem)
     }
-}, [new RequiredArg(0, "`&driller stats` says the stats of your driller\n`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n`&driller repair` repairs the driller, it won't be free though (costs 50 DogeCoins)\n`&driller upgrade` upgrades your driller forever, very expensive.\n`&driller cashin` get all the DogeCoins the driller got, and reset the game")])
+}, [new RequiredArg(0, Driller.help)])
 
 class MPGame {
     constructor(gamemaker) {
         this.hosts = {}
         this.joiners = {}
-        this.makeGame = gamemaker
+        this.gamemaker = gamemaker
+    }
+
+    makeGame(message) {
+        if (this.joiners[message.author.id]) {
+            throw ("You arleady are in someone else's match.")
+        }
+        let Game = this.gamemaker(message)
+        Game.host = message.author.id
+        Game.joiner = undefined
+        Game.hostname = message.author.username
+        Game.joinername = "`none`"
+        message.channel.send("Successfully created a match.")
     }
 
     getGame(id) {
@@ -465,7 +486,8 @@ class MPGame {
             throw ("Someone is arleady inside this match.")
         }
         this.joiners[message.author.id] = this.hosts[host.id]
-        this.hosts[host.id].joinername = message.author.username
+        this.joiners[message.author.id].joiner = message.author.id
+        this.joiners[message.author.id].joinername = message.author.username
         message.channel.send("Successfully joined " + host.username + "'s match.")
     }
 
@@ -483,6 +505,7 @@ class MPGame {
             this.hosts[id] = undefined
             return quitmsg
         } else if (this.joiners[id]) {
+            this.joiners[id].joiner = undefined
             this.joiners[id].joinername = "`none`"
             this.joiners[id] = undefined
             return quitmsg
@@ -505,8 +528,6 @@ class ReversiGame {
         this.board[3][4] = Reversi.blackTile
         this.board[4][3] = Reversi.blackTile
         this.board[4][4] = Reversi.whiteTile
-        this.hostname = user.username
-        this.joinername = "`none`"
         this.turn = 1
     }
 
@@ -529,15 +550,15 @@ class ReversiGame {
         board = board.replace("7\n", ":seven:\n")
         let [blackdiscs, whitediscs] = this.getTotalDiscs()
         return new Discord.MessageEmbed()
-        .setColor("#009900")
-        .setTitle("Reversi match")
-        .setDescription(board)
-        .addFields(
-            { name: "Host (black)", value: this.hostname + "\n" + blackdiscs + " discs", inline: true },
-            { name: "Joiner (white)", value: this.joinername + "\n" + whitediscs + " discs", inline: true },
-        )
-        .setTimestamp()
-        .setFooter(this.turn == 1 ? "\nIt's the host turn" : "\nIt's the joiner turn")
+            .setColor("#009900")
+            .setTitle("Reversi match")
+            .setDescription(board)
+            .addFields(
+                { name: "Host (black)", value: this.hostname + "\n" + blackdiscs + " discs", inline: true },
+                { name: "Joiner (white)", value: this.joinername + "\n" + whitediscs + " discs", inline: true },
+            )
+            .setTimestamp()
+            .setFooter(this.turn == 1 ? "\nIt's the host turn" : "\nIt's the joiner turn")
     }
 
     checkLine(tile, startx, starty, dirx, diry, dontfill) {
@@ -596,12 +617,9 @@ class ReversiGame {
 }
 
 Reversi = new MPGame((message) => {
-    if (Reversi.joiners[message.author.id]) {
-        throw ("You arleady are in someone else's match.")
-    }
     Reversi.hosts[message.author.id] = new ReversiGame(message.author)
     Reversi.hosts[message.author.id].findValidPositions(Reversi.blackTile)
-    message.channel.send("Successfully created a match.")
+    return Reversi.hosts[message.author.id]
 })
 Reversi.emptyTile = "<:green_square:869976853090271323>"
 Reversi.validTile = "<:orange_square:869976862615543818>"
@@ -662,8 +680,14 @@ Commands.reversi = new Command("Defeat your opponent in this classic board game 
                             message.channel.send("No valid moves found for either player! Game over!\nBlack discs: " + blackdiscs + "\nWhite discs: " + whitediscs)
                             if (blackdiscs > whitediscs) {
                                 message.channel.send("The host wins!")
+                                let EconomySystem = Economy.getEconomySystem({ id: ReversiGame.host, username: ReversiGame.hostname })
+                                EconomySystem.give(200, message)
                             } else if (blackdiscs < whitediscs) {
                                 message.channel.send("The joiner wins!")
+                                if (ReversiGame.joiner) {
+                                    let EconomySystem = Economy.getEconomySystem({ id: ReversiGame.joiner, username: ReversiGame.joinername })
+                                    EconomySystem.give(200, message)
+                                }
                             } else {
                                 message.channel.send("It's a tie!")
                             }
@@ -696,7 +720,16 @@ Commands.reversi = new Command("Defeat your opponent in this classic board game 
 Commands.stats = new Command("Gets your amount of money and your rank", (message, args) => {
     let user = message.mentions.users.first() || message.author
     let EconomySystem = Economy.getEconomySystem(user)
-    message.channel.send(EconomySystem.user + " has " + EconomySystem.money + " DogeCoins, and is rank " + EconomySystem.rank)
+    message.channel.send(new Discord.MessageEmbed()
+        .setColor(message.member.displayHexColor)
+        .setTitle(EconomySystem.user + "'s statistics")
+        .setDescription("```lua\nDogeCoins: " + EconomySystem.money + "\nRank: " + EconomySystem.rank + "```")
+        .addFields(
+            { name: "Driller tier:", value: EconomySystem.flags.driller, inline: true },
+            { name: "Reversi matches won:", value: EconomySystem.flags.reversi, inline: true },
+        )
+        .setTimestamp()
+    )
 })
 
 Commands.leaderboard = new Command("See the users with the highest ranks", (message, args) => {

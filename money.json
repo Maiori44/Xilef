@@ -1,11 +1,12 @@
 {
     "621307633718132746": {
-        "money": 1584,
+        "money": 1874,
         "rank": 29,
         "user": "Felix44",
         "flags": {
             "driller": 5,
-            "day": 28
+            "day": 29,
+            "reversi": 0
         }
     },
     "276363003270791168": {
@@ -14,7 +15,8 @@
         "user": "AliFurkan",
         "flags": {
             "driller": 1,
-            "day": 26
+            "day": 26,
+            "reversi": 0
         }
     },
     "602651056320675840": {
@@ -23,7 +25,8 @@
         "user": "Sebo2205",
         "flags": {
             "driller": 4,
-            "day": 27
+            "day": 27,
+            "reversi": 0
         }
     },
     "393501189788139520": {
@@ -32,7 +35,8 @@
         "user": "Rem",
         "flags": {
             "driller": 1,
-            "day": -1
+            "day": -1,
+            "reversi": 0
         }
     },
     "365289087864668160": {
@@ -41,7 +45,8 @@
         "user": "Helvetica",
         "flags": {
             "driller": 1,
-            "day": -1
+            "day": -1,
+            "reversi": 0
         }
     },
     "819577272276484107": {
@@ -50,7 +55,8 @@
         "user": "escapevelocity",
         "flags": {
             "driller": 1,
-            "day": -1
+            "day": -1,
+            "reversi": 0
         }
     },
     "367769458804129794": {
@@ -59,7 +65,8 @@
         "user": "Bobmcboblin",
         "flags": {
             "driller": 1,
-            "day": -1
+            "day": -1,
+            "reversi": 0
         }
     },
     "484682433925611542": {
@@ -68,7 +75,8 @@
         "user": "Dark_Brick",
         "flags": {
             "driller": 5,
-            "day": -1
+            "day": -1,
+            "reversi": 0
         }
     },
     "642719190288957450": {
@@ -77,7 +85,8 @@
         "user": "Бумер/Пламя",
         "flags": {
             "driller": 1,
-            "day": 27
+            "day": 27,
+            "reversi": 0
         }
     },
     "242179187983515650": {
@@ -86,7 +95,8 @@
         "user": "Kira_46",
         "flags": {
             "driller": 1,
-            "day": 28
+            "day": 28,
+            "reversi": 0
         }
     },
     "724232875238621204": {
@@ -95,7 +105,8 @@
         "user": "Fele88",
         "flags": {
             "driller": 5,
-            "day": 28
+            "day": 28,
+            "reversi": 0
         }
     },
     "638380713506242576": {
@@ -104,7 +115,8 @@
         "user": "goth15",
         "flags": {
             "driller": 1,
-            "day": -1
+            "day": -1,
+            "reversi": 0
         }
     },
     "604213801927180295": {
@@ -113,7 +125,8 @@
         "user": "Syphon",
         "flags": {
             "driller": 1,
-            "day": 27
+            "day": 27,
+            "reversi": 0
         }
     },
     "483715787467653122": {
@@ -122,7 +135,8 @@
         "user": "poly translator*",
         "flags": {
             "driller": 1,
-            "day": 27
+            "day": 27,
+            "reversi": 0
         }
     },
     "850867485263527956": {
@@ -131,7 +145,8 @@
         "user": "Roots",
         "flags": {
             "driller": 1,
-            "day": -1
+            "day": -1,
+            "reversi": 0
         }
     },
     "335311591778287617": {
@@ -140,7 +155,8 @@
         "user": "Lami",
         "flags": {
             "driller": 1,
-            "day": -1
+            "day": -1,
+            "reversi": 0
         }
     },
     "676696728065277992": {
@@ -149,7 +165,8 @@
         "user": "Peter1095",
         "flags": {
             "driller": 1,
-            "day": 26
+            "day": 26,
+            "reversi": 0
         }
     },
     "760566354918113320": {
@@ -158,7 +175,8 @@
         "user": "I’m in the",
         "flags": {
             "driller": 1,
-            "day": 26
+            "day": 26,
+            "reversi": 0
         }
     },
     "602691289733136404": {
@@ -167,7 +185,8 @@
         "user": "AnoyingShulkerMC",
         "flags": {
             "driller": 1,
-            "day": 27
+            "day": 27,
+            "reversi": 0
         }
     },
     "528309195116642314": {
@@ -176,7 +195,8 @@
         "user": "Keanu",
         "flags": {
             "driller": 1,
-            "day": 27
+            "day": 27,
+            "reversi": 0
         }
     },
     "570503517832478720": {
@@ -185,7 +205,8 @@
         "user": "Oh God Not The Belt",
         "flags": {
             "driller": 1,
-            "day": 27
+            "day": 27,
+            "reversi": 0
         }
     },
     "799228822889037824": {
@@ -194,7 +215,8 @@
         "user": "ARJr",
         "flags": {
             "driller": 1,
-            "day": -1
+            "day": -1,
+            "reversi": 0
         }
     },
     "747506529405763654": {
@@ -203,7 +225,8 @@
         "user": "Nekos|Ftw",
         "flags": {
             "driller": 1,
-            "day": -1
+            "day": -1,
+            "reversi": 0
         }
     }
 }
