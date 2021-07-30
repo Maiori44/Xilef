@@ -1,12 +1,13 @@
 {
     "621307633718132746": {
-        "money": 1077,
+        "money": 666,
         "rank": 29,
         "user": "Felix44",
         "flags": {
             "driller": 5,
             "day": 30,
-            "reversi": 1
+            "reversi": 1,
+            "connect4": 1
         }
     },
     "276363003270791168": {
@@ -16,7 +17,8 @@
         "flags": {
             "driller": 1,
             "day": 26,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "602651056320675840": {
@@ -26,7 +28,8 @@
         "flags": {
             "driller": 4,
             "day": 27,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "393501189788139520": {
@@ -36,7 +39,8 @@
         "flags": {
             "driller": 1,
             "day": -1,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "365289087864668160": {
@@ -46,7 +50,8 @@
         "flags": {
             "driller": 1,
             "day": -1,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "819577272276484107": {
@@ -56,7 +61,8 @@
         "flags": {
             "driller": 1,
             "day": -1,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "367769458804129794": {
@@ -66,7 +72,8 @@
         "flags": {
             "driller": 1,
             "day": -1,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "484682433925611542": {
@@ -76,7 +83,8 @@
         "flags": {
             "driller": 5,
             "day": -1,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "642719190288957450": {
@@ -86,7 +94,8 @@
         "flags": {
             "driller": 1,
             "day": 27,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "242179187983515650": {
@@ -96,17 +105,19 @@
         "flags": {
             "driller": 1,
             "day": 28,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "724232875238621204": {
-        "money": 4325,
+        "money": 5125,
         "rank": 80,
         "user": "Fele88",
         "flags": {
             "driller": 5,
-            "day": 28,
-            "reversi": 0
+            "day": 30,
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "638380713506242576": {
@@ -116,17 +127,19 @@
         "flags": {
             "driller": 1,
             "day": -1,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "604213801927180295": {
-        "money": 1390,
+        "money": 1442,
         "rank": 6,
         "user": "Syphon",
         "flags": {
             "driller": 1,
             "day": 27,
-            "reversi": 3
+            "reversi": 3,
+            "connect4": 1
         }
     },
     "483715787467653122": {
@@ -136,7 +149,8 @@
         "flags": {
             "driller": 1,
             "day": 27,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "850867485263527956": {
@@ -146,7 +160,8 @@
         "flags": {
             "driller": 1,
             "day": -1,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "335311591778287617": {
@@ -156,17 +171,19 @@
         "flags": {
             "driller": 1,
             "day": -1,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "676696728065277992": {
-        "money": 10,
+        "money": 60,
         "rank": 1,
         "user": "Peter1095",
         "flags": {
             "driller": 1,
             "day": 26,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "760566354918113320": {
@@ -176,7 +193,8 @@
         "flags": {
             "driller": 1,
             "day": 26,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "602691289733136404": {
@@ -186,7 +204,8 @@
         "flags": {
             "driller": 1,
             "day": 27,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "528309195116642314": {
@@ -196,7 +215,8 @@
         "flags": {
             "driller": 1,
             "day": 27,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "570503517832478720": {
@@ -206,7 +226,8 @@
         "flags": {
             "driller": 1,
             "day": 27,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "799228822889037824": {
@@ -216,7 +237,8 @@
         "flags": {
             "driller": 1,
             "day": -1,
-            "reversi": 1
+            "reversi": 1,
+            "connect4": 0
         }
     },
     "747506529405763654": {
@@ -226,7 +248,8 @@
         "flags": {
             "driller": 1,
             "day": -1,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
         }
     },
     "852882606629847050": {
@@ -236,7 +259,19 @@
         "flags": {
             "driller": 1,
             "day": -1,
-            "reversi": 0
+            "reversi": 0,
+            "connect4": 0
+        }
+    },
+    "661283181403701288": {
+        "money": 0,
+        "rank": 1,
+        "user": "ThatOneGuy",
+        "flags": {
+            "driller": 1,
+            "day": 30,
+            "reversi": 0,
+            "connect4": 0
         }
     }
 }

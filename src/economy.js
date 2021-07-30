@@ -8,6 +8,7 @@ class EconomySystem {
             driller: flags.driller || 1,
             day: flags.day || -1,
             reversi: flags.reversi || 0,
+            connect4: flags.connect4 || 0,
         }
     }
 
@@ -16,11 +17,11 @@ class EconomySystem {
     }
 
     give(amount, message, nobonus) {
-        this.money = nobonus ? this.money + amount : this.money + amount + Math.floor(((amount/100)*(this.rank-1)))
+        this.money = nobonus ? this.money + amount : this.money + amount + Math.floor(((amount / 100) * (this.rank - 1)))
         if (message) {
             let msg = this.user + " gained " + amount + " DogeCoins!"
             if (!nobonus) {
-                msg = msg + " (+" + Math.floor(((amount/100)*(this.rank-1))) + " bonus)"
+                msg = msg + " (+" + Math.floor(((amount / 100) * (this.rank - 1))) + " bonus)"
             }
             message.channel.send(msg)
         }
@@ -61,7 +62,7 @@ Economy = {
     },
     save() {
         let json = JSON.parse(fs.readFileSync("./src/Data/economy.json", "utf8"));
-        json = {...json, ...Economy.list}
+        json = { ...json, ...Economy.list }
         fs.writeFileSync("./src/Data/economy.json", JSON.stringify(json, null, 4), "utf8")
     }
 }
