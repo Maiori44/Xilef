@@ -1,13 +1,13 @@
 {
     "621307633718132746": {
-        "money": 666,
+        "money": 858,
         "rank": 29,
         "user": "Felix44",
         "flags": {
             "driller": 5,
             "day": 30,
             "reversi": 1,
-            "connect4": 1
+            "connect4": 4
         }
     },
     "276363003270791168": {
@@ -132,14 +132,14 @@
         }
     },
     "604213801927180295": {
-        "money": 1442,
+        "money": 1494,
         "rank": 6,
         "user": "Syphon",
         "flags": {
             "driller": 1,
             "day": 27,
             "reversi": 3,
-            "connect4": 1
+            "connect4": 2
         }
     },
     "483715787467653122": {
