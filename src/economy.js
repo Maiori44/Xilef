@@ -52,7 +52,7 @@ const fs = require('fs')
 const { setFlagsFromString } = require('v8')
 
 Economy = {
-    list: JSON.parse(fs.readFileSync("money.json", "utf8")),
+    list: JSON.parse(fs.readFileSync("Data/economy.json", "utf8")),
     getEconomySystem(user) {
         if (!Economy.list[user.id]) {
             Economy.list[user.id] = new EconomySystem(user.username)
@@ -60,9 +60,9 @@ Economy = {
         return Economy.list[user.id]
     },
     save() {
-        let json = JSON.parse(fs.readFileSync("./money.json", "utf8"));
+        let json = JSON.parse(fs.readFileSync("./Data/economy.json", "utf8"));
         json = {...json, ...Economy.list}
-        fs.writeFileSync("./money.json", JSON.stringify(json, null, 4), "utf8")
+        fs.writeFileSync("./Data/economy.json", JSON.stringify(json, null, 4), "utf8")
     }
 }
 
