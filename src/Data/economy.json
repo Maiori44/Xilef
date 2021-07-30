@@ -1,11 +1,11 @@
 {
     "621307633718132746": {
-        "money": 0,
+        "money": 1077,
         "rank": 29,
         "user": "Felix44",
         "flags": {
             "driller": 5,
-            "day": 29,
+            "day": 30,
             "reversi": 1
         }
     },
@@ -120,7 +120,7 @@
         }
     },
     "604213801927180295": {
-        "money": 1400,
+        "money": 1390,
         "rank": 6,
         "user": "Syphon",
         "flags": {
@@ -130,8 +130,8 @@
         }
     },
     "483715787467653122": {
-        "money": 864,
-        "rank": 9,
+        "money": 184,
+        "rank": 10,
         "user": "poly translator*",
         "flags": {
             "driller": 1,
@@ -223,6 +223,16 @@
         "money": 0,
         "rank": 1,
         "user": "Nekos|Ftw",
+        "flags": {
+            "driller": 1,
+            "day": -1,
+            "reversi": 0
+        }
+    },
+    "852882606629847050": {
+        "money": 0,
+        "rank": 1,
+        "user": "Xilef",
         "flags": {
             "driller": 1,
             "day": -1,

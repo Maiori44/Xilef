@@ -97,35 +97,35 @@ Commands.clown = new Command("Given a person or a thing, the bot will say how mu
 
 //images commands
 
-const chadimage = new Discord.MessageAttachment("giga chad.jpg")
+const chadimage = new Discord.MessageAttachment("./src/Pictures/giga chad.jpg")
 
 Commands.chad = new Command("Sends a beautiful giga chad", (message, args) => {
     message.channel.send("epik")
     message.channel.send(chadimage)
 })
 
-const amogusimage = new Discord.MessageAttachment("amogus.gif")
+const amogusimage = new Discord.MessageAttachment("./src/Pictures/amogus.gif")
 
 Commands.amogus = new Command("It's pretty sus", (message, args) => {
     message.channel.send("sus")
     message.channel.send(amogusimage)
 })
 
-const sdrogoimage = new Discord.MessageAttachment("sdrogo.jpg")
+const sdrogoimage = new Discord.MessageAttachment("./src/Pictures/sdrogo.jpg")
 
 Commands.sdrogo = new Command("Sdrogo man is da wae", (message, args) => {
     message.channel.send("hm yes")
     message.channel.send(sdrogoimage)
 })
 
-const vshitimage = new Discord.MessageAttachment("vshit.png")
+const vshitimage = new Discord.MessageAttachment("./src/Pictures/vshit.png")
 
 Commands.vshit = new Command("Vsauce here", (message, args) => {
     message.channel.send("hey vsauce, Michael here, could you get out of my bathroom?")
     message.channel.send(vshitimage)
 })
 
-const uwuimage = new Discord.MessageAttachment("uwu.png")
+const uwuimage = new Discord.MessageAttachment("./src/Pictures/uwu.png")
 
 Commands.uwu = new Command("Sends a super cute kawaii image ^w^", (message, args) => {
     message.channel.send(":3")
@@ -133,11 +133,11 @@ Commands.uwu = new Command("Sends a super cute kawaii image ^w^", (message, args
 })
 
 const horseimages = [
-    new Discord.MessageAttachment("./Pictures/Horse/horse1.jpg"),
-    new Discord.MessageAttachment("./Pictures/Horse/horse2.jpg"),
-    new Discord.MessageAttachment("./Pictures/Horse/horse3.jpg"),
-    new Discord.MessageAttachment("./Pictures/Horse/horse4.jpg"),
-    new Discord.MessageAttachment("./Pictures/Horse/horse5.jpg"),
+    new Discord.MessageAttachment("./src/Pictures/Horse/horse1.jpg"),
+    new Discord.MessageAttachment("./src/Pictures/Horse/horse2.jpg"),
+    new Discord.MessageAttachment("./src/Pictures/Horse/horse3.jpg"),
+    new Discord.MessageAttachment("./src/Pictures/Horse/horse4.jpg"),
+    new Discord.MessageAttachment("./src/Pictures/Horse/horse5.jpg"),
 ]
 
 Commands.horse = new Command("Sends a random horse photo, idk why I made this", (message, args) => {
