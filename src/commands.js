@@ -133,11 +133,11 @@ Commands.uwu = new Command("Sends a super cute kawaii image ^w^", (message, args
 })
 
 const horseimages = [
-    new Discord.MessageAttachment("Horse/horse1.jpg"),
-    new Discord.MessageAttachment("Horse/horse2.jpg"),
-    new Discord.MessageAttachment("Horse/horse3.jpg"),
-    new Discord.MessageAttachment("Horse/horse4.jpg"),
-    new Discord.MessageAttachment("Horse/horse5.jpg"),
+    new Discord.MessageAttachment("./Pictures/Horse/horse1.jpg"),
+    new Discord.MessageAttachment("./Pictures/Horse/horse2.jpg"),
+    new Discord.MessageAttachment("./Pictures/Horse/horse3.jpg"),
+    new Discord.MessageAttachment("./Pictures/Horse/horse4.jpg"),
+    new Discord.MessageAttachment("./Pictures/Horse/horse5.jpg"),
 ]
 
 Commands.horse = new Command("Sends a random horse photo, idk why I made this", (message, args) => {
