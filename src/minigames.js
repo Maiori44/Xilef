@@ -85,6 +85,19 @@ class MPGame {
             throw ("You are not inside any match.")
         }
     }
+    
+    closeGame(id) {
+        if (this.hosts[id]) {
+            this.leaveGame(id)
+            return
+        }
+        for (let key in this.hosts) {
+            if (this.hosts[key] == this.joiners[id]) {
+                this.leaveGame(key)
+                return
+            }
+        }
+    }
 }
 
 //Among us
@@ -541,6 +554,7 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
                             } else {
                                 message.channel.send("It's a tie!")
                             }
+                            Reversi.closeGame(message.author.id)
                         } else {
                             message.channel.send("No valid moves found! Skipping turn...")
                             message.channel.send(ReversiGame.getMatchInfo())
@@ -664,16 +678,17 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
                         Connect4Game.board[y][x] = tile
                         Connect4Game.turn = (Connect4Game.turn % 2) + 1
                         message.channel.send(Connect4Game.getMatchInfo())
-                        if ((Connect4Game.getDiscs(tile, x, y, 0, 1) + Connect4Game.getDiscs(tile, x, y, 0, -1)) == 3 || 
-                        (Connect4Game.getDiscs(tile, x, y, 1, 0) + Connect4Game.getDiscs(tile, x, y, -1, 0)) == 3 || 
-                        (Connect4Game.getDiscs(tile, x, y, -1, 1) + Connect4Game.getDiscs(tile, x, y, 1, -1)) == 3 || 
-                        (Connect4Game.getDiscs(tile, x, y, -1, -1) + Connect4Game.getDiscs(tile, x, y, 1, 1)) == 3) {
+                        if ((Connect4Game.getDiscs(tile, x, y, 0, 1) + Connect4Game.getDiscs(tile, x, y, 0, -1)) >= 3 || 
+                        (Connect4Game.getDiscs(tile, x, y, 1, 0) + Connect4Game.getDiscs(tile, x, y, -1, 0)) >= 3 || 
+                        (Connect4Game.getDiscs(tile, x, y, -1, 1) + Connect4Game.getDiscs(tile, x, y, 1, -1)) >= 3 || 
+                        (Connect4Game.getDiscs(tile, x, y, -1, -1) + Connect4Game.getDiscs(tile, x, y, 1, 1)) >= 3) {
                             Connect4Game.finished = true
                             let winner = Connect4Game.turn == 1 ? "joiner" : "host"
                             message.channel.send("The " + winner + " wins!")
                             let EconomySystem = Economy.getEconomySystem({ id: Connect4Game[winner], username: Connect4Game[winner + "name"] })
                             EconomySystem.give(50, message)
                             EconomySystem.alterFlag("connect4", 1)
+                            Connect4.closeGame(message.author.id)
                         }
                         return
                     }
@@ -687,6 +702,10 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
             let [Connect4Game, playernum] = Connect4.getGame(message.author.id)
             message.channel.send(Connect4Game.getMatchInfo())
             break
+        }
+        default: {
+            message.channel.send(Connect4.help)
+            return
         }
     }
 }, [new RequiredArg(0, Connect4.help)])
