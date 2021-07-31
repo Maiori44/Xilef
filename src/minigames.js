@@ -599,23 +599,20 @@ class Connect4Game {
             .setFooter(this.finished ? "This match is over" : (this.turn == 1 ? "\nIt's the host turn" : "\nIt's the joiner turn"))
     }
 
-    checkLine(checktile, startx, starty, dirx, diry) {
+    getDiscs(checktile, startx, starty, dirx, diry) {
         let cx = startx + dirx
         let cy = starty + diry
-        let tilesfound = 1
+        let tilesfound = 0
         while (this.board[cy] && this.board[cy][cx]) {
             if (this.board[cy][cx] == checktile) {
                 tilesfound = tilesfound + 1
-                if (tilesfound == 4) {
-                    return true
-                }
             } else {
-                return false
+                break
             }
             cx = cx + dirx
             cy = cy + diry
         }
-        return false
+        return tilesfound
     }
 }
 
@@ -667,7 +664,10 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
                         Connect4Game.board[y][x] = tile
                         Connect4Game.turn = (Connect4Game.turn % 2) + 1
                         message.channel.send(Connect4Game.getMatchInfo())
-                        if (Connect4Game.checkLine(tile, x, y, 0, 1) || Connect4Game.checkLine(tile, x, y, -1, 1) || Connect4Game.checkLine(tile, x, y, -1, 0) || Connect4Game.checkLine(tile, x, y, -1, -1) || Connect4Game.checkLine(tile, x, y, 0, -1) || Connect4Game.checkLine(tile, x, y, 1, -1) || Connect4Game.checkLine(tile, x, y, 1, 0) || Connect4Game.checkLine(tile, x, y, 1, 1)) {
+                        if ((Connect4Game.getDiscs(tile, x, y, 0, 1) + Connect4Game.getDiscs(tile, x, y, 0, -1)) == 3 || 
+                        (Connect4Game.getDiscs(tile, x, y, 1, 0) + Connect4Game.getDiscs(tile, x, y, -1, 0)) == 3 || 
+                        (Connect4Game.getDiscs(tile, x, y, -1, 1) + Connect4Game.getDiscs(tile, x, y, 1, -1)) == 3 || 
+                        (Connect4Game.getDiscs(tile, x, y, -1, -1) + Connect4Game.getDiscs(tile, x, y, 1, 1)) == 3) {
                             Connect4Game.finished = true
                             let winner = Connect4Game.turn == 1 ? "joiner" : "host"
                             message.channel.send("The " + winner + " wins!")
