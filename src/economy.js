@@ -5,6 +5,7 @@ class EconomySystem {
         this.user = username
         flags = flags || {}
         this.flags = {
+            impostors: flags.impostors || 0,
             driller: flags.driller || 1,
             day: flags.day || -1,
             reversi: flags.reversi || 0,

@@ -175,7 +175,7 @@ Commands.stats = new Command("Gets your amount of money and your rank", (message
         .setTitle(EconomySystem.user + "'s statistics")
         .setDescription("```lua\nDogeCoins: " + EconomySystem.money + "\nRank: " + EconomySystem.rank + "```")
         .addFields(
-            { name: "Singleplayer stats:", value: "```lua\nDriller tier: " + EconomySystem.flags.driller + "```", inline: true },
+            { name: "Singleplayer stats:", value: "```lua\nImpostors found: " + EconomySystem.flags.impostors +"\nDriller tier: " + EconomySystem.flags.driller + "```", inline: true },
             { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.flags.reversi + "\nConnect four matches won: " + EconomySystem.flags.connect4 + "```", inline: true },
         )
         .setTimestamp()

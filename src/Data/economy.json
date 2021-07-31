@@ -1,13 +1,14 @@
 {
     "621307633718132746": {
-        "money": 2548,
-        "rank": 32,
+        "money": 3119,
+        "rank": 38,
         "user": "Felix44",
         "flags": {
+            "impostors": 1,
             "driller": 5,
             "day": 31,
             "reversi": 1,
-            "connect4": 4
+            "connect4": 5
         }
     },
     "276363003270791168": {
@@ -15,6 +16,7 @@
         "rank": 217,
         "user": "AliFurkan",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": 26,
             "reversi": 0,
@@ -26,6 +28,7 @@
         "rank": 20,
         "user": "Sebo2205",
         "flags": {
+            "impostors": 0,
             "driller": 4,
             "day": 27,
             "reversi": 0,
@@ -37,6 +40,7 @@
         "rank": 1,
         "user": "Rem",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": -1,
             "reversi": 0,
@@ -48,6 +52,7 @@
         "rank": 1,
         "user": "Helvetica",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": -1,
             "reversi": 0,
@@ -59,6 +64,7 @@
         "rank": 1,
         "user": "escapevelocity",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": -1,
             "reversi": 0,
@@ -70,6 +76,7 @@
         "rank": 1,
         "user": "Bobmcboblin",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": -1,
             "reversi": 0,
@@ -81,6 +88,7 @@
         "rank": 120,
         "user": "Dark_Brick",
         "flags": {
+            "impostors": 0,
             "driller": 5,
             "day": -1,
             "reversi": 0,
@@ -92,6 +100,7 @@
         "rank": 1,
         "user": "Бумер/Пламя",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": 27,
             "reversi": 0,
@@ -103,6 +112,7 @@
         "rank": 6,
         "user": "Kira_46",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": 28,
             "reversi": 0,
@@ -114,6 +124,7 @@
         "rank": 80,
         "user": "Fele88",
         "flags": {
+            "impostors": 0,
             "driller": 5,
             "day": 30,
             "reversi": 0,
@@ -125,6 +136,7 @@
         "rank": 1,
         "user": "goth15",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": -1,
             "reversi": 0,
@@ -132,25 +144,27 @@
         }
     },
     "604213801927180295": {
-        "money": 1546,
+        "money": 1598,
         "rank": 6,
         "user": "Syphon",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": 27,
             "reversi": 3,
-            "connect4": 3
+            "connect4": 4
         }
     },
     "483715787467653122": {
-        "money": 184,
+        "money": 826,
         "rank": 10,
         "user": "poly translator*",
         "flags": {
-            "driller": 1,
+            "impostors": 0,
+            "driller": 2,
             "day": 27,
             "reversi": 0,
-            "connect4": 0
+            "connect4": 1
         }
     },
     "850867485263527956": {
@@ -158,6 +172,7 @@
         "rank": 1,
         "user": "Roots",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": -1,
             "reversi": 0,
@@ -169,6 +184,7 @@
         "rank": 1,
         "user": "Lami",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": -1,
             "reversi": 0,
@@ -180,6 +196,7 @@
         "rank": 1,
         "user": "Peter1095",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": 26,
             "reversi": 0,
@@ -191,6 +208,7 @@
         "rank": 1,
         "user": "I’m in the",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": 26,
             "reversi": 0,
@@ -202,6 +220,7 @@
         "rank": 1,
         "user": "AnoyingShulkerMC",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": 27,
             "reversi": 0,
@@ -213,6 +232,7 @@
         "rank": 1,
         "user": "Keanu",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": 27,
             "reversi": 0,
@@ -224,6 +244,7 @@
         "rank": 1,
         "user": "Oh God Not The Belt",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": 27,
             "reversi": 0,
@@ -235,6 +256,7 @@
         "rank": 1,
         "user": "ARJr",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": -1,
             "reversi": 1,
@@ -246,6 +268,7 @@
         "rank": 1,
         "user": "Nekos|Ftw",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": -1,
             "reversi": 0,
@@ -257,6 +280,7 @@
         "rank": 1,
         "user": "Xilef",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": -1,
             "reversi": 0,
@@ -268,6 +292,7 @@
         "rank": 1,
         "user": "ThatOneGuy",
         "flags": {
+            "impostors": 0,
             "driller": 1,
             "day": 30,
             "reversi": 0,

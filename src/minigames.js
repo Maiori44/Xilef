@@ -212,7 +212,8 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
             else if (args[1] == impostor || Amogus.crew[args[1]] == 10) {
                 message.channel.send(args[1] + " was the impostor! congrats!")
                 let EconomySystem = Economy.getEconomySystem(message.author)
-                EconomySystem.give(250 - (5 * aturn), message)
+                EconomySystem.give(120 - (10 * aturn), message)
+                EconomySystem.alterFlag("impostors", 1)
                 Amogus.reset()
                 return
             } else {
@@ -230,7 +231,7 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
     if (Amogus.turns == 0) {
         message.channel.send("The impostor killed you!\nThe impostor was " + Amogus.getSussier() + ".\nGame over.")
         let EconomySystem = Economy.getEconomySystem(message.author)
-        EconomySystem.steal(80 - (10 * aturn), message)
+        EconomySystem.steal(30 + (10 * aturn), message)
         Amogus.reset()
     } else {
         message.channel.send(Amogus.turns + " turns left.")
