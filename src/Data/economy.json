@@ -156,11 +156,11 @@
         }
     },
     "483715787467653122": {
-        "money": 826,
+        "money": 663,
         "rank": 10,
         "user": "poly translator*",
         "flags": {
-            "impostors": 0,
+            "impostors": 1,
             "driller": 2,
             "day": 27,
             "reversi": 0,
@@ -297,6 +297,18 @@
             "day": 30,
             "reversi": 0,
             "connect4": 0
+        }
+    },
+    "218516967022264321": {
+        "money": 50,
+        "rank": 1,
+        "user": "/~DIGIBILLCIPHER",
+        "flags": {
+            "impostors": 0,
+            "driller": 1,
+            "day": -1,
+            "reversi": 0,
+            "connect4": 1
         }
     }
 }
