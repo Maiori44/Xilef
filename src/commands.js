@@ -15,6 +15,7 @@ class Command {
         this.description = description
         this.action = action
         this.requiredargs = requiredargs
+        console.log("Loaded command " + (Object.keys(Commands).length + 1) + "/24")
     }
 
     call(message, args) {
@@ -40,6 +41,7 @@ Commands.help = new Command("Shows a list of all commands", (message, args) => {
         .setColor("#0368f8")
         .setTitle("List of all commands:")
         .setTimestamp()
+        .setFooter(Object.keys(Commands).length + " total commandss")
     for (let key in Commands) {
         CommandsEmbed.addField(key, Commands[key].description, true)
     }
