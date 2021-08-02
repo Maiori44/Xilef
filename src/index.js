@@ -1,13 +1,14 @@
 require("dotenv").config() //setup the .env
 Discord = require("discord.js") //takes the discord api or something
 
-const client = new Discord.Client(); //makes a new client
+client = new Discord.Client(); //makes a new client
 client.login(process.env.TOKEN); //logins in the client
 
 const prefix = "&" //defines the bot prefix
 
 require("./economy.js")
 require("./commands.js")
+require("./buttons.js")
 require("./minigames.js")
 
 client.on("ready", () => console.log("Bot ready"));

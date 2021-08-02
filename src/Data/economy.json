@@ -144,14 +144,14 @@
         }
     },
     "604213801927180295": {
-        "money": 1598,
+        "money": 1808,
         "rank": 6,
         "user": "Syphon",
         "flags": {
             "impostors": 0,
             "driller": 1,
             "day": 27,
-            "reversi": 3,
+            "reversi": 4,
             "connect4": 4
         }
     },
