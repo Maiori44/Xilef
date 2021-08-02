@@ -33,10 +33,9 @@ exports.Command = Command
 
 Commands = {}
 
-//simple message commands
+//text commands
 
 Commands.help = new Command("Shows a list of all commands", (message, args) => {
-    //message.reply("Here is a list of all commands I can do:\n" + Object.entries(Commands).map(([name, command]) => "`" + name + "`: " + command.description).join("\n"))
     const CommandsEmbed = new Discord.MessageEmbed()
         .setColor("#0368f8")
         .setTitle("List of all commands:")
