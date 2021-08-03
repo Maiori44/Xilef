@@ -51,6 +51,20 @@ Commands.hi = new Command("Says hi to you", (message, args) => {
     message.reply("Hi.")
 })
 
+/*Commands.allutf8 = new Command("Get all existing characters in Discord", (message, args) => {
+    if (message.author.id != "621307633718132746") {
+        throw("You are NOT using this.")
+    }
+    let msg = ""
+    for (let n = 0; n <= 0xFFFF; n++) {
+        msg = msg + n + ": " + String.fromCharCode(n) + ", "
+        if ((n % 50) == 0 && n > 0) {
+            message.channel.send(msg)
+            msg = ""
+        }
+    }
+})*/
+
 Commands.annoy = new Command("Annoys the person you want", (message, args) => {
     message.channel.send(args[0].slice(0, 1900) + " you suck")
 }, [new RequiredArg(0, "You gotta give me someone dumdum")])
@@ -176,7 +190,7 @@ Commands.stats = new Command("Gets your amount of money and your rank", (message
         .setTitle(EconomySystem.user + "'s statistics")
         .setDescription("```lua\nDogeCoins: " + EconomySystem.money + "\nRank: " + EconomySystem.rank + "```")
         .addFields(
-            { name: "Singleplayer stats:", value: "```lua\nImpostors found: " + EconomySystem.flags.impostors +"\nDriller tier: " + EconomySystem.flags.driller + "```", inline: true },
+            { name: "Singleplayer stats:", value: "```lua\nImpostors found: " + EconomySystem.flags.impostors + "\nDriller tier: " + EconomySystem.flags.driller + "```", inline: true },
             { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.flags.reversi + "\nConnect four matches won: " + EconomySystem.flags.connect4 + "```", inline: true },
         )
         .setTimestamp()
