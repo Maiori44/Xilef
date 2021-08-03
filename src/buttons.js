@@ -10,9 +10,22 @@ class Poll {
     }
 
     update() {
-        let newmsg = ""
+        let newmsg = new Discord.MessageEmbed()
+        .setColor(this.message.member.displayHexColor)
+        .setTitle(this.message.author.username + "'s poll")
+        .setTimestamp();
+        let voters = "People who voted:\n"
+        for (let userid of Object.keys(this.users)) {
+            if (this.users[userid]) {
+                voters = voters + "<@" + userid + "> "
+            }
+        }
+        if (voters == "People who voted:\n") {
+            voters = voters + "`none`"
+        }
+        newmsg.setDescription(voters)
         for (let buttonname of Object.keys(this.options)) {
-            newmsg = newmsg + buttonname + ": " + this.options[buttonname] + "\n"
+            newmsg.addField(buttonname, this.options[buttonname], true)
         }
         this.message.edit(newmsg)
     }
@@ -51,7 +64,12 @@ client.on('clickButton', async (button) => {
             if (Polls[buttonid].users[button.clicker.id] && options[Polls[buttonid].users[button.clicker.id]]) {
                 options[Polls[buttonid].users[button.clicker.id]] = options[Polls[buttonid].users[button.clicker.id]] - 1
             }
-            Polls[buttonid].users[button.clicker.id] = buttonname
+            if (Polls[buttonid].users[button.clicker.id] == buttonname) {
+                options[Polls[buttonid].users[button.clicker.id]] = options[Polls[buttonid].users[button.clicker.id]] - 1
+                Polls[buttonid].users[button.clicker.id] = undefined
+            } else {
+                Polls[buttonid].users[button.clicker.id] = buttonname
+            }
             Polls[buttonid].update()
             await button.reply.send("Your choice was submitted sucessfully.", true)
         } else {

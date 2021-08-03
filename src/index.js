@@ -11,11 +11,20 @@ require("./commands.js")
 require("./buttons.js")
 require("./minigames.js")
 
+//"please dont give an error"
+//0 0
+
 client.on("ready", () => console.log("Bot ready"));
 client.on("message", (message) => { //function called when a message is sent
     if (message.author.bot) return
     if (message.content.startsWith(prefix)) {
-        let args = message.content.substr(1).split(" ")
+        // create a regular expresion that matches either any string inside of double quotes, or any string without spaces that is outside of double quotes
+        let regex = /"([^"]*?)"|[^ ]+/gm
+        // make the output of .matchAll into an array, since .matchAll returns an iterator
+        // then map each value (an array that contains strings or null) into a single string
+        // index 0 being the full match, and the rest being the capturing groups
+        let args = [...message.content.slice(prefix.length).matchAll(regex)]
+        .map(el => el[1] || el[0] || "")
         let command = args.shift().toLowerCase()
         if (command == "") {
             message.channel.send('Wow great command, " ", makes complete sense')
