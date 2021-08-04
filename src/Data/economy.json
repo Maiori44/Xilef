@@ -1,14 +1,14 @@
 {
     "621307633718132746": {
-        "money": 3119,
+        "money": 3529,
         "rank": 38,
         "user": "Felix44",
         "flags": {
             "impostors": 1,
             "driller": 5,
             "day": 31,
-            "reversi": 1,
-            "connect4": 5
+            "reversi": 2,
+            "connect4": 7
         }
     },
     "276363003270791168": {
@@ -156,11 +156,11 @@
         }
     },
     "483715787467653122": {
-        "money": 763,
+        "money": 767,
         "rank": 10,
         "user": "poly translator*",
         "flags": {
-            "impostors": 1,
+            "impostors": 6,
             "driller": 2,
             "day": 1,
             "reversi": 0,
@@ -309,6 +309,18 @@
             "day": -1,
             "reversi": 0,
             "connect4": 1
+        }
+    },
+    "311819610380959745": {
+        "money": 0,
+        "rank": 2,
+        "user": "DRKSAO",
+        "flags": {
+            "impostors": 0,
+            "driller": 1,
+            "day": -1,
+            "reversi": 0,
+            "connect4": 2
         }
     }
 }

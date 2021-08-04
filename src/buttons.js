@@ -1,17 +1,20 @@
-const {MessageButton, MessageActionRow, MessageMenuOption, MessageMenu} = require("discord-buttons");
-const {RequiredArg, Command} = require("./commands.js")
+const { MessageButton, MessageActionRow, MessageMenuOption, MessageMenu } = require("discord-buttons");
+const { RequiredArg, Command } = require("./commands.js")
 
 class Poll {
-    constructor(message, options) {
+    constructor(message, options, title, time) {
         this.message = message
         this.options = options
         this.users = {}
+        this.title = title || "Unnamed Poll"
+        this.time = time
     }
 
     update() {
         let newmsg = new Discord.MessageEmbed()
             .setColor(this.message.member.displayHexColor)
-            .setTitle(this.message.author.username + "'s poll")
+            .setTitle(this.title)
+            .setFooter("Expires after " + this.time + " minutes")
             .setTimestamp();
         let voters = "People who voted:\n"
         for (let userid of Object.keys(this.users)) {
@@ -26,7 +29,7 @@ class Poll {
         for (let buttonname of Object.keys(this.options)) {
             newmsg.addField(buttonname, this.options[buttonname], true)
         }
-        this.message.edit(newmsg)
+        this.message.edit("", newmsg)
     }
 }
 
@@ -38,7 +41,10 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
     }
     let options = {}
     let buttons = new MessageActionRow()
+    let argnum = -1
     for (let buttonname of args) {
+        argnum = argnum + 1
+        if (argnum < 2) continue
         options[buttonname] = 0
         let button = new MessageButton()
             .setStyle("blurple")
@@ -46,11 +52,27 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
             .setID(message.id + "-" + buttonname);
         buttons.addComponent(button)
     }
+    if (args.length == 0 || !args[2]) {
+        buttons.addComponent(new MessageButton()
+            .setStyle("green")
+            .setLabel("Yes")
+            .setID(message.id + "-Yes"))
+        buttons.addComponent(new MessageButton()
+            .setStyle("red")
+            .setLabel("No")
+            .setID(message.id + "-No"))
+        options["Yes"] = 0
+        options["No"] = 0
+    }
     message.channel.send("Creating poll...", buttons).then(pollmessage => {
-        Polls[message.id] = new Poll(pollmessage, options)
+        Polls[message.id] = new Poll(pollmessage, options, args[0] || message.author.username + "'s poll", parseFloat(args[1]) || 5)
         Polls[message.id].update()
+        setTimeout(() => {
+            pollmessage.edit("[This poll is closed.]", pollmessage.embeds)
+            Polls[message.id] = undefined
+        }, parseFloat(args[1]) * 60 * 1000 || 300000)
     })
-}, [new RequiredArg(0, "You need at least 1 option for a poll.")])
+})
 
 client.on('clickButton', async (button) => {
     let split = button.id.split("-")
