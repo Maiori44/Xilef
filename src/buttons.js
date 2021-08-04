@@ -60,6 +60,7 @@ client.on('clickButton', async (button) => {
     if (Polls[buttonid]) {
         let options = Polls[buttonid].options
         if (options[buttonname] != undefined) {
+            await button.reply.defer()
             options[buttonname] = options[buttonname] + 1
             if (Polls[buttonid].users[button.clicker.id] && options[Polls[buttonid].users[button.clicker.id]]) {
                 options[Polls[buttonid].users[button.clicker.id]] = options[Polls[buttonid].users[button.clicker.id]] - 1
@@ -71,7 +72,6 @@ client.on('clickButton', async (button) => {
                 Polls[buttonid].users[button.clicker.id] = buttonname
             }
             Polls[buttonid].update()
-            await button.reply.send("Your choice was submitted sucessfully.", true)
         } else {
             await button.reply.send("Somehow, that isn't one of the poll's option.", true)
         }
