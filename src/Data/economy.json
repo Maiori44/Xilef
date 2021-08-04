@@ -1,12 +1,12 @@
 {
     "621307633718132746": {
-        "money": 3529,
+        "money": 3849,
         "rank": 38,
         "user": "Felix44",
         "flags": {
             "impostors": 1,
             "driller": 5,
-            "day": 31,
+            "day": 4,
             "reversi": 2,
             "connect4": 7
         }
@@ -84,15 +84,15 @@
         }
     },
     "484682433925611542": {
-        "money": 73396,
+        "money": 74705,
         "rank": 120,
         "user": "Dark_Brick",
         "flags": {
             "impostors": 0,
             "driller": 5,
-            "day": -1,
+            "day": 4,
             "reversi": 0,
-            "connect4": 0
+            "connect4": 1
         }
     },
     "642719190288957450": {
@@ -321,6 +321,30 @@
             "day": -1,
             "reversi": 0,
             "connect4": 2
+        }
+    },
+    "649253657862471694": {
+        "money": 150,
+        "rank": 3,
+        "user": "Devertexe77",
+        "flags": {
+            "impostors": 0,
+            "driller": 1,
+            "day": -1,
+            "reversi": 0,
+            "connect4": 0
+        }
+    },
+    "687347431548911644": {
+        "money": 1845,
+        "rank": 28,
+        "user": "no_words",
+        "flags": {
+            "impostors": 2,
+            "driller": 5,
+            "day": -1,
+            "reversi": 0,
+            "connect4": 0
         }
     }
 }
