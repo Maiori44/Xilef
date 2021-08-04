@@ -1,4 +1,4 @@
-const { RequiredArg, Command } = require("./commands.js")
+const {RequiredArg, Command} = require("./commands.js")
 
 class Game {
     constructor(gamemaker) {

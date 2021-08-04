@@ -1,6 +1,5 @@
-require("discord-buttons")(client);
-const { MessageButton, MessageActionRow } = require("discord-buttons");
-const { RequiredArg, Command } = require("./commands.js")
+const {MessageButton, MessageActionRow, MessageMenuOption, MessageMenu} = require("discord-buttons");
+const {RequiredArg, Command} = require("./commands.js")
 
 class Poll {
     constructor(message, options) {
@@ -11,9 +10,9 @@ class Poll {
 
     update() {
         let newmsg = new Discord.MessageEmbed()
-        .setColor(this.message.member.displayHexColor)
-        .setTitle(this.message.author.username + "'s poll")
-        .setTimestamp();
+            .setColor(this.message.member.displayHexColor)
+            .setTitle(this.message.author.username + "'s poll")
+            .setTimestamp();
         let voters = "People who voted:\n"
         for (let userid of Object.keys(this.users)) {
             if (this.users[userid]) {
@@ -33,7 +32,7 @@ class Poll {
 
 Polls = {}
 
-Commands.poll = new Command("WIP", (message, args) => {
+Commands.poll = new Command("Creates a poll where anyone can vote, you can have 5 different options at max", (message, args) => {
     if (args[5]) {
         throw ("You can only have 5 different options at max.")
     }
@@ -54,7 +53,7 @@ Commands.poll = new Command("WIP", (message, args) => {
 }, [new RequiredArg(0, "You need at least 1 option for a poll.")])
 
 client.on('clickButton', async (button) => {
-    let split = button.id.split("-") 
+    let split = button.id.split("-")
     let buttonid = split[0]
     let buttonname = split.slice(1).join('-')
     if (Polls[buttonid]) {

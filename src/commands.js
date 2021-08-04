@@ -1,3 +1,6 @@
+require("discord-buttons")(client);
+const { MessageButton, MessageActionRow } = require("discord-buttons");
+
 class RequiredArg {
     constructor(argnum, errormsg) {
         this.argnum = argnum
@@ -44,7 +47,11 @@ Commands.help = new Command("Shows a list of all commands", (message, args) => {
     for (let key in Commands) {
         CommandsEmbed.addField(key, Commands[key].description, true)
     }
-    message.channel.send(CommandsEmbed)
+    let button = new MessageButton()
+        .setStyle("url")
+        .setURL("https://github.com/Felix-44/Xilef")
+        .setLabel("Github page");
+    message.channel.send(CommandsEmbed, button)
 })
 
 Commands.hi = new Command("Says hi to you", (message, args) => {
