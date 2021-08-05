@@ -346,13 +346,24 @@ Driller.Ores = [
     new DrillerOre("Universium", 6000, 75, 10),
     new DrillerOre("Core of the earth", 7000, 76, 11),
     new DrillerOre("Strange portal...", 0, 0, 11),
-    new DrillerOre("A new dimension!", 0, 0, 11),
+    new DrillerOre("a new dimension!", 0, 0, 11),
     new DrillerOre("Unkown ore", 8000, 77, 11),
     new DrillerOre("Very shiny ore", 9000, 78, 11),
     new DrillerOre("Weird-looking treasure", 10000, 79, 11),
     new DrillerOre("Weird ancient artifact", 15000, 80, 11),
-    new DrillerOre("A very resistent-looking locked door", 0, 0, 11),
-    new DrillerOre("how", -999999999, 0, 12),
+    new DrillerOre("a very resistent-looking locked door", 0, 0, 11),
+    new DrillerOre("the spectrite mines", 0, 0, 12),
+    new DrillerOre("Spectrite", 2000, 81, 6),
+    new DrillerOre("Pure Spectrite", 20000, 82, 12),
+    new DrillerOre("Purer Spectrite", 25000, 83, 12),
+    new DrillerOre("Purest Spectrite", 30000, 84, 12),
+    new DrillerOre("Absolute Spectrite", 35000, 85, 12),
+    new DrillerOre("Spectrite Statue", 40000, 86, 12),
+    new DrillerOre("Spectrite Vault", 45000, 87, 12),
+    new DrillerOre("Spectrite Castle", 50000, 88, 12),
+    new DrillerOre("another, even more resistent-looking, locked door", 0, 0, 12),
+    new DrillerOre("placeholder for Dark_Brick", 0, 0, 13),
+    new DrillerOre("how", -999999999, 0, 14),
 ]
 Driller.help =
     "`&driller stats` says the stats of your driller\n" +
@@ -410,9 +421,10 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
             break
         }
         case "upgrade": {
-            if (EconomySystem.driller == 11) {
+            let mul = EconomySystem.driller > 10 ? 2 : 1
+            if (EconomySystem.driller == 13) {
                 message.channel.send("Your driller arleady reached max tier.")
-            } else if (EconomySystem.buy(1500 * EconomySystem.driller, message, "Your driller reached tier " + (EconomySystem.driller + 1) + "! (" + (1500 * EconomySystem.driller) + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + (1500 * EconomySystem.driller) + " DogeCoins needed)")) {
+            } else if (EconomySystem.buy((1500 * EconomySystem.driller) * mul, message, "Your driller reached tier " + (EconomySystem.driller + 1) + "! (" + (1500 * EconomySystem.driller) + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + (1500 * EconomySystem.driller) + " DogeCoins needed)")) {
                 EconomySystem.driller = EconomySystem.driller + 1
             }
             break
