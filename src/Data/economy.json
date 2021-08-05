@@ -1,13 +1,14 @@
 {
     "621307633718132746": {
-        "money": 735,
+        "money": 2451,
         "rank": 38,
         "user": "Felix44",
         "impostors": 1,
         "driller": 10,
         "day": 5,
         "reversi": 2,
-        "connect4": 7
+        "connect4": 7,
+        "test": 26
     },
     "276363003270791168": {
         "money": 324548,
@@ -17,7 +18,8 @@
         "driller": 1,
         "day": 26,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "602651056320675840": {
         "money": 1204,
@@ -27,7 +29,8 @@
         "driller": 4,
         "day": 27,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "393501189788139520": {
         "money": 0,
@@ -37,7 +40,8 @@
         "driller": 1,
         "day": -1,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "365289087864668160": {
         "money": 0,
@@ -47,7 +51,8 @@
         "driller": 1,
         "day": -1,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "819577272276484107": {
         "money": 0,
@@ -57,7 +62,8 @@
         "driller": 1,
         "day": -1,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "367769458804129794": {
         "money": 80,
@@ -67,17 +73,19 @@
         "driller": 1,
         "day": -1,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "484682433925611542": {
-        "money": 320767,
-        "rank": 120,
+        "money": 40090,
+        "rank": 686,
         "user": "Dark_Brick",
         "impostors": 0,
-        "driller": 11,
+        "driller": 14,
         "day": 4,
         "reversi": 0,
-        "connect4": 1
+        "connect4": 1,
+        "test": 0
     },
     "642719190288957450": {
         "money": 10,
@@ -87,7 +95,8 @@
         "driller": 1,
         "day": 27,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "242179187983515650": {
         "money": 73,
@@ -97,7 +106,8 @@
         "driller": 1,
         "day": 28,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "724232875238621204": {
         "money": 5125,
@@ -107,7 +117,8 @@
         "driller": 5,
         "day": 30,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "638380713506242576": {
         "money": 0,
@@ -117,7 +128,8 @@
         "driller": 1,
         "day": -1,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "604213801927180295": {
         "money": 1808,
@@ -127,7 +139,8 @@
         "driller": 1,
         "day": 27,
         "reversi": 4,
-        "connect4": 4
+        "connect4": 4,
+        "test": 0
     },
     "483715787467653122": {
         "money": 767,
@@ -137,7 +150,8 @@
         "driller": 2,
         "day": 1,
         "reversi": 0,
-        "connect4": 1
+        "connect4": 1,
+        "test": 0
     },
     "850867485263527956": {
         "money": 0,
@@ -147,7 +161,8 @@
         "driller": 1,
         "day": -1,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "335311591778287617": {
         "money": 300,
@@ -157,7 +172,8 @@
         "driller": 1,
         "day": -1,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "676696728065277992": {
         "money": 60,
@@ -167,7 +183,8 @@
         "driller": 1,
         "day": 26,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "760566354918113320": {
         "money": 10,
@@ -177,7 +194,8 @@
         "driller": 1,
         "day": 26,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "602691289733136404": {
         "money": 10,
@@ -187,7 +205,8 @@
         "driller": 1,
         "day": 27,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "528309195116642314": {
         "money": 10,
@@ -197,7 +216,8 @@
         "driller": 1,
         "day": 27,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "570503517832478720": {
         "money": 10,
@@ -207,7 +227,8 @@
         "driller": 1,
         "day": 27,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "799228822889037824": {
         "money": 200,
@@ -217,7 +238,8 @@
         "driller": 1,
         "day": -1,
         "reversi": 1,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "747506529405763654": {
         "money": 0,
@@ -227,7 +249,8 @@
         "driller": 1,
         "day": -1,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "852882606629847050": {
         "money": 0,
@@ -237,7 +260,8 @@
         "driller": 1,
         "day": -1,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "661283181403701288": {
         "money": 0,
@@ -247,7 +271,8 @@
         "driller": 1,
         "day": 30,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "218516967022264321": {
         "money": 50,
@@ -257,17 +282,19 @@
         "driller": 1,
         "day": -1,
         "reversi": 0,
-        "connect4": 1
+        "connect4": 1,
+        "test": 0
     },
     "311819610380959745": {
-        "money": 0,
+        "money": 122,
         "rank": 2,
         "user": "DRKSAO",
-        "impostors": 0,
+        "impostors": 3,
         "driller": 1,
         "day": -1,
         "reversi": 0,
-        "connect4": 2
+        "connect4": 3,
+        "test": 0
     },
     "649253657862471694": {
         "money": 150,
@@ -277,16 +304,29 @@
         "driller": 1,
         "day": -1,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
     },
     "687347431548911644": {
-        "money": 1845,
+        "money": 6711,
         "rank": 28,
         "user": "no_words",
         "impostors": 2,
-        "driller": 5,
+        "driller": 10,
         "day": -1,
         "reversi": 0,
-        "connect4": 0
+        "connect4": 0,
+        "test": 0
+    },
+    "694728312823480415": {
+        "money": 16284844,
+        "rank": 517,
+        "user": "lemon cannon",
+        "impostors": 0,
+        "driller": 14,
+        "day": 5,
+        "reversi": 0,
+        "connect4": 0,
+        "test": 26
     }
 }

@@ -1,7 +1,36 @@
 class FlagSystem {
-    //.toString(2).padEnd(<insert number of bits here>, '0')
-    constructor(flags) {
-        this.value = flags
+    constructor(totalflags, flags) {
+        this.value = flags || 0
+        this.totalflags = totalflags
+    }
+
+    toJSON() {
+        return this.value
+    }
+
+    addFlag(flag) {
+        this.value = this.value | flag
+    }
+
+    removeFlag(flag) {
+        this.value = this.value & ~flag
+    }
+
+    checkFlag(flag) {
+        if (this.value & flag) return true
+        return false 
+    }
+
+    getBinary(replacers1, replacer0) {
+        let bits = [...this.value.toString(2).padStart(this.totalflags, "0")]
+        bits.forEach((bit, position) => {
+            if (bit == "1") {
+                bits[position] = replacers1[position] || "1"
+            } else {
+                bits[position] = replacer0 || "0"
+            }
+        })
+        return bits.join("")
     }
 }
 
@@ -16,9 +45,10 @@ class EconomySystem {
         this.day = backup.day || -1
         this.reversi = backup.reversi || 0
         this.connect4 = backup.connect4 || 0
+        this.test = backup.test ? new FlagSystem(5, backup.test) : new FlagSystem(5)
     }
 
-    alterFlag(flagname, amount, max) {
+    alterValue(flagname, amount, max) {
         this[flagname] = Math.min(this[flagname] + amount, max || Infinity)
     }
 

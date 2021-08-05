@@ -213,7 +213,7 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
                 message.channel.send(args[1] + " was the impostor! congrats!")
                 let EconomySystem = Economy.getEconomySystem(message.author)
                 EconomySystem.give(120 - (10 * aturn), message)
-                EconomySystem.alterFlag("impostors", 1)
+                EconomySystem.alterValue("impostors", 1)
                 Amogus.reset()
                 return
             } else {
@@ -639,13 +639,13 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
                                 message.channel.send("The host wins!")
                                 let EconomySystem = Economy.getEconomySystem({ id: ReversiGame.host, username: ReversiGame.hostname })
                                 EconomySystem.give(200, message)
-                                EconomySystem.alterFlag("reversi", 1)
+                                EconomySystem.alterValue("reversi", 1)
                             } else if (blackdiscs < whitediscs) {
                                 message.channel.send("The joiner wins!")
                                 if (ReversiGame.joiner) {
                                     let EconomySystem = Economy.getEconomySystem({ id: ReversiGame.joiner, username: ReversiGame.joinername })
                                     EconomySystem.give(200, message)
-                                    EconomySystem.alterFlag("reversi", 1)
+                                    EconomySystem.alterValue("reversi", 1)
                                 }
                             } else {
                                 message.channel.send("It's a tie!")
@@ -783,7 +783,7 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
                             message.channel.send("The " + winner + " wins!")
                             let EconomySystem = Economy.getEconomySystem({ id: Connect4Game[winner], username: Connect4Game[winner + "name"] })
                             EconomySystem.give(50, message)
-                            EconomySystem.alterFlag("connect4", 1)
+                            EconomySystem.alterValue("connect4", 1)
                             Connect4.closeGame(message.author.id)
                         }
                         return

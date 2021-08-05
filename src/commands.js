@@ -18,7 +18,7 @@ class Command {
         this.description = description
         this.action = action
         this.requiredargs = requiredargs
-        console.log("Loaded command " + (Object.keys(Commands).length + 1) + "/25")
+        console.log("Loaded command " + (Object.keys(Commands).length + 1) + "/26")
     }
 
     call(message, args) {
