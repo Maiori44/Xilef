@@ -244,7 +244,6 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
             message.channel.send("Nope, you lost.")
         }
     }
-
 }, [new RequiredArg(0, "You can't gamble air, choose an amount")])
 
 Commands.leaderboard = new Command("See the users with the highest ranks", (message, args) => {
