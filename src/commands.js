@@ -217,9 +217,16 @@ Commands.daily = new Command("Get some free DogeCoins, works only once per day",
 
 Commands.rankup = new Command("Increases your rank if you have enough money", (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
-    let needed = 100 * EconomySystem.rank
-    if (EconomySystem.buy(needed, message, EconomySystem.user + " is now rank " + (EconomySystem.rank + 1) + "!", EconomySystem.user + " needs " + (needed - EconomySystem.money) + " more DogeCoins for rank " + (EconomySystem.rank + 1))) {
-        EconomySystem.rank = EconomySystem.rank + 1
+    let times = parseInt(args[0]) || 1
+    let oldrank = EconomySystem.rank
+    for (let i = 1; i <= times; i++) {
+        let needed = 100 * EconomySystem.rank
+        if (EconomySystem.buy(needed, message, undefined, EconomySystem.user + " needs " + (needed - EconomySystem.money) + " more DogeCoins for rank " + (EconomySystem.rank + 1))) {
+            EconomySystem.rank = EconomySystem.rank + 1
+        } else break
+    }
+    if (oldrank != EconomySystem.rank) {
+        message.channel.send(EconomySystem.user + " is now rank " + (EconomySystem.rank + 1) + "!")
     }
 })
 
