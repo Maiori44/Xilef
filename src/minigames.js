@@ -353,7 +353,7 @@ Driller.Ores = [
     new DrillerOre("Weird ancient artifact", 15000, 72, 11),
     new DrillerOre("a resistent-looking door", 0, 0, 11),
     new DrillerOre("the spectrite mines!", 0, 0, 12),
-    new DrillerOre("Raw Spectrite", 2000, 72, 6),
+    new DrillerOre("Raw Spectrite", 2000, 72, 12),
     new DrillerOre("Normal Spectrite", 4000, 73, 12),
     new DrillerOre("Pure Spectrite", 8000, 73, 12),
     new DrillerOre("More pure Spectrite", 12000, 73, 12),
