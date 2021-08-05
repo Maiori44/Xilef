@@ -378,7 +378,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
             }
             let msg = ""
             let hurtchance = Math.floor(Math.random() * 101)
-            if (DrillerGame.hitlava) hurtchance = hurtchane * 2
+            if (DrillerGame.hitlava) hurtchance = hurtchance * 2
             if (hurtchance <= Driller.Ores[DrillerGame.depth].lavachance) {
                 msg = "Your driller digs deeper..and finds lava! Your driller got damaged!"
                 DrillerGame.hp = DrillerGame.hp - Math.max((7 * DrillerGame.depth), 1)
