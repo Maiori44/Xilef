@@ -226,7 +226,7 @@ Commands.rankup = new Command("Increases your rank if you have enough money", (m
         } else break
     }
     if (oldrank != EconomySystem.rank) {
-        message.channel.send(EconomySystem.user + " is now rank " + (EconomySystem.rank + 1) + "!")
+        message.channel.send(EconomySystem.user + " is now rank " + EconomySystem.rank + "!")
     }
 })
 
