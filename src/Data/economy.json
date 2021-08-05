@@ -1,10 +1,10 @@
 {
     "621307633718132746": {
-        "money": 4229,
+        "money": 5828,
         "rank": 38,
         "user": "Felix44",
         "impostors": 1,
-        "driller": 5,
+        "driller": 7,
         "day": 5,
         "reversi": 2,
         "connect4": 7
@@ -70,11 +70,11 @@
         "connect4": 0
     },
     "484682433925611542": {
-        "money": 74705,
+        "money": 46267,
         "rank": 120,
         "user": "Dark_Brick",
         "impostors": 0,
-        "driller": 5,
+        "driller": 11,
         "day": 4,
         "reversi": 0,
         "connect4": 1

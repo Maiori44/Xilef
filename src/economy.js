@@ -1,3 +1,10 @@
+class FlagSystem {
+    //.toString(2).padEnd(<insert number of bits here>, '0')
+    constructor(flags) {
+        this.value = flags
+    }
+}
+
 class EconomySystem {
     constructor(username, backup) {
         backup = backup || {}

@@ -1,4 +1,4 @@
-const {RequiredArg, Command} = require("./commands.js")
+const { RequiredArg, Command } = require("./commands.js")
 
 class Game {
     constructor(gamemaker) {
@@ -247,12 +247,24 @@ class DrillerGame {
         this.depth = 0
         this.cash = 0
         this.hp = 100 * EconomySystem.driller
+        this.hitlava = false
     }
 
     reset(EconomySystem) {
         this.depth = 0
         this.cash = 0
         this.hp = 100 * EconomySystem.driller
+    }
+
+    getInfo(EconomySystem) {
+        return new Discord.MessageEmbed()
+            .setColor("#964B00")
+            .setTitle("Driller stats")
+            .setDescription("```lua\ndepth: " + this.depth +
+            "\ntier: " + EconomySystem.driller +
+            "\ncash found: " + this.cash +
+            "\nhealth: " + this.hp + "```")
+            .setTimestamp();
     }
 }
 
@@ -278,7 +290,7 @@ Driller.Ores = [
     new DrillerOre("Gold", 45, 18, 1),
     new DrillerOre("Platinum", 50, 19, 1),
     new DrillerOre("Aquaite", 60, 20, 1),
-    new DrillerOre("Pyratite", 80, 21, 2),    
+    new DrillerOre("Pyratite", 80, 21, 2),
     new DrillerOre("Amethyst", 100, 22, 2),
     new DrillerOre("Topaz", 110, 23, 2),
     new DrillerOre("Sapphire", 120, 24, 2),
@@ -298,7 +310,7 @@ Driller.Ores = [
     new DrillerOre("Uranite", 500, 38, 3),
     new DrillerOre("Ancient debris", 550, 39, 3),
     new DrillerOre("Magnetite", 650, 40, 4),
-    new DrillerOre("Cobalt", 700, 41, 4),  
+    new DrillerOre("Cobalt", 700, 41, 4),
     new DrillerOre("Palladium", 725, 42, 4),
     new DrillerOre("Mythrill", 800, 43, 4),
     new DrillerOre("Orichalcum", 825, 44, 4),
@@ -307,16 +319,16 @@ Driller.Ores = [
     new DrillerOre("Darksteel ore", 1000, 47, 4),
     new DrillerOre("Lodestone", 1100, 48, 5),
     new DrillerOre("Kyanite", 1200, 49, 5),
-    new DrillerOre("Valadium", 1300, 50, 5),    
+    new DrillerOre("Valadium", 1300, 50, 5),
     new DrillerOre("Illumite", 1400, 51, 5),
     new DrillerOre("Hallowite", 1500, 52, 5),
-    new DrillerOre("Niobium", 1600, 53, 3),
+    new DrillerOre("Niobium", 1600, 53, 5),
     new DrillerOre("Chlorophyte", 1700, 54, 5),
     new DrillerOre("Wolframite", 1800, 55, 6),
     new DrillerOre("Shroomite", 1900, 56, 6),
     new DrillerOre("Spectrite", 2000, 57, 6),
     new DrillerOre("Abyssalite", 2100, 58, 6),
-    new DrillerOre("Luminite", 2200, 59, 6),   
+    new DrillerOre("Luminite", 2200, 59, 6),
     new DrillerOre("Cryonite", 2300, 60, 6),
     new DrillerOre("Charred ore", 2400, 61, 7),
     new DrillerOre("Neutronium", 2500, 62, 7),
@@ -324,15 +336,22 @@ Driller.Ores = [
     new DrillerOre("Scarlet ore", 2700, 64, 7),
     new DrillerOre("Thermium", 2800, 65, 7),
     new DrillerOre("Astralite", 2900, 67, 8),
-    new DrillerOre("Exodium", 3000, 68, 8),    
+    new DrillerOre("Exodium", 3000, 68, 8),
     new DrillerOre("Uelibloomite", 3250, 69, 8),
-    new DrillerOre("Cosmolite", 3500, 70, 8),  
-    new DrillerOre("Auricite", 3750, 71, 9),   
+    new DrillerOre("Cosmolite", 3500, 70, 8),
+    new DrillerOre("Auricite", 3750, 71, 9),
     new DrillerOre("Primodium", 4000, 72, 9),
-    new DrillerOre("Shadowspec ore", 4500, 73, 9),   
+    new DrillerOre("Shadowspec ore", 4500, 73, 9),
     new DrillerOre("Hyperius ore", 5000, 74, 10),
     new DrillerOre("Universium", 6000, 75, 10),
     new DrillerOre("Core of the earth", 7000, 76, 11),
+    new DrillerOre("Strange portal...", 0, 0, 11),
+    new DrillerOre("A new dimension!", 0, 0, 11),
+    new DrillerOre("Unkown ore", 8000, 77, 11),
+    new DrillerOre("Very shiny ore", 9000, 78, 11),
+    new DrillerOre("Weird-looking treasure", 10000, 79, 11),
+    new DrillerOre("Weird ancient artifact", 15000, 80, 11),
+    new DrillerOre("A very resistent-looking locked door", 0, 0, 11),
     new DrillerOre("how", -999999999, 0, 12),
 ]
 Driller.help =
@@ -348,26 +367,34 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
     args[0] = args[0].toLowerCase()
     switch (args[0]) {
         case "stats": {
-            message.channel.send("Your driller stats:\ndepth: " + DrillerGame.depth + "\ntier: " + EconomySystem.driller + "\ncash found: " + DrillerGame.cash + "\nhealth: " + DrillerGame.hp)
+            message.channel.send(DrillerGame.getInfo(EconomySystem))
             break
         }
         case "dig": {
             if (Driller.Ores[DrillerGame.depth].tier > EconomySystem.driller) {
-                message.channel.send("Your driller is too weak to dig any further!")
+                let InfoEmbed = DrillerGame.getInfo(EconomySystem)
+                InfoEmbed.addField("Latest event:", "Your driller is too weak to dig any further!")
                 return
             }
+            let msg = ""
             let hurtchance = Math.floor(Math.random() * 101)
+            if (DrillerGame.hitlava) hurtchance = hurtchane * 2
             if (hurtchance <= Driller.Ores[DrillerGame.depth].lavachance) {
-                message.channel.send("Your driller digs deeper..and finds lava! Your driller got damaged!")
-                DrillerGame.hp = DrillerGame.hp - Math.max((10 * DrillerGame.depth), 1)
+                msg = "Your driller digs deeper..and finds lava! Your driller got damaged!"
+                DrillerGame.hp = DrillerGame.hp - Math.max((7 * DrillerGame.depth), 1)
+                DrillerGame.hitlava = true
             } else {
-                message.channel.send("Your driller digs deeper..and finds " + Driller.Ores[DrillerGame.depth].name + "! (worth " + Driller.Ores[DrillerGame.depth].value + ")")
+                msg = "Your driller digs deeper..and finds " + Driller.Ores[DrillerGame.depth].name + "! (worth " + Driller.Ores[DrillerGame.depth].value + ")"
                 DrillerGame.cash = DrillerGame.cash + Driller.Ores[DrillerGame.depth].value
                 DrillerGame.depth++
                 if (Driller.Ores[DrillerGame.depth].tier > EconomySystem.driller) {
-                    message.channel.send("Your driller is struggling to dig any further, you might need to upgrade it")
+                    msg = msg + "\nYour driller is struggling to dig any further, you might need to upgrade it"
                 }
+                DrillerGame.hitlava = false
             }
+            let InfoEmbed = DrillerGame.getInfo(EconomySystem)
+            InfoEmbed.addField("Latest event:", msg)
+            message.channel.send(InfoEmbed)
             break
         }
         case "repair": {
