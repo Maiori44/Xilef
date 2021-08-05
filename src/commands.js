@@ -197,8 +197,8 @@ Commands.stats = new Command("Gets your amount of money and your rank", (message
         .setTitle(EconomySystem.user + "'s statistics")
         .setDescription("```lua\nDogeCoins: " + EconomySystem.money + "\nRank: " + EconomySystem.rank + "```")
         .addFields(
-            { name: "Singleplayer stats:", value: "```lua\nImpostors found: " + EconomySystem.flags.impostors + "\nDriller tier: " + EconomySystem.flags.driller + "```", inline: true },
-            { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.flags.reversi + "\nConnect four matches won: " + EconomySystem.flags.connect4 + "```", inline: true },
+            { name: "Singleplayer stats:", value: "```lua\nImpostors found: " + EconomySystem.impostors + "\nDriller tier: " + EconomySystem.driller + "```", inline: true },
+            { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.reversi + "\nConnect four matches won: " + EconomySystem.connect4 + "```", inline: true },
         )
         .setTimestamp()
     )
@@ -207,9 +207,9 @@ Commands.stats = new Command("Gets your amount of money and your rank", (message
 Commands.daily = new Command("Get some free DogeCoins, works only once per day", (message, args) => {
     let day = new Date().getDate()
     let EconomySystem = Economy.getEconomySystem(message.author)
-    if (day != EconomySystem.flags.day) {
+    if (day != EconomySystem.day) {
         EconomySystem.give(10 * EconomySystem.rank, message, true)
-        EconomySystem.flags.day = day
+        EconomySystem.day = day
     } else {
         message.channel.send("Pretty sure you arleady got your reward today.")
     }

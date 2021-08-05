@@ -1,20 +1,18 @@
 class EconomySystem {
-    constructor(username, money, rank, flags) {
-        this.money = money || 0
-        this.rank = rank || 1
+    constructor(username, backup) {
+        backup = backup || {}
+        this.money = backup.money || 0
+        this.rank = backup.rank || 1
         this.user = username
-        flags = flags || {}
-        this.flags = {
-            impostors: flags.impostors || 0,
-            driller: flags.driller || 1,
-            day: flags.day || -1,
-            reversi: flags.reversi || 0,
-            connect4: flags.connect4 || 0,
-        }
+        this.impostors = backup.impostors || 0
+        this.driller = backup.driller || 1
+        this.day = backup.day || -1
+        this.reversi = backup.reversi || 0
+        this.connect4 = backup.connect4 || 0
     }
 
     alterFlag(flagname, amount, max) {
-        this.flags[flagname] = Math.min(this.flags[flagname] + amount, max || Infinity)
+        this[flagname] = Math.min(this[flagname] + amount, max || Infinity)
     }
 
     give(amount, message, nobonus) {
@@ -58,6 +56,8 @@ Economy = {
     getEconomySystem(user) {
         if (!Economy.list[user.id]) {
             Economy.list[user.id] = new EconomySystem(user.username)
+        } else if (Economy.list[user.id].user != user.username) {
+            Economy.list[user.id].user = user.username
         }
         return Economy.list[user.id]
     },
@@ -69,5 +69,5 @@ Economy = {
 }
 
 for (let ID of Object.keys(Economy.list)) {
-    Economy.list[ID] = new EconomySystem(Economy.list[ID].user, Economy.list[ID].money, Economy.list[ID].rank, Economy.list[ID].flags)
+    Economy.list[ID] = new EconomySystem(Economy.list[ID].user, Economy.list[ID])
 }

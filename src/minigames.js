@@ -246,13 +246,13 @@ class DrillerGame {
     constructor(EconomySystem) {
         this.depth = 0
         this.cash = 0
-        this.hp = 100 * EconomySystem.flags.driller
+        this.hp = 100 * EconomySystem.driller
     }
 
     reset(EconomySystem) {
         this.depth = 0
         this.cash = 0
-        this.hp = 100 * EconomySystem.flags.driller
+        this.hp = 100 * EconomySystem.driller
     }
 }
 
@@ -348,11 +348,11 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
     args[0] = args[0].toLowerCase()
     switch (args[0]) {
         case "stats": {
-            message.channel.send("Your driller stats:\ndepth: " + DrillerGame.depth + "\ntier: " + EconomySystem.flags.driller + "\ncash found: " + DrillerGame.cash + "\nhealth: " + DrillerGame.hp)
+            message.channel.send("Your driller stats:\ndepth: " + DrillerGame.depth + "\ntier: " + EconomySystem.driller + "\ncash found: " + DrillerGame.cash + "\nhealth: " + DrillerGame.hp)
             break
         }
         case "dig": {
-            if (Driller.Ores[DrillerGame.depth].tier > EconomySystem.flags.driller) {
+            if (Driller.Ores[DrillerGame.depth].tier > EconomySystem.driller) {
                 message.channel.send("Your driller is too weak to dig any further!")
                 return
             }
@@ -364,7 +364,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
                 message.channel.send("Your driller digs deeper..and finds " + Driller.Ores[DrillerGame.depth].name + "! (worth " + Driller.Ores[DrillerGame.depth].value + ")")
                 DrillerGame.cash = DrillerGame.cash + Driller.Ores[DrillerGame.depth].value
                 DrillerGame.depth++
-                if (Driller.Ores[DrillerGame.depth].tier > EconomySystem.flags.driller) {
+                if (Driller.Ores[DrillerGame.depth].tier > EconomySystem.driller) {
                     message.channel.send("Your driller is struggling to dig any further, you might need to upgrade it")
                 }
             }
@@ -375,18 +375,18 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
             if (isNaN(cost)) {
                 throw ("I need to know how much you want to repair,\nexample: `&driller repair 50` will restore 50 hp of the drill, and will cost 50 DogeCoins")
             }
-            if (DrillerGame.hp == 100 * EconomySystem.flags.driller) {
+            if (DrillerGame.hp == 100 * EconomySystem.driller) {
                 message.channel.send("Your driller is arleady in perfect condition.")
             } else if (EconomySystem.buy(cost, message, "Your driller recovered " + cost + " hp! (" + cost + " DogeCoins spent)", "You need " + (cost - EconomySystem.money) + " more DogeCoins for this.")) {
-                DrillerGame.hp = Math.min(DrillerGame.hp + cost, 100 * EconomySystem.flags.driller)
+                DrillerGame.hp = Math.min(DrillerGame.hp + cost, 100 * EconomySystem.driller)
             }
             break
         }
         case "upgrade": {
-            if (EconomySystem.flags.driller == 11) {
+            if (EconomySystem.driller == 11) {
                 message.channel.send("Your driller arleady reached max tier.")
-            } else if (EconomySystem.buy(1500 * EconomySystem.flags.driller, message, "Your driller reached tier " + (EconomySystem.flags.driller + 1) + "! (" + (1500 * EconomySystem.flags.driller) + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + (1500 * EconomySystem.flags.driller) + " DogeCoins needed)")) {
-                EconomySystem.flags.driller = EconomySystem.flags.driller + 1
+            } else if (EconomySystem.buy(1500 * EconomySystem.driller, message, "Your driller reached tier " + (EconomySystem.driller + 1) + "! (" + (1500 * EconomySystem.driller) + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + (1500 * EconomySystem.driller) + " DogeCoins needed)")) {
+                EconomySystem.driller = EconomySystem.driller + 1
             }
             break
         }

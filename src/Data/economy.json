@@ -3,348 +3,290 @@
         "money": 4229,
         "rank": 38,
         "user": "Felix44",
-        "flags": {
-            "impostors": 1,
-            "driller": 5,
-            "day": 5,
-            "reversi": 2,
-            "connect4": 7
-        }
+        "impostors": 1,
+        "driller": 5,
+        "day": 5,
+        "reversi": 2,
+        "connect4": 7
     },
     "276363003270791168": {
         "money": 324548,
         "rank": 217,
         "user": "AliFurkan",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": 26,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": 26,
+        "reversi": 0,
+        "connect4": 0
     },
     "602651056320675840": {
         "money": 1204,
         "rank": 20,
         "user": "Sebo2205",
-        "flags": {
-            "impostors": 0,
-            "driller": 4,
-            "day": 27,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 4,
+        "day": 27,
+        "reversi": 0,
+        "connect4": 0
     },
     "393501189788139520": {
         "money": 0,
         "rank": 1,
         "user": "Rem",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": -1,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 0
     },
     "365289087864668160": {
         "money": 0,
         "rank": 1,
         "user": "Helvetica",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": -1,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 0
     },
     "819577272276484107": {
         "money": 0,
         "rank": 1,
         "user": "escapevelocity",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": -1,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 0
     },
     "367769458804129794": {
         "money": 80,
         "rank": 1,
         "user": "Bobmcboblin",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": -1,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 0
     },
     "484682433925611542": {
         "money": 74705,
         "rank": 120,
         "user": "Dark_Brick",
-        "flags": {
-            "impostors": 0,
-            "driller": 5,
-            "day": 4,
-            "reversi": 0,
-            "connect4": 1
-        }
+        "impostors": 0,
+        "driller": 5,
+        "day": 4,
+        "reversi": 0,
+        "connect4": 1
     },
     "642719190288957450": {
         "money": 10,
         "rank": 1,
         "user": "Бумер/Пламя",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": 27,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": 27,
+        "reversi": 0,
+        "connect4": 0
     },
     "242179187983515650": {
         "money": 73,
         "rank": 6,
         "user": "Kira_46",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": 28,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": 28,
+        "reversi": 0,
+        "connect4": 0
     },
     "724232875238621204": {
         "money": 5125,
         "rank": 80,
         "user": "Fele88",
-        "flags": {
-            "impostors": 0,
-            "driller": 5,
-            "day": 30,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 5,
+        "day": 30,
+        "reversi": 0,
+        "connect4": 0
     },
     "638380713506242576": {
         "money": 0,
         "rank": 1,
         "user": "goth15",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": -1,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 0
     },
     "604213801927180295": {
         "money": 1808,
         "rank": 6,
         "user": "Syphon",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": 27,
-            "reversi": 4,
-            "connect4": 4
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": 27,
+        "reversi": 4,
+        "connect4": 4
     },
     "483715787467653122": {
         "money": 767,
         "rank": 10,
         "user": "poly translator*",
-        "flags": {
-            "impostors": 6,
-            "driller": 2,
-            "day": 1,
-            "reversi": 0,
-            "connect4": 1
-        }
+        "impostors": 6,
+        "driller": 2,
+        "day": 1,
+        "reversi": 0,
+        "connect4": 1
     },
     "850867485263527956": {
         "money": 0,
         "rank": 1,
         "user": "Roots",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": -1,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 0
     },
     "335311591778287617": {
         "money": 300,
         "rank": 1,
         "user": "Lami",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": -1,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 0
     },
     "676696728065277992": {
         "money": 60,
         "rank": 1,
         "user": "Peter1095",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": 26,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": 26,
+        "reversi": 0,
+        "connect4": 0
     },
     "760566354918113320": {
         "money": 10,
         "rank": 1,
         "user": "I’m in the",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": 26,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": 26,
+        "reversi": 0,
+        "connect4": 0
     },
     "602691289733136404": {
         "money": 10,
         "rank": 1,
         "user": "AnoyingShulkerMC",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": 27,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": 27,
+        "reversi": 0,
+        "connect4": 0
     },
     "528309195116642314": {
         "money": 10,
         "rank": 1,
         "user": "Keanu",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": 27,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": 27,
+        "reversi": 0,
+        "connect4": 0
     },
     "570503517832478720": {
         "money": 10,
         "rank": 1,
         "user": "Oh God Not The Belt",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": 27,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": 27,
+        "reversi": 0,
+        "connect4": 0
     },
     "799228822889037824": {
         "money": 200,
         "rank": 1,
         "user": "ARJr",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": -1,
-            "reversi": 1,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 1,
+        "connect4": 0
     },
     "747506529405763654": {
         "money": 0,
         "rank": 1,
         "user": "Nekos|Ftw",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": -1,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 0
     },
     "852882606629847050": {
         "money": 0,
         "rank": 1,
         "user": "Xilef",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": -1,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 0
     },
     "661283181403701288": {
         "money": 0,
         "rank": 1,
         "user": "ThatOneGuy",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": 30,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": 30,
+        "reversi": 0,
+        "connect4": 0
     },
     "218516967022264321": {
         "money": 50,
         "rank": 1,
         "user": "/~DIGIBILLCIPHER",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": -1,
-            "reversi": 0,
-            "connect4": 1
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 1
     },
     "311819610380959745": {
         "money": 0,
         "rank": 2,
         "user": "DRKSAO",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": -1,
-            "reversi": 0,
-            "connect4": 2
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 2
     },
     "649253657862471694": {
         "money": 150,
         "rank": 3,
         "user": "Devertexe77",
-        "flags": {
-            "impostors": 0,
-            "driller": 1,
-            "day": -1,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 0
     },
     "687347431548911644": {
         "money": 1845,
         "rank": 28,
         "user": "no_words",
-        "flags": {
-            "impostors": 2,
-            "driller": 5,
-            "day": -1,
-            "reversi": 0,
-            "connect4": 0
-        }
+        "impostors": 2,
+        "driller": 5,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 0
     }
 }
