@@ -319,7 +319,7 @@
         "test": 0
     },
     "694728312823480415": {
-        "money": 24548508,
+        "money": 24548547,
         "rank": 696,
         "user": "lemon cannon",
         "impostors": 1,
@@ -328,5 +328,16 @@
         "reversi": 0,
         "connect4": 1,
         "test": 26
+    },
+    "759184418945630338": {
+        "money": 0,
+        "rank": 1,
+        "user": "woop",
+        "impostors": 0,
+        "driller": 1,
+        "day": -1,
+        "reversi": 0,
+        "connect4": 0,
+        "test": 0
     }
 }
