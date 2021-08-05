@@ -77,14 +77,14 @@
         "test": 0
     },
     "484682433925611542": {
-        "money": 500133,
-        "rank": 686,
+        "money": 87428,
+        "rank": 692,
         "user": "Dark_Brick",
         "impostors": 0,
         "driller": 14,
         "day": 4,
         "reversi": 0,
-        "connect4": 1,
+        "connect4": 2,
         "test": 0
     },
     "642719190288957450": {
@@ -319,14 +319,14 @@
         "test": 0
     },
     "694728312823480415": {
-        "money": 13178344,
-        "rank": 574,
+        "money": 24548508,
+        "rank": 696,
         "user": "lemon cannon",
-        "impostors": 0,
+        "impostors": 1,
         "driller": 14,
         "day": 5,
         "reversi": 0,
-        "connect4": 0,
+        "connect4": 1,
         "test": 26
     }
 }
