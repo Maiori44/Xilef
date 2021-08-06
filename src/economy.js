@@ -46,7 +46,7 @@ class EconomySystem {
         this.reversi = backup.reversi || 0
         this.connect4 = backup.connect4 || 0
         this.vhour = backup.vhour || -1
-        this.vgot = backup.vogt ? new FlagSystem(5, backup.vgot) : new FlagSystem(5)
+        this.vgot = backup.vogt ? new FlagSystem(60, backup.vgot) : new FlagSystem(60)
     }
 
     alterValue(flagname, amount, max) {
