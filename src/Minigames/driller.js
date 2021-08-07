@@ -164,6 +164,30 @@ Driller.Ores = [
     new DrillerOre("The end...", 2000000, 99, 29),
     new DrillerOre("how", -999999999, 0, 69),
 ]
+Driller.tiers = [
+    1000,
+    5000,
+    16000,
+    40000,
+    75000,
+    125000,
+    200000,
+    250000,
+    300000,
+    370000,
+    600000,
+    1400000,
+    5000000,
+    5500000,
+    6500000,
+    8000000,
+    10000000,
+    12500000,
+    15500000,
+    19000000,
+    23000000,
+    27000000
+]
 Driller.help =
     "`&driller stats` says the stats of your driller\n" +
     "`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n" +
@@ -220,10 +244,9 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
             break
         }
         case "upgrade": {
-            let mul = EconomySystem.driller > 10 ? 2 : 1
-            if (EconomySystem.driller == 14) {
+            if (EconomySystem.driller == 23) {
                 message.channel.send("Your driller arleady reached max tier.")
-            } else if (EconomySystem.buy((1500 * EconomySystem.driller) * mul, message, "Your driller reached tier " + (EconomySystem.driller + 1) + "! (" + (1500 * EconomySystem.driller) + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + (1500 * EconomySystem.driller) + " DogeCoins needed)")) {
+            } else if (EconomySystem.buy(Driller.tiers[EconomySystem.driller - 1], message, "Your driller reached tier " + (EconomySystem.driller + 1) + "! (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins needed)")) {
                 EconomySystem.driller = EconomySystem.driller + 1
             }
             break
