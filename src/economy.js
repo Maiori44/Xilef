@@ -1,27 +1,28 @@
 class FlagSystem {
     constructor(totalflags, flags) {
-        this.value = flags || 0
+        this.value = flags ? BigInt(flags) : BigInt(0)
         this.totalflags = totalflags
     }
 
     toJSON() {
-        return this.value
+        return this.value.toString()
     }
 
     addFlag(flag) {
-        this.value = this.value | flag
+        this.value = this.value | BigInt(flag)
     }
 
     removeFlag(flag) {
-        this.value = this.value & ~flag
+        this.value = this.value & ~BigInt(flag)
     }
 
     checkFlag(flag) {
-        if (this.value & flag) return true
+        if (this.value & BigInt(flag)) return true
         return false 
     }
 
     getBinary(replacers1, replacer0) {
+        replacers1.reverse()
         let bits = [...this.value.toString(2).padStart(this.totalflags, "0")]
         bits.forEach((bit, position) => {
             if (bit == "1") {
@@ -30,6 +31,7 @@ class FlagSystem {
                 bits[position] = replacer0 || "0"
             }
         })
+        replacers1.reverse()
         return bits.join("")
     }
 }
@@ -46,7 +48,7 @@ class EconomySystem {
         this.reversi = backup.reversi || 0
         this.connect4 = backup.connect4 || 0
         this.vhour = Date.now()-Date.hour
-        this.vgot = backup.vogt ? new FlagSystem(60, backup.vgot) : new FlagSystem(60)
+        this.vgot = backup.vgot ? new FlagSystem(60, backup.vgot) : new FlagSystem(60)
     }
 
     alterValue(flagname, amount, max) {
