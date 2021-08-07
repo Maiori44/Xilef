@@ -1,13 +1,13 @@
 {
     "621307633718132746": {
-        "money": 3639,
+        "money": 3507,
         "rank": 38,
         "user": "Felix44",
         "impostors": 1,
         "driller": 10,
         "day": 1628326555505,
         "reversi": 2,
-        "connect4": 8,
+        "connect4": 9,
         "vhour": 1628350345788,
         "vgot": "0"
     },
@@ -120,11 +120,11 @@
         "vgot": "0"
     },
     "724232875238621204": {
-        "money": 5125,
+        "money": 112257,
         "rank": 80,
         "user": "Fele88",
         "impostors": 0,
-        "driller": 5,
+        "driller": 11,
         "day": 1628239752422,
         "reversi": 0,
         "connect4": 0,
