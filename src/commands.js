@@ -205,13 +205,14 @@ Commands.stats = new Command("Gets your amount of money and your rank", (message
 })
 
 Commands.daily = new Command("Get some free DogeCoins, works only once per day", (message, args) => {
-    let day = new Date().getDate()
+    let day = new Date().getTime()
     let EconomySystem = Economy.getEconomySystem(message.author)
-    if (day != EconomySystem.day) {
+    let diff = day - EconomySystem.day
+    if (diff >= DAYTIME) {
         EconomySystem.give(10 * EconomySystem.rank, message, true)
         EconomySystem.day = day
     } else {
-        message.channel.send("Pretty sure you arleady got your reward today.")
+        message.channel.send("Pretty sure you arleady got your reward today\nyou can get a new reward in " + Math.floor((DAYTIME - diff)/1000) + " seconds.")
     }
 })
 

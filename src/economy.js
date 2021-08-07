@@ -42,7 +42,7 @@ class EconomySystem {
         this.user = username
         this.impostors = backup.impostors || 0
         this.driller = backup.driller || 1
-        this.day = backup.day || -1
+        this.day = backup.day || new Date().getTime()-DAYTIME
         this.reversi = backup.reversi || 0
         this.connect4 = backup.connect4 || 0
         this.vhour = backup.vhour || -1
