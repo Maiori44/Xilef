@@ -140,16 +140,22 @@ v_Types = {
     ]
 }
 
-Commands.test = new Command("TEST", (message, args) => {
-    if (message.author.id != 621307633718132746) throw ("This command is a big wip, you are not allowed to use it *yet*.")
+Commands.roll = new Command('Buy a random funny looking "v_"!, try collect all 60!', (message, args) => {
+    let hour = Date.now()
     let EconomySystem = Economy.getEconomySystem(message.author)
-    if (true) {
-        let chance = GetPercentual()
-        let rarity = chance >= 90 ? "legendary" : chance >= 50 ? "common" : chance >= 20 ? "rare" : "epic"
-        let v_s = v_Types[rarity]
-        let v_got = v_s[Math.floor(Math.random() * v_s.length)]
-        message.channel.send("You got " + v_got.id + "! (" + rarity + ")")
-        EconomySystem.vgot.addFlag(v_got.value)
-        message.channel.send(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
+    let diff = hour - EconomySystem.vhour
+    if (diff >= Date.hour) {
+        if (EconomySystem.buy(200 * (EconomySystem.rank/4), message, undefined, "You don't have enough DogeCoins for a v_ (" + 200 * (EconomySystem.rank/4) + " DogeCoins needed)")) {
+            let chance = GetPercentual()
+            let rarity = chance >= 90 ? "legendary" : chance >= 50 ? "common" : chance >= 20 ? "rare" : "epic"
+            let v_s = v_Types[rarity]
+            let v_got = v_s[Math.floor(Math.random() * v_s.length)]
+            message.channel.send("You got " + v_got.id + "! (" + rarity + "!)")
+            EconomySystem.vgot.addFlag(v_got.value)
+            message.channel.send(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
+            EconomySystem.vhour = hour
+        }
+    } else {
+        throw ("You arleady got a v_ today, you can get a new one in " +  Math.floor((Date.hour - diff)/1000) + " seconds!")
     }
 })

@@ -47,7 +47,7 @@ class EconomySystem {
         this.day = backup.day || Date.now()-Date.day
         this.reversi = backup.reversi || 0
         this.connect4 = backup.connect4 || 0
-        this.vhour = Date.now()-Date.hour
+        this.vhour = backup.vhour || Date.now()-Date.hour
         this.vgot = backup.vgot ? new FlagSystem(60, backup.vgot) : new FlagSystem(60)
     }
 
