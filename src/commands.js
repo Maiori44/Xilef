@@ -212,7 +212,7 @@ Commands.daily = new Command("Get some free DogeCoins, works only once per day",
         EconomySystem.give(10 * EconomySystem.rank, message, true)
         EconomySystem.day = day
     } else {
-        message.channel.send("Pretty sure you arleady got your reward today\nyou can get a new reward in " + Math.floor((DAYTIME - diff)/1000) + " seconds.")
+        message.channel.send("Pretty sure you already got your reward today\nyou can get a new reward in " + Math.floor((DAYTIME - diff)/1000) + " seconds.")
     }
 })
 
