@@ -9,13 +9,14 @@ const prefix = "&" //defines the bot prefix
 Date.day = 86400000
 Date.hour = 3600000
 
+GetPercentual = () => {
+    return Math.floor(Math.random() * 101)
+}
+
 require("./economy.js")
 require("./commands.js")
 require("./buttons.js")
 require("./minigames.js")
-
-//"please dont give an error"
-//0 0
 
 client.on("ready", () => console.log("Bot ready"));
 client.on("message", (message) => { //function called when a message is sent

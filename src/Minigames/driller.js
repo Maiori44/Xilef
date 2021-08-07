@@ -211,7 +211,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
                 return
             }
             let msg = ""
-            let hurtchance = Math.floor(Math.random() * 101)
+            let hurtchance = GetPercentual()
             if (DrillerGame.hitlava) hurtchance = hurtchance * 2
             if (hurtchance <= Driller.Ores[DrillerGame.depth].lavachance) {
                 msg = "Your driller digs deeper..and finds lava! Your driller got damaged!"
