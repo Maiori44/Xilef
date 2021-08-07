@@ -143,11 +143,13 @@ v_Types = {
 Commands.test = new Command("TEST", (message, args) => {
     if (message.author.id != 621307633718132746) throw ("This command is a big wip, you are not allowed to use it *yet*.")
     let EconomySystem = Economy.getEconomySystem(message.author)
-    let chance = GetPercentual()
-    let rarity = chance >= 90 ? "legendary" : chance >= 50 ? "common" : chance >= 20 ? "rare" : "epic"
-    let v_s = v_Types[rarity]
-    let v_got = v_s[Math.floor(Math.random() * v_s.length)]
-    message.channel.send("You got " + v_got.id + "!")
-    EconomySystem.vgot.addFlag(v_got.value)
-    message.channel.send(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
+    if (true) {
+        let chance = GetPercentual()
+        let rarity = chance >= 90 ? "legendary" : chance >= 50 ? "common" : chance >= 20 ? "rare" : "epic"
+        let v_s = v_Types[rarity]
+        let v_got = v_s[Math.floor(Math.random() * v_s.length)]
+        message.channel.send("You got " + v_got.id + "! (" + rarity + ")")
+        EconomySystem.vgot.addFlag(v_got.value)
+        message.channel.send(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
+    }
 })

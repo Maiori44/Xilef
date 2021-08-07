@@ -74,6 +74,12 @@ class EconomySystem {
     }
 
     buy(amount, message, tmsg, fmsg) {
+        if (amount < 1) {
+            if (message) {
+                message.channel.send("that amount is too low, pal")
+            }
+            return false
+        }
         if (this.money >= amount) {
             this.money = this.money - amount
             if (message && tmsg) {
