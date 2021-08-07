@@ -6,7 +6,8 @@ client.login(process.env.TOKEN); //logins in the client
 
 const prefix = "&" //defines the bot prefix
 
-DAYTIME = 86400000
+Date.day = 86400000
+Date.hour = 3600000
 
 require("./economy.js")
 require("./commands.js")
