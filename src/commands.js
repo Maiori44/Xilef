@@ -57,7 +57,7 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
             }
         }
         syntax = syntax + "`"
-        CommandInfoEmbed.addField("Syntax:", "arguments inside () are required, arguments inside [] can be omitted\narguments can have spaces using \" at the start and end of the argument" + syntax)
+        CommandInfoEmbed.addField("Syntax:", "arguments inside () are required, arguments inside [] can be omitted\narguments can have spaces using \" at the start and end of the argument\n" + syntax)
         message.channel.send(CommandInfoEmbed)
         return
     }
