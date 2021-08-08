@@ -1,11 +1,11 @@
 {
     "621307633718132746": {
-        "money": 729,
+        "money": 1109,
         "rank": 38,
         "user": "Felix44",
         "impostors": 2,
         "driller": 10,
-        "day": 1628326555505,
+        "day": 1628420755063,
         "reversi": 2,
         "connect4": 9,
         "vhour": 1628418440019,
@@ -144,7 +144,7 @@
         "vgot": "0"
     },
     "604213801927180295": {
-        "money": 1508,
+        "money": 1208,
         "rank": 6,
         "user": "Syphon",
         "impostors": 0,
@@ -152,11 +152,11 @@
         "day": 1628239752422,
         "reversi": 4,
         "connect4": 4,
-        "vhour": 1628369407430,
-        "vgot": "2"
+        "vhour": 1628420772594,
+        "vgot": "34"
     },
     "483715787467653122": {
-        "money": 267,
+        "money": 72,
         "rank": 10,
         "user": "poly translator*",
         "impostors": 6,
@@ -240,16 +240,16 @@
         "vgot": "0"
     },
     "570503517832478720": {
-        "money": 20,
+        "money": 9978,
         "rank": 1,
         "user": "Oh God Not The Belt",
         "impostors": 0,
-        "driller": 1,
+        "driller": 3,
         "day": 1628419767943,
-        "reversi": 0,
+        "reversi": 1,
         "connect4": 0,
-        "vhour": 1628361645217,
-        "vgot": "0"
+        "vhour": 1628420071726,
+        "vgot": "4"
     },
     "799228822889037824": {
         "money": 100,
