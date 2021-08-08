@@ -64,7 +64,7 @@ Connect4.help =
     "`&connect4 place (x)` places a disc in the given x\n" +
     "`&connect4 board` shows the board of the current match, the users playing and who's turn it is"
 
-Commands.connect4 = new Command("Make a line of 4 discs in any directions to win (warning: you need a friend)", (message, args) => {
+Commands.connect4 = new Command("Make a line of 4 discs in any directions to win (warning: you need a friend)\n\n" + Connect4.help, (message, args) => {
     args[0] = args[0].toLowerCase()
     switch (args[0]) {
         case "host": {
@@ -128,4 +128,4 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
             return
         }
     }
-}, [new RequiredArg(0, Connect4.help)])
+}, "Game", [new RequiredArg(0, Connect4.help, "command"), new RequiredArg(1, undefined, "argument", true)])

@@ -140,22 +140,26 @@ v_Types = {
     ]
 }
 
-Commands.roll = new Command('Buy a random funny looking "v_"!, try collect all 60!', (message, args) => {
+Commands.roll = new Command('Get a random funny looking "v_", try to collect all 60!', (message, args) => {
     let hour = Date.now()
     let EconomySystem = Economy.getEconomySystem(message.author)
     let diff = hour - EconomySystem.vhour
     if (diff >= Date.hour) {
-        if (EconomySystem.buy(200 * (EconomySystem.rank/4), message, undefined, "You don't have enough DogeCoins for a v_ (" + 200 * (EconomySystem.rank/4) + " DogeCoins needed)")) {
+        if (EconomySystem.buy(200 * (EconomySystem.rank / 4), message, undefined, "You don't have enough DogeCoins for a v_ (" + 200 * (EconomySystem.rank / 4) + " DogeCoins needed)")) {
             let chance = GetPercentual()
             let rarity = chance >= 90 ? "legendary" : chance >= 50 ? "common" : chance >= 20 ? "rare" : "epic"
             let v_s = v_Types[rarity]
             let v_got = v_s[Math.floor(Math.random() * v_s.length)]
             message.channel.send("You got " + v_got.id + "! (" + rarity + "!)")
             EconomySystem.vgot.addFlag(v_got.value)
-            message.channel.send(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
+            message.channel.send(new Discord.MessageEmbed()
+                .setColor(message.member.displayHexColor)
+                .setTitle(EconomySystem.user + "'s v_s")
+                .setDescription(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
+                .setTimestamp())
             EconomySystem.vhour = hour
         }
     } else {
-        throw ("You arleady got a v_ today, you can get a new one in " +  Math.floor((Date.hour - diff)/1000) + " seconds!")
+        throw ("You arleady got a v_ today, you can get a new one in " + Math.floor((Date.hour - diff) / 1000) + " seconds!")
     }
-})
+}, "Game")

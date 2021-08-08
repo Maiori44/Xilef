@@ -2,21 +2,24 @@ require("discord-buttons")(client);
 const { MessageButton, MessageActionRow } = require("discord-buttons");
 
 class RequiredArg {
-    constructor(argnum, errormsg) {
+    constructor(argnum, errormsg, name, notrequired) {
         this.argnum = argnum
         this.errormsg = errormsg
+        this.name = name
+        this.notrequired = notrequired
     }
 
     check(args) {
-        if (args[this.argnum]) { return true }
+        if (this.notrequired || args[this.argnum]) { return true }
         throw (this.errormsg)
     }
 }
 
 class Command {
-    constructor(description, action, requiredargs) {
+    constructor(description, action, category, requiredargs) {
         this.description = description
         this.action = action
+        this.category = category
         this.requiredargs = requiredargs
         console.log("Loaded command " + (Object.keys(Commands).length + 1) + "/26")
     }
@@ -38,25 +41,52 @@ Commands = {}
 
 //text commands
 
-Commands.help = new Command("Shows a list of all commands", (message, args) => {
+Commands.help = new Command("Shows a list of all commands or detailed info of a specific command, if given its name", (message, args) => {
+    args[0] = args[0] ? args[0].toLowerCase() : undefined
+    if (args[0] && Commands[args[0]]) {
+        const CommandInfoEmbed = new Discord.MessageEmbed()
+            .setColor("#0368f8")
+            .setTitle(args[0])
+            .setDescription(Commands[args[0]].description)
+            .setTimestamp()
+            .setFooter(Object.keys(Commands).length + " total commands")
+        let syntax = "`&" + args[0]
+        if (Commands[args[0]].requiredargs) {
+            for (const arg of Commands[args[0]].requiredargs) {
+                syntax = syntax + " " + (arg.notrequired ? "[" : "(") + arg.name + (arg.notrequired ? "]" : ")")
+            }
+        }
+        syntax = syntax + "`"
+        CommandInfoEmbed.addField("Syntax:", "arguments inside () are required, arguments inside [] can be omitted\narguments can have spaces using \" at the start and end of the argument" + syntax)
+        message.channel.send(CommandInfoEmbed)
+        return
+    }
     const CommandsEmbed = new Discord.MessageEmbed()
         .setColor("#0368f8")
         .setTitle("List of all commands:")
+        .setDescription("You can do `&help (command name)` to have a brief description of the command")
         .setTimestamp()
         .setFooter(Object.keys(Commands).length + " total commands")
+    let Categories = {}
     for (let key in Commands) {
-        CommandsEmbed.addField(key, Commands[key].description, true)
+        if (!Categories[Commands[key].category]) {
+            Categories[Commands[key].category] = []
+        }
+        Categories[Commands[key].category].push(key)
+    }
+    for (let category in Categories) {
+        CommandsEmbed.addField(category + " commands", "`" + Categories[category].join("` `") + "`", true)
     }
     let button = new MessageButton()
         .setStyle("url")
         .setURL("https://github.com/Felix-44/Xilef")
         .setLabel("Github page");
     message.channel.send(CommandsEmbed, button)
-})
+}, "Utility", [new RequiredArg(0, undefined, "command name", true)])
 
 Commands.hi = new Command("Says hi to you", (message, args) => {
     message.reply("Hi.")
-})
+}, "Simple")
 
 /*Commands.allutf8 = new Command("Get all existing characters in Discord", (message, args) => {
     if (message.author.id != "621307633718132746") {
@@ -74,21 +104,21 @@ Commands.hi = new Command("Says hi to you", (message, args) => {
 
 Commands.annoy = new Command("Annoys the person you want", (message, args) => {
     message.channel.send(args[0].slice(0, 1900) + " you suck")
-}, [new RequiredArg(0, "You gotta give me someone dumdum")])
+}, "Simple", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
 
 Commands.comfort = new Command("Comforts the person you want", (message, args) => {
     message.channel.send(args[0].slice(0, 1900) + " you don't suck")
-}, [new RequiredArg(0, "You gotta give me someone dumdum")])
+}, "Simple", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
 
 Commands.say = new Command("Says whatever you want", (message, args) => {
     if (!args.join(" ")) { args[0] = "** **" }
     message.channel.send(args.join(" ").slice(0, 1900))
     message.delete()
-}, [new RequiredArg(0, "** **")])
+}, "Simple", [new RequiredArg(0, "** **", "...text")])
 
 Commands.hentai = new Command("Totally sends you hentai", (message, args) => {
     message.channel.send("No..just no..")
-})
+}, "Simple")
 
 //math commands
 
@@ -103,7 +133,7 @@ Commands.dice = new Command("Gives you a number from 1 to 6, and maybe judge you
             message.channel.send("damn u lucky")
             break
     }
-})
+}, "Math")
 
 Commands.clown = new Command("Given a person or a thing, the bot will say how much of a clown it is", (message, args) => {
     let name = args[0] || message.author.username
@@ -124,7 +154,7 @@ Commands.clown = new Command("Given a person or a thing, the bot will say how mu
             message.channel.send("Wow, " + name + " is not a clown, " + name + " is the entire circus")
             break
     }
-}, [new RequiredArg(0, "You're a clown at 100%, since you didn't even give me something or someone")])
+}, "Math", [new RequiredArg(0, "You're a clown at 100%, since you didn't even give me something or someone", "something")])
 
 //images commands
 
@@ -133,35 +163,35 @@ const chadimage = new Discord.MessageAttachment("./src/Pictures/giga chad.jpg")
 Commands.chad = new Command("Sends a beautiful giga chad", (message, args) => {
     message.channel.send("epik")
     message.channel.send(chadimage)
-})
+}, "Images")
 
 const amogusimage = new Discord.MessageAttachment("./src/Pictures/amogus.gif")
 
 Commands.amogus = new Command("It's pretty sus", (message, args) => {
     message.channel.send("sus")
     message.channel.send(amogusimage)
-})
+}, "Images")
 
 const sdrogoimage = new Discord.MessageAttachment("./src/Pictures/sdrogo.jpg")
 
 Commands.sdrogo = new Command("Sdrogo man is da wae", (message, args) => {
     message.channel.send("hm yes")
     message.channel.send(sdrogoimage)
-})
+}, "Images")
 
 const vshitimage = new Discord.MessageAttachment("./src/Pictures/vshit.png")
 
 Commands.vshit = new Command("Vsauce here", (message, args) => {
     message.channel.send("hey vsauce, Michael here, could you get out of my bathroom?")
     message.channel.send(vshitimage)
-})
+}, "Images")
 
 const uwuimage = new Discord.MessageAttachment("./src/Pictures/uwu.png")
 
 Commands.uwu = new Command("Sends a super cute kawaii image ^w^", (message, args) => {
     message.channel.send(":3")
     message.channel.send(uwuimage)
-})
+}, "Images")
 
 const horseimages = [
     new Discord.MessageAttachment("./src/Pictures/Horse/horse1.jpg"),
@@ -175,7 +205,7 @@ Commands.horse = new Command("Sends a random horse photo, idk why I made this", 
     message.channel.send("have a horse I guess")
     let horse = Math.floor(Math.random() * 6)
     message.channel.send(horseimages[horse])
-})
+}, "Images")
 
 Commands.whoasked = new Command("Finds out the person who asked", (message, args) => {
     message.channel.send("https://tenor.com/view/meme-who-asked-satellite-looking-radar-gif-17171784")
@@ -185,17 +215,17 @@ Commands.whoasked = new Command("Finds out the person who asked", (message, args
     setTimeout(() => { message.channel.send("Asking god if they know who asked...") }, 9000)
     setTimeout(() => { message.channel.send("Asking google if they know who asked...") }, 12000)
     setTimeout(() => { message.channel.send("Yeah no, nobody asked.") }, 15000)
-})
+}, "Images")
 
 //economy commands
 
-Commands.stats = new Command("Gets your amount of money and your rank", (message, args) => {
+Commands.stats = new Command("Shows a list of all your stats, like your money or rank\nyou can get other people's stats by pinging them", (message, args) => {
     let user = message.mentions.users.first() || message.author
     let EconomySystem = Economy.getEconomySystem(user)
     message.channel.send(
         new Discord.MessageEmbed()
             .setColor(message.member.displayHexColor)
-            .setTitle(EconomySystem.user + "'s v_'s")
+            .setTitle(EconomySystem.user + "'s v_s")
             .setDescription(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
             .setTimestamp(),
         new Discord.MessageEmbed()
@@ -207,7 +237,7 @@ Commands.stats = new Command("Gets your amount of money and your rank", (message
                 { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.reversi + "\nConnect four matches won: " + EconomySystem.connect4 + "```", inline: true },
             )
     )
-})
+}, "Economy", [new RequiredArg(0, undefined, "@person", true)])
 
 Commands.daily = new Command("Get some free DogeCoins, works only once per day", (message, args) => {
     let day = Date.now()
@@ -219,9 +249,9 @@ Commands.daily = new Command("Get some free DogeCoins, works only once per day",
     } else {
         message.channel.send("Pretty sure you already got your reward today\nyou can get a new reward in " + Math.floor((Date.day - diff) / 1000) + " seconds.")
     }
-})
+}, "Economy")
 
-Commands.rankup = new Command("Increases your rank if you have enough money", (message, args) => {
+Commands.rankup = new Command("Increases your rank if you have enough money\nthe rank can be increased multiple times if given an amount of times", (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
     let times = parseInt(args[0]) || 1
     let oldrank = EconomySystem.rank
@@ -234,7 +264,7 @@ Commands.rankup = new Command("Increases your rank if you have enough money", (m
     if (oldrank != EconomySystem.rank) {
         message.channel.send(EconomySystem.user + " is now rank " + EconomySystem.rank + "!")
     }
-})
+}, "Economy", [new RequiredArg(0, undefined, "times", true)])
 
 Commands.gamble = new Command("Gamble your money away cause you have a terrible life", (message, args) => {
     let gamble = parseInt(args[0])
@@ -257,7 +287,7 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
             message.channel.send("Nope, you lost.")
         }
     }
-}, [new RequiredArg(0, "You can't gamble air, choose an amount")])
+}, "Economy", [new RequiredArg(0, "You can't gamble air, choose an amount", "amount")])
 
 Commands.leaderboard = new Command("See the users with the highest ranks", (message, args) => {
     const LeaderBoard = new Discord.MessageEmbed()
@@ -272,4 +302,4 @@ Commands.leaderboard = new Command("See the users with the highest ranks", (mess
         if (lbnum > 10) { break }
     }
     message.channel.send(LeaderBoard)
-})
+}, "Economy")

@@ -35,8 +35,8 @@ class Poll {
 
 Polls = {}
 
-Commands.poll = new Command("Creates a poll where anyone can vote, you can have 5 different options at max", (message, args) => {
-    if (args[5]) {
+Commands.poll = new Command("Creates a poll where anyone can vote, you can have 5 different options at max\n a simple yes/no poll can be created by omitting some/all arguments", (message, args) => {
+    if (args[7]) {
         throw ("You can only have 5 different options at max.")
     }
     let options = {}
@@ -72,7 +72,7 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
             Polls[message.id] = undefined
         }, parseFloat(args[1]) * 60 * 1000 || 300000)
     })
-})
+}, "Utility", [new RequiredArg(0, undefined, "title", true), new RequiredArg(1, undefined, "duration", true), new RequiredArg(2, undefined, "option 1", true), new RequiredArg(3, undefined, "option 2", true), new RequiredArg(4, undefined, "option 3", true), new RequiredArg(5, undefined, "option 4", true), new RequiredArg(6, undefined, "option 5", true)])
 
 client.on('clickButton', async (button) => {
     let split = button.id.split("-")

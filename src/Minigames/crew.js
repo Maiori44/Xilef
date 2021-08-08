@@ -43,7 +43,7 @@ Amongus.help =
     "`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n" +
     "`&crew eject (color)` to eject a crewmate out, you can only eject once"
 
-Commands.crew = new Command("Find the imposter!", (message, args) => {
+Commands.crew = new Command("Find the imposter!\n\n" + Amongus.help + "\npossible options for crewmates are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.", (message, args) => {
     let Amogus = Amongus.getGame(message.author.id)
     let aturn = Amogus.turns
     args[1] = args[1].toLowerCase()
@@ -135,6 +135,6 @@ Commands.crew = new Command("Find the imposter!", (message, args) => {
     } else {
         message.channel.send(Amogus.turns + " turns left.")
     }
-}, [new RequiredArg(0, Amongus.help),
+}, "Game", [new RequiredArg(0, Amongus.help, "command"),
 new RequiredArg(1, "You need to choose the color of the crewmate if you want to do anything to them, " +
-    "possible options are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.")])
+    "possible options are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.", "argument")])

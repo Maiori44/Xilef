@@ -117,7 +117,7 @@ Reversi.help =
     "`&reversi place (x) (y)` will try to place a disk in the given location\n" +
     "`&reversi board` shows the board of the current match, the users playing and who's turn it is"
 
-Commands.reversi = new Command("Capture as most disks as possible to win the match (warning: you need a friend)", (message, args) => {
+Commands.reversi = new Command("Capture as most disks as possible to win the match (warning: you need a friend)\n\n" + Reversi.help, (message, args) => {
     args[0] = args[0].toLowerCase()
     switch (args[0]) {
         case "host": {
@@ -201,4 +201,4 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
             return
         }
     }
-}, [new RequiredArg(0, Reversi.help)])
+}, "Game", [new RequiredArg(0, Reversi.help, "command"), new RequiredArg(1, undefined, "argument", true)])

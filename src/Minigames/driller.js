@@ -195,7 +195,7 @@ Driller.help =
     "`&driller upgrade` upgrades your driller forever, very expensive\n" +
     "`&driller cashin` get all the DogeCoins the driller got, and reset the game"
 
-Commands.driller = new Command("Dig deeper and deeper to find the treasures", (message, args) => {
+Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n" + Driller.help, (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
     let DrillerGame = Driller.getGame(message.author.id, EconomySystem)
     args[0] = args[0].toLowerCase()
@@ -267,4 +267,4 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures", (m
         EconomySystem.steal(25 * DrillerGame.depth, message)
         DrillerGame.reset(EconomySystem)
     }
-}, [new RequiredArg(0, Driller.help)])
+}, "Game", [new RequiredArg(0, Driller.help, "command"), new RequiredArg(1, undefined, "argument", true)])
