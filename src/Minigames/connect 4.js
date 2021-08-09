@@ -128,4 +128,4 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
             return
         }
     }
-}, "Game", [new RequiredArg(0, Connect4.help, "command"), new RequiredArg(1, undefined, "argument", true)])
+}, "Game", [new RequiredArg(0, Connect4.help, "command"), new RequiredArg(1, undefined, "argument", true)], "https://en.wikipedia.org/wiki/Connect_Four")

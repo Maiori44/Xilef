@@ -16,11 +16,12 @@ class RequiredArg {
 }
 
 class Command {
-    constructor(description, action, category, requiredargs) {
+    constructor(description, action, category, requiredargs, link) {
         this.description = description
         this.action = action
         this.category = category
         this.requiredargs = requiredargs
+        this.link = link
         console.log("Loaded command " + (Object.keys(Commands).length + 1) + "/26")
     }
 
@@ -58,7 +59,14 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
         }
         syntax = syntax + "`"
         CommandInfoEmbed.addField("Syntax:", "arguments inside () are required, arguments inside [] can be omitted\narguments can have spaces using \" at the start and end of the argument\n" + syntax)
-        message.channel.send(CommandInfoEmbed)
+        let button
+        if (Commands[args[0]].link) {
+            button = new MessageButton()
+                .setStyle("url")
+                .setURL(Commands[args[0]].link)
+                .setLabel("How to play " + args[0])
+        }
+        message.channel.send(CommandInfoEmbed, button)
         return
     }
     const CommandsEmbed = new Discord.MessageEmbed()
