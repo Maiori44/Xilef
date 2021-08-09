@@ -113,6 +113,9 @@ Commands.crew = new Command("Find the imposter!\n\n" + Amongus.help + "\npossibl
                 let EconomySystem = Economy.getEconomySystem(message.author)
                 EconomySystem.give(120 - (10 * aturn), message)
                 EconomySystem.alterValue("impostors", 1)
+                if (EconomySystem.impostors >= 25) {
+                    EconomySystem.award("crew", message)
+                }
                 Amogus.reset()
                 return
             } else {

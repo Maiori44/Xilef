@@ -168,12 +168,18 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
                                 let EconomySystem = Economy.getEconomySystem({ id: ReversiGame.host, username: ReversiGame.hostname })
                                 EconomySystem.give(200, message)
                                 EconomySystem.alterValue("reversi", 1)
+                                if (EconomySystem.reversi >= 15) {
+                                    EconomySystem.award("reversi", message)
+                                }
                             } else if (blackdiscs < whitediscs) {
                                 message.channel.send("The joiner wins!")
                                 if (ReversiGame.joiner) {
                                     let EconomySystem = Economy.getEconomySystem({ id: ReversiGame.joiner, username: ReversiGame.joinername })
                                     EconomySystem.give(200, message)
                                     EconomySystem.alterValue("reversi", 1)
+                                    if (EconomySystem.reversi >= 15) {
+                                        EconomySystem.award("reversi", message)
+                                    }
                                 }
                             } else {
                                 message.channel.send("It's a tie!")

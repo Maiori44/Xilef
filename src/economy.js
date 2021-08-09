@@ -49,11 +49,18 @@ class EconomySystem {
         this.connect4 = backup.connect4 || 0
         this.vhour = backup.vhour || Date.now()-Date.hour
         this.vgot = new FlagSystem(60, backup.vgot)
-        this.achievments = new FlagSystem(5, backup.achievments)
+        this.achievments = new FlagSystem(6, backup.achievments)
     }
 
     alterValue(flagname, amount, max) {
         this[flagname] = Math.min(this[flagname] + amount, max || Infinity)
+    }
+
+    award(name, message) {
+        if (!this.achievments.checkFlag(Achievments[name].value)) {
+            this.achievments.addFlag(Achievments[name].value)
+            message.channel.send(this.user + " just got the \"" + Achievments[name].id + "\" achievement!")
+        }
     }
 
     give(amount, message, nobonus) {
@@ -112,8 +119,31 @@ Economy = {
         let json = JSON.parse(fs.readFileSync("./src/Data/economy.json", "utf8"));
         json = { ...json, ...Economy.list }
         fs.writeFileSync("./src/Data/economy.json", JSON.stringify(json, null, 4), "utf8")
+    },
+    flag: class {
+        constructor(id, bit) {
+            this.id = id
+            this.value = 2 ** bit - 2 ** (bit - 1)
+        }
     }
 }
+
+Achievments = {
+    first: new Economy.flag("<:golden_medal:874402462902128656> reach 1st place in the leaderboard", 1),
+    reversi: new Economy.flag("<:black_circle:869976829811884103> win 15 reversi matches", 2),
+    connect4: new Economy.flag("<:yellow_circle:870716292515106846> win 15 connect 4 matches", 3),
+    crew: new Economy.flag("<:imposter:874402966084395058> eject 25 impostors", 4),
+    driller: new Economy.flag("<:driller:874403362827796530> reach tier 29", 5),
+    v_: new Economy.flag("<:v_c:873259417557151765> find all v_s", 6),
+}
+Achievments.binary = [
+    Achievments.first.id + "\n",
+    Achievments.reversi.id + "\n",
+    Achievments.connect4.id + "\n",
+    Achievments.crew.id + "\n",
+    Achievments.driller.id + "\n",
+    Achievments.v_.id + "\n",
+]
 
 for (let ID of Object.keys(Economy.list)) {
     Economy.list[ID] = new EconomySystem(Economy.list[ID].user, Economy.list[ID])

@@ -108,6 +108,9 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
                             let EconomySystem = Economy.getEconomySystem({ id: Connect4Game[winner], username: Connect4Game[winner + "name"] })
                             EconomySystem.give(50, message)
                             EconomySystem.alterValue("connect4", 1)
+                            if (EconomySystem.connect4 >= 15) {
+                                EconomySystem.award("connect4", message)
+                            }
                             Connect4.closeGame(message.author.id)
                         }
                         return

@@ -256,6 +256,7 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
             .addFields(
                 { name: "Singleplayer stats:", value: "```lua\nImpostors found: " + EconomySystem.impostors + "\nDriller tier: " + EconomySystem.driller + "```", inline: true },
                 { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.reversi + "\nConnect four matches won: " + EconomySystem.connect4 + "```", inline: true },
+                { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievments.binary, "❔ ???\n")}
             )
     )
 }, "Economy", [new RequiredArg(0, undefined, "@person", true)])
@@ -318,6 +319,9 @@ Commands.leaderboard = new Command("See the users with the highest ranks", (mess
     let leaderboard = Object.keys(Economy.list).sort((a, b) => { return Economy.list[b].rank - Economy.list[a].rank })
     let lbnum = 1
     for (let ID of leaderboard) {
+        if (lbnum == 1) {
+            Economy.list[ID].award("first", message)
+        }
         LeaderBoard.addField(lbnum + ": " + Economy.list[ID].user, "```lua\nRank: " + Economy.list[ID].rank + "\nDogeCoins: " + Economy.list[ID].money + "```", lbnum == 1 ? false : true)
         lbnum++
         if (lbnum > 10) { break }
