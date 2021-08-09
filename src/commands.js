@@ -22,7 +22,7 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("Loaded command " + (Object.keys(Commands).length + 1) + "/26")
+        console.log("Loaded command " + (Object.keys(Commands).length + 1) + "/28")
     }
 
     call(message, args) {
@@ -64,7 +64,7 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
             button = new MessageButton()
                 .setStyle("url")
                 .setURL(Commands[args[0]].link)
-                .setLabel("How to play " + args[0])
+                .setLabel(Commands[args[0]].category == "Game" ? "How to play " + args[0] : "Github page")
         }
         message.channel.send(CommandInfoEmbed, button)
         return
@@ -91,6 +91,19 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
         .setLabel("Github page");
     message.channel.send(CommandsEmbed, button)
 }, "Utility", [new RequiredArg(0, undefined, "command name", true)])
+
+Commands.info = new Command("Shows info about the bot", (message, args) => {
+    message.channel.send(new Discord.MessageEmbed()
+        .setColor("#0368f8")
+        .setTitle("Xilef info")
+        .setDescription("Bot created by <@621307633718132746>\nYou can check out the code on github")
+        .setTimestamp())
+}, "Utility", undefined, "https://github.com/Felix-44/Xilef")
+
+Commands.warn = new Command("Developer only", (message, args) => {
+    if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the developer only")
+    warning = args[0]
+}, "Utility")
 
 Commands.hi = new Command("Says hi to you", (message, args) => {
     message.reply("Hi.")

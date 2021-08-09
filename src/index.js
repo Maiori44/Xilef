@@ -13,6 +13,8 @@ GetPercentual = () => {
     return Math.floor(Math.random() * 101)
 }
 
+warning = undefined
+
 require("./economy.js")
 require("./commands.js")
 require("./buttons.js")
@@ -28,7 +30,7 @@ client.on("message", (message) => { //function called when a message is sent
         // then map each value (an array that contains strings or null) into a single string
         // index 0 being the full match, and the rest being the capturing groups
         let args = [...message.content.slice(prefix.length).matchAll(regex)]
-        .map(el => el[1] || el[0] || "")
+            .map(el => el[1] || el[0] || "")
         let command = args.shift().toLowerCase()
         if (command == "") {
             message.channel.send('Wow great command, " ", makes complete sense')
@@ -37,6 +39,13 @@ client.on("message", (message) => { //function called when a message is sent
             try {
                 Commands[command.toLowerCase()].call(message, args)
                 Economy.save()
+                if (warning) {
+                    message.channel.send(new Discord.MessageEmbed()
+                        .setColor("#ff0000")
+                        .setTitle("Warning")
+                        .setDescription(warning)
+                        .setTimestamp())
+                }
             } catch (errormsg) {
                 message.channel.send(errormsg.toString().slice(0, 1900))
                 console.error(errormsg)
