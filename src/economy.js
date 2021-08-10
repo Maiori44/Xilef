@@ -22,6 +22,7 @@ class FlagSystem {
     }
 
     getBinary(replacers1, replacer0) {
+        replacers1 = replacers1 || []
         replacers1.reverse()
         let bits = [...this.value.toString(2).padStart(this.totalflags, "0")]
         bits.forEach((bit, position) => {

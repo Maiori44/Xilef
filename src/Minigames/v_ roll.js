@@ -1,3 +1,4 @@
+const { Message } = require("discord.js")
 const { RequiredArg, Command } = require("./../commands.js")
 
 v_Types = {
@@ -144,12 +145,20 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
             let v_s = v_Types[rarity]
             let v_got = v_s[Math.floor(Math.random() * v_s.length)]
             message.channel.send("You got " + v_got.id + "! (" + rarity + "!)")
-            EconomySystem.vgot.addFlag(v_got.value)
-            message.channel.send(new Discord.MessageEmbed()
-                .setColor(message.member.displayHexColor)
-                .setTitle(EconomySystem.user + "'s v_s")
-                .setDescription(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
-                .setTimestamp())
+            if (EconomySystem.vgot.checkFlag(v_got.value)) {
+                message.channel.send("Oh..you arleady had " + v_got.id + "..I can give you back half of what you paid")
+                EconomySystem.give((200 * (EconomySystem.rank / 4)) / 2)
+            } else {
+                EconomySystem.vgot.addFlag(v_got.value)
+                message.channel.send(new Discord.MessageEmbed()
+                    .setColor(message.member.displayHexColor)
+                    .setTitle(EconomySystem.user + "'s v_s")
+                    .setDescription(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
+                    .setTimestamp())
+                if (EconomySystem.vgot.getBinary() == "111111111111111111111111111111111111111111111111111111111111") {
+                    EconomySystem.award("v_", message)
+                }
+            }
             EconomySystem.vhour = hour
         }
     } else {
