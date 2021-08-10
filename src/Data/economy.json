@@ -1,6 +1,6 @@
 {
     "621307633718132746": {
-        "money": 1896,
+        "money": 6555,
         "rank": 50,
         "user": "Felix44",
         "impostors": 2,
@@ -91,7 +91,7 @@
         "achievments": "0"
     },
     "484682433925611542": {
-        "money": 42939842,
+        "money": 42750152,
         "rank": 3811,
         "user": "Dark_Brick",
         "impostors": 0,
@@ -99,8 +99,8 @@
         "day": 1628596848654,
         "reversi": 0,
         "connect4": 3,
-        "vhour": 1628600668392,
-        "vgot": "140926470358528",
+        "vhour": 1628608665125,
+        "vgot": "140926470424064",
         "achievments": "1"
     },
     "642719190288957450": {
@@ -464,6 +464,19 @@
         "reversi": 0,
         "connect4": 0,
         "vhour": 1628541446684,
+        "vgot": "0",
+        "achievments": "0"
+    },
+    "569133728148750346": {
+        "money": 0,
+        "rank": 1,
+        "user": "HavaNiece",
+        "impostors": 0,
+        "driller": 1,
+        "day": 1628523202096,
+        "reversi": 0,
+        "connect4": 0,
+        "vhour": 1628606002096,
         "vgot": "0",
         "achievments": "0"
     }

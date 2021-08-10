@@ -18,11 +18,11 @@ class DrillerGame {
     getInfo(EconomySystem) {
         return new Discord.MessageEmbed()
             .setColor("#964B00")
-            .setTitle("Driller stats")
+            .setTitle(EconomySystem.user + "'s Driller stats")
             .setDescription("```lua\ndepth: " + this.depth +
                 "\ntier: " + EconomySystem.driller +
                 "\ncash found: " + this.cash +
-                "\nhealth: " + this.hp + "```")
+                "\nhealth: " + this.hp + "/" + 100 * EconomySystem.driller +"```")
             .setTimestamp();
     }
 }
