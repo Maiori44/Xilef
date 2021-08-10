@@ -214,6 +214,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             if (Driller.Ores[DrillerGame.depth].tier > EconomySystem.driller) {
                 let InfoEmbed = DrillerGame.getInfo(EconomySystem)
                 InfoEmbed.addField("Latest event:", "Your driller is too weak to dig any further!")
+                message.channel.send(InfoEmbed)
                 return
             }
             let msg = ""

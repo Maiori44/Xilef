@@ -171,7 +171,7 @@ Commands.clown = new Command("Given a person or a thing, the bot will say how mu
         case 69:
             message.channel.send("Noice.")
             break
-        case 100:
+        case 99:
             message.channel.send("Wow, " + name + " is not a clown, " + name + " is the entire circus")
             break
     }
