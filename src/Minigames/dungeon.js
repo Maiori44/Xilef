@@ -10,6 +10,10 @@ class Entity {
         this.ai = ai
     }
 
+    attack(entity, damage) {
+        
+    }
+
     think() {
 
     }
@@ -49,6 +53,8 @@ class DungeonGame {
 
 Dungeon = new Game(() => { return new DungeonGame() })
 Dungeon.enemies = [
+    [100, 0, 40, 0, "goblin"],
+    [50, 0, 60, 20, "skeleton"],
     [100, 0, 40, 0, "goblin"],
 ]
 Dungeon.thinkers = {
