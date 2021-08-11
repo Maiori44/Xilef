@@ -105,6 +105,7 @@ exports.MPGame = MPGame
 
 require("./Minigames/crew.js")
 require("./Minigames/driller.js")
+require("./Minigames/dungeon.js")
 require("./Minigames/reversi.js")
 require("./Minigames/connect 4.js")
 require("./Minigames/v_ roll.js")

@@ -22,7 +22,7 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("Loaded command " + (Object.keys(Commands).length + 1) + "/28")
+        console.log("Loaded command " + (Object.keys(Commands).length + 1) + "/29")
     }
 
     call(message, args) {
@@ -77,6 +77,7 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
         .setFooter(Object.keys(Commands).length + " total commands")
     let Categories = {}
     for (let key in Commands) {
+        if (!Commands[key].category) continue
         if (!Categories[Commands[key].category]) {
             Categories[Commands[key].category] = []
         }
