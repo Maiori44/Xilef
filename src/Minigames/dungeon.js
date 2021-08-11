@@ -53,9 +53,25 @@ class DungeonGame {
 
 Dungeon = new Game(() => { return new DungeonGame() })
 Dungeon.enemies = [
-    [100, 0, 40, 0, "goblin"],
-    [50, 0, 60, 20, "skeleton"],
-    [100, 0, 40, 0, "goblin"],
+    [40, 0, 25, 0, "slime"],
+    [55, 0, 30, 0, "zombie"],
+    [90, 0, 40, 5, "goblin"],
+    [80, 0, 60, 20, "skeleton"],
+    [65, 0, 40, 10, "skeleton archer"],
+    [75, 100, 50, 5, "skeleton mage"], 
+    [200, 0, 40, 0, "slime"], //big slime
+    [125, 125, 125, 0, "ghost"],
+    [400, 0, 90, 75, "goblin"], //armored goblin
+    [350, 0, 80, 60, "skeleton"], //skeleton brute
+    [150, 0, 110, 160, "mimic"],
+    [300, 150, 75, 69, "v_"],
+    [400, 0, 100, 100, "golem"], //mini golem
+    [300, 175, 125, 40, "ghost"], //spectre
+    [500, 0, 25, 0, "slime"], //abyss slime
+    [600, 0, 200, 110, "golem"],
+    [900, 200, 250, 150, "v_"], //distortedv_
+    [1000, 175, 125, 40, "ghost"], //great ghost
+    [2000, 400, 250, 300, "golem"], //power golem 
 ]
 Dungeon.thinkers = {
     goblin() {
