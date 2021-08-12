@@ -50,7 +50,7 @@ client.on("message", (message) => {
                 console.log("- Command call completed sucessfully:" +
                 "\n\tCommand: " + command +
                 "\n\tArgs: " + args +
-                "\n\tTime taken: " + Date.now() - start +
+                "\n\tTime taken: " + (Date.now() - start) +
                 "\n\tCaller: " + message.author.username +
                 "\n\tChannel name: " + message.channel.name +
                 "\n\tGuild name: " + message.guild.name)
