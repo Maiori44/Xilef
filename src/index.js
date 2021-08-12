@@ -1,10 +1,10 @@
-require("dotenv").config() //setup the .env
-Discord = require("discord.js") //takes the discord api or something
+require("dotenv").config()
+Discord = require("discord.js")
 
-client = new Discord.Client(); //makes a new client
-client.login(process.env.TOKEN); //logins in the client
+client = new Discord.Client()
+client.login(process.env.TOKEN)
 
-const prefix = "&" //defines the bot prefix
+const prefix = "&"
 
 Date.day = 86400000
 Date.hour = 3600000
@@ -20,8 +20,9 @@ require("./commands.js")
 require("./buttons.js")
 require("./minigames.js")
 
-client.on("ready", () => console.log("Bot ready"));
-client.on("message", (message) => { //function called when a message is sent
+client.on("ready", () => console.log("- Bot ready"));
+client.on("message", (message) => {
+    let start = Date.now()
     if (message.author.bot) return
     if (message.content.startsWith(prefix)) {
         // create a regular expresion that matches either any string inside of double quotes, or any string without spaces that is outside of double quotes
@@ -46,9 +47,16 @@ client.on("message", (message) => { //function called when a message is sent
                         .setDescription(warning)
                         .setTimestamp())
                 }
+                console.log("- Command call completed sucessfully:" +
+                "\n\tCommand: " + command +
+                "\n\tArgs: " + args +
+                "\n\tTime taken: " + Date.now() - start +
+                "\n\tCaller: " + message.author.username +
+                "\n\tChannel name: " + message.channel.name +
+                "\n\tGuild name: " + message.guild.name)
             } catch (errormsg) {
+                if (errormsg instanceof Error) console.error("- Command call ended by thrown error:\n" + errormsg)
                 message.channel.send(errormsg.toString().slice(0, 1900))
-                console.error(errormsg)
             }
         } else {
             message.channel.send("That command doesn't exist buddy, use `&help` for a list of commands")

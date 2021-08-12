@@ -65,11 +65,12 @@ class EconomySystem {
     }
 
     give(amount, message, nobonus) {
-        this.money = nobonus ? this.money + amount : this.money + amount + Math.floor(((amount / 100) * (this.rank - 1)))
+        let pbonus = Math.floor(((amount / 100) * (this.rank - 1)))
+        this.money = nobonus ? this.money + amount : this.money + amount + pbonus
         if (message) {
             let msg = this.user + " gained " + amount + " DogeCoins!"
             if (!nobonus) {
-                msg = msg + " (+" + Math.floor(((amount / 100) * (this.rank - 1))) + " bonus)"
+                msg = msg + " (+" + pbonus + " bonus)"
             }
             message.channel.send(msg)
         }

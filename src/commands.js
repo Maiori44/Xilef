@@ -22,7 +22,7 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("Loaded command " + (Object.keys(Commands).length + 1) + "/29")
+        console.log("- Loaded command " + (Object.keys(Commands).length + 1) + "/29")
     }
 
     call(message, args) {
