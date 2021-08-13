@@ -38,6 +38,20 @@ class Command {
 exports.RequiredArg = RequiredArg
 exports.Command = Command
 
+const Buttons = new MessageActionRow()
+Buttons.addComponent(new MessageButton()
+    .setStyle("url")
+    .setURL("https://github.com/Felix-44/Xilef")
+    .setLabel("Github page"))
+Buttons.addComponent(new MessageButton()
+    .setStyle("url")
+    .setURL("https://discord.gg/Qyz5HgrxWg")
+    .setLabel("Official server"))
+Buttons.addComponent(new MessageButton()
+    .setStyle("url")
+    .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=59456&scope=bot")
+    .setLabel("Invite bot"))
+
 Commands = {}
 
 //text commands
@@ -86,11 +100,7 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
     for (let category in Categories) {
         CommandsEmbed.addField(category + " commands", "`" + Categories[category].join("` `") + "`", true)
     }
-    let button = new MessageButton()
-        .setStyle("url")
-        .setURL("https://github.com/Felix-44/Xilef")
-        .setLabel("Github page");
-    message.channel.send(CommandsEmbed, button)
+    message.channel.send(CommandsEmbed, Buttons)
 }, "Utility", [new RequiredArg(0, undefined, "command name", true)])
 
 Commands.info = new Command("Shows info about the bot", (message, args) => {
@@ -98,8 +108,8 @@ Commands.info = new Command("Shows info about the bot", (message, args) => {
         .setColor("#0368f8")
         .setTitle("Xilef info")
         .setDescription("Bot created by <@621307633718132746>\nYou can check out the code on github")
-        .setTimestamp())
-}, "Utility", undefined, "https://github.com/Felix-44/Xilef")
+        .setTimestamp(), Buttons)
+}, "Utility")
 
 Commands.warn = new Command("Developer only", (message, args) => {
     if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the developer only")
@@ -257,7 +267,7 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
             .addFields(
                 { name: "Singleplayer stats:", value: "```lua\nImpostors found: " + EconomySystem.impostors + "\nDriller tier: " + EconomySystem.driller + "```", inline: true },
                 { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.reversi + "\nConnect four matches won: " + EconomySystem.connect4 + "```", inline: true },
-                { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievments.binary, "❔ ???\n")}
+                { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievments.binary, "❔ ???\n") }
             )
     )
 }, "Economy", [new RequiredArg(0, undefined, "@person", true)])

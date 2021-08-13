@@ -9,6 +9,7 @@ class Entity {
         this.defense = defense
         this.ai = ai
         this.castmsg = this.ai ? "The " + this.ai + " uses " : "You use "
+        this.evmsg = this.ai ? "The " + this.ai + "'s " : "Your "
     }
 
     fight(Entity, damage) {
@@ -35,8 +36,10 @@ class Attack {
         this.effect = effect
     }
 
-    use() {
-
+    use(Attacker, Attacked) {
+        if (Attacker.mana < this.cost) throw ("You need " + this.cost + " for this spell")
+        Attacker.mana = Attacker.mana - this.cost
+        return Attacker.castmsg + this.name + "!\n" + this.effect(Attacker, Attacked)
     }
 }
 
@@ -111,13 +114,17 @@ Dungeon.thinkers = {
     }
 }
 Dungeon.attacks = {
-    default: (Attacker, Attacked) => {
+    slash: new Attack("Slash", 0, (Attacker, Attacked) => {
         return Attacker.fight(Attacked, Attacker.attack)
-    },
-    fire: (Attacker, Attacked) => {
-        let msg = Attacker.castmsg + "Fire Blast!"
-        msg = msg + "\n" + Attacker.fight(Attacked, Attacker.attack * 0.6)
-    },
+    }),
+    fire: new Attack("Fire Storm", 25, (Attacker, Attacked) => {
+        const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 0.6)) +
+        "\n" + Attacked.evmsg + "defence decreased!"
+        Attacked.defense = Math.floor(Attacked.defense * 0.7)
+    }),
+    ice: new Attack("Ice Blast", 25, (Attacker, Attacked) => {
+        msg = Attacker.fight(Attacked, Attacker.attack * 0.6)
+    }),
 }
 Dungeon.help =
     "`&dungeon stats` say the stats of your current adventure\n" +
@@ -184,15 +191,26 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
         }
         case "ascend": {
             if (DungeonGame.enemies.length) {
-                throw ("You can't ascend while monsters are attacking you!")
+                message.channel.send("You can't ascend while monsters are attacking you!")
+                return
             }
             DungeonGame.floor = DungeonGame.floor + 1
             DungeonGame.explored = 2 + DungeonGame.floor
             message.channel.send("You have reached floor " + DungeonGame.floor)
             break
         }
-        case "repair": {
-            let cost = parseInt(args[1])
+        case "attack": {
+            if (!args[1] || !Dungeon.attacks[args[1]]) {
+                message.channel.send(
+                    "`&dungeon attack slash` the basic attack, costs 0\n" +
+                    "`&dungeon attack fire` does slightly less damage but reduces enemy defense, costs 25\n" +
+                    "`&dungeon attack ice` does slightly more damage and reduces enemy mana, costs 50\n" +
+                    "`&dungeon attack ground` same damage as slash but hits all enemies, costs 75\n" +
+                    "`&dungeon attack thunder` does double damage and reduces both enemy attack and defense, but has a 30% chance of missing, costs 100\n"
+                )
+                return
+            }
+            /*let cost = parseInt(args[1])
             if (isNaN(cost)) {
                 throw ("I need to know how much you want to repair,\nexample: `&driller repair 50` will restore 50 hp of the drill, and will cost 50 DogeCoins")
             }
@@ -201,7 +219,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             } else if (EconomySystem.buy(cost, message, "Your driller recovered " + cost + " hp! (" + cost + " DogeCoins spent)", "You need " + (cost - EconomySystem.money) + " more DogeCoins for this.")) {
                 DungeonGame.hp = Math.min(DungeonGame.hp + cost, 100 * EconomySystem.driller)
             }
-            break
+            break*/
         }
         case "upgrade": {
             if (EconomySystem.driller == 29) {
@@ -217,7 +235,8 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
         }
         case "cashin": {
             if (DungeonGame.enemies.length) {
-                throw ("You can't cashin while monsters are attacking you!")
+                message.channel.send("You can't cashin while monsters are attacking you!")
+                return
             }
             message.channel.send("Your driller comes back, and gives you all the DogeCoins it had collected.")
             EconomySystem.give(DungeonGame.cash, message)

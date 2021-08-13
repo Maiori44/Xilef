@@ -1,6 +1,6 @@
 {
     "621307633718132746": {
-        "money": 11148,
+        "money": 9669,
         "rank": 50,
         "user": "Felix44",
         "impostors": 2,
@@ -8,7 +8,7 @@
         "day": 1628786234048,
         "reversi": 2,
         "connect4": 9,
-        "vhour": 1628799148619,
+        "vhour": 1628854263385,
         "vgot": "144275098375325984",
         "achievments": "0"
     },
@@ -91,16 +91,16 @@
         "achievments": "0"
     },
     "484682433925611542": {
-        "money": 42369052,
-        "rank": 3811,
+        "money": 59319825,
+        "rank": 4200,
         "user": "Dark_Brick",
         "impostors": 0,
-        "driller": 27,
-        "day": 1628596848654,
+        "driller": 29,
+        "day": 1628856827541,
         "reversi": 0,
         "connect4": 3,
-        "vhour": 1628705870578,
-        "vgot": "140926545921536",
+        "vhour": 1628853862020,
+        "vgot": "140926545921568",
         "achievments": "1"
     },
     "642719190288957450": {
@@ -273,16 +273,16 @@
         "achievments": "0"
     },
     "799228822889037824": {
-        "money": 0,
+        "money": 2303,
         "rank": 1,
         "user": "ARJr",
-        "impostors": 0,
-        "driller": 1,
-        "day": 1628239752422,
-        "reversi": 1,
-        "connect4": 0,
-        "vhour": 1628800259648,
-        "vgot": "18253750272",
+        "impostors": 1,
+        "driller": 2,
+        "day": 1628845673784,
+        "reversi": 2,
+        "connect4": 1,
+        "vhour": 1628854258545,
+        "vgot": "18266333184",
         "achievments": "0"
     },
     "747506529405763654": {
@@ -338,14 +338,14 @@
         "achievments": "0"
     },
     "311819610380959745": {
-        "money": 122,
+        "money": 970,
         "rank": 2,
         "user": "DRKSAO",
         "impostors": 3,
-        "driller": 1,
+        "driller": 3,
         "day": 1628239752422,
         "reversi": 0,
-        "connect4": 3,
+        "connect4": 6,
         "vhour": 1628361645217,
         "vgot": "0",
         "achievments": "0"
@@ -481,16 +481,16 @@
         "achievments": "0"
     },
     "642841151484985365": {
-        "money": 277,
+        "money": 4671,
         "rank": 1,
         "user": "Rainbow",
         "impostors": 0,
-        "driller": 1,
-        "day": 1628543403563,
+        "driller": 2,
+        "day": 1628856974358,
         "reversi": 0,
-        "connect4": 0,
-        "vhour": 1628630272485,
-        "vgot": "4194304",
+        "connect4": 3,
+        "vhour": 1628844359046,
+        "vgot": "4194306",
         "achievments": "0"
     }
 }
