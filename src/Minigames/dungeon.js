@@ -81,6 +81,11 @@ class DungeonGame {
         }
         desc = desc + "```"
         InfoEmbed.setDescription(desc)
+        let map = []
+        for (let i = 0; i < 2 + this.floor; i++) {
+            map.push(i > this.explored ? "<:green_square:869976853090271323>" : i == this.explored ? "<:white_circle:869976843263045642>" : "<:brown_square:875834929034973224>")
+        }
+        InfoEmbed.addField("Current floor:", map.reverse().join(""))
         return InfoEmbed
     }
 }
@@ -103,14 +108,14 @@ Dungeon.enemies = [
     [300, 175, 125, 40, "ghost"], //spectre
     [500, 0, 25, 0, "slime"], //abyss slime
     [600, 0, 200, 110, "golem"],
-    [900, 200, 250, 150, "v_"], //distortedv_
+    [900, 200, 250, 150, "v"], //distortedv
     [1000, 175, 125, 40, "ghost"], //great ghost
     [2000, 400, 250, 300, "golem"], //power golem
     [3000, 2000, 300, 350, "Giygas clone", true],
 ]
 Dungeon.thinkers = {
     slime: (DungeonGame, Entity) => {
-        if (DungeonGame.player.hp / 2) {
+        if (GetPercentual() <= 20) {
             return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
         }
         return "The slime hops around.."
@@ -122,7 +127,7 @@ Dungeon.thinkers = {
         return msg
     },
     goblin: (DungeonGame, Entity) => {
-        if (Entity.hp / 2) {
+        if (GetPercentual() <= 20) {
             return "The goblin charges!\n" +
                 Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2)) + "\n" +
                 Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2)) + "\n" +
@@ -171,7 +176,7 @@ Dungeon.thinkers = {
         }
         return "The mimic transforms into DogeCoins!\nYou found some DogeCoin--\n" + Dungeon.attacks.slash.use(Entity, DungeonGame.player)
     },
-    v_: (DungeonGame, Entity) => {
+    v: (DungeonGame, Entity) => {
         if (DungeonGame.player.mana > Entity.mana + 50 && Entity.mana >= 50) {
             return Dungeon.attacks.ice.use(Entity, DungeonGame.player)
         } else if (Entity.mana >= 100) {
@@ -287,7 +292,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                 msg = msg + "\n" + Enemy.think(DungeonGame)
             }
             if (doenemy) {
-                msg = ""
+                msg = "" //FIX THIS
                 const loop = Math.min(Math.max(DungeonGame.floor - 19, 1), 5)
                 for (let i = 1; i <= loop; i++) {
                     let enemyid = Math.min(Math.floor(Math.random() * (DungeonGame.floor + 1)), Dungeon.enemies.length - 1)
@@ -309,6 +314,10 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
         case "ascend": {
             if (DungeonGame.enemies.length) {
                 message.channel.send("You can't ascend while monsters are attacking you!")
+                return
+            }
+            if (DungeonGame.explored) {
+                message.channel.send("You still haven't reached the end of this floor!")
                 return
             }
             DungeonGame.floor = DungeonGame.floor + 1

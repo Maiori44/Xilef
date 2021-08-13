@@ -138,7 +138,7 @@ Achievments = {
     crew: new Economy.flag("<:imposter:874402966084395058> eject 25 impostors", 4),
     driller: new Economy.flag("<:driller:874403362827796530> reach tier 29", 5),
     v_: new Economy.flag("<:v_c:873259417557151765> find all v_s", 6),
-    dungeon: new Economy.flag("<:v_c:873259417557151765> reach floor 50", 7),
+    dungeon: new Economy.flag("<:dungeon:875809577487192116> reach floor 50", 7),
 }
 Achievments.binary = [
     Achievments.first.id + "\n",
