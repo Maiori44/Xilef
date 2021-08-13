@@ -14,7 +14,7 @@ class Entity {
     }
 
     fight(Entity, damage) {
-        let dmg = Math.max(damage - Entity.defense, 1)
+        let dmg = Math.floor(Math.max(damage - Entity.defense, 1))
         Entity.hp = Entity.hp - dmg
         return (this.ai ? "The " + this.ai + " attacks you!" : "You attack " + Entity.ai + "!") + " (" + dmg + " damage dealt)"
     }
@@ -341,9 +341,10 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                     msg = msg + "\nYou got " + cash + " DogeCoins!"
                     DungeonGame.cash = DungeonGame.cash + cash
                     msg = msg + "\nYou feel stronger..your stats increase!"
-                    DungeonGame.player.mana = Math.floor(DungeonGame.player.mana * 1.1)
-                    DungeonGame.player.attack = Math.floor(DungeonGame.player.attack * 1.1)
-                    DungeonGame.player.defense = Math.floor(DungeonGame.player.defense * 1.1)
+                    const boost = Math.min(DungeonGame.floor * 2, 50)
+                    DungeonGame.player.mana = Math.floor(DungeonGame.player.mana + boost)
+                    DungeonGame.player.attack = Math.floor(DungeonGame.player.attack + boost)
+                    DungeonGame.player.defense = Math.floor(DungeonGame.player.defense + boost)
                 } else msg = msg + "\n" + Enemy.think(DungeonGame)
             })
             const InfoEmbed = DungeonGame.getInfo(EconomySystem)
@@ -384,7 +385,6 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
     }
     if (DungeonGame.player.hp < 1) {
         message.channel.send("Your died! You lost all your DogeCoins collected..")
-        EconomySystem.steal(25 * DungeonGame.floor, message)
         if (DungeonGame.floor > EconomySystem.floor) {
             EconomySystem.floor = DungeonGame.floor
             if (EconomySystem.floor >= 50) EconomySystem.award("dungeon", message)
