@@ -5,7 +5,7 @@
         "user": "Felix44",
         "impostors": 2,
         "driller": 10,
-        "floor": 4,
+        "floor": 30,
         "day": 1628875569985,
         "reversi": 2,
         "connect4": 9,
@@ -33,7 +33,7 @@
         "user": "Sebo2205",
         "impostors": 0,
         "driller": 4,
-        "floor": 0,
+        "floor": 19,
         "day": 1628239752422,
         "reversi": 0,
         "connect4": 0,
@@ -98,12 +98,12 @@
         "achievments": "0"
     },
     "484682433925611542": {
-        "money": 63484708,
+        "money": 63931804,
         "rank": 4200,
         "user": "Dark_Brick",
         "impostors": 0,
         "driller": 29,
-        "floor": 7,
+        "floor": 16,
         "day": 1628856827541,
         "reversi": 0,
         "connect4": 3,
@@ -182,17 +182,17 @@
         "achievments": "0"
     },
     "483715787467653122": {
-        "money": 199,
+        "money": 561,
         "rank": 10,
         "user": "poly translator*",
         "impostors": 6,
         "driller": 2,
-        "floor": 1,
+        "floor": 3,
         "day": 1628876482389,
         "reversi": 0,
         "connect4": 1,
-        "vhour": 1628370932763,
-        "vgot": "549755813888",
+        "vhour": 1628878889947,
+        "vgot": "549755815936",
         "achievments": "0"
     },
     "850867485263527956": {
@@ -294,11 +294,11 @@
         "achievments": "0"
     },
     "799228822889037824": {
-        "money": 2148,
+        "money": 11,
         "rank": 1,
         "user": "ARJr",
         "impostors": 1,
-        "driller": 2,
+        "driller": 3,
         "floor": 0,
         "day": 1628845673784,
         "reversi": 2,

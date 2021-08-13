@@ -38,7 +38,7 @@ class Attack {
     }
 
     use(Attacker, Attacked) {
-        if (Attacker.mana < this.cost) throw ("You need " + this.cost + " for this spell")
+        if (Attacker.mana < this.cost) throw ("You need " + this.cost + " mana for this spell")
         Attacker.mana = Attacker.mana - this.cost
         return Attacker.castmsg + this.name + "!\n" + this.effect(Attacker, Attacked)
     }
@@ -106,7 +106,7 @@ Dungeon.enemies = [
     [900, 200, 250, 150, "v_"], //distortedv_
     [1000, 175, 125, 40, "ghost"], //great ghost
     [2000, 400, 250, 300, "golem"], //power golem
-    [5000, 2000, 666, 666, "Giygas clone", true],
+    [3000, 2000, 300, 350, "Giygas clone", true],
 ]
 Dungeon.thinkers = {
     slime: (DungeonGame, Entity) => {
@@ -133,7 +133,7 @@ Dungeon.thinkers = {
     },
     skeleton: (DungeonGame, Entity) => {
         if (DungeonGame.player.attack > Entity.defense * 1.5) {
-            Entity.defense = Entity.defense * 1.3
+            Entity.defense = Math.floor(Entity.defense * 1.5)
             return "The skeleton drinks..milk..\nThe skeleton defense increases!"
         }
         return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
@@ -287,10 +287,11 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                 msg = msg + "\n" + Enemy.think(DungeonGame)
             }
             if (doenemy) {
-                const loop = Math.max(DungeonGame.floor - 19, 1)
+                msg = ""
+                const loop = Math.min(Math.max(DungeonGame.floor - 19, 1), 5)
                 for (let i = 1; i <= loop; i++) {
                     let enemyid = Math.min(Math.floor(Math.random() * (DungeonGame.floor + 1)), Dungeon.enemies.length - 1)
-                    msg = "You find a " + Dungeon.enemies[enemyid][4] + "!" + (i == loop ? "" : "\n")
+                    msg = msg + "You find a " + Dungeon.enemies[enemyid][4] + "!" + (i == loop ? "" : "\n")
                     DungeonGame.enemies.push(new Entity(...Dungeon.enemies[enemyid]))
                 }
             }
@@ -341,7 +342,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                     msg = msg + "\nYou got " + cash + " DogeCoins!"
                     DungeonGame.cash = DungeonGame.cash + cash
                     msg = msg + "\nYou feel stronger..your stats increase!"
-                    const boost = Math.min(DungeonGame.floor * 2, 50)
+                    const boost = Math.min(DungeonGame.floor, 50)
                     DungeonGame.player.mana = Math.floor(DungeonGame.player.mana + boost)
                     DungeonGame.player.attack = Math.floor(DungeonGame.player.attack + boost)
                     DungeonGame.player.defense = Math.floor(DungeonGame.player.defense + boost)
