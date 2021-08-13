@@ -55,7 +55,8 @@ client.on("message", (message) => {
                 "\n\tChannel name: " + message.channel.name +
                 "\n\tGuild name: " + message.guild.name)
             } catch (errormsg) {
-                if (errormsg instanceof Error) console.error("- Command call ended by thrown error:\n" + errormsg)
+                if (errormsg instanceof Error)
+                    console.error("- Command call ended by thrown error:\n" + errormsg.stack)
                 message.channel.send(errormsg.toString().slice(0, 1900))
             }
         } else {

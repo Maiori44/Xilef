@@ -253,11 +253,11 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
         case "upgrade": {
             if (EconomySystem.driller == 29) {
                 message.channel.send("Your driller arleady reached max tier.")
-                EconomySystem.award["driller", message]
+                EconomySystem.award("driller", message)
             } else if (EconomySystem.buy(Driller.tiers[EconomySystem.driller - 1], message, "Your driller reached tier " + (EconomySystem.driller + 1) + "! (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins needed)")) {
                 EconomySystem.driller = EconomySystem.driller + 1
                 if (EconomySystem.driller == 29) {
-                    EconomySystem.award["driller", message]
+                    EconomySystem.award("driller", message)
                 }
             }
             break

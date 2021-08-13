@@ -2,12 +2,13 @@ const { RequiredArg, Command } = require("./../commands.js")
 const { Game, MPGame } = require("./../minigames.js")
 
 class Entity {
-    constructor(hp, mana, attack, defense, ai) {
+    constructor(hp, mana, attack, defense, ai, isboss) {
         this.hp = hp
         this.mana = mana
         this.attack = attack
         this.defense = defense
         this.ai = ai
+        this.isboss = isboss
         this.castmsg = this.ai ? "The " + this.ai + " uses " : "You use "
         this.evmsg = this.ai ? "The " + this.ai + "'s " : "Your "
     }
@@ -19,10 +20,10 @@ class Entity {
     }
 
     think(DungeonGame) {
-        let omana = this.mana
-        let msg = this.ai + " does nothing.."
+        const omana = this.mana
+        let msg = "The " + this.ai + " does nothing.."
         if (Dungeon.thinkers[this.ai]) msg = Dungeon.thinkers[this.ai](DungeonGame, this)
-        if (omana = this.mana) {
+        if (omana == this.mana) {
             this.mana = Math.min(this.mana + 10 * DungeonGame.floor, 2000)
         }
         return msg
@@ -47,7 +48,7 @@ class DungeonGame {
     constructor() {
         this.floor = 1
         this.cash = 0
-        this.player = new Entity(200, 200, 40, 20)
+        this.player = new Entity(100, 100, 40, 20)
         this.explored = 3
         this.enemies = []
     }
@@ -55,7 +56,7 @@ class DungeonGame {
     reset() {
         this.floor = 1
         this.cash = 0
-        this.player = new Entity(200, 200, 40, 20)
+        this.player = new Entity(100, 100, 40, 20)
         this.explored = 3
         this.enemies = []
     }
@@ -74,7 +75,8 @@ class DungeonGame {
         if (this.enemies.length) {
             desc = desc + "\n\nENEMIES:"
             for (let Enemy of this.enemies) {
-                desc = desc + "\n" + Enemy.ai + ": " + Enemy.hp + " hp left"
+                if (!Enemy) continue
+                desc = desc + "\n" + Enemy.ai + ": " + Enemy.hp + " hp left" + (Enemy.isboss ? " (BOSS!)" : "")
             }
         }
         desc = desc + "```"
@@ -103,15 +105,100 @@ Dungeon.enemies = [
     [600, 0, 200, 110, "golem"],
     [900, 200, 250, 150, "v_"], //distortedv_
     [1000, 175, 125, 40, "ghost"], //great ghost
-    [2000, 400, 250, 300, "golem"], //power golem 
+    [2000, 400, 250, 300, "golem"], //power golem
+    [5000, 2000, 666, 666, "Giygas clone", true],
 ]
 Dungeon.thinkers = {
     slime: (DungeonGame, Entity) => {
         if (DungeonGame.player.hp / 2) {
-            return Dungeon.attacks.default(Entity, DungeonGame.player)
+            return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
         }
         return "The slime hops around.."
-    }
+    },
+    zombie: (DungeonGame, Entity) => {
+        let msg = "The zombie becomes more vicious!\nThe zombie attack increased!\n"
+        Entity.attack = Entity.attack * 1.1
+        msg = msg + Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+        return msg
+    },
+    goblin: (DungeonGame, Entity) => {
+        if (Entity.hp / 2) {
+            return "The goblin charges!\n" +
+                Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2)) + "\n" +
+                Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2)) + "\n" +
+                Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2))
+        }
+        DungeonGame.cash = Math.max(DungeonGame.cash - 20, 0)
+        return Dungeon.attacks.slash.use(Entity, DungeonGame.player) + "\nThe goblin steals some of your money!"
+    },
+    skeleton: (DungeonGame, Entity) => {
+        if (DungeonGame.player.attack > Entity.defense * 1.5) {
+            Entity.defense = Entity.defense * 1.3
+            return "The skeleton drinks..milk..\nThe skeleton defense increases!"
+        }
+        return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+    },
+    "skeleton archer": (DungeonGame, Entity) => {
+        if (GetPercentual() <= 20) {
+            return Entity.fight(DungeonGame.player, Entity.attack + DungeonGame.player.defense) + "\nIt's a perfect hit!"
+        }
+        return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+    },
+    "skeleton mage": (DungeonGame, Entity) => {
+        const chance = GetPercentual()
+        if (chance <= 40 && Entity.mana >= 50) {
+            return Dungeon.attacks.ice.use(Entity, DungeonGame.player)
+        } else if (Entity.mana >= 25) {
+            return Dungeon.attacks.fire.use(Entity, DungeonGame.player)
+        } else {
+            Entity.mana = Entity.mana + 75
+            return "The skeleton mage recharges his wand..and recovers mana!"
+        }
+    },
+    ghost: (DungeonGame, Entity) => {
+        const chance = GetPercentual()
+        if (chance <= 20) {
+            DungeonGame.player.defense = Math.floor(DungeonGame.player.defense * 0.7)
+            return "The ghost is stinky! You're disgusted!\nYour defense decreases!"
+        } else if (chance <= 40 && Entity.mana >= 25) {
+            return Dungeon.attacks.fire.use(Entity, DungeonGame.player)
+        }
+        return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+    },
+    mimic: (DungeonGame, Entity) => {
+        if (GetPercentual() <= 50) {
+            return "The mimic transforms into DogeCoins!\n..you're smart enough to realize the trap."
+        }
+        return "The mimic transforms into DogeCoins!\nYou found some DogeCoin--\n" + Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+    },
+    v_: (DungeonGame, Entity) => {
+        if (DungeonGame.player.mana > Entity.mana + 50 && Entity.mana >= 50) {
+            return Dungeon.attacks.ice.use(Entity, DungeonGame.player)
+        } else if (Entity.mana >= 100) {
+            return Dungeon.attacks.thunder.use(Entity, DungeonGame.player)
+        } else {
+            Entity.mana = Entity.mana + 75
+            return "The v_ recharges his meme power..and recovers mana!"
+        }
+    },
+    golem: (DungeonGame, Entity) => {
+        if (Entity.mana >= 100) {
+            Entity.mana = Entity.mana - 100
+            return "The golem uses Rock Throw!\n" + Entity.fight(DungeonGame.player, Entity.attack * 3)
+        }
+        return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+    },
+    "Giygas clone": (DungeonGame, Entity) => {
+        if (GetPercentual() <= 50 && Entity.mana >= 175) {
+            Entity.mana = Entity.mana - 175
+            return "You cannot grasp the true form of Giygas attack!\n" +
+                Dungeon.attacks.fire.use(Entity, DungeonGame.player) + "\n" +
+                Dungeon.attacks.ice.use(Entity, DungeonGame.player) + "\n" +
+                Dungeon.attacks.thunder.use(Entity, DungeonGame.player)
+        }
+        Entity.mana = Entity.mana + 75
+        return "You cannot grasp the true form of Giygas attack!\n" + Entity.fight(DungeonGame.player, Entity.attack * 2)
+    },
 }
 Dungeon.attacks = {
     slash: new Attack("Slash", 0, (Attacker, Attacked) => {
@@ -119,11 +206,39 @@ Dungeon.attacks = {
     }),
     fire: new Attack("Fire Storm", 25, (Attacker, Attacked) => {
         const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 0.6)) +
-        "\n" + Attacked.evmsg + "defence decreased!"
+            "\n" + Attacked.evmsg + "defence decreased!"
         Attacked.defense = Math.floor(Attacked.defense * 0.7)
+        return msg
     }),
-    ice: new Attack("Ice Blast", 25, (Attacker, Attacked) => {
-        msg = Attacker.fight(Attacked, Attacker.attack * 0.6)
+    ice: new Attack("Ice Blast", 50, (Attacker, Attacked) => {
+        const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 1.4)) +
+            "\n" + Attacked.evmsg + "mana decreased!"
+        Attacked.defense = Math.floor(Attacked.defense * 0.6)
+        return msg
+    }),
+    ground: new Attack("Earthquake", 75, (Attacker, Attacked) => {
+        let DungeonGame
+        for (let ID in Dungeon.list) {
+            if (Dungeon.list[ID].player == Attacker) {
+                DungeonGame = Dungeon.list[ID]
+                break
+            }
+        }
+        if (!DungeonGame) throw ("Could not find your game.")
+        let msg = ""
+        for (let Enemy of DungeonGame.enemies) {
+            msg = msg + (msg == "" ? "" : "\n") + Attacker.fight(Enemy, Attacker.attack)
+        }
+        return msg
+    }),
+    thunder: new Attack("Thunder", 100, (Attacker, Attacked) => {
+        const chance = GetPercentual()
+        if (chance <= 30) return "..the attack misses!"
+        const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 2)) +
+            "\n" + Attacked.evmsg + "attack decreased!\n" + Attacked.evmsg + "defense decreased!"
+        Attacked.attack = Math.floor(Attacked.defense * 0.7)
+        Attacked.defense = Math.floor(Attacked.defense * 0.7)
+        return msg
     }),
 }
 Dungeon.help =
@@ -131,13 +246,10 @@ Dungeon.help =
     "`&dungeon explore` explore the current floor in the dungeon and find treasures..or enemies!\n" +
     "`&dungeon ascend` go to the next floor\n" +
     "`&dungeon attack (type)` attack the current enemy, omit type for a list of all attacks\n" +
-    "`&dungeon regen (amount)` regenerate some mana, it won't be free\n" +
-    "`&dungeon cashin` get all the DogeCoins the dungeon got, and reset the game"
+    //"`&dungeon regen (amount)` regenerate some mana, it won't be free\n" +
+    "`&dungeon cashin` get all the DogeCoins you found, and reset the game"
 
 Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.help, (message, args) => {
-    if (message.author.id != "621307633718132746") {
-        throw ("This command is still incomplete")
-    }
     let EconomySystem = Economy.getEconomySystem(message.author)
     let DungeonGame = Dungeon.getGame(message.author.id, EconomySystem)
     args[0] = args[0].toLowerCase()
@@ -155,34 +267,38 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                 return
             }
             let msg = ""
-            let random = GetPercentual()
-            let enemyid
-            if (random <= 25) {
-                let cash = DungeonGame.floor * 50
+            const random = GetPercentual()
+            let doenemy = false
+            if (random <= 20) {
+                let cash = DungeonGame.floor * 25
                 msg = "You find a treasure worth " + cash + " DogeCoins!"
                 DungeonGame.cash = DungeonGame.cash + cash
-            } else if (random <= 50) {
+            } else if (random <= 30) {
                 msg = "You find an upgrade to your sword! Your attack increased!"
                 DungeonGame.player.attack = DungeonGame.player.attack + 5 * DungeonGame.floor
-            } else if (random <= 75) {
+            } else if (random <= 40) {
                 msg = "You find an upgrade to your shield! Your defense increased!"
                 DungeonGame.player.defense = DungeonGame.player.defense + 5 * DungeonGame.floor
             } else {
-                enemyid = Math.floor(Math.random() * (DungeonGame.floor + 1))
-                msg = "You find a " + Dungeon.enemies[enemyid][4] + "!"
+                doenemy = true
             }
             DungeonGame.explored = DungeonGame.explored - 1
-            if (!DungeonGame.explored) {
-                msg = msg + "\nIt seems that there is nothing left in this floor.."
-            }
             for (let Enemy of DungeonGame.enemies) {
                 msg = msg + "\n" + Enemy.think(DungeonGame)
             }
-            if (enemyid !== undefined) {
-                DungeonGame.enemies.push(new Entity(...Dungeon.enemies[enemyid]))
+            if (doenemy) {
+                const loop = Math.max(DungeonGame.floor - 19, 1)
+                for (let i = 1; i <= loop; i++) {
+                    let enemyid = Math.min(Math.floor(Math.random() * (DungeonGame.floor + 1)), Dungeon.enemies.length - 1)
+                    msg = "You find a " + Dungeon.enemies[enemyid][4] + "!" + (i == loop ? "" : "\n")
+                    DungeonGame.enemies.push(new Entity(...Dungeon.enemies[enemyid]))
+                }
+            }
+            if (!DungeonGame.explored) {
+                msg = msg + "\nIt seems that there is nothing left in this floor.."
             }
             if (ohp == DungeonGame.player.hp) {
-                DungeonGame.player.hp = DungeonGame.player.hp + Math.min(5 * DungeonGame.floor, 50)
+                DungeonGame.player.hp = DungeonGame.player.hp + Math.min(DungeonGame.floor, 50)
             }
             let InfoEmbed = DungeonGame.getInfo(EconomySystem)
             InfoEmbed.addField("Latest event:", msg)
@@ -196,7 +312,9 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             }
             DungeonGame.floor = DungeonGame.floor + 1
             DungeonGame.explored = 2 + DungeonGame.floor
-            message.channel.send("You have reached floor " + DungeonGame.floor)
+            let InfoEmbed = DungeonGame.getInfo(EconomySystem)
+            InfoEmbed.addField("Latest event:", "You have reached floor " + DungeonGame.floor)
+            message.channel.send(InfoEmbed)
             break
         }
         case "attack": {
@@ -210,37 +328,53 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                 )
                 return
             }
-            /*let cost = parseInt(args[1])
-            if (isNaN(cost)) {
-                throw ("I need to know how much you want to repair,\nexample: `&driller repair 50` will restore 50 hp of the drill, and will cost 50 DogeCoins")
+            if (!DungeonGame.enemies.length) {
+                message.channel.send("There are no enemies to attack..")
+                return
             }
-            if (DungeonGame.hp == 100 * EconomySystem.driller) {
-                message.channel.send("Your driller is arleady in perfect condition.")
-            } else if (EconomySystem.buy(cost, message, "Your driller recovered " + cost + " hp! (" + cost + " DogeCoins spent)", "You need " + (cost - EconomySystem.money) + " more DogeCoins for this.")) {
-                DungeonGame.hp = Math.min(DungeonGame.hp + cost, 100 * EconomySystem.driller)
-            }
-            break*/
-        }
-        case "upgrade": {
-            if (EconomySystem.driller == 29) {
-                message.channel.send("Your driller arleady reached max tier.")
-                EconomySystem.award["driller", message]
-            } else if (EconomySystem.buy(Driller.tiers[EconomySystem.driller - 1], message, "Your driller reached tier " + (EconomySystem.driller + 1) + "! (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins needed)")) {
-                EconomySystem.driller = EconomySystem.driller + 1
-                if (EconomySystem.driller == 29) {
-                    EconomySystem.award["driller", message]
-                }
-            }
+            let msg = Dungeon.attacks[args[1]].use(DungeonGame.player, DungeonGame.enemies.slice(-1)[0])
+            DungeonGame.enemies.forEach((Enemy, index) => {
+                if (Enemy.hp < 1) {
+                    msg = msg + "\nThe " + Enemy.ai + " was defeated!"
+                    DungeonGame.enemies.splice(index, 1)
+                    const cash = DungeonGame.floor * 100
+                    msg = msg + "\nYou got " + cash + " DogeCoins!"
+                    DungeonGame.cash = DungeonGame.cash + cash
+                    msg = msg + "\nYou feel stronger..your stats increase!"
+                    DungeonGame.player.mana = Math.floor(DungeonGame.player.mana * 1.1)
+                    DungeonGame.player.attack = Math.floor(DungeonGame.player.attack * 1.1)
+                    DungeonGame.player.defense = Math.floor(DungeonGame.player.defense * 1.1)
+                } else msg = msg + "\n" + Enemy.think(DungeonGame)
+            })
+            const InfoEmbed = DungeonGame.getInfo(EconomySystem)
+            InfoEmbed.addField("Latest event:", msg)
+            message.channel.send(InfoEmbed)
             break
         }
+        /*case "regen": {
+            let cost = parseInt(args[1])
+            if (isNaN(cost)) {
+                throw ("I need to know how much mana you want to regen,\nexample: `&dungeon repair 50` will restore 50 mana, and will cost 50 DogeCoins")
+            }
+            if (DungeonGame.player.mana == 2000) {
+                message.channel.send("Your already have a lot of mana")
+            } else if (EconomySystem.buy(cost, message, "Your recovered " + cost + " mana! (" + cost + " DogeCoins spent)", "You need " + (cost - EconomySystem.money) + " more DogeCoins for this.")) {
+                DungeonGame.player.mana = Math.min(DungeonGame.player.mana + cost, 2000)
+            }
+            break
+        }*/
         case "cashin": {
             if (DungeonGame.enemies.length) {
                 message.channel.send("You can't cashin while monsters are attacking you!")
                 return
             }
-            message.channel.send("Your driller comes back, and gives you all the DogeCoins it had collected.")
+            message.channel.send("Your escape the dungeon, and enjoy the DogeCoins you gained")
             EconomySystem.give(DungeonGame.cash, message)
-            DungeonGame.reset(EconomySystem)
+            if (DungeonGame.floor > EconomySystem.floor) {
+                EconomySystem.floor = DungeonGame.floor
+                if (EconomySystem.floor >= 50) EconomySystem.award("dungeon", message)
+            }
+            DungeonGame.reset()
             break
         }
         default: {
@@ -248,9 +382,13 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             return
         }
     }
-    if (DungeonGame.hp < 1) {
-        message.channel.send("Your driller broke! It lost whatever it had collected.")
-        EconomySystem.steal(25 * DungeonGame.depth, message)
-        DungeonGame.reset(EconomySystem)
+    if (DungeonGame.player.hp < 1) {
+        message.channel.send("Your died! You lost all your DogeCoins collected..")
+        EconomySystem.steal(25 * DungeonGame.floor, message)
+        if (DungeonGame.floor > EconomySystem.floor) {
+            EconomySystem.floor = DungeonGame.floor
+            if (EconomySystem.floor >= 50) EconomySystem.award("dungeon", message)
+        }
+        DungeonGame.reset()
     }
-}, undefined/*"Game"*/, [new RequiredArg(0, Dungeon.help, "command"), new RequiredArg(1, undefined, "argument", true)])
+}, "Game", [new RequiredArg(0, Dungeon.help, "command"), new RequiredArg(1, undefined, "argument", true)])
