@@ -113,8 +113,10 @@ Commands.info = new Command("Shows info about the bot", (message, args) => {
 
 Commands.warn = new Command("Developer only", (message, args) => {
     if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the developer only")
+    args[0] = args.join(" ")
     warning = args[0]
-}, "Utility")
+    client.user.setActivity(args[0] + ", Prefix is &")
+}, "Utility", [new RequiredArg(0, "What will you warn the people about . _.", "...text")])
 
 Commands.hi = new Command("Says hi to you", (message, args) => {
     message.reply("Hi.")

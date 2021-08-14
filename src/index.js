@@ -20,7 +20,10 @@ require("./commands.js")
 require("./buttons.js")
 require("./minigames.js")
 
-client.on("ready", () => console.log("- Bot ready"));
+client.on("ready", () => {
+    console.log("- Bot ready")
+    client.user.setActivity("Prefix is &")
+})
 client.on("message", (message) => {
     let start = Date.now()
     if (message.author.bot) return
