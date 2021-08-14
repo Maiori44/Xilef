@@ -103,12 +103,12 @@ Dungeon.enemies = [
     [400, 0, 90, 75, "goblin"], //armored goblin
     [350, 0, 80, 60, "skeleton"], //skeleton brute
     [150, 0, 110, 160, "mimic"],
-    [300, 150, 75, 69, "v_"],
+    [300, 150, 75, 69, "meme fanatic"],
     [400, 0, 100, 100, "golem"], //mini golem
     [300, 175, 125, 40, "ghost"], //spectre
     [500, 0, 25, 0, "slime"], //abyss slime
     [600, 0, 200, 110, "golem"],
-    [900, 200, 250, 150, "v"], //distortedv
+    [900, 200, 250, 150, "meme fanatic"], //meme lunatic
     [1000, 175, 125, 40, "ghost"], //great ghost
     [2000, 400, 250, 300, "golem"], //power golem
     [3000, 2000, 300, 350, "Giygas clone", true],
@@ -176,14 +176,14 @@ Dungeon.thinkers = {
         }
         return "The mimic transforms into DogeCoins!\nYou found some DogeCoin--\n" + Dungeon.attacks.slash.use(Entity, DungeonGame.player)
     },
-    v: (DungeonGame, Entity) => {
+    "meme fanatic": (DungeonGame, Entity) => {
         if (DungeonGame.player.mana > Entity.mana + 50 && Entity.mana >= 50) {
             return Dungeon.attacks.ice.use(Entity, DungeonGame.player)
         } else if (Entity.mana >= 100) {
             return Dungeon.attacks.thunder.use(Entity, DungeonGame.player)
         } else {
             Entity.mana = Entity.mana + 75
-            return "The v_ recharges his meme power..and recovers mana!"
+            return "The meme fanatic recharges his meme power..and recovers mana!"
         }
     },
     golem: (DungeonGame, Entity) => {
@@ -292,7 +292,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                 msg = msg + "\n" + Enemy.think(DungeonGame)
             }
             if (doenemy) {
-                msg = "" //FIX THIS
+                msg = msg + "\n"
                 const loop = Math.min(Math.max(DungeonGame.floor - 19, 1), 5)
                 for (let i = 1; i <= loop; i++) {
                     let enemyid = Math.min(Math.floor(Math.random() * (DungeonGame.floor + 1)), Dungeon.enemies.length - 1)
@@ -343,7 +343,8 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                 return
             }
             let msg = Dungeon.attacks[args[1]].use(DungeonGame.player, DungeonGame.enemies.slice(-1)[0])
-            DungeonGame.enemies.forEach((Enemy, index) => {
+            for (let index = 0; index <= DungeonGame.enemies.length - 1; index++) {
+                let Enemy = DungeonGame.enemies[index]
                 if (Enemy.hp < 1) {
                     msg = msg + "\nThe " + Enemy.ai + " was defeated!"
                     DungeonGame.enemies.splice(index, 1)
@@ -352,11 +353,12 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                     DungeonGame.cash = DungeonGame.cash + cash
                     msg = msg + "\nYou feel stronger..your stats increase!"
                     const boost = Math.min(DungeonGame.floor, 50)
-                    DungeonGame.player.mana = Math.floor(DungeonGame.player.mana + boost)
+                    DungeonGame.player.mana = Math.floor(DungeonGame.player.mana + boost * 2)
                     DungeonGame.player.attack = Math.floor(DungeonGame.player.attack + boost)
                     DungeonGame.player.defense = Math.floor(DungeonGame.player.defense + boost)
+                    index = 0
                 } else msg = msg + "\n" + Enemy.think(DungeonGame)
-            })
+            }
             const InfoEmbed = DungeonGame.getInfo(EconomySystem)
             InfoEmbed.addField("Latest event:", msg)
             message.channel.send(InfoEmbed)

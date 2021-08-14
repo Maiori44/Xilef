@@ -265,7 +265,10 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
             .setTitle(EconomySystem.user + "'s statistics")
             .setDescription("```lua\nDogeCoins: " + EconomySystem.money + "\nRank: " + EconomySystem.rank + "```")
             .addFields(
-                { name: "Singleplayer stats:", value: "```lua\nImpostors found: " + EconomySystem.impostors + "\nDriller tier: " + EconomySystem.driller + "```", inline: true },
+                { name: "Singleplayer stats:", value:
+                    "```lua\nImpostors found: " + EconomySystem.impostors +
+                    "\nDriller tier: " + EconomySystem.driller + 
+                    "\nDungeon top floor: " + EconomySystem.floor + "```", inline: true },
                 { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.reversi + "\nConnect four matches won: " + EconomySystem.connect4 + "```", inline: true },
                 { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievments.binary, "❔ ???\n") }
             )
