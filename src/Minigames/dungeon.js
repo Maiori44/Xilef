@@ -70,8 +70,8 @@ class DungeonGame {
             "\ncash found: " + this.cash +
             "\nhealth: " + this.player.hp + "/2000" +
             "\nmana: " + this.player.mana + "/2000" +
-            "\nattack: " + this.player.attack +
-            "\ndefense: " + this.player.defense
+            "\nattack: " + this.player.attack + "/500" +
+            "\ndefense: " + this.player.defense + "/500"
         if (this.enemies.length) {
             desc = desc + "\n\nENEMIES:"
             for (let Enemy of this.enemies) {
@@ -112,6 +112,27 @@ Dungeon.enemies = [
     [1000, 175, 125, 40, "ghost"], //great ghost
     [2000, 400, 250, 300, "golem"], //power golem
     [3000, 2000, 300, 350, "Giygas clone", true],
+    //TIER 2
+    [400, 0, 250, 0, "slime"],
+    [550, 0, 300, 0, "zombie"],
+    [900, 0, 400, 50, "goblin"],
+    [800, 0, 600, 200, "skeleton"],
+    [650, 0, 400, 100, "skeleton archer"],
+    [750, 1000, 500, 50, "skeleton mage"],
+    [2000, 0, 400, 0, "slime"], //big slime
+    [1250, 1250, 1250, 0, "ghost"],
+    [4000, 0, 900, 750, "goblin"], //armored goblin
+    [3500, 0, 800, 600, "skeleton"], //skeleton brute
+    [1500, 0, 1100, 1600, "mimic"],
+    [3000, 1500, 750, 690, "meme fanatic"],
+    [4000, 0, 1000, 1000, "golem"], //mini golem
+    [3000, 1750, 12500, 4000, "ghost"], //spectre
+    [5000, 0, 2500, 0, "slime"], //abyss slime
+    [6000, 0, 2000, 1100, "golem"],
+    [9000, 2000, 2500, 1500, "meme fanatic"], //meme lunatic
+    [10000, 1750, 1250, 400, "ghost"], //great ghost
+    [20000, 4000, 2500, 3000, "golem"], //power golem
+    [30000, 20000, 3000, 3500, "Supreme Calamitas clone", true],
 ]
 Dungeon.thinkers = {
     slime: (DungeonGame, Entity) => {
@@ -195,7 +216,6 @@ Dungeon.thinkers = {
     },
     "Giygas clone": (DungeonGame, Entity) => {
         if (GetPercentual() <= 50 && Entity.mana >= 175) {
-            Entity.mana = Entity.mana - 175
             return "You cannot grasp the true form of Giygas attack!\n" +
                 Dungeon.attacks.fire.use(Entity, DungeonGame.player) + "\n" +
                 Dungeon.attacks.ice.use(Entity, DungeonGame.player) + "\n" +
@@ -203,6 +223,16 @@ Dungeon.thinkers = {
         }
         Entity.mana = Entity.mana + 75
         return "You cannot grasp the true form of Giygas attack!\n" + Entity.fight(DungeonGame.player, Entity.attack * 2)
+    },
+    "Supreme Calamitas clone": (DungeonGame, Entity) => {
+        if (Entity.mana >= 200) {
+            return Dungeon.attacks.fire.use(Entity, DungeonGame.player) + "\n" +
+                Dungeon.attacks.fire.use(Entity, DungeonGame.player) + "\n" +
+                Dungeon.attacks.fire.use(Entity, DungeonGame.player) + "\n" +
+                Dungeon.attacks.fire.use(Entity, DungeonGame.player)
+        }
+        Entity.mana = 20000
+        return "Supreme Calamitas recharges..and restores all of its mana!"
     },
 }
 Dungeon.attacks = {
@@ -304,7 +334,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                 msg = msg + "\nIt seems that there is nothing left in this floor.."
             }
             if (ohp == DungeonGame.player.hp) {
-                DungeonGame.player.hp = DungeonGame.player.hp + Math.min(DungeonGame.floor, 50)
+                DungeonGame.player.hp = Math.min(DungeonGame.player.hp + Math.min(DungeonGame.floor, 50), 2000)
             }
             let InfoEmbed = DungeonGame.getInfo(EconomySystem)
             InfoEmbed.addField("Latest event:", msg)
@@ -352,10 +382,10 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                     msg = msg + "\nYou got " + cash + " DogeCoins!"
                     DungeonGame.cash = DungeonGame.cash + cash
                     msg = msg + "\nYou feel stronger..your stats increase!"
-                    const boost = Math.min(DungeonGame.floor, 50)
-                    DungeonGame.player.mana = Math.floor(DungeonGame.player.mana + boost * 2)
-                    DungeonGame.player.attack = Math.floor(DungeonGame.player.attack + boost)
-                    DungeonGame.player.defense = Math.floor(DungeonGame.player.defense + boost)
+                    const boost = Math.ceil(Math.min(DungeonGame.floor / 2, 50))
+                    DungeonGame.player.mana = Math.min(Math.floor(DungeonGame.player.mana + boost * 2), 2000)
+                    DungeonGame.player.attack = Math.min(Math.floor(DungeonGame.player.attack + boost), 500)
+                    DungeonGame.player.defense = Math.min(Math.floor(DungeonGame.player.defense + boost), 500)
                     index = 0
                 } else msg = msg + "\n" + Enemy.think(DungeonGame)
             }
