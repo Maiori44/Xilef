@@ -115,7 +115,7 @@ Commands.warn = new Command("Developer only", (message, args) => {
     if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the developer only")
     args[0] = args.join(" ")
     warning = args[0]
-    client.user.setActivity(args[0] + ", Prefix is &")
+    client.user.setActivity(args[0] + ", prefix is &")
 }, "Utility", [new RequiredArg(0, "What will you warn the people about . _.", "...text")])
 
 Commands.hi = new Command("Says hi to you", (message, args) => {

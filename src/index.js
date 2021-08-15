@@ -22,7 +22,7 @@ require("./minigames.js")
 
 client.on("ready", () => {
     console.log("- Bot ready")
-    client.user.setActivity("Prefix is &")
+    client.user.setActivity("prefix is &")
 })
 client.on("message", (message) => {
     let start = Date.now()
@@ -50,16 +50,25 @@ client.on("message", (message) => {
                         .setDescription(warning)
                         .setTimestamp())
                 }
-                console.log("- Command call completed sucessfully:" +
-                "\n\tCommand: " + command +
-                "\n\tArgs: " + args +
-                "\n\tTime taken: " + (Date.now() - start) +
-                "\n\tCaller: " + message.author.username +
-                "\n\tChannel name: " + message.channel.name +
-                "\n\tGuild name: " + message.guild.name)
+                console.log("- \x1B[92mCommand call completed sucessfully:\033[97m" +
+                    "\n\tCommand: " + command +
+                    "\n\tArgs: " + args +
+                    "\n\tTime taken: " + (Date.now() - start) +
+                    "\n\tCalled at: " + new Date() +
+                    "\n\tCaller: " + message.author.username +
+                    "\n\tChannel name: " + message.channel.name +
+                    "\n\tGuild name: " + message.guild.name)
             } catch (errormsg) {
                 if (errormsg instanceof Error)
-                    console.error("- Command call ended by thrown error:\n" + errormsg.stack)
+                    console.error("- \x1B[31mCommand call ended by thrown error:\033[97m" +
+                        "\n\tCommand: " + command +
+                        "\n\tArgs: " + args +
+                        "\n\tTime taken: " + (Date.now() - start) +
+                        "\n\tCalled at: " + new Date() +
+                        "\n\tCaller: " + message.author.username +
+                        "\n\tChannel name: " + message.channel.name +
+                        "\n\tGuild name: " + message.guild.name +
+                        "\n\tError: " + errormsg.stack)
                 message.channel.send(errormsg.toString().slice(0, 1900))
             }
         } else {
