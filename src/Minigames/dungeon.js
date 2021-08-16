@@ -53,6 +53,10 @@ class DungeonGame {
         this.enemies = []
     }
 
+    get statmax () {
+        return 300 + 10 * (this.floor - 1)
+    }
+
     reset() {
         this.floor = 1
         this.cash = 0
@@ -70,8 +74,8 @@ class DungeonGame {
             "\ncash found: " + this.cash +
             "\nhealth: " + this.player.hp + "/2000" +
             "\nmana: " + this.player.mana + "/2000" +
-            "\nattack: " + this.player.attack + "/500" +
-            "\ndefense: " + this.player.defense + "/500"
+            "\nattack: " + this.player.attack + "/" + this.statmax +
+            "\ndefense: " + this.player.defense + "/" + this.statmax
         if (this.enemies.length) {
             desc = desc + "\n\nENEMIES:"
             for (let Enemy of this.enemies) {
@@ -310,10 +314,10 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                 DungeonGame.cash = DungeonGame.cash + cash
             } else if (random <= 30) {
                 msg = "You find an upgrade to your sword! Your attack increased!"
-                DungeonGame.player.attack = DungeonGame.player.attack + 5 * DungeonGame.floor
+                DungeonGame.player.attack = Math.min(DungeonGame.player.attack + 5 * DungeonGame.floor, DungeonGame.statmax)
             } else if (random <= 40) {
                 msg = "You find an upgrade to your shield! Your defense increased!"
-                DungeonGame.player.defense = DungeonGame.player.defense + 5 * DungeonGame.floor
+                DungeonGame.player.defense = Math.min(DungeonGame.player.defense + 5 * DungeonGame.floor, DungeonGame.statmax)
             } else {
                 doenemy = true
             }
@@ -384,8 +388,8 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                     msg = msg + "\nYou feel stronger..your stats increase!"
                     const boost = Math.ceil(Math.min(DungeonGame.floor / 2, 50))
                     DungeonGame.player.mana = Math.min(Math.floor(DungeonGame.player.mana + boost * 2), 2000)
-                    DungeonGame.player.attack = Math.min(Math.floor(DungeonGame.player.attack + boost), 500)
-                    DungeonGame.player.defense = Math.min(Math.floor(DungeonGame.player.defense + boost), 500)
+                    DungeonGame.player.attack = Math.min(Math.floor(DungeonGame.player.attack + boost), DungeonGame.statmax)
+                    DungeonGame.player.defense = Math.min(Math.floor(DungeonGame.player.defense + boost), DungeonGame.statmax)
                     index = 0
                 } else msg = msg + "\n" + Enemy.think(DungeonGame)
             }
