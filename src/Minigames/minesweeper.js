@@ -92,7 +92,7 @@ class MineSweeperGame {
         board = board.replace("7\n", ":seven:\n")
         board = board.replace("8\n", ":eight:\n")
         return new Discord.MessageEmbed()
-            .setColor("#0a0a0a")
+            .setColor("#d3d3d3")
             .setTitle(EconomySystem.user + "'s MineSweeper board")
             .setDescription(board)
             .setFooter(gameover ? "Game Over" : this.tilesleft + " tiles left")
