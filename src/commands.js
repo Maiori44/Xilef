@@ -22,7 +22,7 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- Loaded command " + (Object.keys(Commands).length + 1) + "/29")
+        console.log("- Loaded command " + (Object.keys(Commands).length + 1) + "/30")
     }
 
     call(message, args) {
@@ -78,7 +78,7 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
             button = new MessageButton()
                 .setStyle("url")
                 .setURL(Commands[args[0]].link)
-                .setLabel(Commands[args[0]].category == "Game" ? "How to play " + args[0] : "Github page")
+                .setLabel(Commands[args[0]].category == "Game" ? "How to play" : "Github page")
         }
         message.channel.send(CommandInfoEmbed, button)
         return
@@ -134,7 +134,7 @@ Commands.hi = new Command("Says hi to you", (message, args) => {
             msg = ""
         }
     }
-})*/
+}) removed due to it obviously spamming, will not be re-enabled unless necessary*/
 
 Commands.annoy = new Command("Annoys the person you want", (message, args) => {
     message.channel.send(args[0].slice(0, 1900) + " you suck")
@@ -268,7 +268,7 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
             .setDescription("```lua\nDogeCoins: " + EconomySystem.money + "\nRank: " + EconomySystem.rank + "```")
             .addFields(
                 { name: "Singleplayer stats:", value:
-                    "```lua\nImpostors found: " + EconomySystem.impostors +
+                    "```js\nImpostors found: " + EconomySystem.impostors +
                     "\nDriller tier: " + EconomySystem.driller + 
                     "\nDungeon top floor: " + EconomySystem.floor + "```", inline: true },
                 { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.reversi + "\nConnect four matches won: " + EconomySystem.connect4 + "```", inline: true },

@@ -140,4 +140,4 @@ Commands.crew = new Command("Find the imposter!\n\n" + Amongus.help + "\npossibl
     }
 }, "Game", [new RequiredArg(0, Amongus.help, "command"),
 new RequiredArg(1, "You need to choose the color of the crewmate if you want to do anything to them, " +
-    "possible options are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.", "argument")])
+    "possible options are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.", "color")])
