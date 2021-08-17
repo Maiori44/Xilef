@@ -270,7 +270,8 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
                 { name: "Singleplayer stats:", value:
                     "```js\nImpostors found: " + EconomySystem.impostors +
                     "\nDriller tier: " + EconomySystem.driller + 
-                    "\nDungeon top floor: " + EconomySystem.floor + "```", inline: true },
+                    "\nDungeon top floor: " + EconomySystem.floor + 
+                    "\nMineSweeper matches won: " + EconomySystem.msweeper + "```", inline: true },
                 { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.reversi + "\nConnect four matches won: " + EconomySystem.connect4 + "```", inline: true },
                 { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievments.binary, "❔ ???\n") }
             )

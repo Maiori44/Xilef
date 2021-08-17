@@ -46,12 +46,13 @@ class EconomySystem {
         this.impostors = backup.impostors || 0
         this.driller = backup.driller || 1
         this.floor = backup.floor || 0,
+        this.msweeper = backup.msweeper || 0,
         this.day = backup.day || Date.now()-Date.day
         this.reversi = backup.reversi || 0
         this.connect4 = backup.connect4 || 0
         this.vhour = backup.vhour || Date.now()-Date.hour
         this.vgot = new FlagSystem(60, backup.vgot)
-        this.achievments = new FlagSystem(7, backup.achievments)
+        this.achievments = new FlagSystem(8, backup.achievments)
     }
 
     alterValue(flagname, amount, max) {
@@ -139,6 +140,7 @@ Achievments = {
     driller: new Economy.flag("<:driller:874403362827796530> reach tier 29 in driller", 5),
     v_: new Economy.flag("<:v_c:873259417557151765> find all v_s", 6),
     dungeon: new Economy.flag("<:dungeon:875809577487192116> reach floor 50 in dungeon", 7),
+    msweeper: new Economy.flag("💥 win minesweeper 15 times", 8),
 }
 Achievments.binary = [
     Achievments.first.id + "\n",
@@ -148,6 +150,7 @@ Achievments.binary = [
     Achievments.driller.id + "\n",
     Achievments.v_.id + "\n",
     Achievments.dungeon.id + "\n",
+    Achievments.msweeper.id + "\n",
 ]
 
 for (let ID of Object.keys(Economy.list)) {

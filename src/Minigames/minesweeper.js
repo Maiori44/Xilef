@@ -5,6 +5,7 @@ class MineSweeperCell {
     constructor() {
         this.isbomb = false
         this.isrevealed = false
+        this.isflagged = false
         this.nearbybombs = 0
     }
 
@@ -77,7 +78,7 @@ class MineSweeperGame {
                     "💥" :
                     this.board[y][x].isrevealed ?
                         MineSweeper.numToTile[this.board[y][x].nearbybombs] :
-                        "<:ms:876134777701412904>")
+                        (this.board[y][x].isflagged ? "<:flag:877088652600172544>" : "<:ms:876134777701412904>"))
             }
             board = board + y + "\n"
         }
@@ -106,7 +107,8 @@ MineSweeper = new Game(() => {
 MineSweeper.numToTile = [":black_large_square:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:"]
 MineSweeper.help =
     "`&msweeper board` shows the current board\n" +
-    "`&msweeper dig (x) (y)` digs in the given location, the dug tile will give information about the nearby tiles..or explode!"
+    "`&msweeper dig (x) (y)` digs in the given location, the dug tile will give information about the nearby tiles..or explode!\n" +
+    "`&msweeper flag (x) (y)` puts a flag in the given location, does nothing, but can be used to remember the mines locations"
 
 Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" + MineSweeper.help, (message, args) => {
     const MineSweeperGameConstructor = MineSweeperGame
@@ -124,7 +126,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
                 message.channel.send("You need to give valid coordinates for where to dig\nExample: `&msweeper dig 0 0` will dig the tile in the top left corner")
                 return
             }
-            let MineSweeperGame = MineSweeper.getGame(message.author.id)
+            const MineSweeperGame = MineSweeper.getGame(message.author.id)
             if (MineSweeperGame.board[y] && MineSweeperGame.board[y][x]) {
                 if (MineSweeperGame.board[y][x].isbomb) {
                     message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem, true))
@@ -132,7 +134,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
                     return
                 }
                 let CheckNeighbors = []
-                let Queue = [{x: x, y: y}]
+                let Queue = [{ x: x, y: y }]
                 do {
                     if (Queue.length) {
                         for (let i = 0; i < Queue.length; i++) {
@@ -146,14 +148,14 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
                                     const mx = Math.max(Tileinfo.x - 1, 0)
                                     const py = Math.min(Tileinfo.y + 1, 8)
                                     const my = Math.max(Tileinfo.y - 1, 0)
-                                    Queue.push({x: Tileinfo.x, y: py})
-                                    Queue.push({x: mx, y: py})
-                                    Queue.push({x: mx, y: Tileinfo.y})
-                                    Queue.push({x: mx, y: my})
-                                    Queue.push({x: Tileinfo.x, y: my})
-                                    Queue.push({x: px, y: my})
-                                    Queue.push({x: px, y: Tileinfo.y})
-                                    Queue.push({x: px, y: py})
+                                    Queue.push({ x: Tileinfo.x, y: py })
+                                    Queue.push({ x: mx, y: py })
+                                    Queue.push({ x: mx, y: Tileinfo.y })
+                                    Queue.push({ x: mx, y: my })
+                                    Queue.push({ x: Tileinfo.x, y: my })
+                                    Queue.push({ x: px, y: my })
+                                    Queue.push({ x: px, y: Tileinfo.y })
+                                    Queue.push({ x: px, y: py })
                                 }
                             }
                         }
@@ -163,13 +165,33 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
                 if (!MineSweeperGame.tilesleft) {
                     message.channel.send("You won!")
                     EconomySystem.give(300, message)
+                    EconomySystem.alterValue("msweeper", 1)
+                    if (EconomySystem.msweeper == 15) {
+                        EconomySystem.award("msweeper", message)
+                    }
                     MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
                 }
                 return
             } else {
                 message.channel.send("That location is out of bounds.")
                 return
-            }  
+            }
+        }
+        case "flag": {
+            const x = parseInt(args[1])
+            const y = parseInt(args[2])
+            if (isNaN(x) || isNaN(y)) {
+                message.channel.send("You need to give valid coordinates for where to place the flag\nExample: `&msweeper flag 0 0` will place the flag in the top left corner of the board")
+                return
+            }
+            const MineSweeperGame = MineSweeper.getGame(message.author.id)
+            if (MineSweeperGame.board[y] && MineSweeperGame.board[y][x]) {
+                MineSweeperGame.board[y][x].isflagged = true
+                message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem))
+            } else {
+                message.channel.send("That location is out of bounds.")
+            }
+            return
         }
         default: {
             message.channel.send(MineSweeper.help)
