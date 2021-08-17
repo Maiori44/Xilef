@@ -53,7 +53,7 @@ class DungeonGame {
         this.enemies = []
     }
 
-    get statmax () {
+    get statmax() {
         return 300 + 10 * (this.floor - 1)
     }
 
@@ -285,7 +285,7 @@ Dungeon.help =
     "`&dungeon explore` explore the current floor in the dungeon and find treasures..or enemies!\n" +
     "`&dungeon ascend` go to the next floor\n" +
     "`&dungeon attack (type)` attack the current enemy, omit type for a list of all attacks\n" +
-    //"`&dungeon regen (amount)` regenerate some mana, it won't be free\n" +
+    "`&dungeon escape` attempt to escape from all current enemies, might fail\n" +
     "`&dungeon cashin` get all the DogeCoins you found, and reset the game"
 
 Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.help, (message, args) => {
@@ -398,18 +398,24 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             message.channel.send(InfoEmbed)
             break
         }
-        /*case "regen": {
-            let cost = parseInt(args[1])
-            if (isNaN(cost)) {
-                throw ("I need to know how much mana you want to regen,\nexample: `&dungeon repair 50` will restore 50 mana, and will cost 50 DogeCoins")
+        case "escape": {
+            const chance = GetPercentual()
+            if (chance > DungeonGame.floor * 2) {
+                DungeonGame.enemies = []
+                const InfoEmbed = DungeonGame.getInfo(EconomySystem)
+                InfoEmbed.addField("Latest event:", "You managed to escape!")
+                message.channel.send(InfoEmbed)
+                return
             }
-            if (DungeonGame.player.mana == 2000) {
-                message.channel.send("Your already have a lot of mana")
-            } else if (EconomySystem.buy(cost, message, "Your recovered " + cost + " mana! (" + cost + " DogeCoins spent)", "You need " + (cost - EconomySystem.money) + " more DogeCoins for this.")) {
-                DungeonGame.player.mana = Math.min(DungeonGame.player.mana + cost, 2000)
+            let msg = "You tried to escape..but failed!"
+            for (let Enemy of DungeonGame.enemies) {
+                msg = msg + "\n" + Enemy.think(DungeonGame)
             }
-            break
-        }*/
+            const InfoEmbed = DungeonGame.getInfo(EconomySystem)
+            InfoEmbed.addField("Latest event:", msg)
+            message.channel.send(InfoEmbed)
+            return
+        }
         case "cashin": {
             if (DungeonGame.enemies.length) {
                 message.channel.send("You can't cashin while monsters are attacking you!")

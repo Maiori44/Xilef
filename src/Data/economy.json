@@ -1,17 +1,17 @@
 {
     "621307633718132746": {
-        "money": 6811,
+        "money": 2258,
         "rank": 50,
         "user": "Felix44",
         "impostors": 2,
         "driller": 10,
         "floor": 30,
-        "msweeper": 0,
+        "msweeper": 1,
         "day": 1629102073755,
         "reversi": 2,
         "connect4": 9,
-        "vhour": 1629186313508,
-        "vgot": "238850690686748968",
+        "vhour": 1629226688098,
+        "vgot": "238850690686757161",
         "achievments": "0"
     },
     "276363003270791168": {
@@ -105,7 +105,7 @@
         "achievments": "0"
     },
     "484682433925611542": {
-        "money": 67647754,
+        "money": 71741704,
         "rank": 4200,
         "user": "Dark_Brick",
         "impostors": 0,
@@ -115,8 +115,8 @@
         "day": 1628970477602,
         "reversi": 0,
         "connect4": 3,
-        "vhour": 1629045242200,
-        "vgot": "9148125805381156",
+        "vhour": 1629219216328,
+        "vgot": "9148125805389348",
         "achievments": "17"
     },
     "642719190288957450": {
@@ -180,7 +180,7 @@
         "achievments": "0"
     },
     "604213801927180295": {
-        "money": 2956,
+        "money": 125716,
         "rank": 101,
         "user": "Syphon",
         "impostors": 0,
@@ -190,12 +190,12 @@
         "day": 1629044929782,
         "reversi": 4,
         "connect4": 4,
-        "vhour": 1629057336372,
-        "vgot": "175019917362",
+        "vhour": 1629225605109,
+        "vgot": "35359392022578",
         "achievments": "0"
     },
     "483715787467653122": {
-        "money": 7938,
+        "money": 7388,
         "rank": 11,
         "user": "poly translator*",
         "impostors": 7,
@@ -205,8 +205,8 @@
         "day": 1628876482389,
         "reversi": 0,
         "connect4": 1,
-        "vhour": 1628962063551,
-        "vgot": "4947802327040",
+        "vhour": 1629223196849,
+        "vgot": "7146825582592",
         "achievments": "0"
     },
     "850867485263527956": {
@@ -285,13 +285,13 @@
         "achievments": "0"
     },
     "528309195116642314": {
-        "money": 10,
+        "money": 310,
         "rank": 1,
         "user": "Keanu",
         "impostors": 0,
         "driller": 1,
         "floor": 0,
-        "msweeper": 0,
+        "msweeper": 1,
         "day": 1628239752422,
         "reversi": 0,
         "connect4": 0,
@@ -300,18 +300,18 @@
         "achievments": "0"
     },
     "570503517832478720": {
-        "money": 42691,
+        "money": 40606,
         "rank": 42,
         "user": "Oh God Not The Belt",
         "impostors": 0,
         "driller": 5,
         "floor": 15,
-        "msweeper": 3,
+        "msweeper": 8,
         "day": 1628419767943,
         "reversi": 1,
         "connect4": 0,
-        "vhour": 1629186227269,
-        "vgot": "577023704405909572",
+        "vhour": 1629222620807,
+        "vgot": "577023704406073412",
         "achievments": "0"
     },
     "799228822889037824": {
@@ -420,14 +420,14 @@
         "achievments": "0"
     },
     "687347431548911644": {
-        "money": 23850,
+        "money": 25216,
         "rank": 63,
         "user": "no_words",
-        "impostors": 2,
+        "impostors": 3,
         "driller": 10,
-        "floor": 0,
+        "floor": 2,
         "msweeper": 0,
-        "day": 1628373382029,
+        "day": 1629227647299,
         "reversi": 0,
         "connect4": 0,
         "vhour": 1628373446983,
@@ -510,9 +510,9 @@
         "achievments": "0"
     },
     "712610883620044896": {
-        "money": 9975,
+        "money": 5725,
         "rank": 85,
-        "user": "Grass Kek But Lemon Kek UD",
+        "user": "Weather Kek",
         "impostors": 0,
         "driller": 5,
         "floor": 18,
@@ -520,8 +520,8 @@
         "day": 1628455075468,
         "reversi": 0,
         "connect4": 0,
-        "vhour": 1628783576592,
-        "vgot": "18882560",
+        "vhour": 1629213580386,
+        "vgot": "19931136",
         "achievments": "0"
     },
     "852988339484098580": {
@@ -567,6 +567,21 @@
         "connect4": 3,
         "vhour": 1628844359046,
         "vgot": "4194306",
+        "achievments": "0"
+    },
+    "866046348321882132": {
+        "money": 0,
+        "rank": 1,
+        "user": "Speccy",
+        "impostors": 0,
+        "driller": 1,
+        "floor": 0,
+        "msweeper": 0,
+        "day": 1629120711917,
+        "reversi": 0,
+        "connect4": 0,
+        "vhour": 1629203511917,
+        "vgot": "0",
         "achievments": "0"
     }
 }
