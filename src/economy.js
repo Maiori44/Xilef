@@ -18,7 +18,7 @@ class FlagSystem {
 
     checkFlag(flag) {
         if (this.value & BigInt(flag)) return true
-        return false 
+        return false
     }
 
     getBinary(replacers1, replacer0) {
