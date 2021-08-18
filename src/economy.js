@@ -40,19 +40,19 @@ class FlagSystem {
 class EconomySystem {
     constructor(username, backup) {
         backup = backup || {}
-        this.money = backup.money || 0
-        this.rank = backup.rank || 1
-        this.user = username
-        this.impostors = backup.impostors || 0
-        this.driller = backup.driller || 1
-        this.floor = backup.floor || 0,
-        this.msweeper = backup.msweeper || 0,
-        this.day = backup.day || Date.now()-Date.day
-        this.reversi = backup.reversi || 0
-        this.connect4 = backup.connect4 || 0
-        this.vhour = backup.vhour || Date.now()-Date.hour
-        this.vgot = new FlagSystem(60, backup.vgot)
-        this.achievments = new FlagSystem(8, backup.achievments)
+        this.money = backup.money || 0 //the amount of DogeCoins the user has
+        this.rank = backup.rank || 1 //their leaderboard rank
+        this.user = username //their username
+        this.impostors = backup.impostors || 0 //the amount of times they won in &crew
+        this.driller = backup.driller || 1 //their &driller tier
+        this.floor = backup.floor || 0, //their record in &dungeon
+        this.msweeper = backup.msweeper || 0, //the amount of times they won in &msweeper
+        this.day = backup.day || Date.now()-Date.day //last time they got &daily
+        this.reversi = backup.reversi || 0 //the amount of times they won in &reversi
+        this.connect4 = backup.connect4 || 0 //the amount of times they won in &connect4
+        this.vhour = backup.vhour || Date.now()-Date.hour //last time they rolled
+        this.vgot = new FlagSystem(60, backup.vgot) //flag system for the different v_s
+        this.achievments = new FlagSystem(8, backup.achievments) //flag system for the achievements
     }
 
     alterValue(flagname, amount, max) {
