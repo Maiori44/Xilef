@@ -239,7 +239,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             break
         }
         case "repair": {
-            let cost = parseInt(args[1])
+            const cost = args[1] == 'max' ? 100 * EconomySystem.driller - Driller.hp : parseInt(args[1])
             if (isNaN(cost)) {
                 throw ("I need to know how much you want to repair,\nexample: `&driller repair 50` will restore 50 hp of the drill, and will cost 50 DogeCoins")
             }
