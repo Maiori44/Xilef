@@ -36,7 +36,8 @@ client.on("message", (message) => {
         // index 0 being the full match, and the rest being the capturing groups
         let args = [...message.content.slice(prefix.length).matchAll(regex)]
             .map(el => el[1] || el[0] || "")
-        let command = args.shift().toLowerCase()
+        let command = args.shift()
+        command = command ? command.toLowerCase() : undefined
         if (command == "") {
             message.channel.send('Wow great command, " ", makes complete sense')
             return
