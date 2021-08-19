@@ -244,7 +244,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     ? 100 * EconomySystem.driller - DrillerGame.hp
                     : parseInt(args[1]);
             if (isNaN(cost)) {
-                throw (`You need to give a valid x for where to place your disc\nExample: \`${Prefix.get(message.guild.id)}connect4 place 0\` will place your disc in the leftmost column`)
+                throw (`I need to know how much you want to repair,\nexample: \`${Prefix.get(message.guild.id)}driller repair 50\` will restore 50 hp of the drill, and will cost 50 DogeCoins.\nYou could also put 'max' and it will restore your drill to max hp.`)
             }
             if (DrillerGame.hp == 100 * EconomySystem.driller) {
                 message.channel.send("Your driller is arleady in perfect condition.")
@@ -281,4 +281,4 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
         EconomySystem.steal(25 * DrillerGame.depth, message)
         DrillerGame.reset(EconomySystem)
     }
-}, "Game", [new RequiredArg(0, Driller.help.replace('&'), "command"), new RequiredArg(1, undefined, "argument", true)])
+}, "Game", [new RequiredArg(0, Driller.help, "command"), new RequiredArg(1, undefined, "argument", true)])
