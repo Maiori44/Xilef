@@ -20,7 +20,10 @@ Prefix = {
 }
 
 Commands.prefix = new Command('Changes the prefix for the current server. Put `default` as the argument of `prefix` to reset the current server-prefix to the global prefix', (message , args) => {
-    if (debugmode) throw ("This command cannot be used while in debug mode")
+    if (debugmode) {
+      console.log("- " + Colors.blue.colorize("Update of \"prefixes.json\" was cancelled due to debug mode being active"))
+      throw ("This command cannot be used while in debug mode")
+    }
     fs.writeFileSync(
         "./src/Data/prefixes.json",
         JSON.stringify(
@@ -31,5 +34,5 @@ Commands.prefix = new Command('Changes the prefix for the current server. Put `d
         ),
         "utf8"
     )
-    console.log("- \x1B[35mSuccessfully updated file \"prefixes.json\"\033[97m")
+    console.log("- " + Colors.purple.colorize("Successfully updated file \"prefixes.json\""))
 }, 'Utility', [new RequiredArg(0, 'Missing `prefix` argument', 'prefix')])

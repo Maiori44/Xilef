@@ -22,7 +22,7 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- Loaded command " + (Object.keys(Commands).length + 1) + "/31")
+        console.log("- " + Colors.green.colorize("Loaded command " + (Object.keys(Commands).length + 1) + "/31"))
     }
 
     call(message, args) {

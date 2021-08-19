@@ -123,7 +123,7 @@ Economy = {
         let json = JSON.parse(fs.readFileSync("./src/Data/economy.json", "utf8"));
         json = { ...json, ...Economy.list }
         fs.writeFileSync("./src/Data/economy.json", JSON.stringify(json, null, 4), "utf8")
-        console.log("- \x1B[35mSuccessfully updated file \"economy.json\"\033[97m")
+        console.log("- " + Colors.purple.colorize("Successfully updated file \"economy.json\""))
     },
     flag: class {
         constructor(id, bit) {

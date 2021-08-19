@@ -10,6 +10,26 @@ client.prefix = debugmode ? "beta&" : "&"
 Date.day = 86400000
 Date.hour = 3600000
 
+class Colorizer {
+    constructor(color) {
+        this.color = color
+    }
+
+    colorize(text) {
+        return this.color + text + Colors.white.color
+    }
+}
+
+Colors = {
+    white: new Colorizer("\033[97m"),
+    green: new Colorizer("\x1B[92m"),
+    red: new Colorizer("\x1B[31m"),
+    blue: new Colorizer("\x1B[34m"),
+    yellow: new Colorizer("\x1B[33m"),
+    purple: new Colorizer("\x1B[35m"),
+    cyan: new Colorizer("\x1B[36m")
+}
+
 GetPercentual = () => {
     return Math.floor(Math.random() * 101)
 }
@@ -24,7 +44,7 @@ require("./minigames.js")
 
 client.on("ready", () => {
     console.log("- Bot ready")
-    if (debugmode) console.log("- \x1B[31mThe current bot session is running in debug mode, no data will be saved\033[97m")
+    if (debugmode) console.log("- \x1B[31mThe current bot session is running in debug mode, no data will be saved" + Colors.white)
     client.user.setActivity("ping me for info")
 })
 client.on("message", (message) => {
@@ -50,7 +70,7 @@ client.on("message", (message) => {
                 Commands[command.toLowerCase()].call(message, args)
                 if (!debugmode) {
                     Economy.save()
-                }
+                } else console.log("- " + Colors.blue.colorize("Update of \"economy.json\" was cancelled due to debug mode being active"))
                 if (warning) {
                     message.channel.send(new Discord.MessageEmbed()
                         .setColor("#ff0000")
@@ -58,7 +78,7 @@ client.on("message", (message) => {
                         .setDescription(warning)
                         .setTimestamp())
                 }
-                console.log("- \x1B[92mCommand call completed sucessfully:\033[97m" +
+                console.log("- " + Colors.green.colorize("Command call completed sucessfully:") +
                     "\n\tCommand: " + command +
                     "\n\tArgs: " + args +
                     "\n\tTime taken: " + (Date.now() - start) +
@@ -68,7 +88,7 @@ client.on("message", (message) => {
                     "\n\tGuild name: " + message.guild.name)
             } catch (errormsg) {
                 if (errormsg instanceof Error) {
-                    console.error("- \x1B[31mCommand call ended by JavaScript error:\033[97m" +
+                    console.error("- " + Colors.red.colorize("Command call ended by JavaScript error:") +
                         "\n\tCommand: " + command +
                         "\n\tArgs: " + args +
                         "\n\tTime taken: " + (Date.now() - start) +
@@ -79,7 +99,7 @@ client.on("message", (message) => {
                         "\n\tError: " + errormsg.stack)
                     message.channel.send(errormsg.toString().slice(0, 1900))
                 } else if (typeof errormsg == "object") {
-                    console.error("- \x1B[34mCommand call ended by missing argument:\033[97m" +
+                    console.error("- " + Colors.blue.colorize("Command call ended by missing argument:") +
                         "\n\tCommand: " + command +
                         "\n\tArgs: " + args +
                         "\n\tTime taken: " + (Date.now() - start) +
@@ -89,9 +109,9 @@ client.on("message", (message) => {
                         "\n\tGuild name: " + message.guild.name +
                         "\n\tArgument number: " + errormsg.num +
                         "\n\tArgument name: " + errormsg.name)
-                        message.channel.send(errormsg.msg.toString().slice(0, 1900))
+                    message.channel.send(errormsg.msg.toString().slice(0, 1900))
                 } else {
-                    console.error("- \x1B[33mCommand call ended by command error:\033[97m" +
+                    console.error("- " + Colors.yellow.colorize("Command call ended by thrown error:") +
                         "\n\tCommand: " + command +
                         "\n\tArgs: " + args +
                         "\n\tTime taken: " + (Date.now() - start) +
