@@ -197,7 +197,7 @@ Driller.tiers = [
 Driller.help =
     "`&driller stats` says the stats of your driller\n" +
     "`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n" +
-    "`&driller repair (amount)` repairs the driller, it won't be free though\n" +
+    "`&driller repair (amount/\"max\")` repairs the driller, it won't be free though\n" +
     "`&driller upgrade` upgrades your driller forever, very expensive\n" +
     "`&driller cashin` get all the DogeCoins the driller got, and reset the game"
 
@@ -244,7 +244,8 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     ? 100 * EconomySystem.driller - DrillerGame.hp
                     : parseInt(args[1]);
             if (isNaN(cost)) {
-                throw (`I need to know how much you want to repair,\nexample: \`${Prefix.get(message.guild.id)}driller repair 50\` will restore 50 hp of the drill, and will cost 50 DogeCoins.\nYou could also put 'max' and it will restore your drill to max hp.`)
+                message.channel.send(`I need to know how much you want to repair,\nexample: \`${Prefix.get(message.guild.id)}driller repair 50\` will restore 50 hp of the drill, and will cost 50 DogeCoins.\nYou could also put 'max' and it will restore your drill to max hp.`)
+                return
             }
             if (DrillerGame.hp == 100 * EconomySystem.driller) {
                 message.channel.send("Your driller is arleady in perfect condition.")

@@ -1,6 +1,6 @@
 {
     "621307633718132746": {
-        "money": 637,
+        "money": 5473,
         "rank": 50,
         "user": "Felix44",
         "impostors": 2,
@@ -10,7 +10,7 @@
         "day": 1629366148495,
         "reversi": 2,
         "connect4": 9,
-        "vhour": 1629321034849,
+        "vhour": 1629373679475,
         "vgot": "238859486779779369",
         "achievments": "0"
     },
@@ -480,11 +480,11 @@
         "achievments": "0"
     },
     "684285694063018048": {
-        "money": 20250,
-        "rank": 35,
+        "money": 1077,
+        "rank": 40,
         "user": "LJMSU",
         "impostors": 0,
-        "driller": 4,
+        "driller": 5,
         "floor": 0,
         "msweeper": 0,
         "day": 1629366014841,

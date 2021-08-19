@@ -68,7 +68,7 @@ client.on("message", (message) => {
                     "\n\tGuild name: " + message.guild.name)
             } catch (errormsg) {
                 if (errormsg instanceof Error) {
-                    console.error("- \x1B[31mCommand call ended by thrown error:\033[97m" +
+                    console.error("- \x1B[31mCommand call ended by JavaScript error:\033[97m" +
                         "\n\tCommand: " + command +
                         "\n\tArgs: " + args +
                         "\n\tTime taken: " + (Date.now() - start) +
@@ -77,8 +77,31 @@ client.on("message", (message) => {
                         "\n\tChannel name: " + message.channel.name +
                         "\n\tGuild name: " + message.guild.name +
                         "\n\tError: " + errormsg.stack)
+                    message.channel.send(errormsg.toString().slice(0, 1900))
+                } else if (typeof errormsg == "object") {
+                    console.error("- \x1B[34mCommand call ended by missing argument:\033[97m" +
+                        "\n\tCommand: " + command +
+                        "\n\tArgs: " + args +
+                        "\n\tTime taken: " + (Date.now() - start) +
+                        "\n\tCalled at: " + new Date() +
+                        "\n\tCaller: " + message.author.username +
+                        "\n\tChannel name: " + message.channel.name +
+                        "\n\tGuild name: " + message.guild.name +
+                        "\n\tArgument number: " + errormsg.num +
+                        "\n\tArgument name: " + errormsg.name)
+                        message.channel.send(errormsg.msg.toString().slice(0, 1900))
+                } else {
+                    console.error("- \x1B[33mCommand call ended by command error:\033[97m" +
+                        "\n\tCommand: " + command +
+                        "\n\tArgs: " + args +
+                        "\n\tTime taken: " + (Date.now() - start) +
+                        "\n\tCalled at: " + new Date() +
+                        "\n\tCaller: " + message.author.username +
+                        "\n\tChannel name: " + message.channel.name +
+                        "\n\tGuild name: " + message.guild.name +
+                        "\n\tError: " + errormsg)
+                    message.channel.send(errormsg.toString().slice(0, 1900))
                 }
-                message.channel.send(errormsg.toString().slice(0, 1900))
             }
         } else {
             message.channel.send(`That command doesn't exist buddy, use \`${prefix}help\` for a list of commands`)

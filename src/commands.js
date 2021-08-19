@@ -28,7 +28,7 @@ class Command {
     call(message, args) {
         if (this.requiredargs)
             for (const arg of this.requiredargs)
-                if (!arg.check(args)) throw arg.errormsg.replace(/\&/g, Prefix.get(message.guild.id))
+                if (!arg.check(args)) throw {msg: arg.errormsg.replace(/\&/g, Prefix.get(message.guild.id)), name: arg.name, num: arg.argnum}
 
         this.action(message, args)
     }

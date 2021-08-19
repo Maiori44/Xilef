@@ -31,4 +31,5 @@ Commands.prefix = new Command('Changes the prefix for the current server. Put `d
         ),
         "utf8"
     )
+    console.log("- \x1B[35mSuccessfully updated file \"prefixes.json\"\033[97m")
 }, 'Utility', [new RequiredArg(0, 'Missing `prefix` argument', 'prefix')])
