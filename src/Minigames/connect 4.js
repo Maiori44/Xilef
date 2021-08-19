@@ -89,7 +89,7 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
             }
             let x = parseInt(args[1])
             if (isNaN(x)) {
-                throw ("You need to give a valid x for where to place your disc\nExample: `&connect4 place 0` will place your disc in the leftmost column")
+                throw (`You need to give a valid x for where to place your disc\nExample: \`${Prefix.get(message.guild.id)}connect4 place 0\` will place your disc in the leftmost column`)
             }
             if (x >= 0 && x <= 6) {
                 let tile = Connect4Game.turn == 1 ? Connect4.yellowTile : Connect4.redTile
@@ -127,7 +127,7 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
             break
         }
         default: {
-            message.channel.send(Connect4.help)
+            message.channel.send(Connect4.help.replace('&', Prefix.get(message.guild.id)))
             return
         }
     }

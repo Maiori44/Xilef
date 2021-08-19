@@ -123,7 +123,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             const x = parseInt(args[1])
             const y = parseInt(args[2])
             if (isNaN(x) || isNaN(y)) {
-                message.channel.send("You need to give valid coordinates for where to dig\nExample: `&msweeper dig 0 0` will dig the tile in the top left corner")
+                message.channel.send(`You need to give valid coordinates for where to dig\nExample: \`${Prefix.get(message.guild.id)}msweeper dig 0 0\` will dig the tile in the top left corner`)
                 return
             }
             const MineSweeperGame = MineSweeper.getGame(message.author.id)
@@ -181,7 +181,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             const x = parseInt(args[1])
             const y = parseInt(args[2])
             if (isNaN(x) || isNaN(y)) {
-                message.channel.send("You need to give valid coordinates for where to place the flag\nExample: `&msweeper flag 0 0` will place the flag in the top left corner of the board")
+                message.channel.send(`You need to give valid coordinates for where to place the flag\nExample: \`${Prefix.get(message.guild.id)}msweeper flag 0 0\` will place the flag in the top left corner of the board`)
                 return
             }
             const MineSweeperGame = MineSweeper.getGame(message.author.id)
@@ -194,7 +194,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             return
         }
         default: {
-            message.channel.send(MineSweeper.help)
+            message.channel.send(MineSweeper.help.replace('&', Prefix.get(message.guild.id)))
             return
         }
     }

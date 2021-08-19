@@ -140,7 +140,7 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
             let x = parseInt(args[1])
             let y = parseInt(args[2])
             if (isNaN(x) || isNaN(y)) {
-                throw ("You need to give valid coordinates for where to place your disk\nExample: `&reversi place 0 0` will place your disk in the top left corner")
+                throw (`You need to give valid coordinates for where to place your disk\nExample: \`${Prefix.get(message.guild.id)}reversi place 0 0\` will place your disk in the top left corner`)
             }
             if (ReversiGame.board[y] && ReversiGame.board[y][x]) {
                 let tile = ReversiGame.turn == 1 ? Reversi.darkTile : Reversi.lightTile
@@ -203,7 +203,7 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
             break
         }
         default: {
-            message.channel.send(Reversi.help)
+            message.channel.send(Reversi.help.replace('&', Prefix.get(message.guild.id)))
             return
         }
     }

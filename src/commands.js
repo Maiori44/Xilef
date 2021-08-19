@@ -11,7 +11,7 @@ class RequiredArg {
 
     check(args) {
         if (this.notrequired || args[this.argnum]) { return true }
-        throw (this.errormsg)
+        return false
     }
 }
 
@@ -26,11 +26,10 @@ class Command {
     }
 
     call(message, args) {
-        if (this.requiredargs) {
-            for (const arg of this.requiredargs) {
-                arg.check(args)
-            }
-        }
+        if (this.requiredargs)
+            for (const arg of this.requiredargs)
+                if (!arg.check(args)) throw arg.errormsg.replace('&', Prefix.get(message.guild.id))
+
         this.action(message, args)
     }
 }
@@ -62,10 +61,10 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
         const CommandInfoEmbed = new Discord.MessageEmbed()
             .setColor("#0368f8")
             .setTitle(args[0])
-            .setDescription(Commands[args[0]].description)
+            .setDescription(Commands[args[0]].description.replace('&', Prefix.get(message.guild.id)))
             .setTimestamp()
             .setFooter(Object.keys(Commands).length + " total commands")
-        let syntax = "`&" + args[0]
+        let syntax = `\`${Prefix.get(message.guild.id)}` + args[0]
         if (Commands[args[0]].requiredargs) {
             for (const arg of Commands[args[0]].requiredargs) {
                 syntax = syntax + " " + (arg.notrequired ? "[" : "(") + arg.name + (arg.notrequired ? "]" : ")")
@@ -86,7 +85,7 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
     const CommandsEmbed = new Discord.MessageEmbed()
         .setColor("#0368f8")
         .setTitle("List of all commands:")
-        .setDescription("You can do `&help (command name)` to have a brief description of the command")
+        .setDescription(`You can do \`${Prefix.get(message.guild.id)}help (command name)\` to have a brief description of the command`)
         .setTimestamp()
         .setFooter(Object.keys(Commands).length + " total commands")
     let Categories = {}
@@ -115,7 +114,7 @@ Commands.warn = new Command("Developer only", (message, args) => {
     if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the developer only")
     args[0] = args.join(" ")
     warning = args[0]
-    client.user.setActivity(args[0] + ", prefix is &")
+    client.user.setActivity(args[0] + ", ping me for info")
 }, "Utility", [new RequiredArg(0, "What will you warn the people about . _.", "...text")])
 
 Commands.hi = new Command("Says hi to you", (message, args) => {
@@ -269,8 +268,8 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
             .addFields(
                 { name: "Singleplayer stats:", value:
                     "```js\nImpostors found: " + EconomySystem.impostors +
-                    "\nDriller tier: " + EconomySystem.driller + 
-                    "\nDungeon top floor: " + EconomySystem.floor + 
+                    "\nDriller tier: " + EconomySystem.driller +
+                    "\nDungeon top floor: " + EconomySystem.floor +
                     "\nMineSweeper matches won: " + EconomySystem.msweeper + "```", inline: true },
                 { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.reversi + "\nConnect four matches won: " + EconomySystem.connect4 + "```", inline: true },
                 { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievments.binary, "❔ ???\n") }

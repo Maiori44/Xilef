@@ -125,7 +125,7 @@ Commands.crew = new Command("Find the imposter!\n\n" + Amongus.help + "\npossibl
             break
         }
         default: {
-            message.channel.send(Amongus.help)
+            message.channel.send(Amongus.help.replace('&', Prefix.get(message.guild.id)))
             return
         }
     }

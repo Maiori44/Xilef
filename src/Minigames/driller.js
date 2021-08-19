@@ -201,7 +201,7 @@ Driller.help =
     "`&driller upgrade` upgrades your driller forever, very expensive\n" +
     "`&driller cashin` get all the DogeCoins the driller got, and reset the game"
 
-Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n" + Driller.help, (message, args) => {
+Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n" + Driller.help.replace('&', Prefix), (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
     let DrillerGame = Driller.getGame(message.author.id, EconomySystem)
     args[0] = args[0].toLowerCase()
@@ -244,7 +244,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     ? 100 * EconomySystem.driller - DrillerGame.hp
                     : parseInt(args[1]);
             if (isNaN(cost)) {
-                throw ("I need to know how much you want to repair,\nexample: `&driller repair 50` will restore 50 hp of the drill, and will cost 50 DogeCoins")
+                throw (`I need to know how much you want to repair,\nexample: \`${Prefix.get(message.guild.id)}driller repair 50\` will restore 50 hp of the drill, and will cost 50 DogeCoins.\nYou could also put 'max' and it will restore your drill to max hp.`)
             }
             if (DrillerGame.hp == 100 * EconomySystem.driller) {
                 message.channel.send("Your driller is arleady in perfect condition.")
@@ -272,7 +272,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             break
         }
         default: {
-            message.channel.send(Driller.help)
+            message.channel.send(Driller.help.replace('&', Prefix.get(message.guild.id)))
             return
         }
     }

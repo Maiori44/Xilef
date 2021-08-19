@@ -3,8 +3,7 @@ Discord = require("discord.js")
 
 client = new Discord.Client()
 client.login(process.env.TOKEN)
-
-const prefix = "&"
+client.prefix = "&"
 
 Date.day = 86400000
 Date.hour = 3600000
@@ -19,12 +18,14 @@ require("./economy.js")
 require("./commands.js")
 require("./buttons.js")
 require("./minigames.js")
+require("./prefix.js")
 
 client.on("ready", () => {
     console.log("- Bot ready")
-    client.user.setActivity("prefix is &")
+    client.user.setActivity(`ping me for info`) // Could be improved probably @Felix-44
 })
 client.on("message", (message) => {
+    const prefix = Prefix.get(message.guild.id)
     let start = Date.now()
     if (message.author.bot) return
     if (message.content.startsWith(prefix)) {
@@ -73,7 +74,11 @@ client.on("message", (message) => {
                 message.channel.send(errormsg.toString().slice(0, 1900))
             }
         } else {
-            message.channel.send("That command doesn't exist buddy, use `&help` for a list of commands")
+            message.channel.send(`That command doesn't exist buddy, use \`${prefix}help\` for a list of commands`)
         }
     }
+})
+
+client.on("message", (message) => {
+    if (message.content.trim() == '<@852882606629847050>') Commands.info.action(message)
 })

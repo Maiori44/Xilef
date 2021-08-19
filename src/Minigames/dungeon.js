@@ -363,12 +363,13 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
         }
         case "attack": {
             if (!args[1] || !Dungeon.attacks[args[1]]) {
-                message.channel.send(
+                message.channel.send((
                     "`&dungeon attack slash` the basic attack, costs 0\n" +
                     "`&dungeon attack fire` does slightly less damage but reduces enemy defense, costs 25\n" +
                     "`&dungeon attack ice` does slightly more damage and reduces enemy mana, costs 50\n" +
                     "`&dungeon attack ground` same damage as slash but hits all enemies, costs 75\n" +
-                    "`&dungeon attack thunder` does double damage and reduces both enemy attack and defense, but has a 30% chance of missing, costs 100\n"
+                    "`&dungeon attack thunder` does double damage and reduces both enemy attack and defense, but has a 30% chance of missing, costs 100\n")
+                    .replace('&', Prefix.get(message.guild.id))
                 )
                 return
             }
@@ -431,7 +432,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             break
         }
         default: {
-            message.channel.send(Dungeon.help)
+            message.channel.send(Dungeon.help.replace('&', Prefix.get(message.guild.id)))
             return
         }
     }
