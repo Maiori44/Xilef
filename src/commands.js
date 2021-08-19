@@ -22,13 +22,13 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- Loaded command " + (Object.keys(Commands).length + 1) + "/30")
+        console.log("- Loaded command " + (Object.keys(Commands).length + 1) + "/31")
     }
 
     call(message, args) {
         if (this.requiredargs)
             for (const arg of this.requiredargs)
-                if (!arg.check(args)) throw arg.errormsg.replace('&', Prefix.get(message.guild.id))
+                if (!arg.check(args)) throw arg.errormsg.replace(/\&/g, Prefix.get(message.guild.id))
 
         this.action(message, args)
     }
@@ -61,7 +61,7 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
         const CommandInfoEmbed = new Discord.MessageEmbed()
             .setColor("#0368f8")
             .setTitle(args[0])
-            .setDescription(Commands[args[0]].description.replace('&', Prefix.get(message.guild.id)))
+            .setDescription(Commands[args[0]].description.replace(/\&/g, Prefix.get(message.guild.id)))
             .setTimestamp()
             .setFooter(Object.keys(Commands).length + " total commands")
         let syntax = `\`${Prefix.get(message.guild.id)}` + args[0]
@@ -102,11 +102,12 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
     message.channel.send(CommandsEmbed, Buttons)
 }, "Utility", [new RequiredArg(0, undefined, "command name", true)])
 
-Commands.info = new Command("Shows info about the bot", (message, args) => {
+Commands.info = new Command("Shows info about the bot and this server's prefix", (message, args) => {
     message.channel.send(new Discord.MessageEmbed()
         .setColor("#0368f8")
         .setTitle("Xilef info")
         .setDescription("Bot created by <@621307633718132746>\nYou can check out the code on github")
+        .addField("This server's prefix:", "`" + Prefix.get(message.guild.id) + "`")
         .setTimestamp(), Buttons)
 }, "Utility")
 

@@ -201,7 +201,7 @@ Driller.help =
     "`&driller upgrade` upgrades your driller forever, very expensive\n" +
     "`&driller cashin` get all the DogeCoins the driller got, and reset the game"
 
-Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n" + Driller.help.replace('&', Prefix), (message, args) => {
+Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n" + Driller.help, (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
     let DrillerGame = Driller.getGame(message.author.id, EconomySystem)
     args[0] = args[0].toLowerCase()
@@ -272,7 +272,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             break
         }
         default: {
-            message.channel.send(Driller.help.replace('&', Prefix.get(message.guild.id)))
+            message.channel.send(Driller.help.replace(/\&/g, Prefix.get(message.guild.id)))
             return
         }
     }

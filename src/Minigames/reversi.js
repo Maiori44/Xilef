@@ -203,7 +203,7 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
             break
         }
         default: {
-            message.channel.send(Reversi.help.replace('&', Prefix.get(message.guild.id)))
+            message.channel.send(Reversi.help.replace(/\&/g, Prefix.get(message.guild.id)))
             return
         }
     }

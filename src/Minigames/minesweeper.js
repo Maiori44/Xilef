@@ -194,7 +194,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             return
         }
         default: {
-            message.channel.send(MineSweeper.help.replace('&', Prefix.get(message.guild.id)))
+            message.channel.send(MineSweeper.help.replace(/\&/g, Prefix.get(message.guild.id)))
             return
         }
     }

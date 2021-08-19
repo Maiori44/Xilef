@@ -16,15 +16,16 @@ warning = undefined
 
 require("./economy.js")
 require("./commands.js")
+require("./prefix.js")
 require("./buttons.js")
 require("./minigames.js")
-require("./prefix.js")
 
 client.on("ready", () => {
     console.log("- Bot ready")
     client.user.setActivity(`ping me for info`) // Could be improved probably @Felix-44
 })
 client.on("message", (message) => {
+    if (message.content.trim() == '<@!852882606629847050>') {Commands.info.action(message); return }
     const prefix = Prefix.get(message.guild.id)
     let start = Date.now()
     if (message.author.bot) return
@@ -77,8 +78,4 @@ client.on("message", (message) => {
             message.channel.send(`That command doesn't exist buddy, use \`${prefix}help\` for a list of commands`)
         }
     }
-})
-
-client.on("message", (message) => {
-    if (message.content.trim() == '<@852882606629847050>') Commands.info.action(message)
 })

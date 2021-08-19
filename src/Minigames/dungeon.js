@@ -369,7 +369,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                     "`&dungeon attack ice` does slightly more damage and reduces enemy mana, costs 50\n" +
                     "`&dungeon attack ground` same damage as slash but hits all enemies, costs 75\n" +
                     "`&dungeon attack thunder` does double damage and reduces both enemy attack and defense, but has a 30% chance of missing, costs 100\n")
-                    .replace('&', Prefix.get(message.guild.id))
+                    .replace(/\&/g, Prefix.get(message.guild.id))
                 )
                 return
             }
@@ -432,7 +432,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             break
         }
         default: {
-            message.channel.send(Dungeon.help.replace('&', Prefix.get(message.guild.id)))
+            message.channel.send(Dungeon.help.replace(/\&/g, Prefix.get(message.guild.id)))
             return
         }
     }

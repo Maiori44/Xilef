@@ -127,7 +127,7 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
             break
         }
         default: {
-            message.channel.send(Connect4.help.replace('&', Prefix.get(message.guild.id)))
+            message.channel.send(Connect4.help.replace(/\&/g, Prefix.get(message.guild.id)))
             return
         }
     }

@@ -1,4 +1,5 @@
-const { RequiredArg, Command } = require("./../commands.js")
+const { RequiredArg, Command } = require("./commands.js")
+const fs = require('fs')
 
 Prefix = {
   /**
