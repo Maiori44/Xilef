@@ -1,9 +1,11 @@
 require("dotenv").config()
 Discord = require("discord.js")
 
+debugmode = process.argv[2] == "-debug" ? true : false
+
 client = new Discord.Client()
-client.login(process.env.TOKEN)
-client.prefix = "&"
+client.login(debugmode ? process.env.DEBUG : process.env.TOKEN)
+client.prefix = debugmode ? "beta&" : "&"
 
 Date.day = 86400000
 Date.hour = 3600000
@@ -12,7 +14,7 @@ GetPercentual = () => {
     return Math.floor(Math.random() * 101)
 }
 
-warning = undefined
+warning = debugmode ? "This bot is running in debug mode, no changes will be saved" : undefined
 
 require("./economy.js")
 require("./commands.js")
@@ -22,10 +24,11 @@ require("./minigames.js")
 
 client.on("ready", () => {
     console.log("- Bot ready")
-    client.user.setActivity(`ping me for info`) // Could be improved probably @Felix-44
+    if (debugmode) console.log("- \x1B[31mThe current bot session is running in debug mode, no data will be saved\033[97m")
+    client.user.setActivity("ping me for info")
 })
 client.on("message", (message) => {
-    if (message.content.trim() == '<@!852882606629847050>') {Commands.info.action(message); return }
+    if (message.content.trim() == "<@!" + client.user.id + ">") { Commands.info.action(message); return }
     const prefix = Prefix.get(message.guild.id)
     let start = Date.now()
     if (message.author.bot) return
@@ -45,7 +48,9 @@ client.on("message", (message) => {
         } else if (Commands[command]) {
             try {
                 Commands[command.toLowerCase()].call(message, args)
-                Economy.save()
+                if (!debugmode) {
+                    Economy.save()
+                }
                 if (warning) {
                     message.channel.send(new Discord.MessageEmbed()
                         .setColor("#ff0000")
@@ -62,7 +67,7 @@ client.on("message", (message) => {
                     "\n\tChannel name: " + message.channel.name +
                     "\n\tGuild name: " + message.guild.name)
             } catch (errormsg) {
-                if (errormsg instanceof Error)
+                if (errormsg instanceof Error) {
                     console.error("- \x1B[31mCommand call ended by thrown error:\033[97m" +
                         "\n\tCommand: " + command +
                         "\n\tArgs: " + args +
@@ -72,6 +77,7 @@ client.on("message", (message) => {
                         "\n\tChannel name: " + message.channel.name +
                         "\n\tGuild name: " + message.guild.name +
                         "\n\tError: " + errormsg.stack)
+                }
                 message.channel.send(errormsg.toString().slice(0, 1900))
             }
         } else {

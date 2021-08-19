@@ -7,7 +7,7 @@ Prefix = {
    * @returns {string} - The guild's prefix. fallbacks to the global prefix (client.prefix)
    */
   get(guildID) {
-    return this.read()[guildID] ?? client.prefix
+    return debugmode ? "beta&" : (this.read()[guildID] ?? client.prefix)
   },
 
   /**
@@ -20,6 +20,7 @@ Prefix = {
 }
 
 Commands.prefix = new Command('Changes the prefix for the current server. Put `default` as the argument of `prefix` to reset the current server-prefix to the global prefix', (message , args) => {
+    if (debugmode) throw ("This command cannot be used while in debug mode")
     fs.writeFileSync(
         "./src/Data/prefixes.json",
         JSON.stringify(
