@@ -345,16 +345,3 @@ Commands.leaderboard = new Command("See the users with the highest ranks", (mess
     }
     message.channel.send(LeaderBoard)
 }, "Economy")
-
-Commands.prefix = new Command('Changes the prefix for the current server. Put `default` as the argument of `prefix` to reset the current server-prefix to the global prefix', (message , args) => {
-    fs.writeFileSync(
-        "./src/Data/prefixes.json",
-        JSON.stringify(
-            {
-                ...Prefix.read(),
-                [message.guild.id]: args[0] == 'default' ? undefined: args[0]
-            }, null, 4
-        ),
-        "utf8"
-    )
-}, 'Utility', [new RequiredArg(0, 'Missing `prefix` argument', 'prefix')])

@@ -195,13 +195,13 @@ Driller.tiers = [
     69420420
 ]
 Driller.help =
-    `\`${Prefix.get()}driller stats\` says the stats of your driller\n` +
-    `\`${Prefix.get()}driller dig\` makes the driller dig deeper, finding treasures..or lava!\n` +
-    `\`${Prefix.get()}driller repair (amount)\` repairs the driller, it won't be free though\n` +
-    `\`${Prefix.get()}driller upgrade\` upgrades your driller forever, very expensive\n` +
-    `\`${Prefix.get()}driller cashin\` get all the DogeCoins the driller got, and reset the game`
+    "`&driller stats` says the stats of your driller\n" +
+    "`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n" +
+    "`&driller repair (amount)` repairs the driller, it won't be free though\n" +
+    "`&driller upgrade` upgrades your driller forever, very expensive\n" +
+    "`&driller cashin` get all the DogeCoins the driller got, and reset the game"
 
-Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n" + Driller.help, (message, args) => {
+Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n" + Driller.help.replace('&', Prefix), (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
     let DrillerGame = Driller.getGame(message.author.id, EconomySystem)
     args[0] = args[0].toLowerCase()
@@ -244,7 +244,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     ? 100 * EconomySystem.driller - DrillerGame.hp
                     : parseInt(args[1]);
             if (isNaN(cost)) {
-                throw (`I need to know how much you want to repair,\nexample: \`${Prefix.get(message.guild.id)}driller repair 50\` will restore 50 hp of the drill, and will cost 50 DogeCoins`)
+                throw (`You need to give a valid x for where to place your disc\nExample: \`${Prefix.get(message.guild.id)}connect4 place 0\` will place your disc in the leftmost column`)
             }
             if (DrillerGame.hp == 100 * EconomySystem.driller) {
                 message.channel.send("Your driller is arleady in perfect condition.")
@@ -272,7 +272,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             break
         }
         default: {
-            message.channel.send(Driller.help)
+            message.channel.send(Driller.help.replace('&', Prefix.get(message.guild.id)))
             return
         }
     }
@@ -281,4 +281,4 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
         EconomySystem.steal(25 * DrillerGame.depth, message)
         DrillerGame.reset(EconomySystem)
     }
-}, "Game", [new RequiredArg(0, Driller.help, "command"), new RequiredArg(1, undefined, "argument", true)])
+}, "Game", [new RequiredArg(0, Driller.help.replace('&'), "command"), new RequiredArg(1, undefined, "argument", true)])

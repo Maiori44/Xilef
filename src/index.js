@@ -18,7 +18,7 @@ require("./economy.js")
 require("./commands.js")
 require("./buttons.js")
 require("./minigames.js")
-require("./general.js")
+require("./prefix.js")
 
 client.on("ready", () => {
     console.log("- Bot ready")

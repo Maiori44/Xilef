@@ -106,9 +106,9 @@ MineSweeper = new Game(() => {
 })
 MineSweeper.numToTile = [":black_large_square:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:"]
 MineSweeper.help =
-    `\`${Prefix.get()}msweeper board\` shows the current board\n` +
-    `\`${Prefix.get()}msweeper dig (x) (y)\` digs in the given location, the dug tile will give information about the nearby tiles..or explode!\n` +
-    `\`${Prefix.get()}msweeper flag (x) (y)\` puts a flag in the given location, does nothing, but can be used to remember the mines locations`
+    "`&msweeper board` shows the current board\n" +
+    "`&msweeper dig (x) (y)` digs in the given location, the dug tile will give information about the nearby tiles..or explode!\n" +
+    "`&msweeper flag (x) (y)` puts a flag in the given location, does nothing, but can be used to remember the mines locations"
 
 Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" + MineSweeper.help, (message, args) => {
     const MineSweeperGameConstructor = MineSweeperGame
@@ -194,7 +194,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             return
         }
         default: {
-            message.channel.send(MineSweeper.help)
+            message.channel.send(MineSweeper.help.replace('&', Prefix.get(message.guild.id)))
             return
         }
     }
