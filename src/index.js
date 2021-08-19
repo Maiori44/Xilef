@@ -78,3 +78,7 @@ client.on("message", (message) => {
         }
     }
 })
+
+client.on("message", (message) => {
+    if (message.content.trim() == '<@852882606629847050>') Commands.info.action(message)
+})
