@@ -131,4 +131,4 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
             return
         }
     }
-}, "Game",[new RequiredArg(0, Reversi.help, "command"), new RequiredArg(1, undefined, "argument 1", true), new RequiredArg(2, undefined, "argument 2", true), new RequiredArg(3, undefined, "argument 3", true)], "https://en.wikipedia.org/wiki/Connect_Four")
+}, "Game",[new RequiredArg(0, Connect4.help, "command"), new RequiredArg(1, undefined, "argument 1", true), new RequiredArg(2, undefined, "argument 2", true), new RequiredArg(3, undefined, "argument 3", true)], "https://en.wikipedia.org/wiki/Connect_Four")
