@@ -11,7 +11,7 @@ class RequiredArg {
 
     check(args) {
         if (this.notrequired || args[this.argnum]) { return true }
-        throw (this.errormsg)
+        return false
     }
 }
 
@@ -26,11 +26,10 @@ class Command {
     }
 
     call(message, args) {
-        if (this.requiredargs) {
-            for (const arg of this.requiredargs) {
-                arg.check(args)
-            }
-        }
+        if (this.requiredargs)
+            for (const arg of this.requiredargs)
+                if (!arg.check(args)) throw arg.errormsg.replace('&', Prefix.get(message.guild.id))
+
         this.action(message, args)
     }
 }
@@ -62,7 +61,7 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
         const CommandInfoEmbed = new Discord.MessageEmbed()
             .setColor("#0368f8")
             .setTitle(args[0])
-            .setDescription(Commands[args[0]].description)
+            .setDescription(Commands[args[0]].description.replace('&', Prefix.get(message.guild.id)))
             .setTimestamp()
             .setFooter(Object.keys(Commands).length + " total commands")
         let syntax = `\`${Prefix.get(message.guild.id)}` + args[0]
