@@ -40,8 +40,8 @@ Amongus = new Game(() => {
     return Amogus
 })
 Amongus.help =
-    "`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n" +
-    "`&crew eject (color)` to eject a crewmate out, you can only eject once"
+    `\`${Prefix.get()}crew examine (color)\` to examine a crewmate, the impostor might find you though...\n` +
+    `\`${Prefix.get()}crew eject (color)\` to eject a crewmate out, you can only eject once`
 
 Commands.crew = new Command("Find the imposter!\n\n" + Amongus.help + "\npossible options for crewmates are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.", (message, args) => {
     let Amogus = Amongus.getGame(message.author.id)

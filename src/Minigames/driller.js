@@ -195,11 +195,11 @@ Driller.tiers = [
     69420420
 ]
 Driller.help =
-    "`&driller stats` says the stats of your driller\n" +
-    "`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n" +
-    "`&driller repair (amount)` repairs the driller, it won't be free though\n" +
-    "`&driller upgrade` upgrades your driller forever, very expensive\n" +
-    "`&driller cashin` get all the DogeCoins the driller got, and reset the game"
+    `\`${Prefix.get()}driller stats\` says the stats of your driller\n` +
+    `\`${Prefix.get()}driller dig\` makes the driller dig deeper, finding treasures..or lava!\n` +
+    `\`${Prefix.get()}driller repair (amount)\` repairs the driller, it won't be free though\n` +
+    `\`${Prefix.get()}driller upgrade\` upgrades your driller forever, very expensive\n` +
+    `\`${Prefix.get()}driller cashin\` get all the DogeCoins the driller got, and reset the game`
 
 Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n" + Driller.help, (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
@@ -244,7 +244,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     ? 100 * EconomySystem.driller - DrillerGame.hp
                     : parseInt(args[1]);
             if (isNaN(cost)) {
-                throw ("I need to know how much you want to repair,\nexample: `&driller repair 50` will restore 50 hp of the drill, and will cost 50 DogeCoins")
+                throw (`I need to know how much you want to repair,\nexample: \`${Prefix.get(message.guild.id)}driller repair 50\` will restore 50 hp of the drill, and will cost 50 DogeCoins`)
             }
             if (DrillerGame.hp == 100 * EconomySystem.driller) {
                 message.channel.send("Your driller is arleady in perfect condition.")

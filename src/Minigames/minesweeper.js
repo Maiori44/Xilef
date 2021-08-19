@@ -106,9 +106,9 @@ MineSweeper = new Game(() => {
 })
 MineSweeper.numToTile = [":black_large_square:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:"]
 MineSweeper.help =
-    "`&msweeper board` shows the current board\n" +
-    "`&msweeper dig (x) (y)` digs in the given location, the dug tile will give information about the nearby tiles..or explode!\n" +
-    "`&msweeper flag (x) (y)` puts a flag in the given location, does nothing, but can be used to remember the mines locations"
+    `\`${Prefix.get()}msweeper board\` shows the current board\n` +
+    `\`${Prefix.get()}msweeper dig (x) (y)\` digs in the given location, the dug tile will give information about the nearby tiles..or explode!\n` +
+    `\`${Prefix.get()}msweeper flag (x) (y)\` puts a flag in the given location, does nothing, but can be used to remember the mines locations`
 
 Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" + MineSweeper.help, (message, args) => {
     const MineSweeperGameConstructor = MineSweeperGame
@@ -123,7 +123,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             const x = parseInt(args[1])
             const y = parseInt(args[2])
             if (isNaN(x) || isNaN(y)) {
-                message.channel.send("You need to give valid coordinates for where to dig\nExample: `&msweeper dig 0 0` will dig the tile in the top left corner")
+                message.channel.send(`You need to give valid coordinates for where to dig\nExample: \`${Prefix.get(message.guild.id)}msweeper dig 0 0\` will dig the tile in the top left corner`)
                 return
             }
             const MineSweeperGame = MineSweeper.getGame(message.author.id)
@@ -181,7 +181,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             const x = parseInt(args[1])
             const y = parseInt(args[2])
             if (isNaN(x) || isNaN(y)) {
-                message.channel.send("You need to give valid coordinates for where to place the flag\nExample: `&msweeper flag 0 0` will place the flag in the top left corner of the board")
+                message.channel.send(`You need to give valid coordinates for where to place the flag\nExample: \`${Prefix.get(message.guild.id)}msweeper flag 0 0\` will place the flag in the top left corner of the board`)
                 return
             }
             const MineSweeperGame = MineSweeper.getGame(message.author.id)

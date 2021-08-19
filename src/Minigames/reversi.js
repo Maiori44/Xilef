@@ -111,11 +111,11 @@ Reversi.validTile = "<:orange_square:869976862615543818>"
 Reversi.darkTile = "<:black_circle:869976829811884103>"
 Reversi.lightTile = "<:white_circle:869976843263045642>"
 Reversi.help =
-    "`&reversi host` will make you host a match, the person who hosts a match is always dark\n" +
-    "`&reversi join (@user)` will make you join the pinged user's match if they are hosting\n" +
-    "`&reversi quit` will make you leave the current match, if you are the host the joiner will be kicked too\n" +
-    "`&reversi place (x) (y)` will try to place a disk in the given location\n" +
-    "`&reversi board` shows the board of the current match, the users playing and who's turn it is"
+    `\`${Prefix.get()}reversi host\` will make you host a match, the person who hosts a match is always dark\n` +
+    `\`${Prefix.get()}reversi join (@user)\` will make you join the pinged user's match if they are hosting\n` +
+    `\`${Prefix.get()}reversi quit\` will make you leave the current match, if you are the host the joiner will be kicked too\n` +
+    `\`${Prefix.get()}reversi place (x) (y)\` will try to place a disk in the given location\n` +
+    `\`${Prefix.get()}reversi board\` shows the board of the current match, the users playing and who's turn it is`
 
 Commands.reversi = new Command("Capture as most disks as possible to win the match (warning: you need a friend)\n\n" + Reversi.help, (message, args) => {
     args[0] = args[0].toLowerCase()
@@ -140,7 +140,7 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
             let x = parseInt(args[1])
             let y = parseInt(args[2])
             if (isNaN(x) || isNaN(y)) {
-                throw ("You need to give valid coordinates for where to place your disk\nExample: `&reversi place 0 0` will place your disk in the top left corner")
+                throw (`You need to give valid coordinates for where to place your disk\nExample: \`${Prefix.get(message.guild.id)}reversi place 0 0\` will place your disk in the top left corner`)
             }
             if (ReversiGame.board[y] && ReversiGame.board[y][x]) {
                 let tile = ReversiGame.turn == 1 ? Reversi.darkTile : Reversi.lightTile

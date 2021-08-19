@@ -58,11 +58,11 @@ Connect4.emptyTile = "<:blue_square:870714439836516454>"
 Connect4.yellowTile = "<:yellow_circle:870716292515106846>"
 Connect4.redTile = "<:red_circle:870716292640964618>"
 Connect4.help =
-    "`&connect4 host` will make you host a match, the person who hosts a match is always yellow\n" +
-    "`&connect4 join (@user)` will make you join the pinged user's match if they are hosting\n" +
-    "`&connect4 quit` will make you leave the current match, if you are the host the joiner will be kicked too\n" +
-    "`&connect4 place (x)` places a disc in the given x\n" +
-    "`&connect4 board` shows the board of the current match, the users playing and who's turn it is"
+    `\`${Prefix.get()}connect4 host\` will make you host a match, the person who hosts a match is always yellow\n` +
+    `\`${Prefix.get()}connect4 join (@user)\` will make you join the pinged user's match if they are hosting\n` +
+    `\`${Prefix.get()}connect4 quit\` will make you leave the current match, if you are the host the joiner will be kicked too\n` +
+    `\`${Prefix.get()}connect4 place (x)\` places a disc in the given x\n` +
+    `\`${Prefix.get()}connect4 board\` shows the board of the current match, the users playing and who's turn it is`
 
 Commands.connect4 = new Command("Make a line of 4 discs in any directions to win (warning: you need a friend)\n\n" + Connect4.help, (message, args) => {
     args[0] = args[0].toLowerCase()
@@ -89,7 +89,7 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
             }
             let x = parseInt(args[1])
             if (isNaN(x)) {
-                throw ("You need to give a valid x for where to place your disc\nExample: `&connect4 place 0` will place your disc in the leftmost column")
+                throw (`You need to give a valid x for where to place your disc\nExample: \`${Prefix.get(message.guild.id)}connect4 place 0\` will place your disc in the leftmost column`)
             }
             if (x >= 0 && x <= 6) {
                 let tile = Connect4Game.turn == 1 ? Connect4.yellowTile : Connect4.redTile
