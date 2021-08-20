@@ -88,7 +88,7 @@ class EconomySystem {
                 "\n\tUser: " + this.user +
                 "\n\tCurrent DogeCoins: " + this.money +
                 "\n\tAmount given: " + amount +
-                "\n\tBonus: " + nobonus ? "None" : pbonus +
+                "\n\tBonus: " + (nobonus ? "None" : pbonus) +
                 "\n\tTotal given: " + (amount + pbonus))
         }
     }

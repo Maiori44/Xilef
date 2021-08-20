@@ -28,17 +28,17 @@ Commands.prefix = new Command('Changes the prefix for the current server. Put `d
 			"\n\tReason: Debug mode is active" +
 			"\n\tGuild name: " + message.guild.name +
 			"\n\tGuild ID: " + message.guild.id)
-		console.log("- " + Colors.blue.colorize("Update of ") + Colors.hblue.colorize("prefixes.json") + (" was cancelled due to debug mode being active"))
+		console.log("- " + Colors.blue.colorize("Update of ") + Colors.hblue.colorize("prefixes.json") + Colors.blue.colorize(" was cancelled due to debug mode being active"))
 		throw ("This command cannot be used while in debug mode")
 	}
 	if (!message.member.permissions.has("MANAGE_GUILD")) {
-		onsole.log("- " + Colors.blue.colorize("Aborted server prefix update:") +
+		console.log("- " + Colors.blue.colorize("Aborted server prefix update:") +
 			"\n\tCurrent prefix: " + Prefix.get(message.guild.id) +
 			"\n\tRequested prefix: " + args[0] +
 			"\n\tReason: The user does not have \"Manage Guild\" permissions" +
 			"\n\tGuild name: " + message.guild.name +
 			"\n\tGuild ID: " + message.guild.id)
-		console.log("- " + Colors.blue.colorize("Update of ") + Colors.hblue.colorize("prefixes.json") + (" was cancelled due to the user not having \"Manage Guild\" permissions"))
+		console.log("- " + Colors.blue.colorize("Update of ") + Colors.hblue.colorize("prefixes.json") + Colors.blue.colorize(" was cancelled due to the user not having \"Manage Guild\" permissions"))
 		throw ("You need \"Manage Guild\" permissions for this command")
 	}
 	console.log("- " + Colors.cyan.colorize("Successfully updated server prefix:") +
