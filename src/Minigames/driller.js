@@ -220,11 +220,6 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                 return;
             }
 
-            if (depth > 20) {
-                message.channel.send("Error : you cannot dig that many layers, please use a value below 21.")
-                break;
-            }
-
             if (depth > 10) {
                 message.channel.send("Warning : Given that much depth, the chances of hitting lava are very high.")
             }
