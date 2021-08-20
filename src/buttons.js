@@ -77,7 +77,7 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
             console.log("- " + Colors.cyan.colorize("Sucessfully closed a poll:") +
                 "\n\tCreator: " + message.author.username +
                 "\n\tPoll title: " + Polls[message.id].title +
-                "\n\tPoll options: " + JSON.stringify(Polls[buttonid].options) +
+                "\n\tPoll options: " + JSON.stringify(Polls[message.id].options) +
                 "\n\tPoll voters: " + JSON.stringify(Polls[message.id].users))
             Polls[message.id] = undefined
         }, parseFloat(args[1]) * 60 * 1000 || 300000)

@@ -44,7 +44,7 @@ require("./minigames.js")
 
 client.on("ready", () => {
     console.log("- Bot ready")
-    if (debugmode) console.log("- \x1B[31mThe current bot session is running in debug mode, no data will be saved" + Colors.white)
+    if (debugmode) console.log("- " + Colors.yellow.colorize("The current bot session is running in debug mode, no data will be saved"))
     client.user.setActivity("ping me for info")
 })
 client.on("message", (message) => {
