@@ -78,7 +78,7 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
                 "\n\tCreator: " + message.author.username +
                 "\n\tPoll title: " + Polls[message.id].title +
                 "\n\tPoll options: " + JSON.stringify(Polls[buttonid].options) +
-                "\n\tPoll voters: " + Object.keys(Polls[message.id].users))
+                "\n\tPoll voters: " + JSON.stringify(Polls[message.id].users))
             Polls[message.id] = undefined
         }, parseFloat(args[1]) * 60 * 1000 || 300000)
     })
@@ -109,7 +109,7 @@ client.on('clickButton', async (button) => {
                 "\n\tPoll ID: " + buttonid +
                 "\n\tPoll title: " + Polls[buttonid].title +
                 "\n\tPoll options: " + JSON.stringify(Polls[buttonid].options) +
-                "\n\tPoll voters: " + Object.keys(Polls[buttonid].users))
+                "\n\tPoll voters: " + JSON.stringify(Polls[buttonid].users))
             Polls[buttonid].update()
         } else {
             console.log("- " + Colors.yellow.colorize("Failed attempt at voting in a poll, the selected option doesn't exist:") +
@@ -119,7 +119,7 @@ client.on('clickButton', async (button) => {
                 "\n\tPoll title: " + Polls[buttonid].title +
                 "\n\tRequested option name: " + buttonname +
                 "\n\tPoll options: " + JSON.stringify(Polls[buttonid].options) +
-                "\n\tPoll voters: " + Object.keys(Polls[buttonid].users))
+                "\n\tPoll voters: " + JSON.stringify(Polls[buttonid].users))
             await button.reply.send("Somehow, that isn't one of the poll's option.", true)
         }
     } else {
