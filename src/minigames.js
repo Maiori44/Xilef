@@ -26,7 +26,7 @@ class MPGame {
 
     makeGame(message) {
         if (this.joiners[message.author.id]) {
-            console.log("- " + Colors.blue.colorize("Cancelled attempt at creating a new MPGame"))
+            console.log("- " + Colors.blue.colorize("Aborted attempt at creating a new MPGame"))
             throw ("You arleady are in someone else's match.")
         }
         let Game = this.gamemaker(message)
@@ -53,19 +53,19 @@ class MPGame {
 
     connectGame(message) {
         if (this.hosts[message.author.id]) {
-            console.log("- " + Colors.blue.colorize("Cancelled attempt at joining a MPGame, the user is arleady in a match"))
+            console.log("- " + Colors.blue.colorize("Aborted attempt at joining a MPGame, the user is arleady in a match"))
             throw ("You are arleady hosting a match yourself.")
         }
         let host = message.mentions.users.first()
         if (!host) {
-            console.log("- " + Colors.blue.colorize("Cancelled attempt at joining a MPGame, the user did not provide the host they want to join"))
+            console.log("- " + Colors.blue.colorize("Aborted attempt at joining a MPGame, the user did not provide the host they want to join"))
             throw ("You need to ping the person you want to join.")
         }
         if (!this.hosts[host.id]) {
-            console.log("- " + Colors.blue.colorize("Cancelled attempt at joining a MPGame, the given host is not hosting any match"))
+            console.log("- " + Colors.blue.colorize("Aborted attempt at joining a MPGame, the given host is not hosting any match"))
             throw ("Could not find the match.")
         } else if (this.hosts[host.id].joinername != "`none`") {
-            console.log("- " + Colors.blue.colorize("Cancelled attempt at joining a MPGame, the requested match has arleady a joiner"))
+            console.log("- " + Colors.blue.colorize("Aborted attempt at joining a MPGame, the requested match has arleady a joiner"))
             throw ("Someone is arleady inside this match.")
         }
         this.joiners[message.author.id] = this.hosts[host.id]
@@ -109,7 +109,7 @@ class MPGame {
                 "\n\tJoiner ID: " + this.joiners[id].joiner)
             return quitmsg
         } else {
-            console.log("- " + Colors.blue.colorize("Cancelled attempt at leaving a MPGame, the user is not inside any match"))
+            console.log("- " + Colors.blue.colorize("Aborted attempt at leaving a MPGame, the user is not inside any match"))
             throw ("You are not inside any match.")
         }
     }
