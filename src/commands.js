@@ -22,7 +22,7 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- " + Colors.green.colorize("Loaded command " + (Object.keys(Commands).length + 1) + "/31"))
+        console.log("- " + Colors.green.colorize("Loaded command " + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/31")))
     }
 
     call(message, args) {
@@ -297,7 +297,7 @@ Commands.rankup = new Command("Increases your rank if you have enough money\nthe
     for (let i = 1; i <= times; i++) {
         let needed = 100 * EconomySystem.rank
         if (EconomySystem.buy(needed, message, undefined, EconomySystem.user + " needs " + (needed - EconomySystem.money) + " more DogeCoins for rank " + (EconomySystem.rank + 1))) {
-            EconomySystem.rank = EconomySystem.rank + 1
+            EconomySystem.alterValue("rank", 1, 1000000000)
         } else break
     }
     if (oldrank != EconomySystem.rank) {

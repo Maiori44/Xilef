@@ -10,10 +10,10 @@ class Game {
         if (!this.list[ID]) {
             this.list[ID] = this.makeGame(EconomySystem)
             console.log("- " + Colors.cyan.colorize("Successfully created a new Game:") +
-                "\n\tCreator name: " + EconomySystem.user +
+                "\n\tCreator name: " + (EconomySystem ? EconomySystem.user : Colors.hyellow.colorize("Unknown")) +
                 "\n\tCreator ID: " + ID)
         }
-        return this.list[id]
+        return this.list[ID]
     }
 }
 

@@ -16,7 +16,7 @@ class Colorizer {
     }
 
     colorize(text) {
-        return this.color + text + Colors.white.color
+        return this.color + text + Colors.white.color + Colors.hblack.color
     }
 }
 
@@ -27,7 +27,14 @@ Colors = {
     blue: new Colorizer("\x1B[34m"),
     yellow: new Colorizer("\x1B[33m"),
     purple: new Colorizer("\x1B[35m"),
-    cyan: new Colorizer("\x1B[36m")
+    cyan: new Colorizer("\x1B[36m"),
+    hblack: new Colorizer("\x1B[40m"),
+    hred: new Colorizer("\x1B[41m"),
+    hgreen: new Colorizer("\x1B[42m"),
+    hyellow: new Colorizer("\x1B[43m"),
+    hblue: new Colorizer("\x1B[44m"),
+    hpurple: new Colorizer("\x1B[45m"),
+    hcyan: new Colorizer("\x1B[46m"),
 }
 
 GetPercentual = () => {

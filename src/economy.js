@@ -45,29 +45,38 @@ class EconomySystem {
         this.user = username //their username
         this.impostors = backup.impostors || 0 //the amount of times they won in &crew
         this.driller = backup.driller || 1 //their &driller tier
-        this.floor = backup.floor || 0, //their record in &dungeon
-        this.msweeper = backup.msweeper || 0, //the amount of times they won in &msweeper
-        this.day = backup.day || Date.now()-Date.day //last time they got &daily
+        this.floor = backup.floor || 0 //their record in &dungeon
+        this.msweeper = backup.msweeper || 0 //the amount of times they won in &msweeper
+        this.day = backup.day || Date.now() - Date.day //last time they got &daily
         this.reversi = backup.reversi || 0 //the amount of times they won in &reversi
         this.connect4 = backup.connect4 || 0 //the amount of times they won in &connect4
-        this.vhour = backup.vhour || Date.now()-Date.hour //last time they rolled
+        this.vhour = backup.vhour || Date.now() - Date.hour //last time they rolled
         this.vgot = new FlagSystem(60, backup.vgot) //flag system for the different v_s
         this.achievments = new FlagSystem(8, backup.achievments) //flag system for the achievements
+        console.log("- " + Colors.purple.colorize(backup ? "Restored EconomySystem of " : "Created EconomySystem of ") + Colors.hpurple.colorize(this.user))
     }
 
-    alterValue(flagname, amount, max) {
-        this[flagname] = Math.min(this[flagname] + amount, max || Infinity)
+    alterValue(valuename, amount, max) {
+        console.log("- " + Colors.purple.colorize("Altered a value of an EconomySystem:") +
+            "\n\tUser: " + this.user +
+            "\n\tValue: " + valuename +
+            "\n\tAmount: " + amount)
+        this[valuename] = Math.min(this[valuename] + amount, max || Infinity)
     }
 
     award(name, message) {
         if (!this.achievments.checkFlag(Achievments[name].value)) {
             this.achievments.addFlag(Achievments[name].value)
             message.channel.send(this.user + " just got the \"" + Achievments[name].id + "\" achievement!")
+            console.log("- " + Colors.purple.colorize("Awarded achievement to an EconomySystem:") +
+                "\n\tUser: " + this.user +
+                "\n\tAchievement name: " + name +
+                "\n\tAchievement value: " + Achievments[name].value)
         }
     }
 
     give(amount, message, nobonus) {
-        let pbonus = Math.floor(((amount / 100) * (this.rank - 1)))
+        const pbonus = Math.floor(((amount / 100) * (this.rank - 1)))
         this.money = nobonus ? this.money + amount : this.money + amount + pbonus
         if (message) {
             let msg = this.user + " gained " + amount + " DogeCoins!"
@@ -75,6 +84,12 @@ class EconomySystem {
                 msg = msg + " (+" + pbonus + " bonus)"
             }
             message.channel.send(msg)
+            console.log("- " + Colors.purple.colorize("Given DogeCoins to an EconomySystem:") +
+                "\n\tUser: " + this.user +
+                "\n\tCurrent DogeCoins: " + this.money +
+                "\n\tAmount given: " + amount +
+                "\n\tBonus: " + nobonus ? "None" : pbonus +
+                "\n\tTotal given: " + (amount + pbonus))
         }
     }
 
@@ -83,6 +98,10 @@ class EconomySystem {
         if (message) {
             message.channel.send(this.user + " lost " + amount + " DogeCoins!")
         }
+        console.log("- " + Colors.purple.colorize("Removed DogeCoins to an EconomySystem:") +
+            "\n\tUser: " + this.user +
+            "\n\tCurrent DogeCoins: " + this.money +
+            "\n\tAmount taken: " + amount)
     }
 
     buy(amount, message, tmsg, fmsg) {
@@ -90,6 +109,11 @@ class EconomySystem {
             if (message) {
                 message.channel.send("that amount is too low, pal")
             }
+            console.log("- " + Colors.blue.colorize("Aborted attempt at buying from an EconomySystem:") +
+                "\n\tUser: " + this.user +
+                "\n\tCurrent DogeCoins: " + this.money +
+                "\n\tReason: the price was 0 or negative" +
+                "\n\tPrice: " + amount)
             return false
         }
         if (this.money >= amount) {
@@ -97,11 +121,20 @@ class EconomySystem {
             if (message && tmsg) {
                 message.channel.send(tmsg)
             }
+            console.log("- " + Colors.purple.colorize("Sucessfully attempt of buying from an EconomySystem:") +
+                "\n\tUser: " + this.user +
+                "\n\tCurrent DogeCoins: " + this.money +
+                "\n\tPrice: " + amount)
             return true
         }
         if (message && fmsg) {
             message.channel.send(fmsg)
         }
+        console.log("- " + Colors.blue.colorize("Aborted attempt at buying from an EconomySystem:") +
+            "\n\tUser: " + this.user +
+            "\n\tCurrent DogeCoins: " + this.money +
+            "\n\tReason: the user doesn't have enough DogeCoins" +
+            "\n\tPrice: " + amount)
         return false
     }
 }
@@ -123,7 +156,7 @@ Economy = {
         let json = JSON.parse(fs.readFileSync("./src/Data/economy.json", "utf8"));
         json = { ...json, ...Economy.list }
         fs.writeFileSync("./src/Data/economy.json", JSON.stringify(json, null, 4), "utf8")
-        console.log("- " + Colors.purple.colorize("Successfully updated file \"economy.json\""))
+        console.log("- " + Colors.purple.colorize("Successfully updated file ") + Colors.hpurple.colorize("economy.json"))
     },
     flag: class {
         constructor(id, bit) {

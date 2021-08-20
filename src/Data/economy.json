@@ -1,6 +1,6 @@
 {
     "621307633718132746": {
-        "money": 4909,
+        "money": 4271,
         "rank": 50,
         "user": "Felix44",
         "impostors": 2,
@@ -10,7 +10,7 @@
         "day": 1629366148495,
         "reversi": 2,
         "connect4": 10,
-        "vhour": 1629405024919,
+        "vhour": 1629453992671,
         "vgot": "238859486779779369",
         "achievments": "0"
     },
@@ -180,7 +180,7 @@
         "achievments": "0"
     },
     "604213801927180295": {
-        "money": 109076,
+        "money": 104026,
         "rank": 101,
         "user": "Syphon",
         "impostors": 0,
@@ -190,8 +190,8 @@
         "day": 1629044929782,
         "reversi": 4,
         "connect4": 4,
-        "vhour": 1629453098536,
-        "vgot": "35376849769010",
+        "vhour": 1629464321493,
+        "vgot": "35376883323442",
         "achievments": "0"
     },
     "483715787467653122": {
@@ -300,18 +300,18 @@
         "achievments": "0"
     },
     "570503517832478720": {
-        "money": 34306,
+        "money": 33278,
         "rank": 42,
         "user": "Oh God Not The Belt",
         "impostors": 0,
         "driller": 5,
         "floor": 15,
-        "msweeper": 8,
+        "msweeper": 12,
         "day": 1628419767943,
         "reversi": 1,
         "connect4": 0,
-        "vhour": 1629410486263,
-        "vgot": "577023705546924132",
+        "vhour": 1629460303526,
+        "vgot": "577023705547186276",
         "achievments": "0"
     },
     "799228822889037824": {
@@ -360,7 +360,7 @@
         "achievments": "255"
     },
     "661283181403701288": {
-        "money": 1440,
+        "money": 1390,
         "rank": 1,
         "user": "ThatOneGuy",
         "impostors": 0,
@@ -370,8 +370,8 @@
         "day": 1629408499878,
         "reversi": 0,
         "connect4": 0,
-        "vhour": 1629409762275,
-        "vgot": "2147483648",
+        "vhour": 1629457773702,
+        "vgot": "10737418240",
         "achievments": "0"
     },
     "218516967022264321": {
@@ -510,7 +510,7 @@
         "achievments": "0"
     },
     "712610883620044896": {
-        "money": 5725,
+        "money": 8350,
         "rank": 85,
         "user": "Weather Kek",
         "impostors": 0,
