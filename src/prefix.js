@@ -19,10 +19,14 @@ Prefix = {
   }
 }
 
-Commands.prefix = new Command('Changes the prefix for the current server. Put `default` as the argument of `prefix` to reset the current server-prefix to the global prefix', (message , args) => {
+Commands.prefix = new Command('Changes the prefix for the current server. Put `default` as the argument of `prefix` to reset the current server-prefix to the global prefix\nThe user needs \"Manage Guild\" permissions for this command', (message , args) => {
     if (debugmode) {
       console.log("- " + Colors.blue.colorize("Update of \"prefixes.json\" was cancelled due to debug mode being active"))
       throw ("This command cannot be used while in debug mode")
+    }
+    if (!message.member.permissions.has("MANAGE_GUILD")) {
+      console.log("- " + Colors.blue.colorize("Update of \"prefixes.json\" was cancelled due to the user not having \"Manage Guild\" permissions"))
+      throw ("You need \"Manage Guild\" permissions for this command")
     }
     fs.writeFileSync(
         "./src/Data/prefixes.json",
