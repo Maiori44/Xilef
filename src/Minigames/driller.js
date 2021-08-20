@@ -7,6 +7,7 @@ class DrillerGame {
         this.cash = 0
         this.hp = 100 * EconomySystem.driller
         this.hitlava = false
+        this.locked = false
     }
 
     reset(EconomySystem) {
@@ -22,7 +23,7 @@ class DrillerGame {
             .setDescription("```lua\ndepth: " + this.depth +
                 "\ntier: " + EconomySystem.driller +
                 "\ncash found: " + this.cash +
-                "\nhealth: " + this.hp + "/" + 100 * EconomySystem.driller +"```")
+                "\nhealth: " + this.hp + "/" + 100 * EconomySystem.driller + "```")
             .setTimestamp();
     }
 }
@@ -196,7 +197,7 @@ Driller.tiers = [
 ]
 Driller.help =
     "`&driller stats` says the stats of your driller\n" +
-    "`&driller dig` makes the driller dig deeper, finding treasures..or lava!\n" +
+    "`&driller dig [depth]` makes the driller dig deeper, finding treasures..or lava!\n" +
     "`&driller repair (amount/\"max\")` repairs the driller, it won't be free though\n" +
     "`&driller upgrade` upgrades your driller forever, very expensive\n" +
     "`&driller cashin` get all the DogeCoins the driller got, and reset the game"
@@ -208,34 +209,82 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
     switch (args[0]) {
         case "stats": {
             message.channel.send(DrillerGame.getInfo(EconomySystem))
+            DrillerGame.locked = false
             break
         }
         case "dig": {
-            if (Driller.Ores[DrillerGame.depth].tier > EconomySystem.driller) {
-                let InfoEmbed = DrillerGame.getInfo(EconomySystem)
-                InfoEmbed.addField("Latest event:", "Your driller is too weak to dig any further!")
-                message.channel.send(InfoEmbed)
-                return
+
+            if (DrillerGame.locked) {
+                message.channel.send("Error : cannot request to dig while the bot already is digging")
+                return;
             }
-            let msg = ""
-            let hurtchance = GetPercentual()
-            if (DrillerGame.hitlava) hurtchance = hurtchance * 2
-            if (hurtchance <= Driller.Ores[DrillerGame.depth].lavachance) {
-                msg = "Your driller digs deeper..and finds lava! Your driller got damaged!"
-                DrillerGame.hp = DrillerGame.hp - Math.max((7 * DrillerGame.depth), 1)
-                DrillerGame.hitlava = true
-            } else {
-                msg = "Your driller digs deeper..and finds " + Driller.Ores[DrillerGame.depth].name + "! (worth " + Driller.Ores[DrillerGame.depth].value + ")"
-                DrillerGame.cash = DrillerGame.cash + Driller.Ores[DrillerGame.depth].value
-                DrillerGame.depth++
-                if (Driller.Ores[DrillerGame.depth].tier > EconomySystem.driller) {
-                    msg = msg + "\nYour driller is struggling to dig any further, you might need to upgrade it"
+
+            let depth = parseInt(args[1]);
+
+            if (depth < 1) {
+                message.channel.send("What are you doing? You can only go forward, sorry my friend.");
+                return;
+            }
+
+            if (depth > 10) {
+                message.channel.send("Warning : Given that much depth, the chances of hitting lava are very high.")
+            }
+            
+            if (depth > 21) {
+                message.channel.send("Error : you cannot dig that many layers, please use a value below 21.")
+            }
+
+            if (isNaN(depth)) {
+                message.channel.send("Ignoring invalid argument or nothing (expected an integer), defaulting to a depth of 1.")
+                depth = 1;
+            }
+
+            
+            DrillerGame.locked = true
+
+            let results = [];
+
+            for (let x = 1; x <= depth; x++) {
+                let hurtchance = GetPercentual();
+                if (DrillerGame.hitlava) hurtchance = hurtchance * 2
+
+                let currentOre = Driller.Ores[DrillerGame.depth]
+                if (currentOre.tier > EconomySystem.driller) {
+
+                    results += "Your driller can't dig any further, please upgrade it to dig further. For now, cashin to get the money you found."
+                    break;
                 }
-                DrillerGame.hitlava = false
+
+                if (hurtchance <= currentOre.lavachance) {
+                    const lostHp = Math.max((7 * DrillerGame.depth), 1)
+                    DrillerGame.hp -= lostHp    
+                    DrillerGame.hitlava = true
+                    results += `- Hit lava (lost ${lostHp} HP) \n`
+                }
+                else {
+                    results += `- Found ${currentOre.name}, has a value of ${currentOre.value} \n`
+                    DrillerGame.cash += currentOre.value
+                    DrillerGame.depth++
+
+                    DrillerGame.hitlava = false
+
+                    if (currentOre.tier > EconomySystem.driller) {
+                        results += "Your driller cannot dig any further, please upgrade it when possible."
+                        break;
+                    }
+                }
+
             }
-            let InfoEmbed = DrillerGame.getInfo(EconomySystem)
-            InfoEmbed.addField("Latest event:", msg)
-            message.channel.send(InfoEmbed)
+
+            const resultEmbed = new Discord.MessageEmbed()
+                .setColor("#964B00")
+                .addField(
+                    "**Results**", results.toString()
+                )
+
+            message.channel.send(resultEmbed);
+
+            DrillerGame.locked = false
             break
         }
         case "repair": {
