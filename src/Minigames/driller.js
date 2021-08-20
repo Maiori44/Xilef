@@ -220,16 +220,11 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                 return;
             }
 
-            if (depth > 10) {
-                message.channel.send("Warning : Given that much depth, the chances of hitting lava are very high.")
-            }
-
-
             if (isNaN(depth)) {
                 depth = 1;
             }
 
-            let results = [];
+            let log = [];
 
             for (let x = 1; x <= depth; x++) {
                 let hurtchance = GetPercentual();
@@ -238,7 +233,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                 let currentOre = Driller.Ores[DrillerGame.depth]
                 if (currentOre.tier > EconomySystem.driller) {
 
-                    results += "Your driller can't dig any further, please upgrade it to dig further. For now, cashin to get the money you found."
+                    log += "Your driller can't dig any further, please upgrade it to dig further. For now, cashin to get the money you found."
                     break;
                 }
 
@@ -246,17 +241,17 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     const lostHp = Math.max((7 * DrillerGame.depth), 1)
                     DrillerGame.hp -= lostHp
                     DrillerGame.hitlava = true
-                    results += `Hit lava (lost ${lostHp} HP => ${DrillerGame.hp}) \n`
+                    log += `Hit lava (lost ${lostHp} HP => ${DrillerGame.hp}) \n`
                 }
                 else {
-                    results += `Found ${currentOre.name}, has a value of ${currentOre.value} \n`
+                    log += `Found ${currentOre.name}, has a value of ${currentOre.value} \n`
                     DrillerGame.cash += currentOre.value
                     DrillerGame.depth++
 
                     DrillerGame.hitlava = false
 
                     if (currentOre.tier > EconomySystem.driller) {
-                        results += "Your driller cannot dig any further, please upgrade it when possible. Automatically cashing in."
+                        log += "Your driller cannot dig any further, please upgrade it when possible. Automatically cashing in."
 
                         message.channel.send("Your driller comes back, and gives you all the DogeCoins it had collected.")
                         EconomySystem.give(DrillerGame.cash, message)
@@ -269,9 +264,16 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             }
 
             const resultEmbed = DrillerGame.getInfo(EconomySystem)
-                .addField(
-                    "**Log : **", results.toString()
-                )
+            
+            let results = [];
+            for (var i = 0; i < log.toString().length; i += 1024)
+                results.push(log.toString().substring(i, i + 1024));
+
+            if (results.length > 1)
+                resultEmbed.addField("Warning : ", "The ore log has been split up to allow it to be sent.")
+
+            for (let i = 0; i < results.length; i++)
+                resultEmbed.addField("**Page " + (i + 1) + "** :", results[i], true);
 
             message.channel.send(resultEmbed)
 
