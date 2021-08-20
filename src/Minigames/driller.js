@@ -211,7 +211,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             DrillerGame.locked = false
             break
         }
-        case "dig": { 
+        case "dig": {
 
             let depth = parseInt(args[1]);
 
@@ -219,7 +219,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                 message.channel.send("What are you doing? You can only go forward, sorry my friend.");
                 return;
             }
-            
+
             if (depth > 20) {
                 message.channel.send("Error : you cannot dig that many layers, please use a value below 21.")
                 break;
@@ -228,7 +228,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             if (depth > 10) {
                 message.channel.send("Warning : Given that much depth, the chances of hitting lava are very high.")
             }
-            
+
 
             if (isNaN(depth)) {
                 depth = 1;
@@ -249,7 +249,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
 
                 if (hurtchance <= currentOre.lavachance) {
                     const lostHp = Math.max((7 * DrillerGame.depth), 1)
-                    DrillerGame.hp -= lostHp    
+                    DrillerGame.hp -= lostHp
                     DrillerGame.hitlava = true
                     results += `Hit lava (lost ${lostHp} HP => ${DrillerGame.hp}) \n`
                 }
@@ -261,8 +261,13 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     DrillerGame.hitlava = false
 
                     if (currentOre.tier > EconomySystem.driller) {
-                        results += "Your driller cannot dig any further, please upgrade it when possible."
-                        break;
+                        results += "Your driller cannot dig any further, please upgrade it when possible. Automatically cashing in."
+
+                        message.channel.send("Your driller comes back, and gives you all the DogeCoins it had collected.")
+                        EconomySystem.give(DrillerGame.cash, message)
+                        DrillerGame.reset(EconomySystem)
+
+                        break
                     }
                 }
 
