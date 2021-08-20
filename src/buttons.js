@@ -124,8 +124,6 @@ client.on('clickButton', async (button) => {
         }
     } else {
         console.log("- " + Colors.blue.colorize("Failed attempt at voting in a poll, the poll is closed/does not exist:") +
-            "\n\tVoter name: " + button.clicker.user.username +
-            "\n\tVoter ID: " + button.clicker.id +
             "\n\tRequested Poll ID: " + buttonid +
             "\n\tOption name: " + buttonname)
         await button.reply.send("This poll is closed.", true)
