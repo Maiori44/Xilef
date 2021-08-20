@@ -7,7 +7,6 @@ class DrillerGame {
         this.cash = 0
         this.hp = 100 * EconomySystem.driller
         this.hitlava = false
-        this.locked = false
     }
 
     reset(EconomySystem) {
@@ -212,12 +211,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             DrillerGame.locked = false
             break
         }
-        case "dig": {
-
-            if (DrillerGame.locked) {
-                message.channel.send("Error : cannot request to dig while the bot already is digging")
-                return;
-            }
+        case "dig": { 
 
             let depth = parseInt(args[1]);
 
@@ -225,22 +219,20 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                 message.channel.send("What are you doing? You can only go forward, sorry my friend.");
                 return;
             }
+            
+            if (depth > 20) {
+                message.channel.send("Error : you cannot dig that many layers, please use a value below 21.")
+                break;
+            }
 
             if (depth > 10) {
                 message.channel.send("Warning : Given that much depth, the chances of hitting lava are very high.")
             }
             
-            if (depth > 21) {
-                message.channel.send("Error : you cannot dig that many layers, please use a value below 21.")
-            }
 
             if (isNaN(depth)) {
-                message.channel.send("Ignoring invalid argument or nothing (expected an integer), defaulting to a depth of 1.")
                 depth = 1;
             }
-
-            
-            DrillerGame.locked = true
 
             let results = [];
 
@@ -259,10 +251,10 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     const lostHp = Math.max((7 * DrillerGame.depth), 1)
                     DrillerGame.hp -= lostHp    
                     DrillerGame.hitlava = true
-                    results += `- Hit lava (lost ${lostHp} HP) \n`
+                    results += `Hit lava (lost ${lostHp} HP => ${DrillerGame.hp}) \n`
                 }
                 else {
-                    results += `- Found ${currentOre.name}, has a value of ${currentOre.value} \n`
+                    results += `Found ${currentOre.name}, has a value of ${currentOre.value} \n`
                     DrillerGame.cash += currentOre.value
                     DrillerGame.depth++
 
@@ -276,15 +268,13 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
 
             }
 
-            const resultEmbed = new Discord.MessageEmbed()
-                .setColor("#964B00")
+            const resultEmbed = DrillerGame.getInfo(EconomySystem)
                 .addField(
-                    "**Results**", results.toString()
+                    "**Log : **", results.toString()
                 )
 
-            message.channel.send(resultEmbed);
+            message.channel.send(resultEmbed)
 
-            DrillerGame.locked = false
             break
         }
         case "repair": {
