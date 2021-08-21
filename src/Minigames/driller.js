@@ -208,7 +208,6 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
     switch (args[0]) {
         case "stats": {
             message.channel.send(DrillerGame.getInfo(EconomySystem))
-            DrillerGame.locked = false
             break
         }
         case "dig": {
