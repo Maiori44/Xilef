@@ -227,6 +227,10 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             let log = [];
 
             for (let x = 1; x <= depth; x++) {
+                if (DrillerGame.hp <= 0) {
+                    log += "You died!"
+                    break
+                }
                 let hurtchance = GetPercentual();
                 if (DrillerGame.hitlava) hurtchance = hurtchance * 2
 
