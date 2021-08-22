@@ -247,7 +247,11 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     log += `Hit lava (lost ${lostHp} HP => ${DrillerGame.hp}) \n`
                 }
                 else {
-                    log += `Found ${currentOre.name}, has a value of ${currentOre.value} \n`
+                    let text = `Found ${currentOre.name}`
+                    if (currentOre.value != 0)
+                        text += `, has a value of ${currentOre.value}`
+                    log += text
+                    
                     DrillerGame.cash += currentOre.value
                     DrillerGame.depth++
 
