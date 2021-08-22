@@ -77,7 +77,7 @@ client.on("message", (message) => {
                 Commands[command.toLowerCase()].call(message, args)
                 if (!debugmode) {
                     Economy.save()
-                } else console.log("- " + Colors.blue.colorize("Update of \"economy.json\" was cancelled due to debug mode being active"))
+                } else console.log("- " + Colors.blue.colorize("Update of ") + Colors.hblue.colorize("economy.json") + Colors.blue.colorize(" was cancelled due to debug mode being active"))
                 if (warning) {
                     message.channel.send(new Discord.MessageEmbed()
                         .setColor("#ff0000")
