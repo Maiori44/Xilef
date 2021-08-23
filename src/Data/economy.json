@@ -1,6 +1,6 @@
 {
     "621307633718132746": {
-        "money": 854,
+        "money": 0,
         "rank": 50,
         "user": "Felix44",
         "impostors": 2,
@@ -105,7 +105,7 @@
         "achievments": "0"
     },
     "484682433925611542": {
-        "money": 261804795,
+        "money": 261803073,
         "rank": 7000,
         "user": "Dark_Brick",
         "impostors": 0,
@@ -150,7 +150,7 @@
         "achievments": "0"
     },
     "724232875238621204": {
-        "money": 446767,
+        "money": 444867,
         "rank": 85,
         "user": "Fele88",
         "impostors": 1,
@@ -195,14 +195,14 @@
         "achievments": "0"
     },
     "483715787467653122": {
-        "money": 2653,
-        "rank": 41,
+        "money": 15173,
+        "rank": 52,
         "user": "poly translator*",
         "impostors": 18,
         "driller": 5,
         "floor": 11,
         "msweeper": 0,
-        "day": 1629376726444,
+        "day": 1629724778915,
         "reversi": 0,
         "connect4": 1,
         "vhour": 1629649737682,
@@ -390,18 +390,18 @@
         "achievments": "0"
     },
     "311819610380959745": {
-        "money": 724,
-        "rank": 61,
+        "money": 9931,
+        "rank": 100,
         "user": "DRKSAO",
         "impostors": 5,
-        "driller": 7,
-        "floor": 19,
+        "driller": 8,
+        "floor": 21,
         "msweeper": 0,
-        "day": 1629616736954,
+        "day": 1629724766421,
         "reversi": 0,
         "connect4": 6,
-        "vhour": 1629649956780,
-        "vgot": "18084767288655882",
+        "vhour": 1629731268455,
+        "vgot": "18084767422881802",
         "achievments": "0"
     },
     "649253657862471694": {
@@ -480,12 +480,12 @@
         "achievments": "0"
     },
     "684285694063018048": {
-        "money": 42969,
-        "rank": 43,
+        "money": 62455,
+        "rank": 75,
         "user": "LJMSU",
         "impostors": 0,
         "driller": 6,
-        "floor": 10,
+        "floor": 16,
         "msweeper": 1,
         "day": 1629366014841,
         "reversi": 0,
