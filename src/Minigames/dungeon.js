@@ -252,7 +252,7 @@ Dungeon.attacks = {
     ice: new Attack("Ice Blast", 50, (Attacker, Attacked) => {
         const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 1.4)) +
             "\n" + Attacked.evmsg + "mana decreased!"
-        Attacked.defense = Math.floor(Attacked.defense * 0.6)
+        Attacked.mana = Math.floor(Attacked.mana * 0.6)
         return msg
     }),
     ground: new Attack("Earthquake", 75, (Attacker, Attacked) => {
