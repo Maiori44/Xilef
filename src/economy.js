@@ -121,7 +121,7 @@ class EconomySystem {
             if (message && tmsg) {
                 message.channel.send(tmsg)
             }
-            console.log("- " + Colors.purple.colorize("Sucessfully attempt of buying from an EconomySystem:") +
+            console.log("- " + Colors.purple.colorize("Sucessful attempt at buying from an EconomySystem:") +
                 "\n\tUser: " + this.user +
                 "\n\tCurrent DogeCoins: " + this.money +
                 "\n\tPrice: " + amount)
