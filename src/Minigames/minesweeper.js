@@ -186,7 +186,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             }
             const MineSweeperGame = MineSweeper.getGame(message.author.id)
             if (MineSweeperGame.board[y] && MineSweeperGame.board[y][x]) {
-                MineSweeperGame.board[y][x].isflagged = true
+                MineSweeperGame.board[y][x].isflagged = !MineSweeperGame.board[y][x].isflagged
                 message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem))
             } else {
                 message.channel.send("That location is out of bounds.")
