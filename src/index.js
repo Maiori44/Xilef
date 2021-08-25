@@ -55,10 +55,18 @@ client.on("ready", () => {
     client.user.setActivity("ping me for info")
 })
 client.on("message", (message) => {
+    if (message.author.bot) return
+    if (message.guild === null) {
+        message.author.send("I can't answer command calls from DMs, join my official server for that!\nhttps://discord.gg/Qyz5HgrxWg")
+        console.error("- " + Colors.blue.colorize("Potential command call ended due to call being in a Direct Message:") +
+            "\n\tMessage: " + message.content +
+            "\n\tCalled at: " + new Date() +
+            "\n\tCaller: " + message.author.username)
+        return
+    }
     if (message.content.trim() == "<@!" + client.user.id + ">") { Commands.info.action(message); return }
     const prefix = Prefix.get(message.guild.id)
     let start = Date.now()
-    if (message.author.bot) return
     if (message.content.startsWith(prefix)) {
         // create a regular expresion that matches either any string inside of double quotes, or any string without spaces that is outside of double quotes
         let regex = /"([^"]*?)"|[^ ]+/gm
