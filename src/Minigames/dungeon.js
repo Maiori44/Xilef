@@ -97,48 +97,85 @@ class DungeonGame {
 
 Dungeon = new Game(() => { return new DungeonGame() })
 Dungeon.enemies = [
-    [40, 0, 25, 0, "slime", "slime"],
-    [55, 0, 30, 0, "zombie", "zombie"],
-    [90, 0, 40, 5, "goblin", "goblin"],
-    [80, 0, 60, 20, "skeleton", "skeleton"],
-    [65, 0, 40, 10, "skeleton archer", "skeleton archer"],
-    [75, 100, 50, 5, "skeleton mage", "skeleton mage"],
-    [200, 0, 40, 0, "slime", "big slime"],
-    [125, 125, 125, 0, "ghost", "ghost"],
-    [400, 0, 90, 75, "goblin", "armored goblin"],
-    [350, 0, 80, 60, "skeleton", "skeleton brute"],
-    [150, 0, 110, 160, "mimic", "mimic"],
-    [300, 150, 75, 69, "meme fanatic", "meme fanatic"],
-    [400, 0, 100, 100, "golem", "mini golem"],
-    [300, 175, 125, 40, "ghost", "spectre"],
-    [500, 0, 25, 0, "slime", "abyss slime"],
-    [600, 0, 200, 110, "golem", "golem"],
-    [900, 200, 250, 150, "meme fanatic", "meme lunatic"],
-    [1000, 175, 125, 40, "ghost", "great ghost"],
-    [2000, 400, 250, 300, "golem", "power golem"],
-    [3000, 2000, 300, 350, "Giygas clone", "Giygas clone", true],
-    /*/TIER 2
-    [400, 0, 250, 0, "slime"],
-    [550, 0, 300, 0, "zombie"],
-    [900, 0, 400, 50, "goblin"],
-    [800, 0, 600, 200, "skeleton"],
-    [650, 0, 400, 100, "skeleton archer"],
-    [750, 1000, 500, 50, "skeleton mage"],
-    [2000, 0, 400, 0, "slime"], //big slime
-    [1250, 1250, 1250, 0, "ghost"],
-    [4000, 0, 900, 750, "goblin"], //armored goblin
-    [3500, 0, 800, 600, "skeleton"], //skeleton brute
-    [1500, 0, 1100, 1600, "mimic"],
-    [3000, 1500, 750, 690, "meme fanatic"],
-    [4000, 0, 1000, 1000, "golem"], //mini golem
-    [3000, 1750, 12500, 4000, "ghost"], //spectre
-    [5000, 0, 2500, 0, "slime"], //abyss slime
-    [6000, 0, 2000, 1100, "golem"],
-    [9000, 2000, 2500, 1500, "meme fanatic"], //meme lunatic
-    [10000, 1750, 1250, 400, "ghost"], //great ghost
-    [20000, 4000, 2500, 3000, "golem"], //power golem
-    [30000, 20000, 3000, 3500, "Supreme Calamitas clone", true],
-    commented out cuz im too lazy to add names to them too considering they will be replaced*/
+    // surface
+    [50, 0, 20, 0, "slime", "green slime"],
+    [60, 0, 40, 15, "skeleton", "skeleton"],
+    [100, 100, 45, 20, "rock-elemental", "rock elemental"],
+    [55, 0, 35, 10, "goblin", "goblin novice"],
+    [45, 0, 25, 5, "bat", "cave bat"],
+    [150, 100, 60, 30, "lost-spirit", "lost spirit", true],
+   // overgrown
+    [80, 0, 40, 5, "slime", "moss slime"],
+    [110, 0, 60, 25, "skeleton", "overgrown skeleton"],
+    [200, 200, 65, 40, "vine-monster", "vine monster"],
+    [100, 0, 70, 20, "goblin", "goblin brute"],
+    [120, 0, 50, 10, "bat", "jungle bat"],
+    [300, 200, 90, 60, "nature-elemental", "nature elemental", true],
+     // crystal
+    [160, 0, 45, 20, "slime", "crystaline slime"],
+    [240, 0, 85, 35, "skeleton", "prism skeleton"],
+    [400, 300, 90, 60, "gemstone-golem", "gemstone golem"],
+    [250, 0, 80, 30, "goblin", "goblin crusher"],
+    [210, 0, 65, 15, "bat", "glowing bat"],
+    [600, 300, 120, 90, "crystal-elemental", "crystal elemental", true],
+     // spirit
+    [270, 0, 60, 40, "slime", "howling slime"],
+    [320, 0, 90, 40, "skeleton", "skeleton summoner"],
+    [600, 400, 100, 80, "great spirit", "great spirit"],
+    [310, 0, 85, 40, "goblin", "goblin spiritualist"],
+    [300, 0, 75, 20, "bat", "albino bat"],
+    [900, 400, 150, 120, "power-ghost", "power ghost", true],
+      // dark
+    [360, 0, 90, 50, "slime", "void slime"],
+    [430, 0, 90, 50, "skeleton", "voidhammer skeleton"],
+    [800, 500, 135, 100, "void-ghost", "void ghost"],
+    [415, 0, 90, 50, "goblin", "ambush goblin"],
+    [400, 0, 90, 25, "bat", "great bat"],
+    [1200, 500, 180, 150, "the-void", "the void", true],
+     // magma
+    [460, 0, 105, 60, "slime", "magma slime"],
+    [500, 0, 105, 60, "skeleton", "skeleton incinerator"],
+    [1000, 600, 160, 120, "bone-snake", "bone-snake"],
+    [500, 0, 105, 60, "goblin", "goblin firewarrior"],
+    [500, 0, 105, 30, "bat", "lava bat"],
+    [1500, 600, 210, 180, "lava-elemental", "lava elemental", true],
+     // blight
+    [600, 0, 120, 70, "slime", "blighted slime"],
+    [600, 0, 120, 70, "skeleton", "infected skeleton"],
+    [1200, 700, 180, 140, "blight-orb", "blight orb"],
+    [600, 0, 120, 70, "goblin", "mutated goblin"],
+    [600, 0, 120, 70, "bat", "corrupted bat"],
+    [1800, 700, 240, 210, "radiant-core", "radiant core", true],
+     // error
+    [700, 0, 135, 80, "slime", "mistake slime"],
+    [700, 0, 135, 80, "skeleton", "skerrorton"],
+    [1400, 800, 180, 160, "question-mark", "???"],
+    [700, 0, 135, 80, "goblin", "gobboblin"],
+    [700, 0, 135, 80, "bat", "bullet bat"],
+    [2100, 800, 270, 240, "error", "%}])@&!(*%-!", true],
+     // ancient
+    [800, 0, 150, 90, "slime", "primordial slime"],
+    [800, 0, 150, 90, "skeleton", "ancient skeleton"],
+    [1600, 900, 225, 180, "-", "special"],
+    [800, 0, 150, 90, "goblin", "goblin cyclops"],
+    [800, 0, 150, 90, "bat", "irontooth bat"],
+    [2400, 900, 300, 210, "ancient-swordmaster", "ancient swordmaster", true],
+     // element
+    [900, 0, 165, 100, "slime", "core slime"],
+    [900, 0, 165, 100, "skeleton", "plasmabone skeleton"],
+    [1800, 1000, 220, 200, "amoled-elemental", "amoled elemental"],
+    [900, 0, 165, 100, "goblin", "goblin elemental"],
+    [900, 0, 165, 100, "bat", "ultrabat"],
+    [2700, 1000, 320, 300, "true-elemental", "true elemental", true],
+     // hell
+    [1000, 0, 180, 110, "slime", "inferno slime"],
+    [1000, 0, 180, 110, "skeleton", "everburn skeleton"],
+    [2000, 1000, 270, 220, "ruined-elemental", "ruined elemental"],
+    [1000, 0, 180, 110, "goblin", "ashhammer goblin"],
+    [1000, 0, 180, 110, "bat", "hellstone bat"],
+    [3000, 1000, 360, 330, "calamitas", "calamitas", true],
+    
+
 ]
 Dungeon.thinkers = {
     slime: (DungeonGame, Entity) => {
