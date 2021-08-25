@@ -28,7 +28,7 @@ class Command {
     call(message, args) {
         if (this.requiredargs)
             for (const arg of this.requiredargs)
-                if (!arg.check(args)) throw {msg: arg.errormsg.replace(/\&/g, Prefix.get(message.guild.id)), name: arg.name, num: arg.argnum}
+                if (!arg.check(args)) throw { msg: arg.errormsg.replace(/\&/g, Prefix.get(message.guild.id)), name: arg.name, num: arg.argnum }
 
         this.action(message, args)
     }
@@ -111,12 +111,33 @@ Commands.info = new Command("Shows info about the bot and this server's prefix",
         .setTimestamp(), Buttons)
 }, "Utility")
 
-Commands.warn = new Command("Developer only", (message, args) => {
+const NewProcess = require('child_process').spawn
+
+Commands.shutdown = new Command("Shuts down the bot after a given time\nDeveloper only", (message, args) => {
     if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the developer only")
-    args[0] = args.join(" ")
-    warning = args[0]
-    client.user.setActivity(args[0] + ", ping me for info")
-}, "Utility", [new RequiredArg(0, "What will you warn the people about . _.", "...text")])
+    if (args[0]) {
+        warning = args[0]
+        client.user.setActivity(args[0] + ", ping me for info")
+    }
+    const timeleft = parseFloat(args[1]) * 60 * 1000
+    console.log("- " + Colors.cyan.colorize("Shutdown initiated:") +
+        "\n\tTime left: " + (timeleft ? (timeleft / 1000) + " seconds" : Colors.hyellow.colorize("None")) +
+        "\n\tReason: " + (args[0] || Colors.hyellow.colorize("None")) +
+        "\n\tRestart?: " + (args[2] ? "true" : "false"))
+    setTimeout(() => {
+        console.log("- Shutting down...")
+        message.channel.send("Shutting down...").then(() => {
+            if (args[2]) {
+                NewProcess("cmd.exe", ["/c", debugmode ? "testbot.bat" : "startbot.bat"], { detached: true })
+                setTimeout(() => message.channel.send("Bot restarted successfully").then(() => process.exit(0), 2500))
+            } else process.exit(0)
+        })
+    }, timeleft || 0)
+}, "Utility", [
+    new RequiredArg(0, undefined, "message", true),
+    new RequiredArg(1, undefined, "time", true),
+    new RequiredArg(2, undefined, "restart?", true)
+])
 
 Commands.hi = new Command("Says hi to you", (message, args) => {
     message.reply("Hi.")
@@ -267,11 +288,13 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
             .setTitle(EconomySystem.user + "'s statistics")
             .setDescription("```lua\nDogeCoins: " + EconomySystem.money + "\nRank: " + EconomySystem.rank + "```")
             .addFields(
-                { name: "Singleplayer stats:", value:
-                    "```js\nImpostors found: " + EconomySystem.impostors +
-                    "\nDriller tier: " + EconomySystem.driller +
-                    "\nDungeon top floor: " + EconomySystem.floor +
-                    "\nMineSweeper matches won: " + EconomySystem.msweeper + "```", inline: true },
+                {
+                    name: "Singleplayer stats:", value:
+                        "```js\nImpostors found: " + EconomySystem.impostors +
+                        "\nDriller tier: " + EconomySystem.driller +
+                        "\nDungeon top floor: " + EconomySystem.floor +
+                        "\nMineSweeper matches won: " + EconomySystem.msweeper + "```", inline: true
+                },
                 { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.reversi + "\nConnect four matches won: " + EconomySystem.connect4 + "```", inline: true },
                 { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievments.binary, "❔ ???\n") }
             )
