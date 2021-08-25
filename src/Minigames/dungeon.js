@@ -156,10 +156,10 @@ Dungeon.enemies = [
      // ancient
     [800, 0, 150, 90, "slime", "primordial slime"],
     [800, 0, 150, 90, "skeleton", "ancient skeleton"],
-    [1600, 900, 225, 180, "-", "special"],
+    [1600, 900, 225, 180, "ancient-swordmaster", "ancient swordmaster"],
     [800, 0, 150, 90, "goblin", "goblin cyclops"],
     [800, 0, 150, 90, "bat", "irontooth bat"],
-    [2400, 900, 300, 210, "ancient-swordmaster", "ancient swordmaster", true],
+    [2400, 900, 300, 210, "gigyas", "gigyas", true],
      // element
     [900, 0, 165, 100, "slime", "core slime"],
     [900, 0, 165, 100, "skeleton", "plasmabone skeleton"],
