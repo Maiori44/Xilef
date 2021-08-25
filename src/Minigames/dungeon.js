@@ -141,14 +141,14 @@ Dungeon.enemies = [
 Dungeon.thinkers = {
     slime: (DungeonGame, Entity) => {
         if (GetPercentual() <= 20) {
-            return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+            return Entity.fight(DungeonGame.player, Entity.attack)
         }
         return "The slime hops around.."
     },
     zombie: (DungeonGame, Entity) => {
         let msg = "The zombie becomes more vicious!\nThe zombie attack increased!\n"
         Entity.attack = Entity.attack * 1.1
-        msg = msg + Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+        msg = msg + Entity.fight(DungeonGame.player, Entity.attack)
         return msg
     },
     goblin: (DungeonGame, Entity) => {
@@ -169,10 +169,10 @@ Dungeon.thinkers = {
         return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
     },
     "skeleton archer": (DungeonGame, Entity) => {
-        if (GetPercentual() <= 20) {
+        if (GetPercentual() <= 40) {
             return Entity.fight(DungeonGame.player, Entity.attack + DungeonGame.player.defense) + "\nIt's a perfect hit!"
         }
-        return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+        return Entity.fight(DungeonGame.player, Entity.attack)
     },
     "skeleton mage": (DungeonGame, Entity) => {
         const chance = GetPercentual()
@@ -193,13 +193,13 @@ Dungeon.thinkers = {
         } else if (chance <= 40 && Entity.mana >= 25) {
             return Dungeon.attacks.fire.use(Entity, DungeonGame.player)
         }
-        return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+        return Entity.fight(DungeonGame.player, Entity.attack)
     },
     mimic: (DungeonGame, Entity) => {
-        if (GetPercentual() <= 50) {
+        if (GetPercentual() <= 40) {
             return "The mimic transforms into DogeCoins!\n..you're smart enough to realize the trap."
         }
-        return "The mimic transforms into DogeCoins!\nYou found some DogeCoin--\n" + Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+        return "The mimic transforms into DogeCoins!\nYou found some DogeCoin--\n" + Entity.fight(DungeonGame.player, Entity.attack)
     },
     "meme fanatic": (DungeonGame, Entity) => {
         if (DungeonGame.player.mana > Entity.mana + 50 && Entity.mana >= 50) {
