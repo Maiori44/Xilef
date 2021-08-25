@@ -2,12 +2,13 @@ const { RequiredArg, Command } = require("./../commands.js")
 const { Game, MPGame } = require("./../minigames.js")
 
 class Entity {
-    constructor(hp, mana, attack, defense, ai, isboss) {
+    constructor(hp, mana, attack, defense, ai, name, isboss) {
         this.hp = hp
         this.mana = mana
         this.attack = attack
         this.defense = defense
         this.ai = ai
+        this.name = name
         this.isboss = isboss
         this.castmsg = this.ai ? "The " + this.ai + " uses " : "You use "
         this.evmsg = this.ai ? "The " + this.ai + "'s " : "Your "
@@ -80,7 +81,7 @@ class DungeonGame {
             desc = desc + "\n\nENEMIES:"
             for (let Enemy of this.enemies) {
                 if (!Enemy) continue
-                desc = desc + "\n" + Enemy.ai + ": " + Enemy.hp + " hp left" + (Enemy.isboss ? " (BOSS!)" : "")
+                desc = desc + "\n" + Enemy.name + ": " + Enemy.hp + " hp left" + (Enemy.isboss ? " (BOSS!)" : "")
             }
         }
         desc = desc + "```"
@@ -96,27 +97,27 @@ class DungeonGame {
 
 Dungeon = new Game(() => { return new DungeonGame() })
 Dungeon.enemies = [
-    [40, 0, 25, 0, "slime"],
-    [55, 0, 30, 0, "zombie"],
-    [90, 0, 40, 5, "goblin"],
-    [80, 0, 60, 20, "skeleton"],
-    [65, 0, 40, 10, "skeleton archer"],
-    [75, 100, 50, 5, "skeleton mage"],
-    [200, 0, 40, 0, "slime"], //big slime
-    [125, 125, 125, 0, "ghost"],
-    [400, 0, 90, 75, "goblin"], //armored goblin
-    [350, 0, 80, 60, "skeleton"], //skeleton brute
-    [150, 0, 110, 160, "mimic"],
-    [300, 150, 75, 69, "meme fanatic"],
-    [400, 0, 100, 100, "golem"], //mini golem
-    [300, 175, 125, 40, "ghost"], //spectre
-    [500, 0, 25, 0, "slime"], //abyss slime
-    [600, 0, 200, 110, "golem"],
-    [900, 200, 250, 150, "meme fanatic"], //meme lunatic
-    [1000, 175, 125, 40, "ghost"], //great ghost
-    [2000, 400, 250, 300, "golem"], //power golem
-    [3000, 2000, 300, 350, "Giygas clone", true],
-    //TIER 2
+    [40, 0, 25, 0, "slime", "slime"],
+    [55, 0, 30, 0, "zombie", "zombie"],
+    [90, 0, 40, 5, "goblin", "goblin"],
+    [80, 0, 60, 20, "skeleton", "skeleton"],
+    [65, 0, 40, 10, "skeleton archer", "skeleton archer"],
+    [75, 100, 50, 5, "skeleton mage", "skeleton mage"],
+    [200, 0, 40, 0, "slime", "big slime"],
+    [125, 125, 125, 0, "ghost", "ghost"],
+    [400, 0, 90, 75, "goblin", "armored goblin"],
+    [350, 0, 80, 60, "skeleton", "skeleton brute"],
+    [150, 0, 110, 160, "mimic", "mimic"],
+    [300, 150, 75, 69, "meme fanatic", "meme fanatic"],
+    [400, 0, 100, 100, "golem", "mini golem"],
+    [300, 175, 125, 40, "ghost", "spectre"],
+    [500, 0, 25, 0, "slime", "abyss slime"],
+    [600, 0, 200, 110, "golem", "golem"],
+    [900, 200, 250, 150, "meme fanatic", "meme lunatic"],
+    [1000, 175, 125, 40, "ghost", "great ghost"],
+    [2000, 400, 250, 300, "golem", "power golem"],
+    [3000, 2000, 300, 350, "Giygas clone", "Giygas clone", true],
+    /*/TIER 2
     [400, 0, 250, 0, "slime"],
     [550, 0, 300, 0, "zombie"],
     [900, 0, 400, 50, "goblin"],
@@ -137,6 +138,7 @@ Dungeon.enemies = [
     [10000, 1750, 1250, 400, "ghost"], //great ghost
     [20000, 4000, 2500, 3000, "golem"], //power golem
     [30000, 20000, 3000, 3500, "Supreme Calamitas clone", true],
+    commented out cuz im too lazy to add names to them too considering they will be replaced*/
 ]
 Dungeon.thinkers = {
     slime: (DungeonGame, Entity) => {
