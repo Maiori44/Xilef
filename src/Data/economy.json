@@ -1,16 +1,16 @@
 {
     "621307633718132746": {
-        "money": 3574,
+        "money": 3436,
         "rank": 50,
         "user": "Felix44",
         "impostors": 2,
         "driller": 10,
         "floor": 30,
         "msweeper": 1,
-        "day": 1629636082975,
+        "day": 1629804192675,
         "reversi": 2,
         "connect4": 10,
-        "vhour": 1629744826402,
+        "vhour": 1629804195816,
         "vgot": "238859487048214829",
         "achievments": "0"
     },
@@ -105,8 +105,8 @@
         "achievments": "0"
     },
     "484682433925611542": {
-        "money": 261103073,
-        "rank": 7000,
+        "money": 331023275,
+        "rank": 8000,
         "user": "Dark_Brick",
         "impostors": 0,
         "driller": 29,
@@ -115,8 +115,8 @@
         "day": 1628970477602,
         "reversi": 0,
         "connect4": 3,
-        "vhour": 1629744729415,
-        "vgot": "9151149495938604",
+        "vhour": 1629872534026,
+        "vgot": "9168741681983021",
         "achievments": "17"
     },
     "642719190288957450": {
@@ -180,7 +180,7 @@
         "achievments": "0"
     },
     "604213801927180295": {
-        "money": 68680,
+        "money": 70726,
         "rank": 132,
         "user": "Syphon",
         "impostors": 4,
@@ -190,12 +190,12 @@
         "day": 1629044929782,
         "reversi": 4,
         "connect4": 4,
-        "vhour": 1629705140963,
+        "vhour": 1629829061950,
         "vgot": "18050050273007158",
         "achievments": "0"
     },
     "483715787467653122": {
-        "money": 26094,
+        "money": 48125,
         "rank": 52,
         "user": "poly translator*",
         "impostors": 19,
@@ -205,8 +205,8 @@
         "day": 1629724778915,
         "reversi": 0,
         "connect4": 1,
-        "vhour": 1629739004255,
-        "vgot": "7235275216912",
+        "vhour": 1629872653385,
+        "vgot": "16031378724880",
         "achievments": "0"
     },
     "850867485263527956": {
@@ -300,19 +300,19 @@
         "achievments": "0"
     },
     "570503517832478720": {
-        "money": 20481,
+        "money": 17127,
         "rank": 42,
         "user": "Oh God Not The Belt",
         "impostors": 0,
         "driller": 5,
         "floor": 15,
-        "msweeper": 13,
+        "msweeper": 15,
         "day": 1628419767943,
         "reversi": 1,
         "connect4": 0,
-        "vhour": 1629650727853,
-        "vgot": "730146110328184933",
-        "achievments": "0"
+        "vhour": 1629829423454,
+        "vgot": "731272010235027685",
+        "achievments": "128"
     },
     "799228822889037824": {
         "money": 11,
@@ -360,7 +360,7 @@
         "achievments": "255"
     },
     "661283181403701288": {
-        "money": 1290,
+        "money": 1240,
         "rank": 1,
         "user": "ThatOneGuy",
         "impostors": 0,
@@ -370,8 +370,8 @@
         "day": 1629408499878,
         "reversi": 0,
         "connect4": 0,
-        "vhour": 1629553180189,
-        "vgot": "11274289216",
+        "vhour": 1629839460568,
+        "vgot": "11408506944",
         "achievments": "0"
     },
     "218516967022264321": {
@@ -390,18 +390,18 @@
         "achievments": "0"
     },
     "311819610380959745": {
-        "money": 74836,
-        "rank": 111,
+        "money": 40170,
+        "rank": 154,
         "user": "DRKSAO",
         "impostors": 18,
-        "driller": 8,
+        "driller": 11,
         "floor": 21,
         "msweeper": 0,
-        "day": 1629724766421,
+        "day": 1629873266475,
         "reversi": 0,
         "connect4": 6,
-        "vhour": 1629793174861,
-        "vgot": "18085875524460554",
+        "vhour": 1629872774550,
+        "vgot": "18090273570971658",
         "achievments": "0"
     },
     "649253657862471694": {
@@ -435,18 +435,18 @@
         "achievments": "0"
     },
     "694728312823480415": {
-        "money": 694206969,
-        "rank": 6969,
+        "money": 1599075981,
+        "rank": 14213,
         "user": "lemon cannon",
         "impostors": 1,
         "driller": 29,
         "floor": 21,
         "msweeper": 0,
-        "day": 1629480389390,
+        "day": 1629840072591,
         "reversi": 0,
         "connect4": 1,
-        "vhour": 1629483442913,
-        "vgot": "36031004632154112",
+        "vhour": 1629840079804,
+        "vgot": "36031006779637760",
         "achievments": "17"
     },
     "759184418945630338": {
@@ -480,18 +480,18 @@
         "achievments": "0"
     },
     "684285694063018048": {
-        "money": 62455,
-        "rank": 75,
+        "money": 11821,
+        "rank": 123,
         "user": "LJMSU",
         "impostors": 0,
         "driller": 6,
-        "floor": 16,
+        "floor": 22,
         "msweeper": 1,
         "day": 1629366014841,
         "reversi": 0,
         "connect4": 0,
-        "vhour": 1629563436541,
-        "vgot": "4503599627370560",
+        "vhour": 1629872650979,
+        "vgot": "4503599627374784",
         "achievments": "0"
     },
     "762021343612502066": {
@@ -555,7 +555,7 @@
         "achievments": "0"
     },
     "642841151484985365": {
-        "money": 4071,
+        "money": 4021,
         "rank": 1,
         "user": "Rainbow",
         "impostors": 0,
@@ -565,8 +565,8 @@
         "day": 1628856974358,
         "reversi": 0,
         "connect4": 3,
-        "vhour": 1628844359046,
-        "vgot": "4194306",
+        "vhour": 1629794512453,
+        "vgot": "4718594",
         "achievments": "0"
     },
     "866046348321882132": {
