@@ -141,7 +141,7 @@ Commands.shutdown = new Command("Shuts down the bot after a given time\nDevelope
 
 Commands.hi = new Command("Says hi to you", (message, args) => {
     message.reply("Hi.")
-}, "Simple")
+}, "Joke")
 
 /*Commands.allutf8 = new Command("Get all existing characters in Discord", (message, args) => {
     if (message.author.id != "621307633718132746") {
@@ -159,21 +159,21 @@ Commands.hi = new Command("Says hi to you", (message, args) => {
 
 Commands.annoy = new Command("Annoys the person you want", (message, args) => {
     message.channel.send(args[0].slice(0, 1900) + " you suck")
-}, "Simple", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
+}, "Joke", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
 
 Commands.comfort = new Command("Comforts the person you want", (message, args) => {
     message.channel.send(args[0].slice(0, 1900) + " you don't suck")
-}, "Simple", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
+}, "Joke", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
 
 Commands.say = new Command("Says whatever you want", (message, args) => {
     if (!args.join(" ")) { args[0] = "** **" }
     message.channel.send(args.join(" ").slice(0, 1900))
     message.delete()
-}, "Simple", [new RequiredArg(0, "** **", "...text")])
+}, "Joke", [new RequiredArg(0, "** **", "...text")])
 
 Commands.hentai = new Command("Totally sends you hentai", (message, args) => {
     message.channel.send("No..just no..")
-}, "Simple")
+}, "Joke")
 
 Commands.secret = new Command("Sends you the secret of life", (message, args) => {
     message.author.send("The sercret of life is...\n" +
@@ -197,7 +197,7 @@ Commands.secret = new Command("Sends you the secret of life", (message, args) =>
     "||⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀||\n" +
     "||⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀||\n" +
     "|| amogus. ||")
-}, "Simple")
+}, "Joke")
 
 //math commands
 
