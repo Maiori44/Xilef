@@ -157,11 +157,12 @@ Driller.Ores = [
     new DrillerOre("Magnesia", 300000, 92, 22),
     new DrillerOre("The vessel of the philosophers", 400000, 93, 23),
     new DrillerOre("Our blessed stone", 550000, 94, 23),
-    new DrillerOre("Magnum opus", 700000, 95, 24),
-    new DrillerOre("Philosopher's stone", 900000, 96, 25),
+    new DrillerOre("Magnum opus", 700000, 95, 25),
+    new DrillerOre("Philosopher's stone", 900000, 96, 26),
     new DrillerOre("Sampo", 1100000, 97, 27),
     new DrillerOre("True knowledge", 1500000, 98, 28),
-    new DrillerOre("The end...", 2000000, 99, 29),
+    new DrillerOre("Chicken Nuggets", 2000000, 99, 29),
+    new DrillerOre("The end...", 3000000, 100, 30),
     new DrillerOre("how", -999999999, 0, 69),
 ]
 Driller.tiers = [
@@ -192,7 +193,8 @@ Driller.tiers = [
     44000000,
     50500000,
     57500000,
-    69420420
+    69420420,
+    80696969
 ]
 Driller.help =
     "`&driller stats` says the stats of your driller\n" +
@@ -303,7 +305,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             break
         }
         case "upgrade": {
-            if (EconomySystem.driller == 29) {
+            if (EconomySystem.driller == 30) {
                 message.channel.send("Your driller arleady reached max tier.")
                 EconomySystem.award("driller", message)
             } else if (EconomySystem.buy(Driller.tiers[EconomySystem.driller - 1], message, "Your driller reached tier " + (EconomySystem.driller + 1) + "! (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins needed)")) {
