@@ -65,7 +65,8 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
         options["No"] = 0
     }
     message.channel.send("Creating poll...", buttons).then(pollmessage => {
-        Polls[message.id] = new Poll(pollmessage, options, args[0] || message.author.username + "'s poll", parseFloat(args[1]) || 5)
+        const time = Math.min(parseFloat(args[1]) * 60 * 1000 || 300000, 0x7FFFFFFF)
+        Polls[message.id] = new Poll(pollmessage, options, args[0] || message.author.username + "'s poll", time / 1000 / 60)
         Polls[message.id].update()
         console.log("- " + Colors.cyan.colorize("Sucessfully created a poll:") +
             "\n\tCreator: " + message.author.username +
@@ -80,7 +81,7 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
                 "\n\tPoll options: " + JSON.stringify(Polls[message.id].options) +
                 "\n\tPoll voters: " + JSON.stringify(Polls[message.id].users))
             Polls[message.id] = undefined
-        }, parseFloat(args[1]) * 60 * 1000 || 300000)
+        }, time)
     })
 }, "Utility", [new RequiredArg(0, undefined, "title", true), new RequiredArg(1, undefined, "duration", true), new RequiredArg(2, undefined, "option 1", true), new RequiredArg(3, undefined, "option 2", true), new RequiredArg(4, undefined, "option 3", true), new RequiredArg(5, undefined, "option 4", true), new RequiredArg(6, undefined, "option 5", true)])
 
