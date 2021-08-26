@@ -49,18 +49,18 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
         let button = new MessageButton()
             .setStyle("blurple")
             .setLabel(buttonname)
-            .setID(message.id + "-" + buttonname);
+            .setID("poll-" + message.id + "-" + buttonname);
         buttons.addComponent(button)
     }
     if (args.length == 0 || !args[2]) {
         buttons.addComponent(new MessageButton()
             .setStyle("green")
             .setLabel("Yes")
-            .setID(message.id + "-Yes"))
+            .setID("poll-" + message.id + "-Yes"))
         buttons.addComponent(new MessageButton()
             .setStyle("red")
             .setLabel("No")
-            .setID(message.id + "-No"))
+            .setID("poll-" + message.id + "-No"))
         options["Yes"] = 0
         options["No"] = 0
     }
@@ -84,48 +84,54 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
     })
 }, "Utility", [new RequiredArg(0, undefined, "title", true), new RequiredArg(1, undefined, "duration", true), new RequiredArg(2, undefined, "option 1", true), new RequiredArg(3, undefined, "option 2", true), new RequiredArg(4, undefined, "option 3", true), new RequiredArg(5, undefined, "option 4", true), new RequiredArg(6, undefined, "option 5", true)])
 
-client.on('clickButton', async (button) => {
-    let split = button.id.split("-")
-    let buttonid = split[0]
-    let buttonname = split.slice(1).join('-')
-    if (Polls[buttonid]) {
-        let options = Polls[buttonid].options
-        if (options[buttonname] != undefined) {
-            await button.reply.defer()
-            options[buttonname] = options[buttonname] + 1
-            if (Polls[buttonid].users[button.clicker.id] && options[Polls[buttonid].users[button.clicker.id]]) {
-                options[Polls[buttonid].users[button.clicker.id]] = options[Polls[buttonid].users[button.clicker.id]] - 1
-            }
-            if (Polls[buttonid].users[button.clicker.id] == buttonname) {
-                options[Polls[buttonid].users[button.clicker.id]] = options[Polls[buttonid].users[button.clicker.id]] - 1
-                Polls[buttonid].users[button.clicker.id] = undefined
+ButtonEvents = {
+    poll: async (button, id, optionname) => {
+        if (Polls[id]) {
+            let options = Polls[id].options
+            if (options[optionname] != undefined) {
+                await button.reply.defer()
+                options[optionname] = options[optionname] + 1
+                if (Polls[id].users[button.clicker.id] && options[Polls[id].users[button.clicker.id]]) {
+                    options[Polls[id].users[button.clicker.id]] = options[Polls[id].users[button.clicker.id]] - 1
+                }
+                if (Polls[id].users[button.clicker.id] == optionname) {
+                    options[Polls[id].users[button.clicker.id]] = options[Polls[id].users[button.clicker.id]] - 1
+                    Polls[id].users[button.clicker.id] = undefined
+                } else {
+                    Polls[id].users[button.clicker.id] = optionname
+                }
+                console.log("- " + Colors.cyan.colorize("Sucesfully voted in a poll:") +
+                    "\n\tVoter name: " + button.clicker.user.useroptionname +
+                    "\n\tVoter ID: " + button.clicker.id +
+                    "\n\tVoted option name: " + optionname +
+                    "\n\tPoll ID: " + id +
+                    "\n\tPoll title: " + Polls[id].title +
+                    "\n\tPoll options: " + JSON.stringify(Polls[id].options) +
+                    "\n\tPoll voters: " + JSON.stringify(Polls[id].users))
+                Polls[id].update()
             } else {
-                Polls[buttonid].users[button.clicker.id] = buttonname
+                console.log("- " + Colors.yellow.colorize("Failed attempt at voting in a poll, the selected option doesn't exist:") +
+                    "\n\tVoter name: " + button.clicker.user.useroptionname +
+                    "\n\tVoter ID: " + button.clicker.id +
+                    "\n\tPoll ID: " + id +
+                    "\n\tPoll title: " + Polls[id].title +
+                    "\n\tRequested option name: " + optionname +
+                    "\n\tPoll options: " + JSON.stringify(Polls[id].options) +
+                    "\n\tPoll voters: " + JSON.stringify(Polls[id].users))
+                await button.reply.send("Somehow, that isn't one of the poll's option.", true)
             }
-            console.log("- " + Colors.cyan.colorize("Sucesfully voted in a poll:") +
-                "\n\tVoter name: " + button.clicker.user.username +
-                "\n\tVoter ID: " + button.clicker.id +
-                "\n\tVoted option name: " + buttonname +
-                "\n\tPoll ID: " + buttonid +
-                "\n\tPoll title: " + Polls[buttonid].title +
-                "\n\tPoll options: " + JSON.stringify(Polls[buttonid].options) +
-                "\n\tPoll voters: " + JSON.stringify(Polls[buttonid].users))
-            Polls[buttonid].update()
         } else {
-            console.log("- " + Colors.yellow.colorize("Failed attempt at voting in a poll, the selected option doesn't exist:") +
-                "\n\tVoter name: " + button.clicker.user.username +
-                "\n\tVoter ID: " + button.clicker.id +
-                "\n\tPoll ID: " + buttonid +
-                "\n\tPoll title: " + Polls[buttonid].title +
-                "\n\tRequested option name: " + buttonname +
-                "\n\tPoll options: " + JSON.stringify(Polls[buttonid].options) +
-                "\n\tPoll voters: " + JSON.stringify(Polls[buttonid].users))
-            await button.reply.send("Somehow, that isn't one of the poll's option.", true)
+            console.log("- " + Colors.blue.colorize("Failed attempt at voting in a poll, the poll is closed/does not exist:") +
+                "\n\tRequested Poll ID: " + id +
+                "\n\tOption name: " + optionname)
+            await button.reply.send("This poll is closed.", true)
         }
-    } else {
-        console.log("- " + Colors.blue.colorize("Failed attempt at voting in a poll, the poll is closed/does not exist:") +
-            "\n\tRequested Poll ID: " + buttonid +
-            "\n\tOption name: " + buttonname)
-        await button.reply.send("This poll is closed.", true)
     }
-});
+}
+
+client.on('clickButton', async (button) => {
+    const buttonargs = button.id.split("-")
+    const event = buttonargs[0]
+    if (ButtonEvents[event]) ButtonEvents[event](button, buttonargs[1], buttonargs.slice(2).join('-'))
+    else throw ("unknown button event received\n\tButton event name: " + event)
+})
