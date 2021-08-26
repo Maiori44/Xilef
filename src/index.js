@@ -64,7 +64,7 @@ client.on("message", (message) => {
             "\n\tCaller: " + message.author.username)
         return
     }
-    if (message.content.trim() == "<@!" + client.user.id + ">") { Commands.info.action(message); return }
+    if (message.content.trim() == "<@!" + client.user.id + ">" || message.content.trim() == "<@" + client.user.id + ">") { Commands.info.action(message); return }
     const prefix = Prefix.get(message.guild.id)
     let start = Date.now()
     if (message.content.startsWith(prefix)) {
