@@ -174,7 +174,7 @@ Achievments = {
     driller: new Economy.flag("<:driller:874403362827796530> reach tier 29 in driller", 5),
     v_: new Economy.flag("<:v_c:873259417557151765> find all v_s", 6),
     dungeon: new Economy.flag("<:dungeon:875809577487192116> reach floor 50 in dungeon", 7),
-    msweeper: new Economy.flag("💥 win minesweeper 15 times", 8),
+    msweeper: new Economy.flag("💥 win minesweeper 10 times", 8),
 }
 Achievments.binary = [
     Achievments.first.id + "\n",

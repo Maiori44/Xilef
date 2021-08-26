@@ -166,7 +166,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
                     message.channel.send("You won!")
                     EconomySystem.give(300, message)
                     EconomySystem.alterValue("msweeper", 1)
-                    if (EconomySystem.msweeper == 15) {
+                    if (EconomySystem.msweeper == 10) {
                         EconomySystem.award("msweeper", message)
                     }
                     MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
