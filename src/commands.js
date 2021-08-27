@@ -1,5 +1,5 @@
 require("discord-buttons")(client);
-const { MessageButton, MessageActionRow } = require("discord-buttons");
+const { MessageButton, MessageActionRow } = require("discord-buttons")
 
 class RequiredArg {
     constructor(argnum, errormsg, name, notrequired) {
@@ -22,7 +22,7 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/31"))
+        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/33"))
     }
 
     call(message, args) {
@@ -319,8 +319,11 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
                         "\nDungeon top floor: " + EconomySystem.floor +
                         "\nMineSweeper matches won: " + EconomySystem.msweeper + "```", inline: true
                 },
-                { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.reversi + "\nConnect four matches won: " + EconomySystem.connect4 + "```", inline: true },
-                { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievments.binary, "❔ ???\n") }
+                { name: "Multiplayer stats:", value:
+                    "```lua\nReversi matches won: " + EconomySystem.reversi +
+                    "\nConnect four matches won: " + EconomySystem.connect4 +
+                    "\nRoshambo matches won: " + EconomySystem.roshambo + "```", inline: true },
+                { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievements.binary, "❔ ???\n") }
             )
     )
 }, "Economy", [new RequiredArg(0, undefined, "@person", true)])
