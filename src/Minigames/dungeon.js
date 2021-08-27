@@ -229,7 +229,8 @@ Dungeon.thinkers = {
         Entity.mana = Math.floor(DungeonGame.player.mana * 0.4) + Entity.mana
         Entity.mana = Entity.mana + 50 /* minumum req for ice */
         Dungeon.attacks.ice.use(Entity, DungeonGame.player)
-        return "You feel faint, as the choking gases from its petals bloom to the sun"
+        DungeonGame.enemies.push(new Entity(...Dungeon.enemies[0])/*testing new enemies summoning, just slimes for now */
+        return "You feel faint, as the choking gases from its petals bloom to the sun, several twisted flowers also face you!"
     },
     "Giygas clone": (DungeonGame, Entity) => {
         if (GetPercentual() <= 50 && Entity.mana >= 175) {
