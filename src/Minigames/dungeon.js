@@ -227,6 +227,7 @@ Dungeon.thinkers = {
                 Dungeon.attacks.leech.use(Entity, DungeonGame.player)
         }
         Entity.mana = Math.floor(DungeonGame.player.mana * 0.4) + Entity.mana
+        Entity.mana = Entity.mana + 50 /* minumum req for ice */
         Dungeon.attacks.ice.use(Entity, DungeonGame.player)
         return "You feel faint, as the choking gases from its petals bloom to the sun"
     },
