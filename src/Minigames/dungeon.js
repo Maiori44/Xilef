@@ -110,6 +110,7 @@ Dungeon.enemies = [
     [150, 0, 110, 160, "mimic", "mimic"],
     [300, 150, 75, 69, "meme fanatic", "meme fanatic"],
     [400, 0, 100, 100, "golem", "mini golem"],
+    [300, 150, 75, 25, "overgrowth", "saplings"],
     [300, 175, 125, 40, "ghost", "spectre"],
     [500, 0, 25, 0, "slime", "abyss slime"],
     [600, 0, 200, 110, "golem", "golem"],
@@ -219,6 +220,15 @@ Dungeon.thinkers = {
             return "The golem uses Rock Throw!\n" + Entity.fight(DungeonGame.player, Entity.attack * 3)
         }
         return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+    },
+    overgrowth: (DungeonGame, Entity) => {
+        if (Entity.hp <= 150 && Entity.mana >= 150) {
+            return "You feel weak as you kick away the leeching vines!\n" +
+                Dungeon.attacks.leech.use(Entity, DungeonGame.player)
+        }
+        Entity.mana = Math.floor(DungeonGame.player.mana * 0.4) + Entity.mana
+        Dungeon.attacks.ice.use(Entity, DungeonGame.player)
+        return "You feel faint, as the choking gases from its petals bloom to the sun"
     },
     "Giygas clone": (DungeonGame, Entity) => {
         if (GetPercentual() <= 50 && Entity.mana >= 175) {
