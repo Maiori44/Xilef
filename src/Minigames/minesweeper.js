@@ -120,62 +120,83 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             return
         }
         case "dig": {
-            const x = parseInt(args[1])
-            const y = parseInt(args[2])
-            if (isNaN(x) || isNaN(y)) {
+            function parsePosition(position) {
+                if (/[0-8]-[0-8]/.test(position)) {
+                    const [from, to] = position.split('-').map(val => parseInt(val))
+                    if ([from, to].some(isNaN)) return
+                    return [...Array(parseInt(to + 1)).keys()].slice(parseInt(from))
+                } else {
+                    return args[1]?.split(',').map(position => parseInt(position))
+                }
+            }
+
+            const x = parsePosition(args[1])
+            const y = parsePosition(args[2])
+                .slice(parseInt(args[2]?.split('-')[0])) ??
+                args[2]?.split(',').map(position => parseInt(position))
+
+            if ([...x,...y].some(isNaN)) {
                 message.channel.send(`You need to give valid coordinates for where to dig\nExample: \`${Prefix.get(message.guild.id)}msweeper dig 0 0\` will dig the tile in the top left corner`)
                 return
             }
             const MineSweeperGame = MineSweeper.getGame(message.author.id)
-            if (MineSweeperGame.board[y] && MineSweeperGame.board[y][x]) {
-                if (MineSweeperGame.board[y][x].isbomb) {
-                    message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem, true))
-                    MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
-                    return
-                }
-                let CheckNeighbors = []
-                let Queue = [{ x: x, y: y }]
-                do {
-                    if (Queue.length) {
-                        for (let i = 0; i < Queue.length; i++) {
-                            CheckNeighbors.push(Queue.pop())
+
+            // for (const xs of x)
+            //     for (const ys of y)
+            //         if (dig(xs, ys) > 0) return
+
+            // function dig(x, y) {
+
+
+            let CheckNeighbors = []
+            let Queue = x.map(x=> y.map(y=> ({x,y}) )).flat()
+            do {
+                if (Queue.length) {
+                    for (let i = 0; i < Queue.length; i++) {
+                        CheckNeighbors.push(Queue.pop())
+                    }
+                    for (const Tileinfo of CheckNeighbors) {
+                        if (!MineSweeperGame.board[Tileinfo.y] && !MineSweeperGame.board[Tileinfo.y][Tileinfo.x])
+                            message.channel.send("That location is out of bounds.")
+                        if (MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isbomb) {
+                            message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem,   true))
+                            MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
+                            return 1
                         }
-                        for (const Tileinfo of CheckNeighbors) {
-                            if (!MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isbomb && !MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isrevealed) {
-                                MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isrevealed = true
-                                if (!MineSweeperGame.board[Tileinfo.y][Tileinfo.x].nearbybombs) {
-                                    const px = Math.min(Tileinfo.x + 1, 8)
-                                    const mx = Math.max(Tileinfo.x - 1, 0)
-                                    const py = Math.min(Tileinfo.y + 1, 8)
-                                    const my = Math.max(Tileinfo.y - 1, 0)
-                                    Queue.push({ x: Tileinfo.x, y: py })
-                                    Queue.push({ x: mx, y: py })
-                                    Queue.push({ x: mx, y: Tileinfo.y })
-                                    Queue.push({ x: mx, y: my })
-                                    Queue.push({ x: Tileinfo.x, y: my })
-                                    Queue.push({ x: px, y: my })
-                                    Queue.push({ x: px, y: Tileinfo.y })
-                                    Queue.push({ x: px, y: py })
-                                }
+
+                        if (!MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isbomb &&    !MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isrevealed) {
+                            MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isrevealed = true
+                            if (!MineSweeperGame.board[Tileinfo.y][Tileinfo.x].nearbybombs)     {
+                                const px = Math.min(Tileinfo.x + 1, 8)
+                                const mx = Math.max(Tileinfo.x - 1, 0)
+                                const py = Math.min(Tileinfo.y + 1, 8)
+                                const my = Math.max(Tileinfo.y - 1, 0)
+                                Queue.push({ x: Tileinfo.x, y: py })
+                                Queue.push({ x: mx, y: py })
+                                Queue.push({ x: mx, y: Tileinfo.y })
+                                Queue.push({ x: mx, y: my })
+                                Queue.push({ x: Tileinfo.x, y: my })
+                                Queue.push({ x: px, y: my })
+                                Queue.push({ x: px, y: Tileinfo.y })
+                                Queue.push({ x: px, y: py })
                             }
                         }
                     }
-                } while (Queue.length > 0)
-                message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem))
-                if (!MineSweeperGame.tilesleft) {
-                    message.channel.send("You won!")
-                    EconomySystem.give(300, message)
-                    EconomySystem.alterValue("msweeper", 1)
-                    if (EconomySystem.msweeper == 10) {
-                        EconomySystem.award("msweeper", message)
-                    }
-                    MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
                 }
-                return
-            } else {
-                message.channel.send("That location is out of bounds.")
-                return
+            } while (Queue.length > 0)
+            // }
+
+            message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem))
+            if (!MineSweeperGame.tilesleft) {
+                message.channel.send("You won!")
+                EconomySystem.give(300, message)
+                EconomySystem.alterValue("msweeper", 1)
+                if (EconomySystem.msweeper == 10) {
+                    EconomySystem.award("msweeper", message)
+                }
+                MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
             }
+            return
         }
         case "flag": {
             const x = parseInt(args[1])
