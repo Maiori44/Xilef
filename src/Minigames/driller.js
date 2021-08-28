@@ -197,7 +197,6 @@ Driller.Ores = [
     new DrillerOre("The end...", 3000000, 100, 30),
     new DrillerOre("how", -999999999, 0, 69),
 ]
-
 Driller.help =
     "`&driller stats` says the stats of your driller\n" +
     "`&driller dig [depth]` makes the driller dig deeper, finding treasures..or lava!\n" +

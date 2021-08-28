@@ -99,14 +99,14 @@ class MPGame {
             this.hosts[id] = undefined
             return quitmsg
         } else if (this.joiners[id]) {
-            this.joiners[id].joiner = undefined
-            this.joiners[id].joinername = "`none`"
-            this.joiners[id] = undefined
             console.log("- " + Colors.cyan.colorize("Sucessfully kicked an user from a MPGame:") +
                 "\n\tHost: " + this.joiners[id].hostname +
                 "\n\tHost ID: " + this.joiners[id].host +
                 "\n\tJoiner: " + this.joiners[id].joinername +
                 "\n\tJoiner ID: " + this.joiners[id].joiner)
+            this.joiners[id].joiner = undefined
+            this.joiners[id].joinername = "`none`"
+            this.joiners[id] = undefined
             return quitmsg
         } else {
             console.log("- " + Colors.blue.colorize("Aborted attempt at leaving a MPGame, the user is not inside any match"))
@@ -138,3 +138,4 @@ require("./Minigames/reversi.js")
 require("./Minigames/connect 4.js")
 require("./Minigames/v_ roll.js")
 require("./Minigames/minesweeper.js")
+require("./Minigames/rock paper scissors.js")

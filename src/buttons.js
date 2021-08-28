@@ -1,4 +1,4 @@
-const { MessageButton, MessageActionRow, MessageMenuOption, MessageMenu } = require("discord-buttons");
+const { MessageButton, MessageActionRow, MessageMenuOption, MessageMenu } = require("discord-buttons")
 const { RequiredArg, Command } = require("./commands.js")
 
 class Poll {
