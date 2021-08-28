@@ -114,7 +114,7 @@ Commands.info = new Command("Shows info about the bot and this server's prefix",
 const NewProcess = require('child_process').spawn
 
 Commands.shutdown = new Command("Shuts down the bot after a given time\nDeveloper only", (message, args) => {
-    if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the developer only")
+    if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the bot owner only")
     if (args[0]) {
         warning = args[0]
         client.user.setActivity(args[0] + ", ping me for info")
@@ -248,7 +248,7 @@ Commands.eval = new Command("Evaluates the given args as JavaScript code, and re
     } catch (error) {
         message.channel.send(new Discord.MessageEmbed()
             .setColor("#FF0000")
-            .setTitle("An error accoured:")
+            .setTitle("An error occured:")
             .setDescription(error)
             .setTimestamp())
     }
