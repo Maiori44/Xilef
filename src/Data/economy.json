@@ -378,10 +378,10 @@
         "day": 1628239752422,
         "reversi": 100000000000000000000,
         "connect4": 100000000000000000000,
-        "roshambo": 0,
+        "roshambo": 100000000000000000000,
         "vhour": 1628361645217,
         "vgot": "1152921504606846975",
-        "achievments": "255"
+        "achievments": "511"
     },
     "661283181403701288": {
         "money": 1240,
@@ -512,7 +512,7 @@
         "achievments": "0"
     },
     "684285694063018048": {
-        "money": 661860,
+        "money": 641610,
         "rank": 405,
         "user": "LJMSU",
         "impostors": 25,
@@ -523,8 +523,8 @@
         "reversi": 0,
         "connect4": 2,
         "roshambo": 0,
-        "vhour": 1630142500419,
-        "vgot": "4503599660929728",
+        "vhour": 1630151630585,
+        "vgot": "4503599677706944",
         "achievments": "136"
     },
     "762021343612502066": {
@@ -640,18 +640,18 @@
         "achievments": "0"
     },
     "877861479305596979": {
-        "money": 0,
-        "rank": 1,
+        "money": -1,
+        "rank": -2,
         "user": "Xilef beta",
-        "impostors": 0,
-        "driller": 1,
-        "floor": 0,
-        "msweeper": 0,
-        "day": 1629320407782,
-        "reversi": 0,
-        "connect4": 0,
-        "roshambo": 0,
-        "vhour": 1629403207782,
+        "impostors": 0.5,
+        "driller": 31,
+        "floor": -15.3,
+        "msweeper": 2000000000000000000000000000000000000000000000000000000000000,
+        "day": 0,
+        "reversi": 4444,
+        "connect4": 2,
+        "roshambo": 0.333,
+        "vhour": 0,
         "vgot": "0",
         "achievments": "0"
     },
