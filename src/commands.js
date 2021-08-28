@@ -1,5 +1,5 @@
 require("discord-buttons")(client);
-const { MessageButton, MessageActionRow } = require("discord-buttons");
+const { MessageButton, MessageActionRow } = require("discord-buttons")
 
 class RequiredArg {
     constructor(argnum, errormsg, name, notrequired) {
@@ -22,13 +22,13 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/31"))
+        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/34"))
     }
 
     call(message, args) {
         if (this.requiredargs)
             for (const arg of this.requiredargs)
-                if (!arg.check(args)) throw {msg: arg.errormsg.replace(/\&/g, Prefix.get(message.guild.id)), name: arg.name, num: arg.argnum}
+                if (!arg.check(args)) throw { msg: arg.errormsg.replace(/\&/g, Prefix.get(message.guild.id)), name: arg.name, num: arg.argnum }
 
         this.action(message, args)
     }
@@ -111,16 +111,37 @@ Commands.info = new Command("Shows info about the bot and this server's prefix",
         .setTimestamp(), Buttons)
 }, "Utility")
 
-Commands.warn = new Command("Developer only", (message, args) => {
-    if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the developer only")
-    args[0] = args.join(" ")
-    warning = args[0]
-    client.user.setActivity(args[0] + ", ping me for info")
-}, "Utility", [new RequiredArg(0, "What will you warn the people about . _.", "...text")])
+const NewProcess = require('child_process').spawn
+
+Commands.shutdown = new Command("Shuts down the bot after a given time\nDeveloper only", (message, args) => {
+    if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the bot owner only")
+    if (args[0]) {
+        warning = args[0]
+        client.user.setActivity(args[0] + ", ping me for info")
+    }
+    const timeleft = parseFloat(args[1]) * 60 * 1000
+    console.log("- " + Colors.cyan.colorize("Shutdown initiated:") +
+        "\n\tTime left: " + (timeleft ? (timeleft / 1000) + " seconds" : Colors.hyellow.colorize("None")) +
+        "\n\tReason: " + (args[0] || Colors.hyellow.colorize("None")) +
+        "\n\tRestart?: " + (args[2] ? "true" : "false"))
+    setTimeout(() => {
+        console.log("- Shutting down...")
+        message.channel.send("Shutting down...").then(() => {
+            if (args[2]) {
+                NewProcess("cmd.exe", ["/c", debugmode ? "testbot.bat" : "startbot.bat"], { detached: true })
+                setTimeout(() => message.channel.send("Bot restarted successfully").then(() => process.exit(0), 2500))
+            } else process.exit(0)
+        })
+    }, timeleft || 0)
+}, "Utility", [
+    new RequiredArg(0, undefined, "message", true),
+    new RequiredArg(1, undefined, "time", true),
+    new RequiredArg(2, undefined, "restart?", true)
+])
 
 Commands.hi = new Command("Says hi to you", (message, args) => {
     message.reply("Hi.")
-}, "Simple")
+}, "Joke")
 
 /*Commands.allutf8 = new Command("Get all existing characters in Discord", (message, args) => {
     if (message.author.id != "621307633718132746") {
@@ -138,21 +159,45 @@ Commands.hi = new Command("Says hi to you", (message, args) => {
 
 Commands.annoy = new Command("Annoys the person you want", (message, args) => {
     message.channel.send(args[0].slice(0, 1900) + " you suck")
-}, "Simple", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
+}, "Joke", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
 
 Commands.comfort = new Command("Comforts the person you want", (message, args) => {
     message.channel.send(args[0].slice(0, 1900) + " you don't suck")
-}, "Simple", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
+}, "Joke", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
 
 Commands.say = new Command("Says whatever you want", (message, args) => {
     if (!args.join(" ")) { args[0] = "** **" }
     message.channel.send(args.join(" ").slice(0, 1900))
     message.delete()
-}, "Simple", [new RequiredArg(0, "** **", "...text")])
+}, "Joke", [new RequiredArg(0, "** **", "...text")])
 
 Commands.hentai = new Command("Totally sends you hentai", (message, args) => {
     message.channel.send("No..just no..")
-}, "Simple")
+}, "Joke")
+
+Commands.secret = new Command("Sends you the secret of life", (message, args) => {
+    message.author.send("The sercret of life is...\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⣿⣿⠁⠀⠀⢰⣿⣿⣯⠁⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣷⡄⠀||\n" +
+        "||⠀⠀⣀⣤⣴⣶⣶⣿⡟⠀⠀⠀⢸⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣷⠀||\n" +
+        "||⠀⢰⣿⡟⠋⠉⣹⣿⡇⠀⠀⠀⠘⣿⣿⣿⣿⣷⣦⣤⣤⣤⣶⣶⣶⣶⣿⣿⣿⠀||\n" +
+        "||⠀⢸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⠀||\n" +
+        "||⠀⣸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠉⠻⠿⣿⣿⣿⣿⡿⠿⠿⠛⢻⣿⡇⠀⠀||\n" +
+        "||⠀⣿⣿⠁⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣧⠀⠀||\n" +
+        "||⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀||\n" +
+        "||⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀||\n" +
+        "||⠀⢿⣿⡆⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀||\n" +
+        "||⠀⠸⣿⣧⡀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠃⠀⠀||\n" +
+        "||⠀⠀⠛⢿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⣰⣿⣿⣷⣶⣶⣶⣶⠶⠀⢠⣿⣿⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⣽⣿⡏⠁⠀⠀⢸⣿⡇⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀||\n" +
+        "|| amogus. ||")
+}, "Joke")
 
 //math commands
 
@@ -189,6 +234,25 @@ Commands.clown = new Command("Given a person or a thing, the bot will say how mu
             break
     }
 }, "Math", [new RequiredArg(0, "You're a clown at 100%, since you didn't even give me something or someone", "something")])
+
+const SafeEval = require("safe-eval")
+
+Commands.eval = new Command("Evaluates the given args as JavaScript code, and returns the output", (message, args) => {
+    try {
+        const output = SafeEval(args.join(" "))
+        message.channel.send(new Discord.MessageEmbed()
+            .setColor("#0368f8")
+            .setTitle("Output")
+            .setDescription("```js\n" + output + "```")
+            .setTimestamp())
+    } catch (error) {
+        message.channel.send(new Discord.MessageEmbed()
+            .setColor("#FF0000")
+            .setTitle("An error occured:")
+            .setDescription(error)
+            .setTimestamp())
+    }
+}, "Math", [new RequiredArg(0, "You have to evalute *something*", "...code")])
 
 //images commands
 
@@ -267,13 +331,20 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
             .setTitle(EconomySystem.user + "'s statistics")
             .setDescription("```lua\nDogeCoins: " + EconomySystem.money + "\nRank: " + EconomySystem.rank + "```")
             .addFields(
-                { name: "Singleplayer stats:", value:
-                    "```js\nImpostors found: " + EconomySystem.impostors +
-                    "\nDriller tier: " + EconomySystem.driller +
-                    "\nDungeon top floor: " + EconomySystem.floor +
-                    "\nMineSweeper matches won: " + EconomySystem.msweeper + "```", inline: true },
-                { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.reversi + "\nConnect four matches won: " + EconomySystem.connect4 + "```", inline: true },
-                { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievments.binary, "❔ ???\n") }
+                {
+                    name: "Singleplayer stats:", value:
+                        "```js\nImpostors found: " + EconomySystem.impostors +
+                        "\nDriller tier: " + EconomySystem.driller +
+                        "\nDungeon top floor: " + EconomySystem.floor +
+                        "\nMineSweeper matches won: " + EconomySystem.msweeper + "```", inline: true
+                },
+                {
+                    name: "Multiplayer stats:", value:
+                        "```lua\nReversi matches won: " + EconomySystem.reversi +
+                        "\nConnect four matches won: " + EconomySystem.connect4 +
+                        "\nRoshambo matches won: " + EconomySystem.roshambo + "```", inline: true
+                },
+                { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievements.binary, "❔ ???\n") }
             )
     )
 }, "Economy", [new RequiredArg(0, undefined, "@person", true)])

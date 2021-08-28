@@ -1,3 +1,1 @@
-color 0f
-node .
-pause
+start cmd /c "node . & pause"

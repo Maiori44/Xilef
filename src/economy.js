@@ -121,7 +121,7 @@ class EconomySystem {
             if (message && tmsg) {
                 message.channel.send(tmsg)
             }
-            console.log("- " + Colors.purple.colorize("Sucessfully attempt of buying from an EconomySystem:") +
+            console.log("- " + Colors.purple.colorize("Sucessful attempt at buying from an EconomySystem:") +
                 "\n\tUser: " + this.user +
                 "\n\tCurrent DogeCoins: " + this.money +
                 "\n\tPrice: " + amount)
@@ -171,10 +171,10 @@ Achievments = {
     reversi: new Economy.flag("<:black_circle:869976829811884103> win 15 reversi matches", 2),
     connect4: new Economy.flag("<:yellow_circle:870716292515106846> win 15 connect 4 matches", 3),
     crew: new Economy.flag("<:imposter:874402966084395058> eject 25 impostors in crew", 4),
-    driller: new Economy.flag("<:driller:874403362827796530> reach tier 29 in driller", 5),
+    driller: new Economy.flag("<:driller:874403362827796530> reach tier 30 in driller", 5),
     v_: new Economy.flag("<:v_c:873259417557151765> find all v_s", 6),
     dungeon: new Economy.flag("<:dungeon:875809577487192116> reach floor 50 in dungeon", 7),
-    msweeper: new Economy.flag("💥 win minesweeper 15 times", 8),
+    msweeper: new Economy.flag("💥 win minesweeper 10 times", 8),
 }
 Achievments.binary = [
     Achievments.first.id + "\n",
