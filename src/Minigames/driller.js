@@ -2,17 +2,49 @@ const { RequiredArg, Command } = require("./../commands.js")
 const { Game, MPGame } = require("./../minigames.js")
 
 class DrillerGame {
+    parseModules(EconomySystem) {
+        let stats = EconomySystem.driller.split("-")
+
+        stats.forEach((value) => {
+            if (value == 0) value = 1
+            this.modules.push(parseInt(value, 16))
+        })
+    }
+
     constructor(EconomySystem) {
+        this.modules = []
+
         this.depth = 0
         this.cash = 0
-        this.hp = 100 * EconomySystem.driller
         this.hitlava = false
+
+        this.parseModules(EconomySystem)
+
+        this.max_health = Math.ceil(100 * (this.modules[2] / 4) - 0.25)
+        this.hp = this.max_health
+    }
+
+    getExactModuleData() {
+        let result = ""
+
+        this.modules.forEach((value) => {
+            result += value + "-"
+        })
+
+        result = result.substring(0, result.length - 1)
+        return result
+    }
+
+    getModules() {
+        return "\n  luck:  " + this.modules[0] +
+            "\n  depth: " + this.modules[1] +
+            "\n  armor: " + this.modules[2]
     }
 
     reset(EconomySystem) {
         this.depth = 0
         this.cash = 0
-        this.hp = 100 * EconomySystem.driller
+        this.hp = this.max_health
     }
 
     getInfo(EconomySystem) {
@@ -20,9 +52,9 @@ class DrillerGame {
             .setColor("#964B00")
             .setTitle(EconomySystem.user + "'s Driller stats")
             .setDescription("```lua\ndepth: " + this.depth +
-                "\ntier: " + EconomySystem.driller +
+                "\ntier: " + this.getModules() +
                 "\ncash found: " + this.cash +
-                "\nhealth: " + this.hp + "/" + 100 * EconomySystem.driller + "```")
+                "\nhealth: " + this.hp + "/" + this.max_health + "```")
             .setTimestamp();
     }
 }
@@ -165,37 +197,7 @@ Driller.Ores = [
     new DrillerOre("The end...", 3000000, 100, 30),
     new DrillerOre("how", -999999999, 0, 69),
 ]
-Driller.tiers = [
-    1000,
-    5000,
-    16000,
-    40000,
-    75000,
-    125000,
-    200000,
-    250000,
-    300000,
-    370000,
-    600000,
-    1400000,
-    5000000,
-    5500000,
-    6500000,
-    8000000,
-    10000000,
-    12500000,
-    15500000,
-    19000000,
-    23000000,
-    27500000,
-    32500000,
-    38000000,
-    44000000,
-    50500000,
-    57500000,
-    69420420,
-    80696969
-]
+
 Driller.help =
     "`&driller stats` says the stats of your driller\n" +
     "`&driller dig [depth]` makes the driller dig deeper, finding treasures..or lava!\n" +
@@ -232,17 +234,17 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     log += "You died!"
                     break
                 }
-                let hurtchance = GetPercentual();
+                let hurtchance = GetPercentual() * GetPercentual() / DrillerGame.modules[0]
                 if (DrillerGame.hitlava) hurtchance = hurtchance * 2
 
                 let currentOre = Driller.Ores[DrillerGame.depth]
-                if (currentOre.tier > EconomySystem.driller) {
+                if (currentOre.tier > (DrillerGame.depth / 4)) {
 
                     log += "Your driller can't dig any further, please upgrade it to dig further. For now, cashin to get the money you found."
                     break;
                 }
 
-                if (hurtchance <= currentOre.lavachance) {
+                if (hurtchance >= currentOre.lavachance) {
                     const lostHp = Math.max((7 * DrillerGame.depth), 1)
                     DrillerGame.hp -= lostHp
                     DrillerGame.hitlava = true
@@ -253,27 +255,17 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     if (currentOre.value != 0)
                         text += `, has a value of ${currentOre.value}\n`
                     log += text
-                    
+
                     DrillerGame.cash += currentOre.value
                     DrillerGame.depth++
 
                     DrillerGame.hitlava = false
-
-                    if (currentOre.tier > EconomySystem.driller) {
-                        log += "Your driller cannot dig any further, please upgrade it when possible. Automatically cashing in."
-
-                        message.channel.send("Your driller comes back, and gives you all the DogeCoins it had collected.")
-                        EconomySystem.give(DrillerGame.cash, message)
-                        DrillerGame.reset(EconomySystem)
-
-                        break
-                    }
                 }
 
             }
 
             const resultEmbed = DrillerGame.getInfo(EconomySystem)
-            
+
             let results = [];
             for (var i = 0; i < log.toString().length; i += 1024)
                 results.push(log.toString().substring(i, i + 1024));
@@ -289,31 +281,63 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             break
         }
         case "repair": {
+            args[1] = (args[1] || "").toLowerCase()
+
+            const hpAmount = parseInt(args[1])
+
             const cost =
-                args[1] == 'max'
-                    ? 100 * EconomySystem.driller - DrillerGame.hp
-                    : parseInt(args[1]);
+                Math.ceil(
+                    args[1] == 'max'
+                        ? this.max_health
+                        : amount
+                        * armor / 4
+                )
+
             if (isNaN(cost)) {
                 message.channel.send(`I need to know how much you want to repair,\nexample: \`${Prefix.get(message.guild.id)}driller repair 50\` will restore 50 hp of the drill, and will cost 50 DogeCoins.\nYou could also put 'max' and it will restore your drill to max hp.`)
                 return
             }
-            if (DrillerGame.hp == 100 * EconomySystem.driller) {
+            if (DrillerGame.hp == this.max_health) {
                 message.channel.send("Your driller is arleady in perfect condition.")
-            } else if (EconomySystem.buy(cost, message, "Your driller recovered " + cost + " hp! (" + cost + " DogeCoins spent)", "You need " + (cost - EconomySystem.money) + " more DogeCoins for this.")) {
-                DrillerGame.hp = Math.min(DrillerGame.hp + cost, 100 * EconomySystem.driller)
+                return
+            }
+            if (EconomySystem.buy(cost, message,
+                "Your driller recovered " + hpAmount + " hp! (" + cost + " DogeCoins spent)",
+                "You need " + (cost - EconomySystem.money) + " more DogeCoins for this.")
+            ) {
+                DrillerGame.hp = Math.min(DrillerGame.hp + hpAmount, 100 * EconomySystem.driller)
             }
             break
         }
         case "upgrade": {
-            if (EconomySystem.driller == 30) {
-                message.channel.send("Your driller arleady reached max tier.")
-                EconomySystem.award("driller", message)
-            } else if (EconomySystem.buy(Driller.tiers[EconomySystem.driller - 1], message, "Your driller reached tier " + (EconomySystem.driller + 1) + "! (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins needed)")) {
-                EconomySystem.driller = EconomySystem.driller + 1
-                if (EconomySystem.driller == 30) {
-                    EconomySystem.award("driller", message)
-                }
+            
+            let validModules = ["luck", "depth", "armor"]
+
+            let moduleIndex = validModules.indexOf(args[1])
+
+            if (moduleIndex == -1) {
+                message.channel.send("You have to send a valid module! You can choose between 'luck', 'depth', 'armor'.");
+                return
             }
+
+            let repeat = parseInt(args[2]) || 1 // DO NOT HANDLE NEGATIVE CASES ON PURPOSE
+
+            let cost = 1;
+
+            for (let i = 0; i < repeat; i++) {
+                cost += Math.ceil(DrillerGame.modules[moduleIndex] * 4 * Math.log2(DrillerGame.modules[moduleIndex]))
+                DrillerGame.modules[moduleIndex]++
+            }
+
+            if (EconomySystem.buy(cost, message,
+                `Your \`${validModules[moduleIndex]}\` reached level ${DrillerGame.modules[moduleIndex] + repeat}, spent ${cost} DogeCoins.`,
+                `You don't have enough DogeCoins to upgrade your ${validModules[moduleIndex]}, that costs ${cost} DogeCoins.`
+            )) {
+                DrillerGame.modules[moduleIndex] += repeat
+                message.channel.send(DrillerGame.getInfo(EconomySystem))
+            }
+
+
             break
         }
         case "cashin": {
