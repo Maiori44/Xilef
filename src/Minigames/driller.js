@@ -269,9 +269,6 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             for (var i = 0; i < log.toString().length; i += 1024)
                 results.push(log.toString().substring(i, i + 1024));
 
-            if (results.length > 1)
-                resultEmbed.addField("Warning : ", "The ore log has been split up to allow it to be sent.")
-
             for (let i = 0; i < results.length; i++)
                 resultEmbed.addField("**Page " + (i + 1) + "** :", results[i], true);
 
