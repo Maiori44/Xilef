@@ -184,6 +184,13 @@ Dungeon.thinkers = {
         }
         return "The slime hops around.."
     },
+    skeleton: (DungeonGame, Entity) => {
+        if (DungeonGame.player.attack > Entity.defense * 1.7) {
+            Entity.defense = Math.floor(Entity.defense * 1.7)
+            return "The skeleton drinks..milk..\nThe skeleton defense increases!"
+        }
+        return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+    },
     zombie: (DungeonGame, Entity) => {
         let msg = "The zombie becomes more vicious!\nThe zombie attack increased!\n"
         Entity.attack = Entity.attack * 1.1
@@ -199,13 +206,6 @@ Dungeon.thinkers = {
         }
         DungeonGame.cash = Math.max(DungeonGame.cash - 20, 0)
         return Dungeon.attacks.slash.use(Entity, DungeonGame.player) + "\nThe goblin steals some of your money!"
-    },
-    skeleton: (DungeonGame, Entity) => {
-        if (DungeonGame.player.attack > Entity.defense * 1.5) {
-            Entity.defense = Math.floor(Entity.defense * 1.5)
-            return "The skeleton drinks..milk..\nThe skeleton defense increases!"
-        }
-        return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
     },
     "skeleton archer": (DungeonGame, Entity) => {
         if (GetPercentual() <= 40) {
