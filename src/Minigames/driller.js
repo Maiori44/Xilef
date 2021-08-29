@@ -7,7 +7,7 @@ class DrillerGame {
 
         stats.forEach((value) => {
             if (value == 0) value = 1
-            this.modules.push(parseInt(value, 16))
+            this.modules.push(parseInt(value))
         })
     }
 
