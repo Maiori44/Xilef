@@ -464,7 +464,7 @@
         "achievments": "0"
     },
     "694728312823480415": {
-        "money": 929578654,
+        "money": 928730204,
         "rank": 16969,
         "user": "lemon cannon",
         "impostors": 25,
@@ -475,8 +475,8 @@
         "reversi": 0,
         "connect4": 15,
         "roshambo": 0,
-        "vhour": 1630169910925,
-        "vgot": "36066191294662656",
+        "vhour": 1630264403524,
+        "vgot": "36066192368404480",
         "achievments": "29"
     },
     "759184418945630338": {
@@ -688,7 +688,7 @@
         "achievments": "0"
     },
     "405012455341817868": {
-        "money": 100,
+        "money": 50,
         "rank": 1,
         "user": "MAKYUNI",
         "impostors": 0,
@@ -699,8 +699,8 @@
         "reversi": 0,
         "connect4": 0,
         "roshambo": 4,
-        "vhour": 1630258716611,
-        "vgot": "0",
+        "vhour": 1630263685916,
+        "vgot": "8192",
         "achievments": "0"
     }
 }
