@@ -104,77 +104,77 @@ Dungeon.enemies = [
     [55, 0, 35, 10, "goblin", "goblin novice"],
     [45, 0, 25, 5, "bat", "cave bat"],
     [150, 100, 60, 30, "lost-spirit", "lost spirit", true],
-   // overgrown
+    // overgrown
     [80, 0, 40, 5, "slime", "moss slime"],
     [110, 0, 60, 25, "skeleton", "overgrown skeleton"],
     [200, 200, 65, 40, "vine-monster", "vine monster"],
     [100, 0, 70, 20, "goblin", "goblin brute"],
     [120, 0, 50, 10, "bat", "jungle bat"],
     [300, 200, 90, 60, "nature-elemental", "nature elemental", true],
-     // crystal
+    // crystal
     [160, 0, 45, 20, "slime", "crystaline slime"],
     [240, 0, 85, 35, "skeleton", "prism skeleton"],
     [400, 300, 90, 60, "gemstone-golem", "gemstone golem"],
     [250, 0, 80, 30, "goblin", "goblin crusher"],
     [210, 0, 65, 15, "bat", "glowing bat"],
     [600, 300, 120, 90, "crystal-elemental", "crystal elemental", true],
-     // spirit
+    // spirit
     [270, 0, 60, 40, "slime", "howling slime"],
     [320, 0, 90, 40, "skeleton", "skeleton summoner"],
     [600, 400, 100, 80, "great spirit", "great spirit"],
     [310, 0, 85, 40, "goblin", "goblin spiritualist"],
     [300, 0, 75, 20, "bat", "albino bat"],
     [900, 400, 150, 120, "power-ghost", "power ghost", true],
-      // dark
+    // dark
     [360, 0, 90, 50, "slime", "void slime"],
     [430, 0, 90, 50, "skeleton", "voidhammer skeleton"],
     [800, 500, 135, 100, "void-ghost", "void ghost"],
     [415, 0, 90, 50, "goblin", "ambush goblin"],
     [400, 0, 90, 25, "bat", "great bat"],
     [1200, 500, 180, 150, "the-void", "the void", true],
-     // magma
+    // magma
     [460, 0, 105, 60, "slime", "magma slime"],
     [500, 0, 105, 60, "skeleton", "skeleton incinerator"],
     [1000, 600, 160, 120, "bone-snake", "bone-snake"],
     [500, 0, 105, 60, "goblin", "goblin firewarrior"],
     [500, 0, 105, 30, "bat", "lava bat"],
     [1500, 600, 210, 180, "lava-elemental", "lava elemental", true],
-     // blight
+    // blight
     [600, 0, 120, 70, "slime", "blighted slime"],
     [600, 0, 120, 70, "skeleton", "infected skeleton"],
     [1200, 700, 180, 140, "blight-orb", "blight orb"],
     [600, 0, 120, 70, "goblin", "mutated goblin"],
     [600, 0, 120, 70, "bat", "corrupted bat"],
     [1800, 700, 240, 210, "radiant-core", "radiant core", true],
-     // error
+    // error
     [700, 0, 135, 80, "slime", "mistake slime"],
     [700, 0, 135, 80, "skeleton", "skerrorton"],
     [1400, 800, 180, 160, "question-mark", "???"],
     [700, 0, 135, 80, "goblin", "gobboblin"],
     [700, 0, 135, 80, "bat", "bullet bat"],
     [2100, 800, 270, 240, "error", "%}])@&!(*%-!", true],
-     // ancient
+    // ancient
     [800, 0, 150, 90, "slime", "primordial slime"],
     [800, 0, 150, 90, "skeleton", "ancient skeleton"],
     [1600, 900, 225, 180, "ancient-swordmaster", "ancient swordmaster"],
     [800, 0, 150, 90, "goblin", "goblin cyclops"],
     [800, 0, 150, 90, "bat", "irontooth bat"],
     [2400, 900, 300, 210, "gigyas", "gigyas", true],
-     // element
+    // element
     [900, 0, 165, 100, "slime", "core slime"],
     [900, 0, 165, 100, "skeleton", "plasmabone skeleton"],
     [1800, 1000, 220, 200, "amoled-elemental", "amoled elemental"],
     [900, 0, 165, 100, "goblin", "goblin elemental"],
     [900, 0, 165, 100, "bat", "ultrabat"],
     [2700, 1000, 320, 300, "true-elemental", "true elemental", true],
-     // hell
+    // hell
     [1000, 0, 180, 110, "slime", "inferno slime"],
     [1000, 0, 180, 110, "skeleton", "everburn skeleton"],
     [2000, 1000, 270, 220, "ruined-elemental", "ruined elemental"],
     [1000, 0, 180, 110, "goblin", "ashhammer goblin"],
     [1000, 0, 180, 110, "bat", "hellstone bat"],
     [3000, 1000, 360, 330, "calamitas", "calamitas", true],
-    
+
 
 ]
 Dungeon.thinkers = {
@@ -294,6 +294,12 @@ Dungeon.attacks = {
         Attacked.mana = Math.floor(Attacked.mana * 0.6)
         return msg
     }),
+    shockwave: new Attack("Shockwave", 50, (Attacker, Attacked) => {
+        const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 0.5)) +
+            "\n" + Attacked.evmsg + "attack decreased!"
+        Attacked.attack = Math.floor(Attacked.attack * 0.7)
+        return msg
+    }),
     ground: new Attack("Earthquake", 75, (Attacker, Attacked) => {
         let DungeonGame
         for (let ID in Dungeon.list) {
@@ -314,7 +320,7 @@ Dungeon.attacks = {
         if (chance <= 30) return "..the attack misses!"
         const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 2)) +
             "\n" + Attacked.evmsg + "attack decreased!\n" + Attacked.evmsg + "defense decreased!"
-        Attacked.attack = Math.floor(Attacked.defense * 0.7)
+        Attacked.attack = Math.floor(Attacked.attack * 0.7)
         Attacked.defense = Math.floor(Attacked.defense * 0.7)
         return msg
     }),
@@ -406,6 +412,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                     "`&dungeon attack slash` the basic attack, costs 0\n" +
                     "`&dungeon attack fire` does slightly less damage but reduces enemy defense, costs 25\n" +
                     "`&dungeon attack ice` does slightly more damage and reduces enemy mana, costs 50\n" +
+                    "`&dungeon attack shockwave` does half damage and reduces enemy attack, costs 50\n" +
                     "`&dungeon attack ground` same damage as slash but hits all enemies, costs 75\n" +
                     "`&dungeon attack thunder` does double damage and reduces both enemy attack and defense, but has a 30% chance of missing, costs 100\n")
                     .replace(/\&/g, Prefix.get(message.guild.id))
