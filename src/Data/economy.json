@@ -10,6 +10,7 @@
         "day": 1629804192675,
         "reversi": 2,
         "connect4": 10,
+        "roshambo": 0,
         "vhour": 1629969938274,
         "vgot": "238863885094725933",
         "achievments": "0"
@@ -121,6 +122,7 @@
         "day": 1629960310551,
         "reversi": 0,
         "connect4": 3,
+        "roshambo": 0,
         "vhour": 1629969899924,
         "vgot": "9173149408947757",
         "achievments": "17"
@@ -200,12 +202,13 @@
         "day": 1629044929782,
         "reversi": 4,
         "connect4": 4,
+        "roshambo": 0,
         "vhour": 1629829061950,
         "vgot": "18050050273007158",
         "achievments": "0"
     },
     "483715787467653122": {
-        "money": 44648,
+        "money": 11503,
         "rank": 52,
         "user": "poly translator*",
         "impostors": 19,
@@ -215,6 +218,7 @@
         "day": 1629724778915,
         "reversi": 0,
         "connect4": 15,
+        "roshambo": 0,
         "vhour": 1629916961350,
         "vgot": "16031378724880",
         "achievments": "4"
@@ -326,6 +330,7 @@
         "day": 1628419767943,
         "reversi": 1,
         "connect4": 0,
+        "roshambo": 0,
         "vhour": 1629829423454,
         "vgot": "731272010235027685",
         "achievments": "128"
@@ -389,6 +394,7 @@
         "day": 1629408499878,
         "reversi": 0,
         "connect4": 0,
+        "roshambo": 0,
         "vhour": 1629839460568,
         "vgot": "11408506944",
         "achievments": "0"
@@ -420,6 +426,7 @@
         "day": 1629959763339,
         "reversi": 0,
         "connect4": 6,
+        "roshambo": 0,
         "vhour": 1629974894894,
         "vgot": "18090823339434762",
         "achievments": "8"
@@ -467,6 +474,7 @@
         "day": 1629840072591,
         "reversi": 0,
         "connect4": 15,
+        "roshambo": 0,
         "vhour": 1629920995717,
         "vgot": "36031006788288512",
         "achievments": "29"
@@ -514,6 +522,7 @@
         "day": 1629882421416,
         "reversi": 0,
         "connect4": 0,
+        "roshambo": 0,
         "vhour": 1629872650979,
         "vgot": "4503599627374784",
         "achievments": "0"
@@ -593,6 +602,7 @@
         "day": 1628856974358,
         "reversi": 0,
         "connect4": 3,
+        "roshambo": 0,
         "vhour": 1629794512453,
         "vgot": "4718594",
         "achievments": "0"
@@ -636,12 +646,12 @@
         "impostors": 0.5,
         "driller": 31,
         "floor": -15.3,
-        "msweeper": 2000000000000000000000000000000000000000000000000000000000000,
-        "day": 0,
+        "msweeper": 2e+60,
+        "day": 1630139817825,
         "reversi": 4444,
         "connect4": 2,
         "roshambo": 0.333,
-        "vhour": 0,
+        "vhour": 1630222617825,
         "vgot": "0",
         "achievments": "0"
     },
