@@ -284,7 +284,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             const cost =
                 Math.ceil(
                     args[1] == 'max'
-                        ? this.max_health
+                        ? DrillerGame.max_health
                         : amount
                         * armor / 4
                 )
@@ -293,7 +293,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                 message.channel.send(`I need to know how much you want to repair,\nexample: \`${Prefix.get(message.guild.id)}driller repair 50\` will restore 50 hp of the drill, and will cost 50 DogeCoins.\nYou could also put 'max' and it will restore your drill to max hp.`)
                 return
             }
-            if (DrillerGame.hp == this.max_health) {
+            if (DrillerGame.hp == DrillerGame.max_health) {
                 message.channel.send("Your driller is arleady in perfect condition.")
                 return
             }
