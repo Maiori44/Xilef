@@ -180,30 +180,71 @@ Dungeon.thinkers = {
         if (GetPercentual() <= 20) {
             return Entity.fight(DungeonGame.player, Entity.attack)
         }
-        return "The slime hops around.."
+        return `The ${Entity.name} hops around..`
     },
     skeleton: (DungeonGame, Entity) => {
         if (DungeonGame.player.attack > Entity.defense * 1.7) {
             Entity.defense = Math.floor(Entity.defense * 1.7)
-            return "The skeleton drinks..milk..\nThe skeleton defense increases!"
+            return `The ${Entity.name} drinks..milk..\nThe skeleton defense increases!`
         }
         return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
     },
-    zombie: (DungeonGame, Entity) => {
-        let msg = "The zombie becomes more vicious!\nThe zombie attack increased!\n"
-        Entity.attack = Entity.attack * 1.1
-        msg = msg + Entity.fight(DungeonGame.player, Entity.attack)
-        return msg
+    "rock-elemental": (DungeonGame, Entity) => {
+        const chance = GetPercentual()
+        if (Entity.mana < 25 || chance == 100) {
+            Entity.mana = 100
+            return "The rock elemental absorbs rocks around it\nThe rock elemental mana increases!"
+        } else if (chance < 60) {
+            Entity.mana -= 25
+            return "The rock elemental throws rock at you!\n" +
+                Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
+                Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
+                Entity.fight(DungeonGame.player, Entity.attack)
+        }
+        return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
     },
     goblin: (DungeonGame, Entity) => {
         if (GetPercentual() <= 20) {
-            return "The goblin charges!\n" +
+            return `The ${Entity.name} charges!\n` +
                 Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2)) + "\n" +
                 Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2)) + "\n" +
                 Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2))
         }
         DungeonGame.cash = Math.max(DungeonGame.cash - 20, 0)
-        return Dungeon.attacks.slash.use(Entity, DungeonGame.player) + "\nThe goblin steals some of your money!"
+        return Dungeon.attacks.slash.use(Entity, DungeonGame.player) + `\nThe ${Entity.name} steals some of your money!`
+    },
+    bat: (DungeonGame, Bat) => {
+        if (Bat.mana >= 150) {
+            return Dungeon.attacks.leech.use(Bat, DungeonGame.player)
+        } else if (GetPercentual() <= 35) {
+            DungeonGame.enemies.push(new Entity(Bat.hp * 0.8, Bat.mana + 50, Bat.attack * 1.8, Bat.defense, "bat", Bat.name))
+            return `The ${Bat.name} calls for help!\nAnother bat joined the fight!`
+        }
+        return Bat.fight(DungeonGame.player, Bat.attack)
+    },
+    "lost-spirit": (DungeonGame, Entity) => {
+        if (Entity.mana >= 25 && DungeonGame.player.defense >= 40) {
+            Entity.mana -= 25
+            DungeonGame.player.defense = DungeonGame.player.defense * 0.8
+            return "The lost spirit haunts you..\nYour defense decreased!"
+        }
+        Entity.mana += 10
+        return Entity.fight(DungeonGame.player, Entity.attack)
+    },
+    "vine-monster": (DungeonGame, Entity) => {
+        if (GetPercentual() >= 50 && Entity.mana >= 25) {
+            Entity.mana -= 25
+            DungeonGame.player.attack = DungeonGame.player.attack * 0.7
+            return Dungeon.attacks.slash.use(Entity, DungeonGame.player) + "\nYour attack decreased!"
+        }
+    }
+}
+/*Dungeon.thinkers = {
+    zombie: (DungeonGame, Entity) => {
+        let msg = "The zombie becomes more vicious!\nThe zombie attack increased!\n"
+        Entity.attack = Entity.attack * 1.1
+        msg = msg + Entity.fight(DungeonGame.player, Entity.attack)
+        return msg
     },
     "skeleton archer": (DungeonGame, Entity) => {
         if (GetPercentual() <= 40) {
@@ -275,7 +316,7 @@ Dungeon.thinkers = {
         Entity.mana = 20000
         return "Supreme Calamitas recharges..and restores all of its mana!"
     },
-}
+}*/
 Dungeon.attacks = {
     slash: new Attack("Slash", 0, (Attacker, Attacked) => {
         return Attacker.fight(Attacked, Attacker.attack)
