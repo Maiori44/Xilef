@@ -159,7 +159,7 @@ Dungeon.enemies = [
     [1600, 900, 225, 180, "ancient-swordmaster", "ancient swordmaster"],
     [800, 0, 150, 90, "goblin", "goblin cyclops"],
     [800, 0, 150, 90, "bat", "irontooth bat"],
-    [2400, 900, 300, 210, "gigyas", "gigyas", true],
+    [2400, 900, 300, 210, "Giygas clone", "Giygas clone", true],
     // element
     [900, 0, 165, 100, "slime", "core slime"],
     [900, 0, 165, 100, "skeleton", "plasmabone skeleton"],
@@ -173,9 +173,7 @@ Dungeon.enemies = [
     [2000, 1000, 270, 220, "ruined-elemental", "ruined elemental"],
     [1000, 0, 180, 110, "goblin", "ashhammer goblin"],
     [1000, 0, 180, 110, "bat", "hellstone bat"],
-    [3000, 1000, 360, 330, "calamitas", "calamitas", true],
-
-
+    [3000, 1000, 360, 330, "Calamitas clone", "Calamitas clone", true],
 ]
 Dungeon.thinkers = {
     slime: (DungeonGame, Entity) => {
