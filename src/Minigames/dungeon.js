@@ -437,7 +437,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                     DungeonGame.player.mana = Math.min(Math.floor(DungeonGame.player.mana + boost * 2), 2000)
                     DungeonGame.player.attack = Math.min(Math.floor(DungeonGame.player.attack + boost), DungeonGame.statmax)
                     DungeonGame.player.defense = Math.min(Math.floor(DungeonGame.player.defense + boost), DungeonGame.statmax)
-                    index = 0
+                    index = -1
                 } else msg = msg + "\n" + Enemy.think(DungeonGame)
             }
             const InfoEmbed = DungeonGame.getInfo(EconomySystem)
@@ -461,7 +461,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             const InfoEmbed = DungeonGame.getInfo(EconomySystem)
             InfoEmbed.addField("Latest event:", msg)
             message.channel.send(InfoEmbed)
-            return
+            break
         }
         case "cashin": {
             if (DungeonGame.enemies.length) {
