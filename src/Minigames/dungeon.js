@@ -322,6 +322,14 @@ Dungeon.attacks = {
         Attacked.defense = Math.floor(Attacked.defense * 0.7)
         return msg
     }),
+    leech: new Attack("Leech", 150, (Attacker, Attacked) => {
+        const chance = GetPercentual()
+        if (chance <= 40) return "..the attack misses!"
+        const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 0.7)) +
+            "\n" + Attacked.evmsg + "got life stealed!"
+        Attacker.hp += Math.floor(Attacker.attack * 0.7)
+        return msg
+    }),
 }
 Dungeon.help =
     "`&dungeon stats` say the stats of your current adventure\n" +
@@ -412,7 +420,8 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                     "`&dungeon attack ice` does slightly more damage and reduces enemy mana, costs 50\n" +
                     "`&dungeon attack shockwave` does half damage and reduces enemy attack, costs 50\n" +
                     "`&dungeon attack ground` same damage as slash but hits all enemies, costs 75\n" +
-                    "`&dungeon attack thunder` does double damage and reduces both enemy attack and defense, but has a 30% chance of missing, costs 100\n")
+                    "`&dungeon attack thunder` does double damage and reduces both enemy attack and defense, but has a 30% chance of missing, costs 100\n"+
+                    "`&dungeon attack leech` a brutal attack that does 70% damage and has a 40% chance of missing, but regains health based on damage dealt\n")
                     .replace(/\&/g, Prefix.get(message.guild.id))
                 )
                 return
