@@ -120,33 +120,41 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             return
         }
         case "dig": {
+            /** @param {string} position @returns {number[]} */
             function parsePosition(position) {
-                if (/[0-8]-[0-8]/.test(position)) {
-                    const [from, to] = position.split('-').map(val => parseInt(val))
-                    if ([from, to].some(isNaN)) return
-                    return [...Array(parseInt(to + 1)).keys()].slice(parseInt(from))
-                } else {
-                    return args[1]?.split(',').map(position => parseInt(position))
+                if (/^\d+-\d+$/.test(position)) {
+                    const [from, to] = position.split('-')
+                        .map((value) => parseFloat(value))
+                        .sort((a, b) => a - b)
+
+                    return [...Array(to + 1).keys()].slice(from)
                 }
+
+                if (/^\d+(,\d+)+$/.test(position)) {
+                    return position.split(',')
+                        .map((value) => parseInt(value))
+                }
+
+                return [parseInt(position)]
             }
 
             const x = parsePosition(args[1])
             const y = parsePosition(args[2])
-                .slice(parseInt(args[2]?.split('-')[0])) ??
-                args[2]?.split(',').map(position => parseInt(position))
+
+            console.log(x,y);
+
+            message.channel.send(`X: [${x.join(', ')}]; Y: [${y.join(', ')}]`)
+
 
             if ([...x,...y].some(isNaN)) {
-                message.channel.send(`You need to give valid coordinates for where to dig\nExample: \`${Prefix.get(message.guild.id)}msweeper dig 0 0\` will dig the tile in the top left corner`)
+                message.channel.send(`You need to give valid coordinates for where to dig\nExample: \`${Prefix.get(message.guild.id)}msweeper dig 0 0\` will dig the tile in the top left corner\n\nYou could also put a range (N-N) or a comma seperated list of positions (N,N,...)\nExample: \`${Prefix.get(message.guild.id)}msweeper dig 0-8 0,2,4,6,8\``)
                 return
             }
+
+            if ([...x, ...y].some((position) => position < 0 || position > 8)) {
+                return void message.channel.send('The location must be between 0 and 8!')
+            }
             const MineSweeperGame = MineSweeper.getGame(message.author.id)
-
-            // for (const xs of x)
-            //     for (const ys of y)
-            //         if (dig(xs, ys) > 0) return
-
-            // function dig(x, y) {
-
 
             let CheckNeighbors = []
             let Queue = x.map(x=> y.map(y=> ({x,y}) )).flat()
@@ -198,7 +206,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             }
             return
         }
-        case "flag": {
+        case 'flag': {
             const x = parseInt(args[1])
             const y = parseInt(args[2])
             if (isNaN(x) || isNaN(y)) {
