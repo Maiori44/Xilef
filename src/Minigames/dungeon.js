@@ -252,6 +252,7 @@ Dungeon.thinkers = {
 Dungeon.attacks = {
     slash: new Attack("Slash", 0, (Attacker, Attacked) => {
         return Attacker.fight(Attacked, Attacker.attack)
+        Entity.rspell = false
         
     }),
     fire: new Attack("Fire Storm", 25, (Attacker, Attacked) => {
