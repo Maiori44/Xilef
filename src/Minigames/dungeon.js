@@ -53,7 +53,7 @@ class DungeonGame {
     constructor() {
         this.floor = 1
         this.cash = 0
-        this.player = new Entity(100, 100, 40, 20)
+        this.player = new Entity(100, 100, 40, 20, "player", "You")
         this.explored = 3
         this.enemies = []
     }
@@ -65,7 +65,7 @@ class DungeonGame {
     reset() {
         this.floor = 1
         this.cash = 0
-        this.player = new Entity(100, 100, 40, 20)
+        this.player = new Entity(100, 100, 40, 20, "player", "You")
         this.explored = 3
         this.enemies = []
     }
