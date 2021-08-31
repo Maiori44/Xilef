@@ -24,9 +24,13 @@ class Entity {
         const omana = this.mana
         let msg = "The " + this.ai + " does nothing.."
         if (Dungeon.thinkers[this.ai]) msg = Dungeon.thinkers[this.ai](DungeonGame, this)
-        if (omana == this.mana) {
+        if (this.ai == "player" && omana == this.mana) {
             this.mana = Math.min(this.mana + 10 * DungeonGame.floor, 2000)
         }
+        this.hp = Math.floor(this.hp)
+        this.mana = Math.floor(this.mana)
+        this.attack = Math.floor(this.attack)
+        this.defense = Math.floor(this.defense)
         return msg
     }
 }
