@@ -120,78 +120,131 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             return
         }
         case "dig": {
-            const x = parseInt(args[1])
-            const y = parseInt(args[2])
-            if (isNaN(x) || isNaN(y)) {
-                message.channel.send(`You need to give valid coordinates for where to dig\nExample: \`${Prefix.get(message.guild.id)}msweeper dig 0 0\` will dig the tile in the top left corner`)
+            /** @param {string} position @returns {number[]} */
+            function parsePosition(position) {
+                if (/^\d+-\d+$/.test(position)) {
+                    const [from, to] = position.split('-')
+                        .map((value) => parseFloat(value))
+                        .sort((a, b) => a - b)
+
+                    return [...Array(to + 1).keys()].slice(from)
+                }
+
+                if (/^\d+(,\d+)+$/.test(position)) {
+                    return position.split(',')
+                        .map((value) => parseInt(value))
+                }
+
+                return [parseInt(position)]
+            }
+
+            const x = parsePosition(args[1])
+            const y = parsePosition(args[2])
+
+            console.log(x,y);
+
+            if ([...x,...y].some(isNaN)) {
+                message.channel.send(`You need to give valid coordinates for where to dig\nExample: \`${Prefix.get(message.guild.id)}msweeper dig 0 0\` will dig the tile in the top left corner\n\nYou could also put a range (N-N) or a comma seperated list of positions (N,N,...)\nExample: \`${Prefix.get(message.guild.id)}msweeper dig 0-8 0,2,4,6,8\``)
                 return
             }
+
+            if ([...x, ...y].some((position) => position < 0 || position > 8)) {
+                return void message.channel.send('The location must be between 0 and 8!')
+            }
             const MineSweeperGame = MineSweeper.getGame(message.author.id)
-            if (MineSweeperGame.board[y] && MineSweeperGame.board[y][x]) {
-                if (MineSweeperGame.board[y][x].isbomb) {
-                    message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem, true))
-                    MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
-                    return
-                }
-                let CheckNeighbors = []
-                let Queue = [{ x: x, y: y }]
-                do {
-                    if (Queue.length) {
-                        for (let i = 0; i < Queue.length; i++) {
-                            CheckNeighbors.push(Queue.pop())
+
+            let CheckNeighbors = []
+            let Queue = x.map(x=> y.map(y=> ({x,y}) )).flat()
+            do {
+                if (Queue.length) {
+                    for (let i = 0; i < Queue.length; i++) {
+                        CheckNeighbors.push(Queue.pop())
+                    }
+                    for (const Tileinfo of CheckNeighbors) {
+                        if (!MineSweeperGame.board[Tileinfo.y] && !MineSweeperGame.board[Tileinfo.y][Tileinfo.x])
+                            message.channel.send("That location is out of bounds.")
+                        if (MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isbomb) {
+                            message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem,   true))
+                            MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
+                            return 1
                         }
-                        for (const Tileinfo of CheckNeighbors) {
-                            if (!MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isbomb && !MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isrevealed) {
-                                MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isrevealed = true
-                                if (!MineSweeperGame.board[Tileinfo.y][Tileinfo.x].nearbybombs) {
-                                    const px = Math.min(Tileinfo.x + 1, 8)
-                                    const mx = Math.max(Tileinfo.x - 1, 0)
-                                    const py = Math.min(Tileinfo.y + 1, 8)
-                                    const my = Math.max(Tileinfo.y - 1, 0)
-                                    Queue.push({ x: Tileinfo.x, y: py })
-                                    Queue.push({ x: mx, y: py })
-                                    Queue.push({ x: mx, y: Tileinfo.y })
-                                    Queue.push({ x: mx, y: my })
-                                    Queue.push({ x: Tileinfo.x, y: my })
-                                    Queue.push({ x: px, y: my })
-                                    Queue.push({ x: px, y: Tileinfo.y })
-                                    Queue.push({ x: px, y: py })
-                                }
+
+                        if (!MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isbomb &&    !MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isrevealed) {
+                            MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isrevealed = true
+                            if (!MineSweeperGame.board[Tileinfo.y][Tileinfo.x].nearbybombs)     {
+                                const px = Math.min(Tileinfo.x + 1, 8)
+                                const mx = Math.max(Tileinfo.x - 1, 0)
+                                const py = Math.min(Tileinfo.y + 1, 8)
+                                const my = Math.max(Tileinfo.y - 1, 0)
+                                Queue.push({ x: Tileinfo.x, y: py })
+                                Queue.push({ x: mx, y: py })
+                                Queue.push({ x: mx, y: Tileinfo.y })
+                                Queue.push({ x: mx, y: my })
+                                Queue.push({ x: Tileinfo.x, y: my })
+                                Queue.push({ x: px, y: my })
+                                Queue.push({ x: px, y: Tileinfo.y })
+                                Queue.push({ x: px, y: py })
                             }
                         }
                     }
-                } while (Queue.length > 0)
-                message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem))
-                if (!MineSweeperGame.tilesleft) {
-                    message.channel.send("You won!")
-                    EconomySystem.give(300, message)
-                    EconomySystem.alterValue("msweeper", 1)
-                    if (EconomySystem.msweeper == 10) {
-                        EconomySystem.award("msweeper", message)
-                    }
-                    MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
                 }
-                return
-            } else {
-                message.channel.send("That location is out of bounds.")
-                return
-            }
-        }
-        case "flag": {
-            const x = parseInt(args[1])
-            const y = parseInt(args[2])
-            if (isNaN(x) || isNaN(y)) {
-                message.channel.send(`You need to give valid coordinates for where to place the flag\nExample: \`${Prefix.get(message.guild.id)}msweeper flag 0 0\` will place the flag in the top left corner of the board`)
-                return
-            }
-            const MineSweeperGame = MineSweeper.getGame(message.author.id)
-            if (MineSweeperGame.board[y] && MineSweeperGame.board[y][x]) {
-                MineSweeperGame.board[y][x].isflagged = !MineSweeperGame.board[y][x].isflagged
-                message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem))
-            } else {
-                message.channel.send("That location is out of bounds.")
+            } while (Queue.length > 0)
+            // }
+
+            message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem))
+            if (!MineSweeperGame.tilesleft) {
+                message.channel.send("You won!")
+                EconomySystem.give(300, message)
+                EconomySystem.alterValue("msweeper", 1)
+                if (EconomySystem.msweeper == 10) {
+                    EconomySystem.award("msweeper", message)
+                }
+                MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
             }
             return
+        }
+        case 'flag': {
+            /** @param {string} position @returns {number[]} */
+            function parsePosition(position) {
+                if (/^\d+-\d+$/.test(position)) {
+                    const [from, to] = position.split('-')
+                        .map((value) => parseFloat(value))
+                        .sort((a, b) => a - b)
+
+                    return [...Array(to + 1).keys()].slice(from)
+                }
+
+                if (/^\d+(,\d+)+$/.test(position)) {
+                    return position.split(',')
+                        .map((value) => parseInt(value))
+                }
+
+                return [parseInt(position)]
+            }
+
+            const x = parsePosition(args[1])
+            const y = parsePosition(args[2])
+
+            console.log(args[1],args[2], {x,y});
+
+            if ([...x,...y].some(isNaN)) {
+                message.channel.send(`You need to give valid coordinates for where to place the flag\nExample: \`${Prefix.get(message.guild.id)}msweeper flag 0 0\` will place the flag in the top left corner of the board\n\nYou could also put a range (N-N) or a comma seperated list of positions (N,N,...)\nExample: \`${Prefix.get(message.guild.id)}msweeper flag 0-8 0,2,4,6,8\``)
+                return
+            }
+
+            const MineSweeperGame = MineSweeper.getGame(message.author.id)
+
+            for (const xs of x)
+                for (const ys of y)
+                    if (MineSweeperGame.board[ys] && MineSweeperGame.board[ys][xs]) {
+                        MineSweeperGame.board[ys][xs].isflagged =
+                            !MineSweeperGame.board[ys][xs].isflagged
+
+                    } else {
+                        message.channel.send("That location is out of bounds.")
+                    }
+
+            return void message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem))
         }
         default: {
             message.channel.send(MineSweeper.help.replace(/\&/g, Prefix.get(message.guild.id)))
