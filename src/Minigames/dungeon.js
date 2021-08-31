@@ -2,7 +2,7 @@ const { RequiredArg, Command } = require("./../commands.js")
 const { Game, MPGame } = require("./../minigames.js")
 
 class Entity {
-    constructor(hp, mana, attack, defense, ai, name, isboss) {
+    constructor(hp, mana, attack, defense, ai, name, isboss, rspell) {
         this.hp = hp
         this.mana = mana
         this.attack = attack
@@ -10,6 +10,7 @@ class Entity {
         this.ai = ai
         this.name = name
         this.isboss = isboss
+        this.rspell = rspell
         this.castmsg = this.ai ? "The " + this.ai + " uses " : "You use "
         this.evmsg = this.ai ? "The " + this.ai + "'s " : "Your "
     }
@@ -220,6 +221,13 @@ Dungeon.thinkers = {
         }
         return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
     },
+    test: (DungeonGame, Entity) => {
+        if (DungonGame.player.rspell == false) {
+            Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+            return "Its waiting for something..." 
+        }
+        return Dungeon.attacks.slash.use(Entity, DungeonGame.player * 3)
+    },
     "Giygas clone": (DungeonGame, Entity) => {
         if (GetPercentual() <= 50 && Entity.mana >= 175) {
             return "You cannot grasp the true form of Giygas attack!\n" +
@@ -244,18 +252,21 @@ Dungeon.thinkers = {
 Dungeon.attacks = {
     slash: new Attack("Slash", 0, (Attacker, Attacked) => {
         return Attacker.fight(Attacked, Attacker.attack)
+        
     }),
     fire: new Attack("Fire Storm", 25, (Attacker, Attacked) => {
         const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 0.6)) +
             "\n" + Attacked.evmsg + "defence decreased!"
         Attacked.defense = Math.floor(Attacked.defense * 0.7)
         return msg
+        Entity.rspell = true
     }),
     ice: new Attack("Ice Blast", 50, (Attacker, Attacked) => {
         const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 1.4)) +
             "\n" + Attacked.evmsg + "mana decreased!"
         Attacked.mana = Math.floor(Attacked.mana * 0.6)
         return msg
+        Entity.rspell = true
     }),
     ground: new Attack("Earthquake", 75, (Attacker, Attacked) => {
         let DungeonGame
@@ -271,6 +282,7 @@ Dungeon.attacks = {
             msg = msg + (msg == "" ? "" : "\n") + Attacker.fight(Enemy, Attacker.attack)
         }
         return msg
+        Entity.rspell = true
     }),
     thunder: new Attack("Thunder", 100, (Attacker, Attacked) => {
         const chance = GetPercentual()
@@ -280,6 +292,7 @@ Dungeon.attacks = {
         Attacked.attack = Math.floor(Attacked.defense * 0.7)
         Attacked.defense = Math.floor(Attacked.defense * 0.7)
         return msg
+        Entity.rspell = true
     }),
 }
 Dungeon.help =
