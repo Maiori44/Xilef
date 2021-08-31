@@ -241,6 +241,56 @@ Dungeon.thinkers = {
             DungeonGame.player.attack = DungeonGame.player.attack * 0.7
             return Dungeon.attacks.slash.use(Entity, DungeonGame.player) + "\nYour attack decreased!"
         }
+        Entity.mana += 10
+        return Dungeon.attacks.slash.use(Entity, DungeonGame.player) + "\n" + Dungeon.attacks.slash.use(Entity, DungeonGame.player)
+    },
+    "nature-elemental": (DungeonGame, Elemental) => {
+        if (GetPercentual() >= 45 && Elemental.mana >= 50) {
+            Elemental.mana -= 50
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[8]))
+            return "The nature elemental grows more!\nA vine monster joined the fight!"
+        }
+        Elemental.attack = Elemental.attack * 1.4
+        Elemental.defense = Elemental.defense * 1.4
+        Elemental.mana = Elemental.mana * 1.4
+        Elemental.hp = Elemental.hp * 1.4
+        return "The nature elemental grows more!\nThe nature elemental stats increased!"
+    },
+    "gemstone-golem": (DungeonGame, Entity) => {
+        const chance = GetPercentual()
+        if (chance <= 40 && Entity.mana >= 50) {
+            return Dungeon.attacks.ice.use(Entity, DungeonGame.player)
+        } else if (Entity.mana >= 25) {
+            return Dungeon.attacks.fire.use(Entity, DungeonGame.player)
+        } else {
+            Entity.mana += 75
+            return "The gemstone golem charges his gems..and restores mana!"
+        }
+    },
+    "crystal-elemental": (DungeonGame, Entity) => {
+        //ADD AI
+        //"Increase own defense, if you use a spell you take some damage"
+    },
+    "great spirit": (DungeonGame, Entity) => {
+        if (Entity.mana >= 40 && DungeonGame.player.defense >= 300) {
+            Entity.mana -= 40
+            DungeonGame.player.attack = DungeonGame.player.attack * 0.6
+            return "The lost spirit haunts you..\nYour defense decreased!"
+        }
+        Entity.mana += 10
+        return Entity.fight(DungeonGame.player, Entity.attack)
+    },
+    "power-ghost": (DungeonGame, Ghost) => {
+        if (GetPercentual() >= 45 && Ghost.mana >= 50) {
+            Ghost.mana -= 50
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[4]))
+            return "The nature elemental grows more!\nA lost spirit joined the fight!"
+        }
+        Ghost.mana += 15
+        return "The power ghost observes you..."
+    },
+    "void-ghost": (DungeonGame, Ghost) => {
+        //imma continue later
     }
 }
 /*Dungeon.thinkers = {
