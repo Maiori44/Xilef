@@ -592,4 +592,4 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
         }
         DungeonGame.reset()
     }
-}, "Game", [new RequiredArg(0, Dungeon.help, "command"), new RequiredArg(1, undefined, "argument", true)])
+}, "Game", [new RequiredArg(0, Dungeon.help, "command"), new RequiredArg(1, undefined, "argument", true)]) /* test */
