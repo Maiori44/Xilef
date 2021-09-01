@@ -187,7 +187,7 @@ Achievements.binary = [
     Achievements.v_.id + "\n",
     Achievements.dungeon.id + "\n",
     Achievements.msweeper.id + "\n",
-    Achievements.roshambo.id
+    Achievements.roshambo.id + "\n"
 ]
 
 for (let ID of Object.keys(Economy.list)) {
