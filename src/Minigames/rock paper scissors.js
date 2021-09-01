@@ -46,7 +46,7 @@ class RoshamboGame {
         const EconomySystem = Economy.getEconomySystem({ id: this[winner], username: this[winner + "name"] })
         EconomySystem.give(25, message)
         EconomySystem.alterValue("roshambo", 1)
-        if (EconomySystem.reversi >= 25) {
+        if (EconomySystem.roshambo >= 25) {
             EconomySystem.award("roshambo", message)
         }
     }
