@@ -299,31 +299,18 @@ Dungeon.thinkers = {
         return "it's piercing gaze is on the verge of sucking your soul out!"
     },
     "the void": (DungeonGame, Entity) => {
-        if (GetPercentual() <= 50 && Entity.mana >= 500){
-            Entity.mana -= 450
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[28]))
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[28]))
+        if (GetPercentual() < 50 && Entity.mana >= 100){
+            Entity.mana -= 100
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[28]))
             Dungeon.attacks.ice.use(Entity, DungeonGame.player)
             return "The swirling mass of void pulses, and a hord of bats appear out of the darkness..."
-        } else if (GetPercentual() >= 40 && Entity.mana >= 500){
-            Entity.mana -= 450
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[27]))
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[27]))
+        } else if (GetPercentual() > 50 && Entity.mana >= 100){
+            Entity.mana -= 100
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[27]))
             Dungeon.attacks.ice.use(Entity, DungeonGame.player)
             return "The swirling mass of void pulses, and a gang of goblins appear out of the darkness..."
-        } else if (GetPercentual() >= 30 && Entity.mana >= 500){
-            Entity.mana -= 450
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[24]))
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[24]))
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[26]))
-            Dungeon.attacks.ice.use(Entity, DungeonGame.player)
-            return "The swirling mass of void pulses, and a ghost, wait no, slimes appear out of the darkness..."
-        } else if (GetPercentual() >= 20 && Entity.mana >= 500){
-            Entity.mana -= 450
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[25]))
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[25]))
+        } else if (GetPercentual() = 50 && Entity.mana >= 100){
+            Entity.mana -= 100
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[25]))
             Dungeon.attacks.ice.use(Entity, DungeonGame.player)
             return "The swirling mass of void pulses, and the skeletons lining the walls take life..."
