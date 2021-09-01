@@ -1,6 +1,6 @@
 {
     "621307633718132746": {
-        "money": 102178,
+        "money": 100085,
         "rank": 50,
         "user": "Felix44",
         "impostors": 2,
@@ -10,10 +10,10 @@
         "day": 1630490516209,
         "reversi": 2,
         "connect4": 10,
-        "roshambo": 36,
-        "vhour": 1630526493399,
-        "vgot": "239148111002184493",
-        "achievments": "0"
+        "roshambo": 47,
+        "vhour": 1630535797042,
+        "vgot": "239218479746362157",
+        "achievments": "256"
     },
     "276363003270791168": {
         "money": 318148,
@@ -416,7 +416,7 @@
         "achievments": "0"
     },
     "311819610380959745": {
-        "money": 155135,
+        "money": 164547,
         "rank": 251,
         "user": "DRKSAO",
         "impostors": 26,
@@ -427,7 +427,7 @@
         "reversi": 0,
         "connect4": 8,
         "roshambo": 3,
-        "vhour": 1630488611367,
+        "vhour": 1630535548161,
         "vgot": "19225519339299690",
         "achievments": "8"
     },
@@ -464,7 +464,7 @@
         "achievments": "0"
     },
     "694728312823480415": {
-        "money": 999864747,
+        "money": 999886082,
         "rank": 16969,
         "user": "lemon cannon",
         "impostors": 25,
@@ -474,10 +474,10 @@
         "day": 1630521348233,
         "reversi": 0,
         "connect4": 15,
-        "roshambo": 20,
+        "roshambo": 25,
         "vhour": 1630521344393,
         "vgot": "36066192368412672",
-        "achievments": "29"
+        "achievments": "285"
     },
     "759184418945630338": {
         "money": 335,
