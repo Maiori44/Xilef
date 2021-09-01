@@ -283,16 +283,40 @@ Dungeon.thinkers = {
     "power-ghost": (DungeonGame, Ghost) => {
         if (GetPercentual() >= 45 && Ghost.mana >= 50) {
             Ghost.mana -= 50
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[4]))
-            return "The nature elemental grows more!\nA lost spirit joined the fight!"
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[5]))
+            return "The power ghost grows more!\nA lost spirit joined the fight!"
         }
         Ghost.mana += 15
         return "The power ghost observes you..."
     },
     "void-ghost": (DungeonGame, Ghost) => {
-        //imma continue later
-    }
-}
+        if (GetPercentual() >= 45 && Ghost.mana >= 100) {
+            Dungeon.attacks.thunder.use(Ghost, DungeonGame.player)
+            return "The void-ghost launches a ball of swirling blackened Void tentacles at you!"
+        }
+        Ghost.mana += 75
+        Dungeon.attacks.ice.use(Ghost, DungeonGame.player)
+        return "it's piercing gaze is on the verge of sucking your soul out!"
+    },
+    "the void": (DungeonGame, Entity) => {
+        if (GetPercentual() >= 25 && Entity.mana >= 500){
+            Entity.mana -= 450
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[24]))
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[24]))
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[24]))
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[24]))
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[24]))
+            Dungeon.attacks.ice.use(Entity, DungeonGame.player)
+            return "The swirling mass of void pulses, and a hord of slimes appear out of the darkness..."
+        }
+        Entity.mana += 500
+        return "The void has no shape, and never ran out of mana in the first place..."
+    },
+    "bone snake": (DungeonGame, Entity) => {
+        //I'll do it later lmao
+    },
+} 
+
 /*Dungeon.thinkers = {
     zombie: (DungeonGame, Entity) => {
         let msg = "The zombie becomes more vicious!\nThe zombie attack increased!\n"
@@ -592,4 +616,4 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
         }
         DungeonGame.reset()
     }
-}, "Game", [new RequiredArg(0, Dungeon.help, "command"), new RequiredArg(1, undefined, "argument", true)]) /* test */
+}, "Game", [new RequiredArg(0, Dungeon.help, "command"), new RequiredArg(1, undefined, "argument", true)]) 
