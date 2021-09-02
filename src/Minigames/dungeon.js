@@ -291,58 +291,56 @@ Dungeon.thinkers = {
     },
     "void-ghost": (DungeonGame, Ghost) => {
         if (GetPercentual() >= 45 && Ghost.mana >= 100) {
-            Dungeon.attacks.thunder.use(Ghost, DungeonGame.player)
-            return "The void-ghost launches a ball of swirling blackened Void tentacles at you!"
+            return Dungeon.attacks.thunder.use(Ghost, DungeonGame.player) +
+                "\nThe void-ghost launches a ball of swirling blackened Void tentacles at you!"
         }
         Ghost.mana += 75
-        Dungeon.attacks.ice.use(Ghost, DungeonGame.player)
-        return "it's piercing gaze is on the verge of sucking your soul out!"
+        return Dungeon.attacks.ice.use(Ghost, DungeonGame.player) +
+            "\nit's piercing gaze is on the verge of sucking your soul out!"
     },
     "the-void": (DungeonGame, Entity) => {
-        if (GetPercentual() < 50 && Entity.mana >= 100){
+        if (GetPercentual() < 50 && Entity.mana >= 100) {
             Entity.mana -= 100
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[28]))
-            Dungeon.attacks.ice.use(Entity, DungeonGame.player)
-            return "The swirling mass of void pulses, and a hord of bats appear out of the darkness..."
-        } else if (GetPercentual() > 50 && Entity.mana >= 100){
+            return Dungeon.attacks.ice.use(Entity, DungeonGame.player) +
+                "\nThe swirling mass of void pulses, and a hord of bats appear out of the darkness..."
+        } else if (GetPercentual() > 50 && Entity.mana >= 100) {
             Entity.mana -= 100
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[27]))
             Dungeon.attacks.ice.use(Entity, DungeonGame.player)
-            return "The swirling mass of void pulses, and a gang of goblins appear out of the darkness..."
-        } else if (GetPercentual() = 50 && Entity.mana >= 100){
+            return Dungeon.attacks.ice.use(Entity, DungeonGame.player) +
+                "\nThe swirling mass of void pulses, and a gang of goblins appear out of the darkness..."
+        } else if (GetPercentual() = 50 && Entity.mana >= 100) {
             Entity.mana -= 100
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[25]))
-            Dungeon.attacks.ice.use(Entity, DungeonGame.player)
-            return "The swirling mass of void pulses, and the skeletons lining the walls take life..."
+            return Dungeon.attacks.ice.use(Entity, DungeonGame.player) +
+                "\nThe swirling mass of void pulses, and the skeletons lining the walls take life..."
         }
         Entity.mana += 500
         return "The void has no shape, and never ran out of mana in the first place..."
     },
     "bone-snake": (DungeonGame, Entity) => {
-        if (GetPercentual() =< 50 && Entity.mana >= 50){
+        if (GetPercentual() <= 50 && Entity.mana >= 50) {
             Entity.mana -= 50
-            Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
-            Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
-            Entity.fight(DungeonGame.player, Entity.attack)
-            return "Where'd it go? Ah, right, in the ground..."
+            return Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
+                Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
+                Entity.fight(DungeonGame.player, Entity.attack) +
+                "\nWhere'd it go? Ah, right, in the ground..."
         }
         Entity.mana += 75
-        Dungeon.attacks.fire.use(Entity, DungeonGame.player)
-        return "The bone snake shot a ball of fire, roasting your defence to pieces!"
+        return Dungeon.attacks.fire.use(Entity, DungeonGame.player) + "\nThe bone snake shot a ball of fire, roasting your defence to pieces!"
     },
     "blight-orb": (DungeonGame, Entity) => {
-            let DungeonGame
-            if (!DungeonGame) throw ("Could not find your game.")
-            let msg = ""
-            for (let Enemy of DungeonGame.enemies) {
-                if (Enemy < 1) {
-                    DungeonGame.enemies.push(new Entity(...Dungeon.enemies[36]))
-                    return "the blight orb summoned some friends..."
-                } else msg = msg + (msg == "" ? "" : "\n") + Enemy.defence *= 1.2
-            }
-            return msg
+        if (DungeonGame.enemies.length == 1) {
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[36]))
+            return "The blight orb calls for help..\nAnother blight orb joined the fight!"
+        }
+        for (const Enemy of DungeonGame.enemies) {
+            Enemy.defense *= 1.3
+            return "The blight orb light envelopses the other enemies!\nTheir defense increased!"
+        }
     },
-} 
+}
 
 /*Dungeon.thinkers = {
     zombie: (DungeonGame, Entity) => {
@@ -566,7 +564,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                     "`&dungeon attack ice` does slightly more damage and reduces enemy mana, costs 50\n" +
                     "`&dungeon attack shockwave` does half damage and reduces enemy attack, costs 50\n" +
                     "`&dungeon attack ground` same damage as slash but hits all enemies, costs 75\n" +
-                    "`&dungeon attack thunder` does double damage and reduces both enemy attack and defense, but has a 30% chance of missing, costs 100\n"+
+                    "`&dungeon attack thunder` does double damage and reduces both enemy attack and defense, but has a 30% chance of missing, costs 100\n" +
                     "`&dungeon attack leech` a brutal attack that does 70% damage and has a 40% chance of missing, but regains health based on damage dealt\n")
                     .replace(/\&/g, Prefix.get(message.guild.id))
                 )
@@ -643,4 +641,4 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
         }
         DungeonGame.reset()
     }
-}, "Game", [new RequiredArg(0, Dungeon.help, "command"), new RequiredArg(1, undefined, "argument", true)]) 
+}, "Game", [new RequiredArg(0, Dungeon.help, "command"), new RequiredArg(1, undefined, "argument", true)])
