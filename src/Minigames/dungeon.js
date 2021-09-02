@@ -298,7 +298,7 @@ Dungeon.thinkers = {
         Dungeon.attacks.ice.use(Ghost, DungeonGame.player)
         return "it's piercing gaze is on the verge of sucking your soul out!"
     },
-    "the void": (DungeonGame, Entity) => {
+    "the-void": (DungeonGame, Entity) => {
         if (GetPercentual() < 50 && Entity.mana >= 100){
             Entity.mana -= 100
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[28]))
@@ -318,27 +318,20 @@ Dungeon.thinkers = {
         Entity.mana += 500
         return "The void has no shape, and never ran out of mana in the first place..."
     },
-    "bone snake": (DungeonGame, Entity) => {
+    "bone-snake": (DungeonGame, Entity) => {
         if (GetPercentual() =< 50 && Entity.mana >= 50){
             Entity.mana -= 50
-            return "Where'd it go?"
             Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
             Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
             Entity.fight(DungeonGame.player, Entity.attack)
-            return "Ah, right, in the ground..."
+            return "Where'd it go? Ah, right, in the ground..."
         }
         Entity.mana += 75
         Dungeon.attacks.fire.use(Entity, DungeonGame.player)
-        return "you feel like you're gonna get a pounding..."
+        return "The bone snake shot a ball of fire, roasting your defence to pieces!"
     },
-    "blight orb": (DungeonGame, Entity) => {
+    "blight-orb": (DungeonGame, Entity) => {
             let DungeonGame
-            for (let ID in Dungeon.list) {
-                if (Dungeon.list[ID].player == Attacker) {
-                    DungeonGame = Dungeon.list[ID]
-                    break
-                }
-            }
             if (!DungeonGame) throw ("Could not find your game.")
             let msg = ""
             for (let Enemy of DungeonGame.enemies) {
