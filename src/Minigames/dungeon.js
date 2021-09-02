@@ -319,7 +319,35 @@ Dungeon.thinkers = {
         return "The void has no shape, and never ran out of mana in the first place..."
     },
     "bone snake": (DungeonGame, Entity) => {
-        //I'll do it later lmao
+        if (GetPercentual() =< 50 && Entity.mana >= 50){
+            Entity.mana -= 50
+            return "Where'd it go?"
+            Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
+            Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
+            Entity.fight(DungeonGame.player, Entity.attack)
+            return "Ah, right, in the ground..."
+        }
+        Entity.mana += 75
+        Dungeon.attacks.fire.use(Entity, DungeonGame.player)
+        return "you feel like you're gonna get a pounding..."
+    },
+    "blight orb": (DungeonGame, Entity) => {
+            let DungeonGame
+            for (let ID in Dungeon.list) {
+                if (Dungeon.list[ID].player == Attacker) {
+                    DungeonGame = Dungeon.list[ID]
+                    break
+                }
+            }
+            if (!DungeonGame) throw ("Could not find your game.")
+            let msg = ""
+            for (let Enemy of DungeonGame.enemies) {
+                if (Enemy < 1) {
+                    DungeonGame.enemies.push(new Entity(...Dungeon.enemies[36]))
+                    return "the blight orb summoned some friends..."
+                } else msg = msg + (msg == "" ? "" : "\n") + Enemy.defence *= 1.2
+            }
+            return msg
     },
 } 
 
