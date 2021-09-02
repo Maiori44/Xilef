@@ -337,8 +337,8 @@ Dungeon.thinkers = {
         }
         for (const Enemy of DungeonGame.enemies) {
             Enemy.defense *= 1.3
-            return "The blight orb light envelopses the other enemies!\nTheir defense increased!"
         }
+        return "The blight orb light envelopses the other enemies!\nTheir defense increased!"
     },
 }
 
