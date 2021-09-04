@@ -145,6 +145,7 @@ client.on("message", (message) => {
                         "\n\tCaller: " + message.author.username +
                         "\n\tChannel name: " + message.channel.name +
                         "\n\tGuild name: " + message.guild.name)
+                    message.channel.send(errormsg)
                 } else {
                     console.error("- " + Colors.yellow.colorize("Command call ended by thrown error:") +
                         "\n\tCommand: " + command +
