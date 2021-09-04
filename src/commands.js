@@ -22,10 +22,18 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/34"))
+        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/36"))
     }
 
     call(message, args) {
+        if (this.category == "Developer") {
+            const isdev = message.author.client.guilds.cache.get('875695405550166106')
+                .members.cache.get(message.author.id)
+                ?.roles.cache.has("875699796139208724")
+            if (!isdev) {
+                throw("Only my developers can use this command")
+            }
+        }
         if (this.requiredargs)
             for (const arg of this.requiredargs)
                 if (!arg.check(args)) throw { msg: arg.errormsg.replace(/\&/g, Prefix.get(message.guild.id)), name: arg.name, num: arg.argnum }
@@ -111,6 +119,8 @@ Commands.info = new Command("Shows info about the bot and this server's prefix",
         .setTimestamp(), Buttons)
 }, "Utility")
 
+//Developer only commands
+
 const NewProcess = require('child_process').spawn
 
 Commands.shutdown = new Command("Shuts down the bot after a given time\nDeveloper only", (message, args) => {
@@ -133,11 +143,17 @@ Commands.shutdown = new Command("Shuts down the bot after a given time\nDevelope
             } else process.exit(0)
         })
     }, timeleft || 0)
-}, "Utility", [
+}, "Developer", [
     new RequiredArg(0, undefined, "message", true),
     new RequiredArg(1, undefined, "time", true),
     new RequiredArg(2, undefined, "restart?", true)
 ])
+
+Commands.restart = new Command("Restarts the bot\n(internally calls `&shutdown`)", (message, args) => {
+    Commands.shutdown.call(message, ["The bot is currently restarting", 0, true])
+}, "Developer")
+
+//Joke commands
 
 Commands.hi = new Command("Says hi to you", (message, args) => {
     message.reply("Hi.")
