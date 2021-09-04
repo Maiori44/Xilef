@@ -119,40 +119,6 @@ Commands.info = new Command("Shows info about the bot and this server's prefix",
         .setTimestamp(), Buttons)
 }, "Utility")
 
-//Developer only commands
-
-const NewProcess = require('child_process').spawn
-
-Commands.shutdown = new Command("Shuts down the bot after a given time\nDeveloper only", (message, args) => {
-    if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the bot owner only")
-    if (args[0]) {
-        warning = args[0]
-        client.user.setActivity(args[0] + ", ping me for info")
-    }
-    const timeleft = parseFloat(args[1]) * 60 * 1000
-    console.log("- " + Colors.cyan.colorize("Shutdown initiated:") +
-        "\n\tTime left: " + (timeleft ? (timeleft / 1000) + " seconds" : Colors.hyellow.colorize("None")) +
-        "\n\tReason: " + (args[0] || Colors.hyellow.colorize("None")) +
-        "\n\tRestart?: " + (args[2] ? "true" : "false"))
-    setTimeout(() => {
-        console.log("- Shutting down...")
-        message.channel.send("Shutting down...").then(() => {
-            if (args[2]) {
-                NewProcess("cmd.exe", ["/c", debugmode ? "testbot.bat" : "startbot.bat"], { detached: true })
-                setTimeout(() => message.channel.send("Bot restarted successfully").then(() => process.exit(0), 2500))
-            } else process.exit(0)
-        })
-    }, timeleft || 0)
-}, "Developer", [
-    new RequiredArg(0, undefined, "message", true),
-    new RequiredArg(1, undefined, "time", true),
-    new RequiredArg(2, undefined, "restart?", true)
-])
-
-Commands.restart = new Command("Restarts the bot\n(internally calls `&shutdown`)", (message, args) => {
-    Commands.shutdown.call(message, ["The bot is currently restarting", 0, true])
-}, "Developer")
-
 //Joke commands
 
 Commands.hi = new Command("Says hi to you", (message, args) => {
@@ -330,6 +296,40 @@ Commands.whoasked = new Command("Finds out the person who asked", (message, args
     setTimeout(() => { message.channel.send("Asking google if they know who asked...") }, 12000)
     setTimeout(() => { message.channel.send("Yeah no, nobody asked.") }, 15000)
 }, "Images")
+
+//Developer only commands
+
+const NewProcess = require('child_process').spawn
+
+Commands.shutdown = new Command("Shuts down the bot after a given time\nDeveloper only", (message, args) => {
+    if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the bot owner only")
+    if (args[0]) {
+        warning = args[0]
+        client.user.setActivity(args[0] + ", ping me for info")
+    }
+    const timeleft = parseFloat(args[1]) * 60 * 1000
+    console.log("- " + Colors.cyan.colorize("Shutdown initiated:") +
+        "\n\tTime left: " + (timeleft ? (timeleft / 1000) + " seconds" : Colors.hyellow.colorize("None")) +
+        "\n\tReason: " + (args[0] || Colors.hyellow.colorize("None")) +
+        "\n\tRestart?: " + (args[2] ? "true" : "false"))
+    setTimeout(() => {
+        console.log("- Shutting down...")
+        message.channel.send("Shutting down...").then(() => {
+            if (args[2]) {
+                NewProcess("cmd.exe", ["/c", debugmode ? "testbot.bat" : "startbot.bat"], { detached: true })
+                setTimeout(() => message.channel.send("Bot restarted successfully").then(() => process.exit(0), 2500))
+            } else process.exit(0)
+        })
+    }, timeleft || 0)
+}, "Developer", [
+    new RequiredArg(0, undefined, "message", true),
+    new RequiredArg(1, undefined, "time", true),
+    new RequiredArg(2, undefined, "restart?", true)
+])
+
+Commands.restart = new Command("Restarts the bot\n(internally calls `&shutdown`)", (message, args) => {
+    Commands.shutdown.call(message, ["The bot is currently restarting", 0, true])
+}, "Developer")
 
 //economy commands
 
