@@ -144,7 +144,7 @@ client.on("message", (message) => {
                             "\n\tCalled at: " + new Date() +
                             "\n\tCaller: " + message.author.username +
                             "\n\tChannel name: " + message.channel.name +
-                            "\n\tGuild name: " + message.guild.name
+                            "\n\tGuild name: " + message.guild.name)
                     }
                     message.channel.send(errormsg.msg.toString().slice(0, 1900))
                 } else {
