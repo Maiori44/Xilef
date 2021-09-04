@@ -1,6 +1,6 @@
 {
     "621307633718132746": {
-        "money": 96171,
+        "money": 94895,
         "rank": 50,
         "user": "Felix44",
         "impostors": 2,
@@ -11,7 +11,7 @@
         "reversi": 2,
         "connect4": 10,
         "roshambo": 47,
-        "vhour": 1630764553237,
+        "vhour": 1630772499944,
         "vgot": "239218479763139373",
         "achievments": "256"
     },
@@ -32,14 +32,14 @@
         "achievments": "0"
     },
     "602651056320675840": {
-        "money": 1888,
+        "money": 2218,
         "rank": 33,
         "user": "Sebo2205",
         "impostors": 0,
         "driller": 4,
         "floor": 55,
         "msweeper": 0,
-        "day": 1628239752422,
+        "day": 1630768723754,
         "reversi": 0,
         "connect4": 0,
         "roshambo": 0,
@@ -688,7 +688,7 @@
         "achievments": "0"
     },
     "405012455341817868": {
-        "money": 50,
+        "money": 0,
         "rank": 1,
         "user": "MAKYUNI",
         "impostors": 0,
@@ -699,8 +699,8 @@
         "reversi": 0,
         "connect4": 0,
         "roshambo": 4,
-        "vhour": 1630263685916,
-        "vgot": "8192",
+        "vhour": 1630769423285,
+        "vgot": "268443648",
         "achievments": "0"
     }
 }
