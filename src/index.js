@@ -125,28 +125,26 @@ client.on("message", (message) => {
                         "\n\tError: " + errormsg.stack)
                     message.channel.send(errormsg.toString().slice(0, 1900))
                 } else if (typeof errormsg == "object") {
-                    if (errormsg.num) {
-                        console.error("- " + Colors.blue.colorize("Command call aborted by missing argument:") +
-                            "\n\tCommand: " + command +
-                            "\n\tArgs: " + args +
-                            "\n\tTime taken: " + (Date.now() - start) +
-                            "\n\tCalled at: " + new Date() +
-                            "\n\tCaller: " + message.author.username +
-                            "\n\tChannel name: " + message.channel.name +
-                            "\n\tGuild name: " + message.guild.name +
-                            "\n\tArgument number: " + errormsg.num +
-                            "\n\tArgument name: " + errormsg.name)
-                    } else {
-                        console.error("- " + Colors.blue.colorize("Command call aborted due to the user not being a developer:") +
-                            "\n\tCommand: " + command +
-                            "\n\tArgs: " + args +
-                            "\n\tTime taken: " + (Date.now() - start) +
-                            "\n\tCalled at: " + new Date() +
-                            "\n\tCaller: " + message.author.username +
-                            "\n\tChannel name: " + message.channel.name +
-                            "\n\tGuild name: " + message.guild.name)
-                    }
+                    console.error("- " + Colors.blue.colorize("Command call ended by missing argument:") +
+                        "\n\tCommand: " + command +
+                        "\n\tArgs: " + args +
+                        "\n\tTime taken: " + (Date.now() - start) +
+                        "\n\tCalled at: " + new Date() +
+                        "\n\tCaller: " + message.author.username +
+                        "\n\tChannel name: " + message.channel.name +
+                        "\n\tGuild name: " + message.guild.name +
+                        "\n\tArgument number: " + errormsg.num +
+                        "\n\tArgument name: " + errormsg.name)
                     message.channel.send(errormsg.msg.toString().slice(0, 1900))
+                } else if (errormsg == "Only my developers can use this command") {
+                    console.error("- " + Colors.blue.colorize("Command call aborted due to the user not being a developer:") +
+                        "\n\tCommand: " + command +
+                        "\n\tArgs: " + args +
+                        "\n\tTime taken: " + (Date.now() - start) +
+                        "\n\tCalled at: " + new Date() +
+                        "\n\tCaller: " + message.author.username +
+                        "\n\tChannel name: " + message.channel.name +
+                        "\n\tGuild name: " + message.guild.name)
                 } else {
                     console.error("- " + Colors.yellow.colorize("Command call ended by thrown error:") +
                         "\n\tCommand: " + command +
