@@ -138,7 +138,7 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
     let hour = Date.now()
     let EconomySystem = Economy.getEconomySystem(message.author)
     let diff = hour - EconomySystem.vhour
-    if (diff >= Date.hour) {
+    if (diff >= Time.hour) {
         if (EconomySystem.buy(200 * (EconomySystem.rank / 4), message, undefined, "You don't have enough DogeCoins for a v_ (" + 200 * (EconomySystem.rank / 4) + " DogeCoins needed)")) {
             let chance = GetPercentual()
             let rarity = chance >= 90 ? "legendary" : chance >= 50 ? "common" : chance >= 20 ? "rare" : "epic"
@@ -162,7 +162,7 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
             EconomySystem.vhour = hour
         }
     } else {
-        throw ("You arleady got a v_ recently, you can get a new one in " + Math.floor((Date.hour - diff) / 1000) + " seconds!")
+        throw ("You arleady got a v_ recently, you can get a new one in " + Time.convertTime(Time.hour - diff) + "!")
     }
 }, "Game")
 

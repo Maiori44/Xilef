@@ -7,8 +7,19 @@ client = new Discord.Client()
 client.login(debugmode ? process.env.DEBUG : process.env.TOKEN)
 client.prefix = debugmode ? "beta&" : "&"
 
-Date.day = 86400000
-Date.hour = 3600000
+Time = {
+    day: 86400000,
+    hour: 3600000,
+    minute: 60000,
+    second: 1000,
+    convertTime(time) {
+        if (time < Time.second) return time + " milliseconds" 
+        else if (time < Time.minute) return (Math.floor(time / Time.second)) + " seconds"
+        else if (time < Time.hour) return (Math.floor(time / Time.minute)) + " minutes"
+        else if (time < Time.day) return (Math.floor(time / Time.hour)) + " hours"
+        else return (Math.floor(time / Time.day)) + " days"
+    }
+}
 
 class Colorizer {
     constructor(color) {

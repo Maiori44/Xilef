@@ -66,7 +66,7 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
     }
     message.channel.send("Creating poll...", buttons).then(pollmessage => {
         const time = Math.min(parseFloat(args[1]) * 60 * 1000 || 300000, 0x7FFFFFFF)
-        Polls[message.id] = new Poll(pollmessage, options, args[0] || message.author.username + "'s poll", time / 1000 / 60)
+        Polls[message.id] = new Poll(pollmessage, options, args[0] || message.author.username + "'s poll", Time.convertTime(time))
         Polls[message.id].update()
         console.log("- " + Colors.cyan.colorize("Sucessfully created a poll:") +
             "\n\tCreator: " + message.author.username +
