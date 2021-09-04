@@ -1,4 +1,4 @@
-const { Message } = require("discord.js")
+const { Message, Webhook } = require("discord.js")
 const { RequiredArg, Command } = require("./../commands.js")
 
 v_Types = {
@@ -165,3 +165,37 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
         throw ("You arleady got a v_ recently, you can get a new one in " + Math.floor((Date.hour - diff) / 1000) + " seconds!")
     }
 }, "Game")
+
+Commands.vsend = new Command("Send the v_s you have collected as messages!", (message, args) => {
+    const requestedv_ = [...v_Types.common, ...v_Types.rare, ...v_Types.epic, ...v_Types.legendary].find(({id}) =>
+        id.startsWith('<:' + args[0]))
+    if (!requestedv_) {
+        message.channel.send("Could not find the v_\nperhaps you mistyped?")
+        return
+    }
+    if (!Economy.getEconomySystem(message.author).vgot.checkFlag(requestedv_.value)) {
+        message.channel.send("You are not in possession of this v_")
+        return
+    }
+    message.channel.createWebhook("v_ sender", {
+        avatar: client.user.displayAvatarURL(),
+        reason: `The user "${message.author.username}" used the "vsend" command`
+    })
+        .then(webhook => {
+            webhook.send({
+                content: requestedv_.id,
+                username: message.author.username,
+                avatarURL: message.author.displayAvatarURL()
+            })
+                .then(() => {
+                    webhook.delete("The requested message has been sent, this webhook has no need to stay")
+                    message.delete()
+                })
+                .catch(() => {
+                    message.channel.send("Could not send the v_\nperhaps you mistyped?")
+                })
+        })
+        .catch(() => {
+            message.channel.send("Could not create the webhook, check if I have the manage webhook permissions in this server")
+        })
+}, "Utility", [new RequiredArg(0, "You need to type the v_'s name to send one", "v_'s name")])
