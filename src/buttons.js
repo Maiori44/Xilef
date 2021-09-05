@@ -14,7 +14,7 @@ class Poll {
         let newmsg = new Discord.MessageEmbed()
             .setColor(this.message.member.displayHexColor)
             .setTitle(this.title)
-            .setFooter("Expires after " + this.time + " minutes")
+            .setFooter("Expires after " + this.time)
             .setTimestamp();
         let voters = "People who voted:\n"
         for (let userid of Object.keys(this.users)) {
@@ -71,7 +71,7 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
         console.log("- " + Colors.cyan.colorize("Sucessfully created a poll:") +
             "\n\tCreator: " + message.author.username +
             "\n\tPoll title: " + Polls[message.id].title +
-            "\n\tPoll duration: " + Polls[message.id].time + " minutes" +
+            "\n\tPoll duration: " + Polls[message.id].time +
             "\n\tPoll options: " + Object.keys(Polls[message.id].options))
         setTimeout(() => {
             pollmessage.edit("[This poll is closed.]", pollmessage.embeds)
