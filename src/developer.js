@@ -31,10 +31,10 @@ const globals = {
 const description = [
   ' & eval but better',
   String(),
-  'Syntax:',
-  '&debug \`\`\`js',
-  '// Code',
-  '\`\`\`'
+  'Example:',
+  '&debug \\`\\`\\`js',
+  '1 + 1',
+  '\\`\\`\\`'
 ].join('\n');
 
 Commands.debug = new Command(description, (/** @type {Discord.Message} */ message) => {
@@ -64,11 +64,11 @@ Commands.debug = new Command(description, (/** @type {Discord.Message} */ messag
       }
     }
 
-    message.channel.send(...pages.map(
+    pages.map(
       page => new Discord.MessageEmbed()
-        .setColor('BLUE')
+        .setColor('#0368f8')
         .setDescription('```js\n' + page + '\n```')
-    ).reverse());
+    ).forEach((page)=> message.channel.send(page))
 
   } catch (error) {
     console.error(error);
@@ -79,7 +79,7 @@ Commands.debug = new Command(description, (/** @type {Discord.Message} */ messag
         .setDescription('```\n' + error + '\n```')
     );
   }
-});
+}, 'Developer', [new RequiredArg(0, 'No code supplied.', 'code block', false)]);
 
 /**
  * **Evaluate a JavaScript code using node's `vm` module.**
