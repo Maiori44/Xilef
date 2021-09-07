@@ -155,7 +155,7 @@ Dungeon.enemies = [
     // error
     [700, 0, 135, 80, "slime", "mistake slime"],
     [700, 0, 135, 80, "skeleton", "skerrorton"],
-    [1400, 800, 180, 160, "question-mark", "???"],
+    [1400, 100, 180, 0, "loading-window", "download window"],
     [700, 0, 135, 80, "goblin", "gobboblin"],
     [700, 0, 135, 80, "bat", "bullet bat"],
     [2100, 800, 270, 240, "error", "%}])@&!(*%-!", true],
@@ -270,8 +270,13 @@ Dungeon.thinkers = {
         }
     },
     "crystal-elemental": (DungeonGame, Entity) => {
-        //ADD AI
-        //"Increase own defense, if you use a spell you take some damage"
+        if (DungeonGame.player.usedmagic && Entity.mana >= 50) {
+            return "The crystal elemental senses your magic attack!\n" +
+                Dungeon.attacks.ice.use(Entity, DungeonGame.player)
+        }
+        Entity.mana += 30
+        Entity.defense *= 1.2
+        return "The crystal elemental doesn't sense you...\nThe crystal elemental defense increased!"
     },
     "great spirit": (DungeonGame, Entity) => {
         if (Entity.mana >= 40 && DungeonGame.player.defense >= 300) {
@@ -300,25 +305,24 @@ Dungeon.thinkers = {
         return Dungeon.attacks.ice.use(Ghost, DungeonGame.player) +
             "\nit's piercing gaze is on the verge of sucking your soul out!"
     },
-    "the-void": (DungeonGame, Entity) => {
-        if (GetPercentual() < 50 && Entity.mana >= 100) {
-            Entity.mana -= 100
+    "the-void": (DungeonGame, Void) => {
+        if (GetPercentual() < 50 && Void.mana >= 100) {
+            Void.mana -= 50
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[28]))
-            return Dungeon.attacks.ice.use(Entity, DungeonGame.player) +
+            return Dungeon.attacks.ice.use(Void, DungeonGame.player) +
                 "\nThe swirling mass of void pulses, and a hord of bats appear out of the darkness..."
-        } else if (GetPercentual() > 50 && Entity.mana >= 100) {
-            Entity.mana -= 100
+        } else if (GetPercentual() > 50 && Void.mana >= 100) {
+            Void.mana -= 50
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[27]))
-            Dungeon.attacks.ice.use(Entity, DungeonGame.player)
-            return Dungeon.attacks.ice.use(Entity, DungeonGame.player) +
+            return Dungeon.attacks.ice.use(Void, DungeonGame.player) +
                 "\nThe swirling mass of void pulses, and a gang of goblins appear out of the darkness..."
-        } else if (GetPercentual() = 50 && Entity.mana >= 100) {
-            Entity.mana -= 100
+        } else if (GetPercentual() = 50 && Void.mana >= 100) {
+            Void.mana -= 50
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[25]))
-            return Dungeon.attacks.ice.use(Entity, DungeonGame.player) +
+            return Dungeon.attacks.ice.use(Void, DungeonGame.player) +
                 "\nThe swirling mass of void pulses, and the skeletons lining the walls take life..."
         }
-        Entity.mana += 500
+        Void.mana += 500
         return "The void has no shape, and never ran out of mana in the first place..."
     },
     "bone-snake": (DungeonGame, Entity) => {
@@ -332,6 +336,19 @@ Dungeon.thinkers = {
         Entity.mana += 75
         return Dungeon.attacks.fire.use(Entity, DungeonGame.player) + "\nThe bone snake shot a ball of fire, roasting your defence to pieces!"
     },
+    "lava-elemental": (DungeonGame, Entity) => {
+        if (Entity.mana >= 25) {
+            let msg = "You are caught in a huge fire storm!"
+            for (let i = 1; i <= 3; i++) {
+                if (Entity.mana < 25) break;
+                msg = msg + "\nIt hit " + i + (i == 1 ? " time" : " times") + "!\n" +
+                    Dungeon.attacks.fire.use(Entity, DungeonGame.player)
+            }
+            return msg
+        }
+        Entity.mana += 100
+        return "The lava elemental surrounds itself with lava, preparing for the next attack..."
+    },
     "blight-orb": (DungeonGame, Entity) => {
         if (DungeonGame.enemies.length == 1) {
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[36]))
@@ -341,6 +358,16 @@ Dungeon.thinkers = {
             Enemy.defense *= 1.3
         }
         return "The blight orb light envelopses the other enemies!\nTheir defense increased!"
+    },
+    "radiant-core": (DungeonGame, Entity) => {
+        //for lemon cannon
+    },
+    "download-window": (DungeonGame, Entity) => {
+        if (Entity.mana >= 300) return "Download window crashes and burns!\n" + Entity.fight(DungeonGame.player, 800)
+        else {
+            Entity.mana += 100
+            return "Download window is still at 99%"
+        }
     },
 }
 
