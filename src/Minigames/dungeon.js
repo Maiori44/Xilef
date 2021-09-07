@@ -36,15 +36,17 @@ class Entity {
 }
 
 class Attack {
-    constructor(name, cost, effect) {
+    constructor(name, cost, effect, nonmagic) {
         this.name = name
         this.cost = cost
         this.effect = effect
+        this.nonmagic = nonmagic || false
     }
 
     use(Attacker, Attacked) {
         if (Attacker.mana < this.cost) throw ("You need " + this.cost + " mana for this spell")
         Attacker.mana = Attacker.mana - this.cost
+        if (Attacker.ai == "player" && !this.nonmagic) Attacker.usedmagic = true
         return Attacker.castmsg + this.name + "!\n" + this.effect(Attacker, Attacked)
     }
 }
@@ -423,7 +425,7 @@ Dungeon.thinkers = {
 Dungeon.attacks = {
     slash: new Attack("Slash", 0, (Attacker, Attacked) => {
         return Attacker.fight(Attacked, Attacker.attack)
-    }),
+    }, true),
     fire: new Attack("Fire Storm", 25, (Attacker, Attacked) => {
         const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 0.6)) +
             "\n" + Attacked.evmsg + "defence decreased!"
@@ -493,6 +495,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             break
         }
         case "explore": {
+            DungeonGame.player.usedmagic = false
             let ohp = DungeonGame.player.hp
             if (!DungeonGame.explored) {
                 let InfoEmbed = DungeonGame.getInfo(EconomySystem)
@@ -574,6 +577,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                 message.channel.send("There are no enemies to attack..")
                 return
             }
+            DungeonGame.player.usedmagic = false
             let msg = Dungeon.attacks[args[1]].use(DungeonGame.player, DungeonGame.enemies.slice(-1)[0])
             for (let index = 0; index <= DungeonGame.enemies.length - 1; index++) {
                 let Enemy = DungeonGame.enemies[index]
@@ -599,6 +603,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
         case "escape": {
             const chance = GetPercentual()
             if (chance > DungeonGame.floor * 2) {
+                DungeonGame.player.usedmagic = false
                 DungeonGame.enemies = []
                 const InfoEmbed = DungeonGame.getInfo(EconomySystem)
                 InfoEmbed.addField("Latest event:", "You managed to escape!")
