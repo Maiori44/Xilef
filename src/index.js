@@ -59,6 +59,7 @@ require("./commands.js")
 require("./prefix.js")
 require("./buttons.js")
 require("./minigames.js")
+require('./developer')
 
 client.on("ready", () => {
     console.log("- Bot ready")
