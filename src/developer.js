@@ -44,7 +44,7 @@ Commands.debug = new Command(description, (/** @type {Discord.Message} */ messag
       .slice(Prefix.get(message.guild.id).length + 5)
       .match(/```js\n([^]*)\n```/)?.[1] ?? String();
 
-    const result = inspect(evaluate(code, globals)).split('\n');
+    const result = inspect(evaluate(code, {...globals, message})).split('\n');
     /** @type {string[]} */
     const pages = [];
 
