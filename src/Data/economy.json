@@ -1,6 +1,6 @@
 {
     "621307633718132746": {
-        "money": 72052,
+        "money": 68914,
         "rank": 50,
         "user": "Felix44",
         "impostors": 2,
@@ -11,8 +11,8 @@
         "reversi": 2,
         "connect4": 10,
         "roshambo": 56,
-        "vhour": 1631200694561,
-        "vgot": "816242186851970861",
+        "vhour": 1631213439272,
+        "vgot": "818493986665656109",
         "achievments": "256"
     },
     "276363003270791168": {
@@ -112,7 +112,7 @@
         "achievments": "0"
     },
     "484682433925611542": {
-        "money": 17660306949,
+        "money": 18984470793,
         "rank": 42069,
         "user": "Dark_Brick",
         "impostors": 0,
@@ -123,7 +123,7 @@
         "reversi": 0,
         "connect4": 3,
         "roshambo": 0,
-        "vhour": 1631184608728,
+        "vhour": 1631213233257,
         "vgot": "27222807452581693",
         "achievments": "17"
     },
@@ -208,7 +208,7 @@
         "achievments": "0"
     },
     "483715787467653122": {
-        "money": 26352,
+        "money": 23115,
         "rank": 52,
         "user": "poly translator*",
         "impostors": 19,
@@ -219,8 +219,8 @@
         "reversi": 0,
         "connect4": 15,
         "roshambo": 0,
-        "vhour": 1631017185690,
-        "vgot": "4519631023241235",
+        "vhour": 1631209928754,
+        "vgot": "4519631023765523",
         "achievments": "4"
     },
     "850867485263527956": {
@@ -416,7 +416,7 @@
         "achievments": "0"
     },
     "311819610380959745": {
-        "money": 482295,
+        "money": 491707,
         "rank": 251,
         "user": "DRKSAO",
         "impostors": 26,
@@ -427,7 +427,7 @@
         "reversi": 0,
         "connect4": 8,
         "roshambo": 3,
-        "vhour": 1631197547494,
+        "vhour": 1631202227612,
         "vgot": "30484673563981679",
         "achievments": "8"
     },
@@ -512,7 +512,7 @@
         "achievments": "0"
     },
     "684285694063018048": {
-        "money": 81711,
+        "money": 27811,
         "rank": 539,
         "user": "LJMSU",
         "impostors": 25,
@@ -523,8 +523,8 @@
         "reversi": 0,
         "connect4": 2,
         "roshambo": 0,
-        "vhour": 1631197578971,
-        "vgot": "5087544246178768",
+        "vhour": 1631207603931,
+        "vgot": "5122730765751248",
         "achievments": "136"
     },
     "762021343612502066": {
@@ -688,7 +688,7 @@
         "achievments": "0"
     },
     "405012455341817868": {
-        "money": 0,
+        "money": 50,
         "rank": 1,
         "user": "MAKYUNI",
         "impostors": 0,
@@ -697,10 +697,10 @@
         "msweeper": 0,
         "day": 1630175916611,
         "reversi": 0,
-        "connect4": 0,
+        "connect4": 2,
         "roshambo": 4,
-        "vhour": 1630769423285,
-        "vgot": "268443648",
+        "vhour": 1631201513540,
+        "vgot": "1099780071424",
         "achievments": "0"
     }
 }
