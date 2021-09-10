@@ -158,7 +158,7 @@ Dungeon.enemies = [
     [1400, 100, 180, 0, "loading-window", "download window"],
     [700, 0, 135, 80, "goblin", "gobboblin"],
     [700, 0, 135, 80, "bat", "bullet bat"],
-    [2100, 800, 270, 240, "error", "%}])@&!(*%-!", true],
+    [2100, 800, 270, 240, "error", "ZXJyb3I=", true],
     // ancient
     [800, 0, 150, 90, "slime", "primordial slime"],
     [800, 0, 150, 90, "skeleton", "ancient skeleton"],
@@ -369,6 +369,19 @@ Dungeon.thinkers = {
             return "Download window is still at 99%"
         }
     },
+    "error": (DungeonGame, Entity) => {
+        if (Entity.mana >= 100) {
+            Entity.mana -= 100
+            const Player = DungeonGame.player
+            Player.attack *= parseFloat("0." + toString(Math.ceil(Math.random() * 9)))
+            Player.defense *= parseFloat("0." + toString(Math.ceil(Math.random() * 9)))
+            return "WW91IGNhbm5vdCB1bmRlcnN0YW5kIHdoYXQgdGhlIGVycm9yIGRvZXMKWW91ciBhdHRhY2sgYW5kIGRlZmVuc2UgZGVjcmVhc2VkIQ=="
+        }
+        Entity.attack *= parseFloat("1." + toString(Math.ceil(Math.random() * 5)))
+        Entity.defense *= parseFloat("1." + toString(Math.ceil(Math.random() * 5)))
+        Entity.fight(DungeonGame.player, Entity.attack)
+        return "WW91IGZlZWwgcGFpbg=="
+    }
 }
 
 /*Dungeon.thinkers = {
