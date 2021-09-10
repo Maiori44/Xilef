@@ -31,7 +31,7 @@ class Command {
                 .members.cache.get(message.author.id)
                 ?.roles.cache.has("875699796139208724")
             if (!isdev) {
-                throw("Only my developers can use this command")
+                throw ("Only my developers can use this command")
             }
         }
         if (this.requiredargs)
@@ -311,7 +311,9 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
         new Discord.MessageEmbed()
             .setColor(message.member.displayHexColor)
             .setTitle(EconomySystem.user + "'s statistics")
-            .setDescription("```lua\nDogeCoins: " + EconomySystem.money + "\nRank: " + EconomySystem.rank + "```")
+            .setDescription("```lua\nDogeCoins: " + EconomySystem.money +
+                "\nRank: " + EconomySystem.rank +
+                "\nByteCoins: " + EconomySystem.bytecoins + "```")
             .addFields(
                 {
                     name: "Singleplayer stats:", value:
