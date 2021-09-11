@@ -1,6 +1,11 @@
 [
     {
         "seller": "Xilef",
+        "buyer": "Xilef",
+        "price": 0
+    },
+    {
+        "seller": "Xilef",
         "buyer": "Felix44",
         "price": 100
     },
