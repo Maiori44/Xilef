@@ -6,7 +6,13 @@ Stocks = {
         "`&stocks show` show general info about the current status of the Xilefunds\n" +
         "`&stocks offer (price)` offer a price to buy the Xilefunds, has to be higher than the previous\n" +
         "`&stocks auction (lowest price)` starts a new auction, if the lowest price is omitted Xilefunds's current value is used",
-    auction: { seller: "", buyer: "", price: 0 },
+    auction: {
+        seller: undefined,
+        sellerid: undefined,
+        buyer: undefined,
+        buyerid: undefined,
+        price: undefined
+    },
     get ledger() {
         return JSON.parse(fs.readFileSync("./src/Data/xilefunds.json", "utf8"))
     },
