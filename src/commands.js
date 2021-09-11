@@ -22,7 +22,7 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/37"))
+        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/38"))
     }
 
     call(message, args) {
@@ -400,3 +400,5 @@ Commands.leaderboard = new Command("See the users with the highest ranks", (mess
     }
     message.channel.send(LeaderBoard)
 }, "Economy")
+
+require("./xilefunds")
