@@ -1,4 +1,4 @@
-const { RequiredArg, Command } = require("./../commands.js")
+const { RequiredArg, Command } = require("./commands.js")
 const fs = require("fs")
 
 Stocks = {
@@ -18,9 +18,26 @@ Stocks = {
 
 Commands.stocks = new Command("Buy and sell Xilefunds\n\n" + Stocks.help, (message, args) => {
     const EconomySystem = Economy.getEconomySystem(message.author)
-    switch (sus) {
+    //message.channel.send(JSON.stringify(Stocks.ledger.length))
+    switch (args[0]) {
         case "show": {
+            let msg = "```diff\n"
+            const Ledger = Stocks.ledger
+            const ledgerlength = Ledger.length
+            let oldvalue = Ledger[ledgerlength - 11].price
+            for (let i = ledgerlength - 10; i < ledgerlength; i++) {
+                const Transaction = Ledger[i]
+                msg = `${msg}${Transaction.price > oldvalue ? "+" : "-"} ${Math.abs((Transaction.price - oldvalue) / oldvalue * 100).toFixed(2)}% => [${Transaction.price}] (${Transaction.seller} -> ${Transaction.buyer}) ${i == ledgerlength - 1 ? "CURRENT" : ""}\n`
+                oldvalue = Transaction.price
+            }
+            msg = msg + "```"
             const StocksEmbed = new Discord.MessageEmbed()
+                .setColor("#0368f8")
+                .setTitle("Xilefunds' stock market")
+                .setDescription(msg)
+                .setTimestamp()
+            message.channel.send(StocksEmbed)
+            return
         }
         default: {
             message.channel.send(Stocks.help.replace(/\&/g, Prefix.get(message.guild.id)))
