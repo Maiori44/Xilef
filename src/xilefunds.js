@@ -19,7 +19,7 @@ Stocks = {
     },
     get value() {
         const Ledger = Stocks.ledger
-        return Ledger[Ledger.length - 1].value
+        return Ledger[Ledger.length - 1].price
     }
 }
 
@@ -103,7 +103,7 @@ Commands.stocks = new Command("Buy and sell Xilefunds\n\n" + Stocks.help, (messa
                             EconomySystem.give(Stocks.auction.price)
                             EconomySystem.alterValue("xilefunds", -1)
                             BuyerEconomySystem.alterValue("xilefunds", 1)
-                            fs.writeFileSync("./src/Data/xilefunds.json", JSON.stringify([...Stocks.ledger, Stocks.auction]), 'utf8')
+                            fs.writeFileSync("./src/Data/xilefunds.json", JSON.stringify([...Stocks.ledger, Stocks.auction], null, 4), 'utf8')
                             SellerDMChannel.send("You sucessfully sold your Xilefund to " + Stocks.auction.buyer + " for " + Stocks.auction.price + "!")
                             BuyerDMChannel.send("You successfully bought a Xilefund for " + Stocks.auction.price + "!")
                         } else {
