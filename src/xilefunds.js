@@ -36,7 +36,7 @@ Commands.stocks = new Command("Buy and sell Xilefunds\n\n" + Stocks.help, (messa
                 msg = `${msg}${Transaction.price > oldvalue ? "+" : "-"} ${Math.abs((Transaction.price - oldvalue) / oldvalue * 100).toFixed(2)}% => [${Transaction.price}] (${Transaction.seller} -> ${Transaction.buyer}) ${i == ledgerlength - 1 ? "CURRENT" : ""}\n`
                 oldvalue = Transaction.price
             }
-            msg = msg + "```"
+            msg += "```"
             const StocksEmbed = new Discord.MessageEmbed()
                 .setColor("#0368f8")
                 .setTitle("Xilefunds' stock market")
@@ -91,32 +91,34 @@ Commands.stocks = new Command("Buy and sell Xilefunds\n\n" + Stocks.help, (messa
             Stocks.auction.sellerid = message.author.id
             Stocks.auction.price = price
             Stocks.timeout = setTimeout(() => {
-                const SellerDMChannel = message.author.createDM()
-                if (Stocks.auction.buyer == undefined) {
-                    SellerDMChannel.send("It seems like nobody wanted to buy your xilefund, how sad...\n" +
-                        (Stocks.auction.price <= 50 ? "it was even at such a low price..." : "maybe you have to lower the price a little?"))
-                    return
-                }
-                const BuyerDMChannel = client.users.cache.get(Stocks.auction.buyerid).createDM()
-                const BuyerEconomySystem = Economy.getEconomySystem({ id: Stocks.auction.buyerid, username: Stocks.auction.buyer })
-                if (BuyerEconomySystem.buy(Stocks.auction.price)) {
-                    EconomySystem.give(Stocks.auction.price)
-                    EconomySystem.alterValue("xilefunds", -1)
-                    BuyerEconomySystem.alterValue("xilefunds", 1)
-                    fs.writeFileSync("./src/Data/xilefunds.json", JSON.stringify([...Stocks.ledger, Stocks.auction]), 'utf8')
-                    SellerDMChannel.send("You sucessfully sold your Xilefund to " + Stocks.auction.buyer + " for " + Stocks.auction.price + "!")
-                    BuyerDMChannel.send("You successfully bought a Xilefund for " + Stocks.auction.price + "!")
-                } else {
-                    SellerDMChannel.send("Looks like the person who won the auction didn't even have the money for it...what a scam")
-                    BuyerDMChannel.send("The auction ended, but you didn't have enough money for the Xilefund, watch out next time!")
-                }
-                Stocks.auction = {
-                    seller: undefined,
-                    sellerid: undefined,
-                    buyer: undefined,
-                    buyerid: undefined,
-                    price: undefined
-                }
+                const SellerDMChannel = message.author.createDM().then(() => {
+                    if (Stocks.auction.buyer == undefined) {
+                        SellerDMChannel.send("It seems like nobody wanted to buy your xilefund, how sad...\n" +
+                            (Stocks.auction.price <= 50 ? "it was even at such a low price..." : "maybe you have to lower the price a little?"))
+                        return
+                    }
+                    const BuyerDMChannel = client.users.cache.get(Stocks.auction.buyerid).createDM().then(() => {
+                        const BuyerEconomySystem = Economy.getEconomySystem({ id: Stocks.auction.buyerid, username: Stocks.auction.buyer })
+                        if (BuyerEconomySystem.buy(Stocks.auction.price)) {
+                            EconomySystem.give(Stocks.auction.price)
+                            EconomySystem.alterValue("xilefunds", -1)
+                            BuyerEconomySystem.alterValue("xilefunds", 1)
+                            fs.writeFileSync("./src/Data/xilefunds.json", JSON.stringify([...Stocks.ledger, Stocks.auction]), 'utf8')
+                            SellerDMChannel.send("You sucessfully sold your Xilefund to " + Stocks.auction.buyer + " for " + Stocks.auction.price + "!")
+                            BuyerDMChannel.send("You successfully bought a Xilefund for " + Stocks.auction.price + "!")
+                        } else {
+                            SellerDMChannel.send("Looks like the person who won the auction didn't even have the money for it...what a scam")
+                            BuyerDMChannel.send("The auction ended, but you didn't have enough money for the Xilefund, watch out next time!")
+                        }
+                        Stocks.auction = {
+                            seller: undefined,
+                            sellerid: undefined,
+                            buyer: undefined,
+                            buyerid: undefined,
+                            price: undefined
+                        }
+                    })
+                })
             }, Time.hour)
             return
         }
