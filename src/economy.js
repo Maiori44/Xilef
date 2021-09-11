@@ -43,6 +43,7 @@ class EconomySystem {
         this.money = backup.money || 0 //the amount of DogeCoins the user has
         this.rank = backup.rank || 1 //their leaderboard rank
         this.user = username //their username
+        this.xilefunds = backup.xilefunds || 0 //the amount of xilefunds the user has
         this.impostors = backup.impostors || 0 //the amount of times they won in &crew
         this.driller = backup.driller || 1 //their &driller tier
         this.floor = backup.floor || 0 //their record in &dungeon

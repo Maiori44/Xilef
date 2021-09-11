@@ -22,7 +22,7 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/37"))
+        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/38"))
     }
 
     call(message, args) {
@@ -31,7 +31,7 @@ class Command {
                 .members.cache.get(message.author.id)
                 ?.roles.cache.has("875699796139208724")
             if (!isdev) {
-                throw("Only my developers can use this command")
+                throw ("Only my developers can use this command")
             }
         }
         if (this.requiredargs)
@@ -311,7 +311,9 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
         new Discord.MessageEmbed()
             .setColor(message.member.displayHexColor)
             .setTitle(EconomySystem.user + "'s statistics")
-            .setDescription("```lua\nDogeCoins: " + EconomySystem.money + "\nRank: " + EconomySystem.rank + "```")
+            .setDescription("```lua\nDogeCoins: " + EconomySystem.money +
+                "\nRank: " + EconomySystem.rank +
+                "\nXilefunds: " + EconomySystem.xilefunds + "```")
             .addFields(
                 {
                     name: "Singleplayer stats:", value:
@@ -398,3 +400,5 @@ Commands.leaderboard = new Command("See the users with the highest ranks", (mess
     }
     message.channel.send(LeaderBoard)
 }, "Economy")
+
+require("./xilefunds")

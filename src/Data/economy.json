@@ -1,9 +1,9 @@
 {
     "621307633718132746": {
-        "money": 81525,
+        "money": 79611,
         "rank": 50,
         "user": "Felix44",
-        "bytecoins": 0,
+        "xilefunds": 10,
         "impostors": 2,
         "driller": 10,
         "floor": 30,
@@ -12,7 +12,7 @@
         "reversi": 2,
         "connect4": 10,
         "roshambo": 56,
-        "vhour": 1631350927965,
+        "vhour": 1631367037385,
         "vgot": "818493986665656173",
         "achievments": "256"
     },
@@ -221,7 +221,7 @@
         "achievments": "0"
     },
     "483715787467653122": {
-        "money": 19878,
+        "money": 19241,
         "rank": 52,
         "user": "poly translator*",
         "bytecoins": 0,
@@ -233,7 +233,7 @@
         "reversi": 0,
         "connect4": 15,
         "roshambo": 0,
-        "vhour": 1631349657655,
+        "vhour": 1631357461043,
         "vgot": "4519635318732819",
         "achievments": "4"
     },
@@ -442,20 +442,20 @@
         "achievments": "0"
     },
     "311819610380959745": {
-        "money": 534255,
-        "rank": 251,
+        "money": 46436,
+        "rank": 271,
         "user": "DRKSAO",
         "bytecoins": 0,
         "impostors": 26,
         "driller": 13,
         "floor": 21,
         "msweeper": 0,
-        "day": 1631267857338,
+        "day": 1631367068880,
         "reversi": 0,
         "connect4": 8,
         "roshambo": 3,
-        "vhour": 1631353180395,
-        "vgot": "30502368829241199",
+        "vhour": 1631371475734,
+        "vgot": "30502368846018415",
         "achievments": "8"
     },
     "649253657862471694": {
@@ -544,7 +544,7 @@
         "achievments": "0"
     },
     "684285694063018048": {
-        "money": 219730,
+        "money": 224850,
         "rank": 539,
         "user": "LJMSU",
         "bytecoins": 0,
@@ -556,8 +556,8 @@
         "reversi": 0,
         "connect4": 2,
         "roshambo": 0,
-        "vhour": 1631354250251,
-        "vgot": "5413001835484115",
+        "vhour": 1631373395572,
+        "vgot": "5413001841775571",
         "achievments": "136"
     },
     "762021343612502066": {
