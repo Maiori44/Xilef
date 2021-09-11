@@ -91,13 +91,13 @@ Commands.stocks = new Command("Buy and sell Xilefunds\n\n" + Stocks.help, (messa
             Stocks.auction.sellerid = message.author.id
             Stocks.auction.price = price
             Stocks.timeout = setTimeout(() => {
-                const SellerDMChannel = message.author.createDM().then(() => {
+                message.author.createDM().then((SellerDMChannel) => {
                     if (Stocks.auction.buyer == undefined) {
                         SellerDMChannel.send("It seems like nobody wanted to buy your xilefund, how sad...\n" +
                             (Stocks.auction.price <= 50 ? "it was even at such a low price..." : "maybe you have to lower the price a little?"))
                         return
                     }
-                    const BuyerDMChannel = client.users.cache.get(Stocks.auction.buyerid).createDM().then(() => {
+                    client.users.cache.get(Stocks.auction.buyerid).createDM().then((BuyerDMChannel) => {
                         const BuyerEconomySystem = Economy.getEconomySystem({ id: Stocks.auction.buyerid, username: Stocks.auction.buyer })
                         if (BuyerEconomySystem.buy(Stocks.auction.price)) {
                             EconomySystem.give(Stocks.auction.price)
