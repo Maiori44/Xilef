@@ -360,7 +360,15 @@ Dungeon.thinkers = {
         return "The blight orb light envelopses the other enemies!\nTheir defense increased!"
     },
     "radiant-core": (DungeonGame, Entity) => {
-        //for lemon cannon
+        if (DungeonGame.enemies.length <= 4) {
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[36]))
+            return "The the radiant core pulses for help..\nAnother of its kin joined the fight!"
+        }
+        for (const Enemy of DungeonGame.enemies) {
+            Enemy.defense *= 1.5
+            Enemy.attack *= 1.5
+        }
+        return "The blight orb light envelopses the other enemies!\nTheir defense and attack increased!\n(careful of this one, things might get out of hand real fast)"
     },
     "download-window": (DungeonGame, Entity) => {
         if (Entity.mana >= 300) return "Download window crashes and burns!\n" + Entity.fight(DungeonGame.player, 800)
@@ -381,7 +389,17 @@ Dungeon.thinkers = {
         Entity.defense *= parseFloat("1." + toString(Math.ceil(Math.random() * 5)))
         Entity.fight(DungeonGame.player, Entity.attack)
         return "WW91IGZlZWwgcGFpbg=="
-    }
+    },
+    "ancient-swordmaster": (DungeonGame, Entity) => {
+         if (GetPercentual() <= 50) {
+             return Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
+                    Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
+                    Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
+                    Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
+                    Entity.fight(DungeonGame.player, Entity.attack) +
+         }
+         return "He swings the blade in graceful arcs. He is excited to fight his new sparring partner!"
+    },
 }
 
 /*Dungeon.thinkers = {
