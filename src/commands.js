@@ -313,7 +313,7 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
             .setTitle(EconomySystem.user + "'s statistics")
             .setDescription("```lua\nDogeCoins: " + EconomySystem.money +
                 "\nRank: " + EconomySystem.rank +
-                "\nByteCoins: " + EconomySystem.bytecoins + "```")
+                "\nXilefunds: " + EconomySystem.xilefunds + "```")
             .addFields(
                 {
                     name: "Singleplayer stats:", value:
