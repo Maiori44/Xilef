@@ -13,6 +13,7 @@ Stocks = {
         buyerid: undefined,
         price: undefined
     },
+    timeout: undefined,
     get ledger() {
         return JSON.parse(fs.readFileSync("./src/Data/xilefunds.json", "utf8"))
     },
@@ -24,7 +25,6 @@ Stocks = {
 
 Commands.stocks = new Command("Buy and sell Xilefunds\n\n" + Stocks.help, (message, args) => {
     const EconomySystem = Economy.getEconomySystem(message.author)
-    //message.channel.send(JSON.stringify(Stocks.ledger.length))
     switch (args[0]) {
         case "show": {
             let msg = "```diff\n"
@@ -42,7 +42,82 @@ Commands.stocks = new Command("Buy and sell Xilefunds\n\n" + Stocks.help, (messa
                 .setTitle("Xilefunds' stock market")
                 .setDescription(msg)
                 .setTimestamp()
+            if (Stocks.auction.seller) {
+                StocksEmbed.addField("Current auction:", `Seller: ${Stocks.auction.seller}\nLatest offer: ${Stocks.auction.buyer ? (Stocks.auction.buyer + " -> " + Stocks.auction.price) : "`none`"}`)            
+                StocksEmbed.addFooter("The auction will end in " + Time.converTime(Math.floor(Stocks.timeout._idleTimeout - ((process.uptime() * 1000) - Stocks.timeout._idleStart))))
+            } else StocksEmbed.addFooter("Start an auction to sell your Xilefund!")
             message.channel.send(StocksEmbed)
+            return
+        }
+        case "offer": {
+            if (Stocks.auction.seller == undefined) {
+                message.channel.send("There isn't any auction at the moment, start your own!")
+                return
+            } else if (Stocks.auction.seller == message.author.username) {
+                message.channel.send("You can't offer in your own auction!")
+                return
+            }
+            const offer = parseInt(args[1])
+            if (isNaN(offer)) {
+                message.channel.send("That is not a valid offer")
+                return
+            } else if (offer <= Stocks.auction.price) {
+                message.channel.send("Your offer is too low, you have to offer something higher than the current offer (" + Stocks.auction.price + ")")
+                return
+            } else if (EconomySystem.money < offer) {
+                message.channel.send("You can't offer money that you don't even have!")
+                return
+            }
+            Stocks.auction.buyer = message.author.username
+            Stocks.auction.buyerid = message.author.id
+            Stocks.auction.price = offer
+            message.channel.send("You successfully offered " + offer + " to this auction!")
+            return
+        }
+        case "auction": {
+            if (Stocks.auction.seller != undefined) {
+                message.channel.send("There is already another auction going at the moment")
+                return
+            } else if (EconomySystem.xilefunds < 1) {
+                message.channel.send("You don't have any Xilefund to auction!")
+                return
+            }
+            const price = args[1] || Stocks.value
+            if (price < 1) {
+                message.channel.send("uhh...you can't give this away for free...")
+                return
+            }
+            Stocks.auction.seller = message.author.username
+            Stocks.auction.sellerid = message.author.id
+            Stocks.auction.price = price
+            Stocks.timeout = setTimeout(() => {
+                const SellerDMChannel = message.author.createDM()
+                if (Stocks.auction.buyer == undefined) {
+                    SellerDMChannel.send("It seems like nobody wanted to buy your xilefund, how sad...\n" +
+                        (Stocks.auction.price <= 50 ? "it was even at such a low price..." : "maybe you have to lower the price a little?"))
+                    return
+                }
+                const BuyerDMChannel = client.users.cache.get(Stocks.auction.buyerid).createDM()
+                const BuyerEconomySystem = Economy.getEconomySystem({ id: Stocks.auction.buyerid, username: Stocks.auction.buyer })
+                if (BuyerEconomySystem.buy(Stocks.auction.price)) {
+                    EconomySystem.give(Stocks.auction.price)
+                    EconomySystem.alterValue("xilefunds", -1)
+                    BuyerEconomySystem.alterValue("xilefunds", 1)
+                    fs.writeFileSync("./src/Data/xilefunds.json", JSON.stringify([...Stocks.ledger, Stocks.auction]), 'utf8')
+                    SellerDMChannel.send("You sucessfully sold your Xilefund to " + Stocks.auction.buyer + " for " + Stocks.auction.price + "!")
+                    BuyerDMChannel.send("You successfully bought a Xilefund for " + Stocks.auction.price + "!")
+                } else {
+                    SellerDMChannel.send("Looks like the person who won the auction didn't even have the money for it...what a scam")
+                    BuyerDMChannel.send("The auction ended, but you didn't have enough money for the Xilefund, watch out next time!")
+                }
+                Stocks.auction = {
+                    seller: undefined,
+                    sellerid: undefined,
+                    buyer: undefined,
+                    buyerid: undefined,
+                    price: undefined
+                }
+            }, Time.hour)
             return
         }
         default: {
