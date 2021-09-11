@@ -357,12 +357,14 @@ Dungeon.thinkers = {
         for (const Enemy of DungeonGame.enemies) {
             Enemy.defense *= 1.3
         }
-        return "The blight orb light envelopses the other enemies!\nTheir defense increased!"
+        
+        return Entity.fight(DungeonGame.player, Entity.attack) + "\n" + 
+               "The blight orb light envelopses the other enemies!\nTheir defense increased!"
     },
     "radiant-core": (DungeonGame, Entity) => {
         if (DungeonGame.enemies.length <= 4) {
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[36]))
-            return "The the radiant core pulses for help..\nAnother of its kin joined the fight!"
+            return "The the radiant core pulses for help..\nA blight orb joined the fight!"
         }
         for (const Enemy of DungeonGame.enemies) {
             Enemy.defense *= 1.5
@@ -398,7 +400,9 @@ Dungeon.thinkers = {
                     Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
                     Entity.fight(DungeonGame.player, Entity.attack) +
          }
-         return "He swings the blade in graceful arcs. He is excited to fight his new sparring partner!"
+         Entity.mana += 50
+         return "He swings the blade in graceful arcs. He is excited to fight his new sparring partner!" + "\n" +
+                Dungeon.attacks.ice.use(Entity, DungeonGame.player)
     },
 }
 
