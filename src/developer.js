@@ -1,10 +1,12 @@
 const { RequiredArg, Command } = require("./commands");
-const VM = require('vm');
-const { inspect } = require("util");
+
 const Discord = require("discord.js");
+const { Console } = require("console");
+const { inspect } = require("util");
+const Stream = require("stream");
+const VM = require('vm')
 
 const globals = {
-  WebAssembly,
   assert: require('assert'),
   buffer: require('buffer'),
   crypto: require('crypto'),
@@ -29,57 +31,13 @@ const globals = {
 };
 
 const description = [
-  ' & eval but better',
+  '&eval but better',
   String(),
   'Example:',
   '&debug \\`\\`\\`js',
   '1 + 1',
   '\\`\\`\\`'
 ].join('\n');
-
-Commands.debug = new Command(description, (/** @type {Discord.Message} */ message) => {
-  try {
-    /** @type {string} */
-    const code = message.content
-      .slice(Prefix.get(message.guild.id).length + 5)
-      .match(/```js\n([^]*)\n```/)?.[1] ?? String();
-
-    const result = inspect(evaluate(code, {...globals, message})).split('\n');
-    /** @type {string[]} */
-    const pages = [];
-
-    for (let i = 0, charc = 0,/** @type {string[]} */ stack = []; i < result.length; i++) {
-      const line = result[i];
-      if (charc + line.length > 3950) {
-        pages.push(stack.join('\n'));
-        stack = [];
-        charc = 0;
-      }
-      stack.push(line);
-      charc += line.length;
-      if (i == result.length - 1) {
-        pages.push(stack.join('\n'));
-        stack = [];
-        charc = 0;
-      }
-    }
-
-    pages.map(
-      page => new Discord.MessageEmbed()
-        .setColor('#0368f8')
-        .setDescription('```js\n' + page + '\n```')
-    ).forEach((page)=> message.channel.send(page))
-
-  } catch (error) {
-    console.error(error);
-    message.channel.send(
-      new Discord.MessageEmbed()
-        .setColor('RED')
-        .setTitle('error - debug')
-        .setDescription('```\n' + error + '\n```')
-    );
-  }
-}, 'Developer', [new RequiredArg(0, 'No code supplied.', 'code block', false)]);
 
 /**
  * **Evaluate a JavaScript code using node's `vm` module.**
@@ -100,7 +58,147 @@ function evaluate(code, globals) {
   });
 }
 
-const NewProcess = require('child_process').spawn
+Commands.debug = new Command(description, (/** @type {Discord.Message} */ message) => {
+  try {
+    /** @type {string} */
+    const code = message.content
+      .slice(Prefix.get(message.guild.id).length + 5)
+      .match(/```js\n([^]*)\n```/)?.[1] ?? String();
+
+    /** @type {string[]} */
+    const stdout = []
+    /** @type {string[]} */
+    const stderr = []
+
+    const context = {
+      message,
+      console: new Console(
+        new Stream.Writable({ // stdout
+          write(chunk, encoding, callback) {
+            stdout.push(chunk);
+            callback(null)
+          }
+        }),
+        new Stream.Writable({ // stderr
+          write(chunk, encoding, callback) {
+            stderr.push(chunk);
+            callback(null)
+          }
+        })
+      ),
+    }
+
+    const result = evaluate(code, { ...globals, ...context });
+
+    if (!(result == undefined && stdout.length != 0 || stderr.length != 0)) {
+      const expression = inspect(result).split('\n');
+      /** @type {string[]} */
+      const expressionPages = [];
+
+      for (let i = 0, charc = 0,/** @type {string[]} */ stack = []; i < expression.length; i++) {
+        const line = expression[i];
+        if (charc + line.length > 3950) {
+          expressionPages.push(stack.join('\n'));
+          stack = [];
+          charc = 0;
+        }
+        stack.push(line);
+        charc += line.length;
+        if (i == expression.length - 1) {
+          expressionPages.push(stack.join('\n'));
+          stack = [];
+          charc = 0;
+        }
+      }
+
+      const expressionEmbeds = expressionPages.map(
+        page => new Discord.MessageEmbed()
+          .setColor('#0368f8')
+          .setDescription('```js\n' + page + '\n```')
+      )
+
+      expressionEmbeds[0].setTitle('expression')
+
+      for (const embed of expressionEmbeds) message.channel.send(embed)
+    }
+
+    if (stdout.length != 0) {
+      const stdoutString = stdout.join('\n').split('\n')
+
+      /** @type {string[]} */
+      const stdoutPages = [];
+
+      for (let i = 0, charc = 0,/** @type {string[]} */ stack = []; i < stdoutString.length; i++) {
+        const line = stdoutString[i];
+        if (charc + line.length > 3950) {
+          stdoutPages.push(stack.join('\n'));
+          stack = [];
+          charc = 0;
+        }
+        stack.push(line);
+        charc += line.length;
+        if (i == stdoutString.length - 1) {
+          stdoutPages.push(stack.join('\n'));
+          stack = [];
+          charc = 0;
+        }
+      }
+
+      const stdoutEmbeds = stdoutPages.map(
+        page => new Discord.MessageEmbed()
+          .setColor('#0368f8')
+          .setDescription('```js\n' + page + '\n```')
+      )
+
+      stdoutEmbeds[0].setTitle('stdout')
+
+      for (const embed of stdoutEmbeds) message.channel.send(embed)
+    }
+
+    if (stderr.length != 0) {
+      const stderrString = stderr.join('\n').split('\n')
+
+      /** @type {string[]} */
+      const stderrPages = [];
+
+      for (let i = 0, charc = 0,/** @type {string[]} */ stack = []; i < stderrString.length; i++) {
+        const line = stderrString[i];
+        if (charc + line.length > 3950) {
+          stderrPages.push(stack.join('\n'));
+          stack = [];
+          charc = 0;
+        }
+        stack.push(line);
+        charc += line.length;
+        if (i == stderrString.length - 1) {
+          stderrPages.push(stack.join('\n'));
+          stack = [];
+          charc = 0;
+        }
+      }
+
+      const stderrEmbeds = stderrPages.map(
+        page => new Discord.MessageEmbed()
+          .setColor('#0368f8')
+          .setDescription('```js\n' + page + '\n```')
+      )
+
+      stderrEmbeds[0].setTitle('stderr')
+
+      for (const embed of stderrEmbeds) message.channel.send(embed)
+    }
+  } catch (error) {
+    console.error(error);
+    message.channel.send(
+      new Discord.MessageEmbed()
+        .setColor('RED')
+        .setTitle('error - debug')
+        .setDescription('```\n' + error + '\n```')
+    );
+  }
+}, 'Developer', [new RequiredArg(0, 'No code supplied.', 'code block', false)]);
+
+const NewProcess = require('child_process').spawn;
 
 Commands.shutdown = new Command("Shuts down the bot after a given time\nDeveloper only", (message, args) => {
     if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the bot owner only")
