@@ -90,7 +90,7 @@ Commands.debug = new Command(description, (/** @type {Discord.Message} */ messag
 
     const result = evaluate(code, { ...globals, ...context });
 
-    if (!(result == undefined && stdout.length != 0 || stderr.length != 0)) {
+    if (!(result == undefined && (stdout.length != 0 || stderr.length != 0))) {
       const expression = inspect(result).split('\n');
       /** @type {string[]} */
       const expressionPages = [];
