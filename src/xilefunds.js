@@ -43,7 +43,7 @@ Commands.stocks = new Command("Buy and sell Xilefunds\n\n" + Stocks.help, (messa
                 .setDescription(msg)
                 .setTimestamp()
             if (Stocks.auction.seller) {
-                StocksEmbed.addField("Current auction:", `Seller: ${Stocks.auction.seller}\nLatest offer: ${Stocks.auction.buyer ? (Stocks.auction.buyer + " -> " + Stocks.auction.price) : "`none` (lowest offer possible: " + Stocks.auction.price + ")"}`)            
+                StocksEmbed.addField("Current auction:", `Seller: ${Stocks.auction.seller}\nLatest offer: ${Stocks.auction.buyer ? (Stocks.auction.buyer + " -> " + Stocks.auction.price) : "`none` (lowest offer possible: " + (Stocks.auction.price + 1) + ")"}`)            
                 StocksEmbed.setFooter("The auction will end in " + Time.convertTime(Math.floor(Stocks.timeout._idleTimeout - ((process.uptime() * 1000) - Stocks.timeout._idleStart))))
             } else StocksEmbed.setFooter("Start an auction to sell your Xilefund!")
             message.channel.send(StocksEmbed)
