@@ -7,18 +7,6 @@ const Stream = require("stream");
 const VM = require('vm')
 
 const globals = {
-  assert: require('assert'),
-  buffer: require('buffer'),
-  crypto: require('crypto'),
-  events: require('events'),
-  path: require('path'),
-  perf_hooks: require('perf_hooks'),
-  stream: require('stream'),
-  string_decoder: require('string_decoder'),
-  timers: require('timers'),
-  url: require('url'),
-  util: require('util'),
-
   DEBUG: {
     AVAILABLE_MODULES: [
       'assert', 'buffer',
@@ -30,6 +18,8 @@ const globals = {
   }
 };
 
+const directives = new Map()
+
 const description = [
   '&eval but better',
   String(),
@@ -40,14 +30,35 @@ const description = [
 ].join('\n');
 
 /**
+ * @typedef {object} EvaluatorOptions
+ * @property {string[]} EvaluatorOptions.stdlibs
+ */
+
+/**
  * **Evaluate a JavaScript code using node's `vm` module.**
  *
  * @param {string} code - The code string to evaluate.
  * @param {VM.Context} [globals] - Globals to put. May be used to override other variables.
+ * @param {EvaluatorOptions} config - Configurations for use. Properties may include:
+ * - **`stdlibs`**: type: Array<string> - available node standard library modules to put.
  * @returns - The result of the last expression in the code. May be a {@link Promise}.
  */
-function evaluate(code, globals) {
+function evaluate(code, globals, config) {
   const context = {
+    require: new Proxy(require, {
+      apply(target, thisArg, args) {
+        if (!config.stdlibs.includes(args[0]))
+          throw new Error(`module \'${args[0]}\' is restricted`)
+        else return Reflect.apply(target, thisArg, ['console'])
+      },
+      get(target, property, receiver) {
+        const restricted = ['cache', 'main']
+        console.log(property);
+        if (restricted.includes(property))
+          return 'restricted'
+        else return Reflect.get(target, property,receiver)
+      }
+    }),
     ...globals
   };
 
@@ -58,12 +69,31 @@ function evaluate(code, globals) {
   });
 }
 
-Commands.debug = new Command(description, (/** @type {Discord.Message} */ message) => {
+Commands.debug = new Command(description, async function (message) {
+  const features = {}
+  directives.set('enable', (args, code) => {
+    features[args[0]] = true;
+  })
+
   try {
     /** @type {string} */
-    const code = message.content
+    const rawCode = message.content
       .slice(Prefix.get(message.guild.id).length + 5)
-      .match(/```js\n([^]*)\n```/)?.[1] ?? String();
+      .match(/```js\n([^]*)\n```/)?.[1] ?? String()
+
+    const directivesGathered = rawCode.split('\n')
+      .filter((line) => line.startsWith('// #'))
+
+    for (const directive of directivesGathered) {
+      const [name, ...args] = directive.slice('// #'.length).split(/ +/g);
+
+      if (directives.has(name)) directives.get(name)(args, rawCode)
+      else throw new Error(`unknown directive: \'#${name}\'`)
+    }
+
+    const code = features.await
+      ? `async function main() {${rawCode}}; main()`
+      : rawCode;
 
     /** @type {string[]} */
     const stdout = []
@@ -88,7 +118,9 @@ Commands.debug = new Command(description, (/** @type {Discord.Message} */ messag
       ),
     }
 
-    const result = evaluate(code, { ...globals, ...context });
+    const result = await evaluate(code, { ...globals, ...context }, {
+      stdlibs: globals.DEBUG.AVAILABLE_MODULES
+    });
 
     if (!(result == undefined && (stdout.length != 0 || stderr.length != 0))) {
       const expression = inspect(result).split('\n');
