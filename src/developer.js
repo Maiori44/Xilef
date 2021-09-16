@@ -18,7 +18,7 @@ const globals = {
   }
 };
 
-const directives = new Map()
+const directives = new Map();
 
 const description = [
   '&eval but better',
@@ -40,21 +40,19 @@ const description = [
  * @param {string} code - The code string to evaluate.
  * @param {VM.Context} [globals] - Globals to put. May be used to override other variables.
  * @param {EvaluatorOptions} config - Configurations for use. Properties may include:
- * - **`stdlibs`**: type: Array<string> - available node standard library modules to put.
+ * - **`stdlibs`**: type: Array<string> - node standard library modules to put.
  * @returns - The result of the last expression in the code. May be a {@link Promise}.
  */
 function evaluate(code, globals, config) {
   const context = {
     require: new Proxy(require, {
-      apply(target, thisArg, args) {
-        if (!config.stdlibs.includes(args[0]))
-          throw new Error(`module \'${args[0]}\' is restricted`)
-        else return Reflect.apply(target, thisArg, ['console'])
+      apply(target, thisArg, name) {
+        if (config.stdlibs.includes(name))
+          return Reflect.apply(target, thisArg, name);
+        else throw new Error(`module '${name} is restricted`);
       },
       get(target, property, receiver) {
-        const restricted = ['cache', 'main']
-        console.log(property);
-        if (restricted.includes(property))
+        if (['cache', 'main'].includes(property))
           return 'restricted'
         else return Reflect.get(target, property,receiver)
       }
@@ -70,7 +68,8 @@ function evaluate(code, globals, config) {
 }
 
 Commands.debug = new Command(description, async function (message) {
-  const features = {}
+  const features = {};
+  DEBUG.OPTIONAL_FEATURES = features;
   directives.set('enable', (args, code) => {
     features[args[0]] = true;
   })
@@ -88,7 +87,7 @@ Commands.debug = new Command(description, async function (message) {
       const [name, ...args] = directive.slice('// #'.length).split(/ +/g);
 
       if (directives.has(name)) directives.get(name)(args, rawCode)
-      else throw new Error(`unknown directive: \'#${name}\'`)
+      else throw new Error(`unknown directive: '#${name}'`)
     }
 
     const code = features.await
