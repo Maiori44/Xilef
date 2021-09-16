@@ -69,7 +69,7 @@ function evaluate(code, globals, config) {
 
 Commands.debug = new Command(description, async function (message) {
   const features = {};
-  DEBUG.OPTIONAL_FEATURES = features;
+  globals.DEBUG.OPTIONAL_FEATURES = features;
   directives.set('enable', (args, code) => {
     features[args[0]] = true;
   })
