@@ -46,10 +46,11 @@ const description = [
 function evaluate(code, globals, config) {
   const context = {
     require: new Proxy(require, {
-      apply(target, thisArg, name) {
+      apply(target, thisArg, [name]) {
+        console.log(name, config)
         if (config.stdlibs.includes(name))
-          return Reflect.apply(target, thisArg, name);
-        else throw new Error(`module '${name} is restricted`);
+          return Reflect.apply(target, thisArg, [name]);
+        else throw new Error(`module '${name}' is restricted`);
       },
       get(target, property, receiver) {
         if (['cache', 'main'].includes(property))
