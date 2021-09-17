@@ -1,6 +1,6 @@
 {
     "621307633718132746": {
-        "money": 7398498742,
+        "money": 14925831944,
         "rank": 122798,
         "user": "Felix44",
         "xilefunds": 0,
@@ -12,8 +12,8 @@
         "reversi": 2,
         "connect4": 10,
         "roshambo": 56,
-        "vhour": 1631888095419,
-        "vgot": "819619922005979119",
+        "vhour": 1631911891725,
+        "vgot": "819619922005983215",
         "achievments": "273"
     },
     "276363003270791168": {
@@ -119,7 +119,7 @@
         "achievments": "0"
     },
     "484682433925611542": {
-        "money": 3404886421,
+        "money": 7068852454,
         "rank": 121212,
         "user": "Dark_Brick",
         "xilefunds": 6,
@@ -131,8 +131,8 @@
         "reversi": 0,
         "connect4": 3,
         "roshambo": 0,
-        "vhour": 1631888035809,
-        "vgot": "68036679612497725",
+        "vhour": 1631915016874,
+        "vgot": "68036679612497789",
         "achievments": "17"
     },
     "642719190288957450": {
@@ -442,7 +442,7 @@
         "achievments": "0"
     },
     "311819610380959745": {
-        "money": 143927,
+        "money": 155444,
         "rank": 271,
         "user": "DRKSAO",
         "xilefunds": 0,
@@ -454,7 +454,7 @@
         "reversi": 0,
         "connect4": 15,
         "roshambo": 3,
-        "vhour": 1631888405439,
+        "vhour": 1631892993590,
         "vgot": "102843640373575679",
         "achievments": "12"
     },
@@ -544,7 +544,7 @@
         "achievments": "0"
     },
     "684285694063018048": {
-        "money": 18368711,
+        "money": 7576657211,
         "rank": 123000,
         "user": "LJMSU",
         "xilefunds": 4,
@@ -556,7 +556,7 @@
         "reversi": 0,
         "connect4": 15,
         "roshambo": 0,
-        "vhour": 1631888512496,
+        "vhour": 1631901951650,
         "vgot": "77471163889999859",
         "achievments": "157"
     },
@@ -629,7 +629,7 @@
         "achievments": "0"
     },
     "642841151484985365": {
-        "money": 4441,
+        "money": 4391,
         "rank": 1,
         "user": "Rainbow",
         "xilefunds": 0,
@@ -641,8 +641,8 @@
         "reversi": 0,
         "connect4": 3,
         "roshambo": 0,
-        "vhour": 1630138989779,
-        "vgot": "1099516346370",
+        "vhour": 1631910721538,
+        "vgot": "1126999423188994",
         "achievments": "0"
     },
     "866046348321882132": {
@@ -731,7 +731,7 @@
         "achievments": "0"
     },
     "405012455341817868": {
-        "money": 50,
+        "money": 0,
         "rank": 1,
         "user": "MAKYUNI",
         "xilefunds": 0,
@@ -743,8 +743,8 @@
         "reversi": 0,
         "connect4": 2,
         "roshambo": 4,
-        "vhour": 1631201513540,
-        "vgot": "1099780071424",
+        "vhour": 1631904675266,
+        "vgot": "1099780075520",
         "achievments": "0"
     }
 }
