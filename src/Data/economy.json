@@ -1,6 +1,6 @@
 {
     "621307633718132746": {
-        "money": 14925831944,
+        "money": 41289303861,
         "rank": 122798,
         "user": "Felix44",
         "xilefunds": 0,
@@ -8,12 +8,12 @@
         "driller": 30,
         "floor": 30,
         "msweeper": 1,
-        "day": 1631806447252,
+        "day": 1632058266514,
         "reversi": 2,
         "connect4": 10,
         "roshambo": 56,
-        "vhour": 1631911891725,
-        "vgot": "819619922005983215",
+        "vhour": 1632143633659,
+        "vgot": "819619939185852399",
         "achievments": "273"
     },
     "276363003270791168": {
@@ -221,7 +221,7 @@
         "achievments": "0"
     },
     "483715787467653122": {
-        "money": 2367,
+        "money": 2887,
         "rank": 52,
         "user": "poly translator*",
         "xilefunds": 0,
@@ -229,7 +229,7 @@
         "driller": 5,
         "floor": 11,
         "msweeper": 0,
-        "day": 1630316434850,
+        "day": 1631966982345,
         "reversi": 0,
         "connect4": 15,
         "roshambo": 0,
@@ -442,7 +442,7 @@
         "achievments": "0"
     },
     "311819610380959745": {
-        "money": 155444,
+        "money": 227933,
         "rank": 271,
         "user": "DRKSAO",
         "xilefunds": 0,
@@ -450,12 +450,12 @@
         "driller": 13,
         "floor": 21,
         "msweeper": 0,
-        "day": 1631806401918,
+        "day": 1632061112174,
         "reversi": 0,
         "connect4": 15,
         "roshambo": 3,
-        "vhour": 1631892993590,
-        "vgot": "102843640373575679",
+        "vhour": 1632144519383,
+        "vgot": "103406590326996991",
         "achievments": "12"
     },
     "649253657862471694": {
@@ -544,7 +544,7 @@
         "achievments": "0"
     },
     "684285694063018048": {
-        "money": 7576657211,
+        "money": 30253982711,
         "rank": 123000,
         "user": "LJMSU",
         "xilefunds": 4,
@@ -552,11 +552,11 @@
         "driller": 30,
         "floor": 22,
         "msweeper": 10,
-        "day": 1631807280310,
+        "day": 1632058393049,
         "reversi": 0,
         "connect4": 15,
         "roshambo": 0,
-        "vhour": 1631901951650,
+        "vhour": 1632143644424,
         "vgot": "77471163889999859",
         "achievments": "157"
     },
