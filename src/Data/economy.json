@@ -1,6 +1,6 @@
 {
     "621307633718132746": {
-        "money": 16270167276,
+        "money": 20338661376,
         "rank": 127600,
         "user": "Felix44",
         "xilefunds": 0,
@@ -8,11 +8,11 @@
         "driller": 30,
         "floor": 30,
         "msweeper": 1,
-        "day": 1632578915551,
+        "day": 1632844305593,
         "reversi": 2,
         "connect4": 10,
         "roshambo": 56,
-        "vhour": 1632660292005,
+        "vhour": 1632844302943,
         "vgot": "819619939185852415",
         "achievments": "273"
     },
@@ -442,7 +442,7 @@
         "achievments": "0"
     },
     "311819610380959745": {
-        "money": 293648,
+        "money": 307875,
         "rank": 271,
         "user": "DRKSAO",
         "xilefunds": 0,
@@ -450,11 +450,11 @@
         "driller": 13,
         "floor": 21,
         "msweeper": 0,
-        "day": 1632603636295,
+        "day": 1632842690917,
         "reversi": 0,
         "connect4": 15,
         "roshambo": 3,
-        "vhour": 1632660146573,
+        "vhour": 1632842682002,
         "vgot": "103406590326996991",
         "achievments": "12"
     },
@@ -544,7 +544,7 @@
         "achievments": "0"
     },
     "684285694063018048": {
-        "money": 9071328704,
+        "money": 13165376704,
         "rank": 128000,
         "user": "LJMSU",
         "xilefunds": 4,
@@ -552,11 +552,11 @@
         "driller": 30,
         "floor": 22,
         "msweeper": 10,
-        "day": 1632660159188,
+        "day": 1632844270125,
         "reversi": 0,
         "connect4": 15,
         "roshambo": 0,
-        "vhour": 1632667038029,
+        "vhour": 1632844273516,
         "vgot": "509887096861745139",
         "achievments": "157"
     },
