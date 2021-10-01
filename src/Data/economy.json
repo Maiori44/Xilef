@@ -1,19 +1,19 @@
 {
     "621307633718132746": {
-        "money": 1884715073967,
-        "rank": 107798,
+        "money": 28474373576,
+        "rank": 127600,
         "user": "Felix44",
         "xilefunds": 0,
         "impostors": 2,
         "driller": 30,
         "floor": 30,
         "msweeper": 1,
-        "day": 1631710836197,
+        "day": 1633011232276,
         "reversi": 2,
         "connect4": 10,
         "roshambo": 56,
-        "vhour": 1631726212670,
-        "vgot": "819619922005978989",
+        "vhour": 1633011233406,
+        "vgot": "819619939185852415",
         "achievments": "273"
     },
     "276363003270791168": {
@@ -34,8 +34,8 @@
         "achievments": "0"
     },
     "602651056320675840": {
-        "money": 112,
-        "rank": 34,
+        "money": 11829,
+        "rank": 36,
         "user": "Sebo2205",
         "xilefunds": 0,
         "impostors": 0,
@@ -46,8 +46,8 @@
         "reversi": 0,
         "connect4": 0,
         "roshambo": 0,
-        "vhour": 1631029989833,
-        "vgot": "34209792",
+        "vhour": 1631817160138,
+        "vgot": "35258368",
         "achievments": "64"
     },
     "393501189788139520": {
@@ -119,8 +119,8 @@
         "achievments": "0"
     },
     "484682433925611542": {
-        "money": 10846812889,
-        "rank": 100000,
+        "money": 29082951652,
+        "rank": 121212,
         "user": "Dark_Brick",
         "xilefunds": 6,
         "impostors": 0,
@@ -131,8 +131,8 @@
         "reversi": 0,
         "connect4": 3,
         "roshambo": 0,
-        "vhour": 1631735039252,
-        "vgot": "63533079985127229",
+        "vhour": 1632500491655,
+        "vgot": "68045475705519997",
         "achievments": "17"
     },
     "642719190288957450": {
@@ -221,7 +221,7 @@
         "achievments": "0"
     },
     "483715787467653122": {
-        "money": 4967,
+        "money": 2887,
         "rank": 52,
         "user": "poly translator*",
         "xilefunds": 0,
@@ -229,12 +229,12 @@
         "driller": 5,
         "floor": 11,
         "msweeper": 0,
-        "day": 1630316434850,
+        "day": 1631966982345,
         "reversi": 0,
         "connect4": 15,
         "roshambo": 0,
-        "vhour": 1631713486003,
-        "vgot": "4519772796483607",
+        "vhour": 1631881427062,
+        "vgot": "6771572610168855",
         "achievments": "4"
     },
     "850867485263527956": {
@@ -442,7 +442,7 @@
         "achievments": "0"
     },
     "311819610380959745": {
-        "money": 122249,
+        "money": 333619,
         "rank": 271,
         "user": "DRKSAO",
         "xilefunds": 0,
@@ -450,12 +450,12 @@
         "driller": 13,
         "floor": 21,
         "msweeper": 0,
-        "day": 1631710787266,
+        "day": 1633010971169,
         "reversi": 0,
         "connect4": 15,
         "roshambo": 3,
-        "vhour": 1631721910577,
-        "vgot": "30783847312392191",
+        "vhour": 1633016023333,
+        "vgot": "103406590326996991",
         "achievments": "12"
     },
     "649253657862471694": {
@@ -544,20 +544,20 @@
         "achievments": "0"
     },
     "684285694063018048": {
-        "money": 11728007134,
-        "rank": 107000,
+        "money": 17259424704,
+        "rank": 128000,
         "user": "LJMSU",
         "xilefunds": 4,
         "impostors": 25,
         "driller": 30,
         "floor": 22,
         "msweeper": 10,
-        "day": 1631710454090,
+        "day": 1633011009861,
         "reversi": 0,
         "connect4": 15,
         "roshambo": 0,
-        "vhour": 1631727771433,
-        "vgot": "77471146710063091",
+        "vhour": 1633011011496,
+        "vgot": "509887096861745139",
         "achievments": "157"
     },
     "762021343612502066": {
@@ -629,7 +629,7 @@
         "achievments": "0"
     },
     "642841151484985365": {
-        "money": 4441,
+        "money": 4341,
         "rank": 1,
         "user": "Rainbow",
         "xilefunds": 0,
@@ -641,8 +641,8 @@
         "reversi": 0,
         "connect4": 3,
         "roshambo": 0,
-        "vhour": 1630138989779,
-        "vgot": "1099516346370",
+        "vhour": 1632246175394,
+        "vgot": "1127016603058178",
         "achievments": "0"
     },
     "866046348321882132": {
@@ -731,7 +731,7 @@
         "achievments": "0"
     },
     "405012455341817868": {
-        "money": 50,
+        "money": 0,
         "rank": 1,
         "user": "MAKYUNI",
         "xilefunds": 0,
@@ -743,8 +743,8 @@
         "reversi": 0,
         "connect4": 2,
         "roshambo": 4,
-        "vhour": 1631201513540,
-        "vgot": "1099780071424",
+        "vhour": 1631904675266,
+        "vgot": "1099780075520",
         "achievments": "0"
     }
 }
