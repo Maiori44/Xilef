@@ -56,7 +56,7 @@ Buttons.addComponent(new MessageButton()
     .setLabel("Official server"))
 Buttons.addComponent(new MessageButton()
     .setStyle("url")
-    .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=59456&scope=bot")
+    .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=275415091200&scope=bot")
     .setLabel("Invite bot"))
 
 Commands = {}
