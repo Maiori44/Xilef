@@ -162,7 +162,7 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
             EconomySystem.vhour = hour
         }
     } else {
-        throw ("You arleady got a v_ recently, you can get a new one in " + Time.convertTime(Time.hour - diff) + "!")
+        throw ("You already got a v_ recently, you can get a new one in " + Time.convertTime(Time.hour - diff) + "!")
     }
 }, "Game")
 
