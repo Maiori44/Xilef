@@ -247,9 +247,8 @@ Commands.shutdown = new Command("Shuts down the bot after a given time\nDevelope
         console.log("- Shutting down...")
         message.channel.send("Shutting down...").then(() => {
             if (args[2]) {
-                NewProcess("cmd.exe", ["/c", debugmode ? "testbot.bat" : "startbot.bat"], { detached: true })
-                setTimeout(() => message.channel.send("Bot restarted successfully").then(() => process.exit(0), 2500))
-            } else process.exit(0)
+                message.channel.send("Bot Restarting!").then(() => process.exit(0), 2500))
+            } 
         })
     }, timeleft || 0)
 }, "Developer", [
