@@ -233,7 +233,6 @@ Commands.debug = new Command(description, async function (message) {
 const NewProcess = require('child_process').spawn;
 
 Commands.shutdown = new Command("Shuts down the bot after a given time\nDeveloper only", (message, args) => {
-    if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the bot owner only")
     if (args[0]) {
         warning = args[0]
         client.user.setActivity(args[0] + ", ping me for info")
