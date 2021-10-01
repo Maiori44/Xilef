@@ -55,7 +55,7 @@ class EconomySystem {
         this.vhour = backup.vhour || Date.now() - Date.hour //last time they rolled
         this.vgot = new FlagSystem(60, backup.vgot) //flag system for the different v_s
         this.achievments = new FlagSystem(9, backup.achievments) //flag system for the achievements
-        console.log("- " + Colors.purple.colorize(backup ? "Restored EconomySystem of " : "Created EconomySystem of ") + Colors.hpurple.colorize(this.user))
+        console.log("- " + Colors.purple.colorize(Object.keys(backup).length === 0 ? "Created EconomySystem of " : "Restored EconomySystem of ") + Colors.hpurple.colorize(this.user))
     }
 
     alterValue(valuename, amount, max) {
