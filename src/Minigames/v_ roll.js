@@ -146,7 +146,7 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
             let v_got = v_s[Math.floor(Math.random() * v_s.length)]
             message.channel.send("You got " + v_got.id + "! (" + rarity + "!)")
             if (EconomySystem.vgot.checkFlag(v_got.value)) {
-                message.channel.send("Oh..you arleady had " + v_got.id + "..I can give you back half of what you paid")
+                message.channel.send("Oh..you already had " + v_got.id + "..I can give you back half of what you paid")
                 EconomySystem.give((200 * (EconomySystem.rank / 4)) / 2)
             } else {
                 EconomySystem.vgot.addFlag(v_got.value)
@@ -162,7 +162,7 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
             EconomySystem.vhour = hour
         }
     } else {
-        throw ("You arleady got a v_ recently, you can get a new one in " + Time.convertTime(Time.hour - diff) + "!")
+        throw ("You already got a v_ recently, you can get a new one in " + Time.convertTime(Time.hour - diff) + "!")
     }
 }, "Game")
 
