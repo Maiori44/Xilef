@@ -347,8 +347,10 @@ Commands.daily = new Command("Get some free DogeCoins, works only once per day",
 
 Commands.rankup = new Command("Increases your rank if you have enough money\nthe rank can be increased multiple times if given an amount of times", (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
-    let times = parseInt(args[0]) || 1
     let oldrank = EconomySystem.rank
+    let times = args[0]?.startsWith('=')
+        ? parseInt(args[0].slice(1)) - oldrank || 0
+        : parseInt(args[0]) || 1
     for (let i = 1; i <= times; i++) {
         let needed = 100 * EconomySystem.rank
         if (EconomySystem.buy(needed, message, undefined, EconomySystem.user + " needs " + (needed - EconomySystem.money) + " more DogeCoins for rank " + (EconomySystem.rank + 1))) {
