@@ -247,7 +247,7 @@ Commands.shutdown = new Command("Shuts down the bot after a given time\nDevelope
         console.log("- Shutting down...")
         message.channel.send("Shutting down...").then(() => {
             if (args[2]) {
-                message.channel.send("Bot Restarting!").then(() => process.exit(0), 2500))
+                message.channel.send("Shutdown/Restart Successful!").then(() => process.exit(0), 2500))
             } 
         })
     }, timeleft || 0)
