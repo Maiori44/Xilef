@@ -348,6 +348,10 @@ Commands.daily = new Command("Get some free DogeCoins, works only once per day",
 Commands.rankup = new Command("Increases your rank if you have enough money\nthe rank can be increased multiple times if given an amount of times\n\nIf the rank number starts with '=', instead of adding the current rank with `amount`, your rank will be exactly `amount`.", (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
     let oldrank = EconomySystem.rank
+
+    if (args[0]?.startsWith('=') && ((parseInt(args[0].slice(1)) || 1) <= oldrank))
+        return void message.channel.send(`The rank must be above ${oldrank}!`)
+
     let times = args[0]?.startsWith('=')
         ? parseInt(args[0].slice(1)) - oldrank || 0
         : parseInt(args[0]) || 1
