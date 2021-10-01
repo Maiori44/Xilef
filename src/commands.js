@@ -345,7 +345,7 @@ Commands.daily = new Command("Get some free DogeCoins, works only once per day",
     }
 }, "Economy")
 
-Commands.rankup = new Command("Increases your rank if you have enough money\nthe rank can be increased multiple times if given an amount of times", (message, args) => {
+Commands.rankup = new Command("Increases your rank if you have enough money\nthe rank can be increased multiple times if given an amount of times\n\nIf the rank number starts with '=', instead of adding the current rank with `amount`, your rank will be exactly `amount`.", (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
     let oldrank = EconomySystem.rank
     let times = args[0]?.startsWith('=')
@@ -360,7 +360,7 @@ Commands.rankup = new Command("Increases your rank if you have enough money\nthe
     if (oldrank != EconomySystem.rank) {
         message.channel.send(EconomySystem.user + " is now rank " + EconomySystem.rank + "!")
     }
-}, "Economy", [new RequiredArg(0, undefined, "times", true)])
+}, "Economy", [new RequiredArg(0, undefined, "amount", true)])
 
 Commands.gamble = new Command("Gamble your money away cause you have a terrible life", (message, args) => {
     let gamble = parseInt(args[0])
