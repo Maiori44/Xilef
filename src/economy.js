@@ -48,11 +48,11 @@ class EconomySystem {
         this.driller = backup.driller || 1 //their &driller tier
         this.floor = backup.floor || 0 //their record in &dungeon
         this.msweeper = backup.msweeper || 0 //the amount of times they won in &msweeper
-        this.day = backup.day || Date.now() - Date.day //last time they got &daily
+        this.day = backup.day || 1 //last time they got &daily
         this.reversi = backup.reversi || 0 //the amount of times they won in &reversi
         this.connect4 = backup.connect4 || 0 //the amount of times they won in &connect4
         this.roshambo = backup.roshambo || 0 //the amount of times they wont in &roshambo
-        this.vhour = backup.vhour || Date.now() - Date.hour //last time they rolled
+        this.vhour = backup.vhour || 1 //last time they rolled
         this.vgot = new FlagSystem(60, backup.vgot) //flag system for the different v_s
         this.achievments = new FlagSystem(9, backup.achievments) //flag system for the achievements
         console.log("- " + Colors.purple.colorize(Object.keys(backup).length === 0 ? "Created EconomySystem of " : "Restored EconomySystem of ") + Colors.hpurple.colorize(this.user))
