@@ -404,6 +404,39 @@ Dungeon.thinkers = {
          return "He swings the blade in graceful arcs. He is excited to fight his new sparring partner!" + "\n" +
                 Dungeon.attacks.ice.use(Entity, DungeonGame.player)
     },
+    "amoled-elemental": (DungeonGame, Entity) => {
+         if (GetPercentual() <= 50 & Entity.mana > 50) {
+             return Dungeon.attacks.fire.use(Entity, DungeonGame.player) + "\n" +
+                    Dungeon.attacks.fire.use(Entity, DungeonGame.player)
+         }
+         Entity.mana += 50
+         Entity.defence *= 1.3
+         return "A tough wedge of rock and stone... it looks to be hardening even more!"
+    },
+     "true-elemental": (DungeonGame, Entity) => {
+        if (DungeonGame.enemies.length == 1) {
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[35]))
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[2]))
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[11]))
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[17]))
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[54))
+            return "The elementals came to their master once again..."
+        }
+        for (const Enemy of DungeonGame.enemies) {
+            Enemy.defense *= 1.5
+        }
+        return "The sight of their master powers the elementals onward. Their defence sharply rose!"
+    },
+     "ruined-elemental": (DungeonGame, Entity) => {
+        if (GetPercentual() <= 50) {
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[61]))
+            return "Its crumbling body splits into 2...It is broken, not dead"
+        }
+        for (let i = 0; i <= DungeonGame.enemies.length; i++) {
+            Entity.fight(DungeonGame.player, Entity.attack)
+        }
+        return (DungeonGame.enemies.length == 1 ? "It" : "They") + " seem to get stronger with numbers. And you just got whaled on!"
+    },
 }
 
 /*Dungeon.thinkers = {
