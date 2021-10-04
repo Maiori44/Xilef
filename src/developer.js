@@ -31,7 +31,8 @@ const description = [
 
 /**
  * @typedef {object} EvaluatorOptions
- * @property {string[]} EvaluatorOptions.stdlibs
+ * @property {string[]?} EvaluatorOptions.stdlibs
+ * @property {Record<string, unknown>?} EvaluatorOptions.customModules
  */
 
 /**
@@ -40,17 +41,25 @@ const description = [
  * @param {string} code - The code string to evaluate.
  * @param {VM.Context} [globals] - Globals to put. May be used to override other variables.
  * @param {EvaluatorOptions} config - Configurations for use. Properties may include:
- * - **`stdlibs`**: type: Array<string> - node standard library modules to put.
+ * - **`stdlibs`** {`string[]`} - node standard library modules to put.
+ * - **`customModules`** {`{[K: string]: unknown}`} - custom modules to put. these modules
+ *   can be accessed by `require('debug:<module>')`
  * @returns - The result of the last expression in the code. May be a {@link Promise}.
  */
-function evaluate(code, globals, config) {
+function evaluate(code, globals, config = {}) {
   const context = {
     require: new Proxy(require, {
       apply(target, thisArg, [name]) {
-        console.log(name, config)
-        if (config.stdlibs.includes(name))
-          return Reflect.apply(target, thisArg, [name]);
-        else throw new Error(`module '${name}' is restricted`);
+        if (typeof name != 'string')
+          throw new TypeError("The 'id' argument must be of type string.")
+
+        if (require('module').builtinModules.includes(name)) {
+          if (config?.stdlibs?.includes(name)) {
+            return Reflect.apply(target, thisArg, [name]);
+          } else throw new Error(`module '${name}' is restricted`);
+        } else if (name.startsWith('debug:')) {
+          return config.customModules[name.slice(6).toLowerCase()]
+        } else throw new Error(`module '${name}' does not exist`);
       },
       get(target, property, receiver) {
         if (['cache', 'main'].includes(property))
@@ -247,7 +256,7 @@ Commands.shutdown = new Command("Shuts down the bot after a given time\nDevelope
         message.channel.send("Shutting down...").then(() => {
             if (args[2]) {
                 message.channel.send("Shutdown/Restart Successful!").then(() => process.exit(0), 2500)
-            } 
+            }
         })
     }, timeleft || 0)
 }, "Developer", [
