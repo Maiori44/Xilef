@@ -230,6 +230,30 @@ Commands.debug = new Command(description, async function (message) {
   }
 }, 'Developer', [new RequiredArg(0, 'No code supplied.', 'code block', false)]);
 
+Commands.rawset = new Command("Directly alter any value of someone's EconomySystem", (message, args) => {
+	args[0] = message.mentions.users.first().id || args[0]
+	const EconomySystem = Economy.getEconomySystem({id: args[0]})
+	if (!args[3]) {
+		switch (args[2][0]) {
+			case "+":
+				args[2] = EconomySystem[args[1]] + parseFloat(args[2].substring(1))
+				break
+			case "-":
+				args[2] = EconomySystem[args[1]] - parseFloat(args[2].substring(1))
+				break
+			default:
+				args[2] = parseFloat(args[2])
+		}
+	}
+	EconomySystem[args[1]] = args[2]
+	message.channel.send(EconomySystem.user + "'s value \"" + args[1] + "\" was set to " + args[2])
+}, "Developer", [
+	new RequiredArg(0, "Whose EconomySystem do you want to edit?", "user id"),
+	new RequiredArg(1, "What variable do you want to edit?", "value name"),
+	new RequiredArg(2, "What value should this new variable be set to?", "new value"),
+	new RequiredArg(3, undefined, "not a number?", true)
+])
+
 const NewProcess = require('child_process').spawn;
 
 Commands.shutdown = new Command("Shuts down the bot after a given time\nDeveloper only", (message, args) => {
