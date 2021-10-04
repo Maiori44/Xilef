@@ -148,6 +148,7 @@ Economy = {
     list: JSON.parse(fs.readFileSync("./src/Data/economy.json", "utf8")),
     getEconomySystem(user) {
         if (!Economy.list[user.id]) {
+            if (!user.username) throw "The wanted EconomySystem does not exist"
             Economy.list[user.id] = new EconomySystem(user.username)
         } else if (Economy.list[user.id].user != user.username) {
             Economy.list[user.id].user = user.username
