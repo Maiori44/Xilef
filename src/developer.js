@@ -41,16 +41,19 @@ A more advanced, but developer-only version of \`&eval\`.
 
 **Notes**
 - You MUST use a code block with the JavaScript language tag (either \`js\` or \`javascript\`)
+- Globals that are not defined in the specification are omitted, such as \`setTimeout\`
 
 Example:
 &debug \`\`\`js
+const {setTimeout} = require('timers');
+
 // #vmconf timeout 2000
 // #enable async
 
 new Promise((resolve) => {
   setTimeout(() => {
     message.channel.send("From \`&debug\`: Hello, World!");
-  }, 1900);
+  }, 2100);
 })
 \`\`\`
 `.trim()
@@ -122,7 +125,7 @@ Commands.debug = new Command(description, async function (message) {
     /** @type {string} */
     const rawCode = message.content
       .slice(Prefix.get(message.guild.id).length + 5)
-      .match(/```(js|javascript)\n([^]*)\n```/i)?.[1]
+      .match(/```(?:js|javascript)\n([^]*)\n```/i)?.[1]
 
     if (rawCode == undefined)
       return void message.channel.send(`**error**: could not parse the code supplied.\n**hint**: you may have put a plain text instead of a javascript tagged code-block (see \`${Prefix.get(message.guild.id)}help debug\`).`)
