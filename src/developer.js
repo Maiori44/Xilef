@@ -20,14 +20,40 @@ const globals = {
 
 const directives = new Map();
 
-const description = [
-  '&eval but better',
-  String(),
-  'Example:',
-  '&debug \\`\\`\\`js',
-  '1 + 1',
-  '\\`\\`\\`'
-].join('\n');
+const description = /* TODO: improve numbering */ `
+A more advanced, but developer-only version of \`&eval\`.
+
+**Features**
+1. access to the \`require\` function, though it is limited. this \`require\` wraps node's  \`require\`, so there are some differences:
+  1.1. limited access to the stdlib.
+  1.2. a custom \`debug:<name>\` namespace for debug-specific modules.
+2. access to the \`message\` object.
+3. access to some Xilef variables. this can is achieved using the \`debug:xilef\` custom module (See #1.2)
+4. the \`DEBUG\` global object. it is a namespace for some debug information, such as:
+  4.1. \`AVAILABLE_MODULES\`: lists available stdlib modules that can be accessed using \`require\`. (See #1.1)
+  4.2. \`OPTIONAL_FEATURES\`: lists options enabled using the \`#enable\` directive. (See #5.1)
+  4.3. \`VM_CONFIG\`: list the current vm's configuration. (See #5.2)
+5. debug directives (\`// #directive\`), such as:
+  5.1. \`#enable\`: enable an optional feature. it accepts these arguments:
+    5.1.1. \`async\` - enable resolving a promise expression.
+  5.2. \`vmconf\`: configure the vm used to execute the code. it accepts these arguments:
+    5.2.1. \`timeout [number=1000]\` - set the vm's timeout to be \`number\`. if \`number\` is not supplied, it defaults to 1000.
+
+**Notes**
+- You MUST use a code block with the JavaScript language tag (either \`js\` or \`javascript\`)
+
+Example:
+&debug \`\`\`js
+// #vmconf timeout 2000
+// #enable async
+
+new Promise((resolve) => {
+  setTimeout(() => {
+    message.channel.send("From \`&debug\`: Hello, World!");
+  }, 1900);
+})
+\`\`\`
+`.trim()
 
 /**
  * @typedef {object} EvaluatorOptions
@@ -87,6 +113,7 @@ Commands.debug = new Command(description, async function (message) {
     features[args[0]] = true;
   })
   const vmConfig = {}
+  globals.DEBUG.VM_CONFIG = vmConfig
   directives.set('vmconf', (args) => {
     vmConfig[args[0]] = args.slice(1)
   })
@@ -95,7 +122,10 @@ Commands.debug = new Command(description, async function (message) {
     /** @type {string} */
     const rawCode = message.content
       .slice(Prefix.get(message.guild.id).length + 5)
-      .match(/```js\n([^]*)\n```/)?.[1] ?? String()
+      .match(/```(js|javascript)\n([^]*)\n```/i)?.[1]
+
+    if (rawCode == undefined)
+      return void message.channel.send(`**error**: could not parse the code supplied.\n**hint**: you may have put a plain text instead of a javascript tagged code-block (see \`${Prefix.get(message.guild.id)}help debug\`).`)
 
     const directivesGathered = rawCode.split('\n')
       .filter((line) => line.startsWith('// #'))
