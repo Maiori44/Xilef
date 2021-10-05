@@ -357,8 +357,8 @@ Dungeon.thinkers = {
         for (const Enemy of DungeonGame.enemies) {
             Enemy.defense *= 1.3
         }
-        
-        return Entity.fight(DungeonGame.player, Entity.attack) + "\n" + 
+
+        return Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
                "The blight orb light envelopses the other enemies!\nTheir defense increased!"
     },
     "radiant-core": (DungeonGame, Entity) => {
@@ -398,7 +398,7 @@ Dungeon.thinkers = {
                     Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
                     Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
                     Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
-                    Entity.fight(DungeonGame.player, Entity.attack) +
+                    Entity.fight(DungeonGame.player, Entity.attack)
          }
          Entity.mana += 50
          return "He swings the blade in graceful arcs. He is excited to fight his new sparring partner!" + "\n" +
@@ -419,7 +419,7 @@ Dungeon.thinkers = {
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[2]))
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[11]))
             DungeonGame.enemies.push(new Entity(...Dungeon.enemies[17]))
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[54))
+            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[54]))
             return "The elementals came to their master once again..."
         }
         for (const Enemy of DungeonGame.enemies) {
