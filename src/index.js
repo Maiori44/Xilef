@@ -7,8 +7,19 @@ client = new Discord.Client()
 client.login(debugmode ? process.env.DEBUG : process.env.TOKEN)
 client.prefix = debugmode ? "beta&" : "&"
 
-Date.day = 86400000
-Date.hour = 3600000
+Time = {
+    day: 86400000,
+    hour: 3600000,
+    minute: 60000,
+    second: 1000,
+    convertTime(time) {
+        if (time < Time.second) return time + " milliseconds"
+        else if (time < Time.minute) return (Math.floor(time / Time.second)) + " seconds"
+        else if (time < Time.hour) return (Math.floor(time / Time.minute)) + " minutes"
+        else if (time < Time.day) return (Math.floor(time / Time.hour)) + " hours"
+        else return (Math.floor(time / Time.day)) + " days"
+    }
+}
 
 class Colorizer {
     constructor(color) {
@@ -48,6 +59,7 @@ require("./commands.js")
 require("./prefix.js")
 require("./buttons.js")
 require("./minigames.js")
+require('./developer')
 
 client.on("ready", () => {
     console.log("- Bot ready")
@@ -55,10 +67,18 @@ client.on("ready", () => {
     client.user.setActivity("ping me for info")
 })
 client.on("message", (message) => {
-    if (message.content.trim() == "<@!" + client.user.id + ">") { Commands.info.action(message); return }
+    if (message.author.bot) return
+    if (message.guild === null) {
+        message.author.send("I can't answer command calls from DMs, join my official server for that!\nhttps://discord.gg/Qyz5HgrxWg")
+        console.error("- " + Colors.blue.colorize("Potential command call ended due to call being in a Direct Message:") +
+            "\n\tMessage: " + message.content +
+            "\n\tCalled at: " + new Date() +
+            "\n\tCaller: " + message.author.username)
+        return
+    }
+    if (message.content.trim() == "<@!" + client.user.id + ">" || message.content.trim() == "<@" + client.user.id + ">") { Commands.info.action(message); return }
     const prefix = Prefix.get(message.guild.id)
     let start = Date.now()
-    if (message.author.bot) return
     if (message.content.startsWith(prefix)) {
         // create a regular expresion that matches either any string inside of double quotes, or any string without spaces that is outside of double quotes
         let regex = /"([^"]*?)"|[^ ]+/gm
@@ -117,6 +137,16 @@ client.on("message", (message) => {
                         "\n\tArgument number: " + errormsg.num +
                         "\n\tArgument name: " + errormsg.name)
                     message.channel.send(errormsg.msg.toString().slice(0, 1900))
+                } else if (errormsg == "Only my developers can use this command") {
+                    console.error("- " + Colors.blue.colorize("Command call aborted due to the user not being a developer:") +
+                        "\n\tCommand: " + command +
+                        "\n\tArgs: " + args +
+                        "\n\tTime taken: " + (Date.now() - start) +
+                        "\n\tCalled at: " + new Date() +
+                        "\n\tCaller: " + message.author.username +
+                        "\n\tChannel name: " + message.channel.name +
+                        "\n\tGuild name: " + message.guild.name)
+                    message.channel.send(errormsg)
                 } else {
                     console.error("- " + Colors.yellow.colorize("Command call ended by thrown error:") +
                         "\n\tCommand: " + command +

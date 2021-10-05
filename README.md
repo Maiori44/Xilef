@@ -14,4 +14,5 @@ Official discord server join link : https://discord.gg/Qyz5HgrxWg
 - Dungeon : Explore a dark dungeon full of dangerous enemies!
 - Minesweeper : The classic minesweeper game.
 - Reversi : A (slightly) rarer board game played with two people.
+- Roshambo : Simply rock paper scissors.
 - More coming soon.

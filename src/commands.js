@@ -1,5 +1,5 @@
 require("discord-buttons")(client);
-const { MessageButton, MessageActionRow } = require("discord-buttons");
+const { MessageButton, MessageActionRow } = require("discord-buttons")
 
 class RequiredArg {
     constructor(argnum, errormsg, name, notrequired) {
@@ -22,13 +22,21 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/31"))
+        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/39"))
     }
 
     call(message, args) {
+        if (this.category == "Developer") {
+            const isdev = message.author.client.guilds.cache.get('875695405550166106')
+                .members.cache.get(message.author.id)
+                ?.roles.cache.has("875699796139208724")
+            if (!isdev) {
+                throw ("Only my developers can use this command")
+            }
+        }
         if (this.requiredargs)
             for (const arg of this.requiredargs)
-                if (!arg.check(args)) throw {msg: arg.errormsg.replace(/\&/g, Prefix.get(message.guild.id)), name: arg.name, num: arg.argnum}
+                if (!arg.check(args)) throw { msg: arg.errormsg.replace(/\&/g, Prefix.get(message.guild.id)), name: arg.name, num: arg.argnum }
 
         this.action(message, args)
     }
@@ -48,7 +56,7 @@ Buttons.addComponent(new MessageButton()
     .setLabel("Official server"))
 Buttons.addComponent(new MessageButton()
     .setStyle("url")
-    .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=59456&scope=bot")
+    .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=275415091200&scope=bot")
     .setLabel("Invite bot"))
 
 Commands = {}
@@ -111,16 +119,11 @@ Commands.info = new Command("Shows info about the bot and this server's prefix",
         .setTimestamp(), Buttons)
 }, "Utility")
 
-Commands.warn = new Command("Developer only", (message, args) => {
-    if (message.author.id != "621307633718132746") throw ("Sorry, this command is for the developer only")
-    args[0] = args.join(" ")
-    warning = args[0]
-    client.user.setActivity(args[0] + ", ping me for info")
-}, "Utility", [new RequiredArg(0, "What will you warn the people about . _.", "...text")])
+//Joke commands
 
 Commands.hi = new Command("Says hi to you", (message, args) => {
     message.reply("Hi.")
-}, "Simple")
+}, "Joke")
 
 /*Commands.allutf8 = new Command("Get all existing characters in Discord", (message, args) => {
     if (message.author.id != "621307633718132746") {
@@ -138,21 +141,45 @@ Commands.hi = new Command("Says hi to you", (message, args) => {
 
 Commands.annoy = new Command("Annoys the person you want", (message, args) => {
     message.channel.send(args[0].slice(0, 1900) + " you suck")
-}, "Simple", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
+}, "Joke", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
 
 Commands.comfort = new Command("Comforts the person you want", (message, args) => {
     message.channel.send(args[0].slice(0, 1900) + " you don't suck")
-}, "Simple", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
+}, "Joke", [new RequiredArg(0, "You gotta give me someone dumdum", "person")])
 
 Commands.say = new Command("Says whatever you want", (message, args) => {
     if (!args.join(" ")) { args[0] = "** **" }
     message.channel.send(args.join(" ").slice(0, 1900))
     message.delete()
-}, "Simple", [new RequiredArg(0, "** **", "...text")])
+}, "Joke", [new RequiredArg(0, "** **", "...text")])
 
 Commands.hentai = new Command("Totally sends you hentai", (message, args) => {
     message.channel.send("No..just no..")
-}, "Simple")
+}, "Joke")
+
+Commands.secret = new Command("Sends you the secret of life", (message, args) => {
+    message.author.send("The sercret of life is...\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⣿⣿⠁⠀⠀⢰⣿⣿⣯⠁⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣷⡄⠀||\n" +
+        "||⠀⠀⣀⣤⣴⣶⣶⣿⡟⠀⠀⠀⢸⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣷⠀||\n" +
+        "||⠀⢰⣿⡟⠋⠉⣹⣿⡇⠀⠀⠀⠘⣿⣿⣿⣿⣷⣦⣤⣤⣤⣶⣶⣶⣶⣿⣿⣿⠀||\n" +
+        "||⠀⢸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⠀||\n" +
+        "||⠀⣸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠉⠻⠿⣿⣿⣿⣿⡿⠿⠿⠛⢻⣿⡇⠀⠀||\n" +
+        "||⠀⣿⣿⠁⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣧⠀⠀||\n" +
+        "||⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀||\n" +
+        "||⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀||\n" +
+        "||⠀⢿⣿⡆⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀||\n" +
+        "||⠀⠸⣿⣧⡀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠃⠀⠀||\n" +
+        "||⠀⠀⠛⢿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⣰⣿⣿⣷⣶⣶⣶⣶⠶⠀⢠⣿⣿⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⣽⣿⡏⠁⠀⠀⢸⣿⡇⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀||\n" +
+        "||⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀||\n" +
+        "|| amogus. ||")
+}, "Joke")
 
 //math commands
 
@@ -189,6 +216,25 @@ Commands.clown = new Command("Given a person or a thing, the bot will say how mu
             break
     }
 }, "Math", [new RequiredArg(0, "You're a clown at 100%, since you didn't even give me something or someone", "something")])
+
+const SafeEval = require("safe-eval")
+
+Commands.eval = new Command("Evaluates the given args as JavaScript code, and returns the output", (message, args) => {
+    try {
+        const output = SafeEval(args.join(" "))
+        message.channel.send(new Discord.MessageEmbed()
+            .setColor("#0368f8")
+            .setTitle("Output")
+            .setDescription("```js\n" + output + "```")
+            .setTimestamp())
+    } catch (error) {
+        message.channel.send(new Discord.MessageEmbed()
+            .setColor("#FF0000")
+            .setTitle("An error occured:")
+            .setDescription(error)
+            .setTimestamp())
+    }
+}, "Math", [new RequiredArg(0, "You have to evalute *something*", "...code")])
 
 //images commands
 
@@ -265,15 +311,24 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
         new Discord.MessageEmbed()
             .setColor(message.member.displayHexColor)
             .setTitle(EconomySystem.user + "'s statistics")
-            .setDescription("```lua\nDogeCoins: " + EconomySystem.money + "\nRank: " + EconomySystem.rank + "```")
+            .setDescription("```lua\nDogeCoins: " + EconomySystem.money +
+                "\nRank: " + EconomySystem.rank +
+                "\nXilefunds: " + EconomySystem.xilefunds + "```")
             .addFields(
-                { name: "Singleplayer stats:", value:
-                    "```js\nImpostors found: " + EconomySystem.impostors +
-                    "\nDriller tier: " + EconomySystem.driller +
-                    "\nDungeon top floor: " + EconomySystem.floor +
-                    "\nMineSweeper matches won: " + EconomySystem.msweeper + "```", inline: true },
-                { name: "Multiplayer stats:", value: "```lua\nReversi matches won: " + EconomySystem.reversi + "\nConnect four matches won: " + EconomySystem.connect4 + "```", inline: true },
-                { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievments.binary, "❔ ???\n") }
+                {
+                    name: "Singleplayer stats:", value:
+                        "```js\nImpostors found: " + EconomySystem.impostors +
+                        "\nDriller tier: " + EconomySystem.driller +
+                        "\nDungeon top floor: " + EconomySystem.floor +
+                        "\nMineSweeper matches won: " + EconomySystem.msweeper + "```", inline: true
+                },
+                {
+                    name: "Multiplayer stats:", value:
+                        "```lua\nReversi matches won: " + EconomySystem.reversi +
+                        "\nConnect four matches won: " + EconomySystem.connect4 +
+                        "\nRoshambo matches won: " + EconomySystem.roshambo + "```", inline: true
+                },
+                { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievements.binary, "❔ ???\n") }
             )
     )
 }, "Economy", [new RequiredArg(0, undefined, "@person", true)])
@@ -282,18 +337,24 @@ Commands.daily = new Command("Get some free DogeCoins, works only once per day",
     let day = Date.now()
     let EconomySystem = Economy.getEconomySystem(message.author)
     let diff = day - EconomySystem.day
-    if (diff >= Date.day) {
+    if (diff >= Time.day) {
         EconomySystem.give(10 * EconomySystem.rank, message, true)
         EconomySystem.day = day
     } else {
-        message.channel.send("Pretty sure you already got your reward today\nyou can get a new reward in " + Math.floor((Date.day - diff) / 1000) + " seconds.")
+        message.channel.send("Pretty sure you already got your reward today\nyou can get a new reward in " + Time.convertTime(Time.day - diff))
     }
 }, "Economy")
 
-Commands.rankup = new Command("Increases your rank if you have enough money\nthe rank can be increased multiple times if given an amount of times", (message, args) => {
+Commands.rankup = new Command("Increases your rank if you have enough money\nthe rank can be increased multiple times if given an amount of times\n\nIf the rank number starts with '=', instead of adding the current rank with `amount`, your rank will be exactly `amount`.", (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
-    let times = parseInt(args[0]) || 1
     let oldrank = EconomySystem.rank
+
+    if (args[0]?.startsWith('=') && ((parseInt(args[0].slice(1)) || 1) <= oldrank))
+        return void message.channel.send(`The rank must be above ${oldrank}!`)
+
+    let times = args[0]?.startsWith('=')
+        ? parseInt(args[0].slice(1)) - oldrank || 0
+        : parseInt(args[0]) || 1
     for (let i = 1; i <= times; i++) {
         let needed = 100 * EconomySystem.rank
         if (EconomySystem.buy(needed, message, undefined, EconomySystem.user + " needs " + (needed - EconomySystem.money) + " more DogeCoins for rank " + (EconomySystem.rank + 1))) {
@@ -303,7 +364,7 @@ Commands.rankup = new Command("Increases your rank if you have enough money\nthe
     if (oldrank != EconomySystem.rank) {
         message.channel.send(EconomySystem.user + " is now rank " + EconomySystem.rank + "!")
     }
-}, "Economy", [new RequiredArg(0, undefined, "times", true)])
+}, "Economy", [new RequiredArg(0, undefined, "amount", true)])
 
 Commands.gamble = new Command("Gamble your money away cause you have a terrible life", (message, args) => {
     let gamble = parseInt(args[0])
@@ -345,3 +406,5 @@ Commands.leaderboard = new Command("See the users with the highest ranks", (mess
     }
     message.channel.send(LeaderBoard)
 }, "Economy")
+
+require("./xilefunds")

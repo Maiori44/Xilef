@@ -1,4 +1,4 @@
-const { Message } = require("discord.js")
+const { Message, Webhook } = require("discord.js")
 const { RequiredArg, Command } = require("./../commands.js")
 
 v_Types = {
@@ -12,7 +12,7 @@ v_Types = {
         "<:happyv_c:873259416680554506>",
         "<:limev_c:873259416722489434>",
         "<:observantv_c:873259416923820092>",
-        "<:oov_co:873259416458264646>",
+        "<:oov_c:873259416458264646>",
         "<:lowresv_c:873259416365981736>",
         "<:sadv_c:873259416202383410>",
         "<:spiderv_c:873259415636156419>",
@@ -74,7 +74,7 @@ v_Types = {
         new Economy.flag("<:happyv_c:873259416680554506>", 7),
         new Economy.flag("<:limev_c:873259416722489434>", 8),
         new Economy.flag("<:observantv_c:873259416923820092>", 9),
-        new Economy.flag("<:oov_co:873259416458264646>", 10),
+        new Economy.flag("<:oov_c:873259416458264646>", 10),
         new Economy.flag("<:lowresv_c:873259416365981736>", 11),
         new Economy.flag("<:sadv_c:873259416202383410>", 12),
         new Economy.flag("<:spiderv_c:873259415636156419>", 13),
@@ -138,7 +138,7 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
     let hour = Date.now()
     let EconomySystem = Economy.getEconomySystem(message.author)
     let diff = hour - EconomySystem.vhour
-    if (diff >= Date.hour) {
+    if (diff >= Time.hour) {
         if (EconomySystem.buy(200 * (EconomySystem.rank / 4), message, undefined, "You don't have enough DogeCoins for a v_ (" + 200 * (EconomySystem.rank / 4) + " DogeCoins needed)")) {
             let chance = GetPercentual()
             let rarity = chance >= 90 ? "legendary" : chance >= 50 ? "common" : chance >= 20 ? "rare" : "epic"
@@ -146,7 +146,7 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
             let v_got = v_s[Math.floor(Math.random() * v_s.length)]
             message.channel.send("You got " + v_got.id + "! (" + rarity + "!)")
             if (EconomySystem.vgot.checkFlag(v_got.value)) {
-                message.channel.send("Oh..you arleady had " + v_got.id + "..I can give you back half of what you paid")
+                message.channel.send("Oh..you already had " + v_got.id + "..I can give you back half of what you paid")
                 EconomySystem.give((200 * (EconomySystem.rank / 4)) / 2)
             } else {
                 EconomySystem.vgot.addFlag(v_got.value)
@@ -162,6 +162,40 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
             EconomySystem.vhour = hour
         }
     } else {
-        throw ("You arleady got a v_ recently, you can get a new one in " + Math.floor((Date.hour - diff) / 1000) + " seconds!")
+        throw ("You already got a v_ recently, you can get a new one in " + Time.convertTime(Time.hour - diff) + "!")
     }
 }, "Game")
+
+Commands.vsend = new Command("Send the v_s you have collected as messages!", (message, args) => {
+    const requestedv_ = [...v_Types.common, ...v_Types.rare, ...v_Types.epic, ...v_Types.legendary].find(({id}) =>
+        id.startsWith('<:' + args[0]))
+    if (!requestedv_) {
+        message.channel.send("Could not find the v_\nperhaps you mistyped?")
+        return
+    }
+    if (!Economy.getEconomySystem(message.author).vgot.checkFlag(requestedv_.value)) {
+        message.channel.send("You are not in possession of this v_")
+        return
+    }
+    message.channel.createWebhook("v_ sender", {
+        avatar: client.user.displayAvatarURL(),
+        reason: `The user "${message.author.username}" used the "vsend" command`
+    })
+        .then(webhook => {
+            webhook.send({
+                content: requestedv_.id,
+                username: message.author.username,
+                avatarURL: message.author.displayAvatarURL()
+            })
+                .then(() => {
+                    webhook.delete("The requested message has been sent, this webhook has no need to stay")
+                    message.delete()
+                })
+                .catch(() => {
+                    message.channel.send("Could not send the v_\nperhaps you mistyped?")
+                })
+        })
+        .catch(() => {
+            message.channel.send("Could not create the webhook, check if I have the manage webhook permissions in this server")
+        })
+}, "Utility", [new RequiredArg(0, "You need to type the v_'s name to send one", "v_'s name")])

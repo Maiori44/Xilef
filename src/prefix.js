@@ -56,6 +56,6 @@ Commands.prefix = new Command('Changes the prefix for the current server. Put `d
 		),
 		"utf8"
 	)
-	message.chennel.send("This server's prefix is now `" + Prefix.get(message.guild.id) + "`")
+	message.channel.send("This server's prefix is now `" + Prefix.get(message.guild.id) + "`")
 	console.log("- " + Colors.purple.colorize("Successfully updated file ") + Colors.hpurple.colorize("prefixes.json"))
 }, 'Utility', [new RequiredArg(0, 'Missing `prefix` argument', 'prefix')])

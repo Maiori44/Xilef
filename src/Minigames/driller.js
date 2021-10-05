@@ -39,7 +39,7 @@ class DrillerOre {
 Driller = new Game((EconomySystem) => { return new DrillerGame(EconomySystem) })
 Driller.Ores = [
     new DrillerOre("Coal", 5, 1, 1),
-    new DrillerOre("Copper", 2, 11, 1),
+    new DrillerOre("Copper", 10, 2, 1),
     new DrillerOre("Tin", 15, 3, 1),
     new DrillerOre("Iron", 20, 4, 1),
     new DrillerOre("Lead", 25, 5, 1),
@@ -58,9 +58,9 @@ Driller.Ores = [
     new DrillerOre("Ruby", 140, 18, 2),
     new DrillerOre("Victide", 145, 19, 2),
     new DrillerOre("Diamond", 150, 20, 2),
-    new DrillerOre("Amber", 160, 21, 2),
-    new DrillerOre("Thorium", 180, 22, 3),
-    new DrillerOre("Nickel", 200, 23, 3),
+    new DrillerOre("Amber", 170, 21, 2),
+    new DrillerOre("Thorium", 190, 22, 3),
+    new DrillerOre("Nickel", 220, 23, 3),
     new DrillerOre("Ebonite", 250, 24, 3),
     new DrillerOre("Crimtane", 260, 25, 3),
     new DrillerOre("Hellstone", 300, 26, 3),
@@ -112,12 +112,12 @@ Driller.Ores = [
     new DrillerOre("Weird ancient artifact", 15000, 70, 11),
     new DrillerOre("a resistent-looking door", 0, 0, 11),
     new DrillerOre("the spectrite mines!", 0, 0, 12),
-    new DrillerOre("Raw Spectrite", 2000, 70, 12),
+    new DrillerOre("Raw Spectrite", 2800, 70, 12),
     new DrillerOre("Normal Spectrite", 4000, 71, 12),
     new DrillerOre("Pure Spectrite", 8000, 71, 12),
     new DrillerOre("More pure Spectrite", 12000, 72, 12),
     new DrillerOre("Even more pure Spectrite", 20000, 72, 12),
-    new DrillerOre("Absolute Statue", 30000, 73, 12),
+    new DrillerOre("Absolute Spectrite", 30000, 73, 12),
     new DrillerOre("Specrite statue", 42000, 73, 12),
     new DrillerOre("Spectrite vault", 54000, 74, 12),
     new DrillerOre("another, more resistent-looking door", 0, 0, 12),
@@ -147,21 +147,22 @@ Driller.Ores = [
     new DrillerOre("Frosbium", 150000, 84, 14),
     new DrillerOre("the strongest door", 0, 0, 14),
     new DrillerOre("the final corridor", 0, 0, 15),
-    new DrillerOre("The salt", 100000, 85, 15),
-    new DrillerOre("Our matter", 120000, 86, 16),
-    new DrillerOre("Hermes bird", 150000, 87, 17),
+    new DrillerOre("The salt", 110000, 85, 15),
+    new DrillerOre("Our matter", 130000, 86, 16),
+    new DrillerOre("Hermes bird", 160000, 87, 17),
     new DrillerOre("White eagle", 190000, 88, 18),
     new DrillerOre("The green lion", 230000, 89, 19),
     new DrillerOre("Red lion", 250000, 90, 20),
     new DrillerOre("Celestial ruby", 270000, 91, 21),
     new DrillerOre("Magnesia", 300000, 92, 22),
     new DrillerOre("The vessel of the philosophers", 400000, 93, 23),
-    new DrillerOre("Our blessed stone", 550000, 94, 23),
-    new DrillerOre("Magnum opus", 700000, 95, 24),
-    new DrillerOre("Philosopher's stone", 900000, 96, 25),
+    new DrillerOre("Our blessed stone", 550000, 94, 24),
+    new DrillerOre("Magnum opus", 700000, 95, 25),
+    new DrillerOre("Philosopher's stone", 900000, 96, 26),
     new DrillerOre("Sampo", 1100000, 97, 27),
     new DrillerOre("True knowledge", 1500000, 98, 28),
-    new DrillerOre("The end...", 2000000, 99, 29),
+    new DrillerOre("Chicken Nuggets", 2000000, 99, 29),
+    new DrillerOre("The end...", 3000000, 100, 30),
     new DrillerOre("how", -999999999, 0, 69),
 ]
 Driller.tiers = [
@@ -192,7 +193,8 @@ Driller.tiers = [
     44000000,
     50500000,
     57500000,
-    69420420
+    69420420,
+    80696969
 ]
 Driller.help =
     "`&driller stats` says the stats of your driller\n" +
@@ -303,12 +305,12 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             break
         }
         case "upgrade": {
-            if (EconomySystem.driller == 29) {
+            if (EconomySystem.driller == 30) {
                 message.channel.send("Your driller arleady reached max tier.")
                 EconomySystem.award("driller", message)
             } else if (EconomySystem.buy(Driller.tiers[EconomySystem.driller - 1], message, "Your driller reached tier " + (EconomySystem.driller + 1) + "! (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins needed)")) {
                 EconomySystem.driller = EconomySystem.driller + 1
-                if (EconomySystem.driller == 29) {
+                if (EconomySystem.driller == 30) {
                     EconomySystem.award("driller", message)
                 }
             }

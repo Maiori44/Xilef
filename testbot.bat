@@ -1,3 +1,1 @@
-color 0f
-node . -debug
-pause
+start cmd /c "node . -debug & pause"

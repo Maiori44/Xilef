@@ -207,4 +207,4 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
             return
         }
     }
-}, "Game", [new RequiredArg(0, Reversi.help, "command"), new RequiredArg(1, undefined, "argument 1", true), new RequiredArg(2, undefined, "argument 2", true), new RequiredArg(3, undefined, "argument 3", true)], "https://en.wikipedia.org/wiki/Reversi")
+}, "Game", [new RequiredArg(0, Reversi.help, "command"), new RequiredArg(1, undefined, "argument 1", true), new RequiredArg(2, undefined, "argument 2", true)], "https://en.wikipedia.org/wiki/Reversi")
