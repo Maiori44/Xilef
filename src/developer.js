@@ -33,6 +33,7 @@ const description = [
  * @typedef {object} EvaluatorOptions
  * @property {string[]?} EvaluatorOptions.stdlibs
  * @property {Record<string, unknown>?} EvaluatorOptions.customModules
+ * @property {number?} EvaluatorOptions.timeout
  */
 
 /**
@@ -43,6 +44,7 @@ const description = [
  * @param {EvaluatorOptions} config - Configurations for use. Properties may include:
  * - **`stdlibs`** {`string[]`} - node standard library modules to put.
  * - **`customModules`** {`{[K: string]: unknown}`} - custom modules to put. these modules
+ * - **`timeout`** {`{[K: string]: unknown}`} - the timout for the vm process.
  *   can be accessed by `require('debug:<module>')`
  * @returns - The result of the last expression in the code. May be a {@link Promise}.
  */
@@ -74,14 +76,19 @@ function evaluate(code, globals, config = {}) {
     filename: 'evaluate',
   }).runInNewContext(context, {
     breakOnSigint: true,
+    timeout: config.timeout ?? 1000
   });
 }
 
 Commands.debug = new Command(description, async function (message) {
   const features = {};
   globals.DEBUG.OPTIONAL_FEATURES = features;
-  directives.set('enable', (args, code) => {
+  directives.set('enable', (args) => {
     features[args[0]] = true;
+  })
+  const vmConfig = {}
+  directives.set('vmconf', (args) => {
+    vmConfig[args[0]] = args.slice(1)
   })
 
   try {
@@ -127,8 +134,31 @@ Commands.debug = new Command(description, async function (message) {
       ),
     }
 
+    const customModules = {
+      xilef: {
+        debugmode, Time, Colors, GetPercentual, warning, /* index.js                         */
+        Economy, Achievements,                           /* economy.js                       */
+        RequiredArg, Command, Commands,                  /* commands.js                      */
+        Stocks,                                          /* xilefunds.js                     */
+        Prefix,                                          /* prefix.js                        */
+        Polls, ButtonEvents,                             /* buttons                          */
+
+        Amongus,                                         /* Minigames/crew.js                */
+        Driller,                                         /* Minigames/driller.js             */
+        Dungeon,                                         /* Minigames/dungeon.js             */
+        Reversi,                                         /* Minigames/reversi.js             */
+        Connect4,                                        /* Minigames/connect 4.js           */
+        v_Types,                                         /* Minigames/v_roll.js              */
+        MineSweeper,                                     /* Minigames/minesweeper.js         */
+        Roshambo,                                        /* Minigames/rock paper scissors.js */
+      }
+    }
+    globals.DEBUG.CUSTOM_MODULES = Object.keys(customModules)
+
     const result = await evaluate(code, { ...globals, ...context }, {
-      stdlibs: globals.DEBUG.AVAILABLE_MODULES
+      stdlibs: globals.DEBUG.AVAILABLE_MODULES,
+      customModules,
+      timeout: Number(vmConfig.timeout?.[0]) || void 0
     });
 
     if (!(result == undefined && (stdout.length != 0 || stderr.length != 0))) {
@@ -137,21 +167,22 @@ Commands.debug = new Command(description, async function (message) {
       const expressionPages = [];
 
       for (let i = 0, charc = 0,/** @type {string[]} */ stack = []; i < expression.length; i++) {
-        const line = expression[i];
+        const line = expression[i] + '\n'
+        stack.push(line);
+        charc += line.length;
         if (charc + line.length > 3950) {
-          expressionPages.push(stack.join('\n'));
+          expressionPages.push(stack.join(''));
           stack = [];
           charc = 0;
         }
-        stack.push(line);
-        charc += line.length;
         if (i == expression.length - 1) {
-          expressionPages.push(stack.join('\n'));
+          expressionPages.push(stack.join(''));
           stack = [];
           charc = 0;
         }
       }
 
+      console.log(expressionPages.map(i => i.length));
       const expressionEmbeds = expressionPages.map(
         page => new Discord.MessageEmbed()
           .setColor('#0368f8')
@@ -170,16 +201,16 @@ Commands.debug = new Command(description, async function (message) {
       const stdoutPages = [];
 
       for (let i = 0, charc = 0,/** @type {string[]} */ stack = []; i < stdoutString.length; i++) {
-        const line = stdoutString[i];
+        const line = stdoutString[i] + '\n';
         if (charc + line.length > 3950) {
-          stdoutPages.push(stack.join('\n'));
+          stdoutPages.push(stack.join(''));
           stack = [];
           charc = 0;
         }
         stack.push(line);
         charc += line.length;
         if (i == stdoutString.length - 1) {
-          stdoutPages.push(stack.join('\n'));
+          stdoutPages.push(stack.join(''));
           stack = [];
           charc = 0;
         }
@@ -203,16 +234,16 @@ Commands.debug = new Command(description, async function (message) {
       const stderrPages = [];
 
       for (let i = 0, charc = 0,/** @type {string[]} */ stack = []; i < stderrString.length; i++) {
-        const line = stderrString[i];
+        const line = stderrString[i] + '\n';
         if (charc + line.length > 3950) {
-          stderrPages.push(stack.join('\n'));
+          stderrPages.push(stack.join(''));
           stack = [];
           charc = 0;
         }
         stack.push(line);
         charc += line.length;
         if (i == stderrString.length - 1) {
-          stderrPages.push(stack.join('\n'));
+          stderrPages.push(stack.join(''));
           stack = [];
           charc = 0;
         }
