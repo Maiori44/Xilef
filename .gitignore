@@ -118,6 +118,4 @@ dist
 .pnp.*
 
 # .json data files
-src/Data/economy.json
-src/Data/prefixes.json
-src/Data/xilefunds.json
+src/Data/

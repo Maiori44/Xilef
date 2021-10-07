@@ -124,7 +124,6 @@ Commands.debug = new Command(description, async function (message) {
   try {
     /** @type {string} */
     const rawCode = message.content
-      .slice(Prefix.get(message.guild.id).length + 5)
       .match(/```(?:js|javascript)\n([^]*)\n```/i)?.[1]
 
     if (rawCode == undefined)
