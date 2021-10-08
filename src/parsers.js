@@ -93,13 +93,13 @@ Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, (message,
             const [name, substitute] = args;
 
             if (name in Commands)
-                return void message.channel.send("error: an existing command already has the specified name");
+                return void message.channel.send("A command already uses that name");
 
             if (name == undefined)
-                return void message.channel.send("error: missing alias name");
+                return void message.channel.send("I need a name for the alias pal");
 
             if (substitute == undefined)
-                return void message.channel.send("error: missing alias value");
+                return void message.channel.send("An alias has to substitue to something, you know");
 
             aliases.set(message.author.id, {
                 ...aliases.get(message.author.id),
@@ -111,23 +111,23 @@ Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, (message,
 				"\n\tAlias substitute: " + substitute +
 				"\n\tUser: " + message.author.username)
 
-            message.channel.send("alias set successfully");
+            message.channel.send("Alias set successfully");
             break;
         }
         case "get": {
             const [name] = args;
 
             if (name == undefined)
-                return void message.channel.send("error: missing alias name");
+                return void message.channel.send("Nothing is not an alias");
 
             if (!(name in (aliases.get(message.author.id) ?? {})))
-                return void message.channel.send("error: invalid alias name");
+                return void message.channel.send("Couldn't find any alias with that name");
 
             message.channel.send(
                 '```properties\n' +
                 name + ' = ' + aliases.get(message.author.id)[name]
                 + '\n```'
-                ?? "error: missing invalid name");
+                ?? "Missing invalid name");
             break;
         }
         case "delete": {
@@ -147,7 +147,7 @@ Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, (message,
         case "clear":
             aliases.delete(message.author.id)
             aliases.save();
-            message.channel.send("aliases cleared successfully");
+            message.channel.send("Aliases cleared successfully");
             break;
         case "list":
             message.channel.send(
