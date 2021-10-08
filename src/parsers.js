@@ -85,7 +85,7 @@ const aliasHelp = `
 \`&alias list\` list all alias
 `.trim();
 
-Commands.alias = new Command("Manage command aliases", (message, [command, ...args]) => {
+Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, (message, [command, ...args]) => {
     switch (command) {
         case "set": {
             const [name, substitute] = args;
