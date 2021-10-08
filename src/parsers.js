@@ -71,6 +71,10 @@ aliases = new class extends Discord.Collection {
         });
     }
     save() {
+		if (debugmode) {
+			console.log("- " + Colors.blue.colorize("Update of ") + Colors.hblue.colorize("aliases.json") + Colors.blue.colorize(" was cancelled due to debug mode being active"))
+			return
+		}
         const json = JSON.stringify(Object.fromEntries(this), null, 4);
         fs.writeFileSync("./src/Data/aliases.json", json, "utf8");
     }
@@ -101,6 +105,11 @@ Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, (message,
                 ...aliases.get(message.author.id),
                 [name]: String(substitute)
             }).save();
+
+			console.log("- " + Colors.cyan.colorize("Successfully added alias:") +
+				"\n\tAlias name: " + name +
+				"\n\tAlias substitute: " + substitute +
+				"\n\tUser: " + message.author.username)
 
             message.channel.send("alias set successfully");
             break;
