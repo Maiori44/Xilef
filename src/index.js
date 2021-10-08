@@ -56,7 +56,7 @@ warning = debugmode ? "This bot is running in debug mode, no changes will be sav
 
 require("./economy.js")
 require("./commands.js")
-require("./prefix.js")
+require("./parsers.js")
 require("./buttons.js")
 require("./minigames.js")
 require('./developer')
