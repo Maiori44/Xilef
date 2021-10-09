@@ -1,6 +1,7 @@
 const { RequiredArg, Command } = require("./commands.js")
 const fs = require('fs')
 const { Console } = require("console")
+const { MessageMenu } = require("discord-buttons")
 
 Prefix = {
 	/**
@@ -58,6 +59,8 @@ Commands.prefix = new Command('Changes the prefix for the current server. Put `d
 	console.log("- " + Colors.purple.colorize("Successfully updated file ") + Colors.hpurple.colorize("prefixes.json"))
 }, 'Utility', [new RequiredArg(0, 'Missing `prefix` argument', 'prefix')])
 
+aliasesMenus = {}
+
 aliases = new class extends Discord.Collection {
     constructor() {
         super();
@@ -78,11 +81,29 @@ aliases = new class extends Discord.Collection {
         const json = JSON.stringify(Object.fromEntries(this), null, 4);
         fs.writeFileSync("./src/Data/aliases.json", json, "utf8");
     }
+    updateMenu(id) {
+        const message = aliasesMenus[id]
+        if (!message) return
+        const AliasList = new MessageMenu()
+            .setID(id)
+            .setPlaceholder("Choose which alias to delete")
+        const Aliases = this.get(id)
+        if (!Aliases || !Object.keys(Aliases).length) {
+            AliasList.addOption({label: "<empty>", value: "empty"})
+            message.edit("You don't have any alias set", AliasList)
+            return
+        }
+        for (const name in Aliases) {
+            const substitute = Aliases[name]
+            AliasList.addOption({label: name, description: substitute, value: name})
+        }
+        message.edit("** **", AliasList)
+    }
 }
 const aliasHelp = `
 \`&alias set (name) (substitute)\` set an alias for \`substitute\` with the name \`name\`
 \`&alias get (name)\` get an alias with the name \`name\`
-\`&alias delete (name)\` delete an alias with the name \`name\`
+\`&alias delete\` show a menu to delete aliases
 \`&alias clear\` clear all alias
 \`&alias list\` list all alias
 `.trim();
@@ -99,7 +120,7 @@ Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, (message,
                 return void message.channel.send("I need a name for the alias pal");
 
             if (substitute == undefined)
-                return void message.channel.send("An alias has to substitue to something, you know");
+                return void message.channel.send("An alias has to substitute to something, you know");
 
             aliases.set(message.author.id, {
                 ...aliases.get(message.author.id),
@@ -131,18 +152,11 @@ Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, (message,
             break;
         }
         case "delete": {
-            const [name] = args;
-
-            if (name == undefined)
-                return void message.channel.send("error: missing alias name");
-
-            if (!(name in (aliases.get(message.author.id) ?? {})))
-                return void message.channel.send("error: invalid alias name");
-
-            delete aliases.get(message.author.id)[name]
-            aliases.save();
-            message.channel.send("alias deleted successfully");
-            break;
+            message.channel.send("Loading aliases...").then((newmessage) => {
+                aliasesMenus[message.author.id] = newmessage
+                aliases.updateMenu(message.author.id)
+            })
+            break
         }
         case "clear":
             aliases.delete(message.author.id)
@@ -177,3 +191,10 @@ Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, (message,
     new RequiredArg(1, undefined, "argument 1", true),
 	new RequiredArg(1, undefined, "argument 2", true),
 ])
+
+client.on('clickMenu', async (menu) => {
+    if (menu.values[0] == "empty") return
+    delete aliases.get(menu.id)[menu.values[0]]
+    aliases.updateMenu(menu.id)
+    await menu.reply.defer()
+})
