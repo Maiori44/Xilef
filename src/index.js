@@ -170,7 +170,7 @@ client.on("message", (message) => {
             const replaced = message.content
                 .replace(command, aliases.get(message.author.id)[command])
 
-            message.channel.send(`parsed to: ${message.content
+            message.channel.send(`Parsed to: ${message.content
                 .replace(command, '**' + aliases.get(message.author.id)[command] + '**')}`)
 
             handler(Object.assign(message, {content: replaced}))
