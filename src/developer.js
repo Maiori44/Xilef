@@ -15,7 +15,8 @@ const globals = {
       'stream', 'string_decoder',
       'timers', 'url', 'util'
     ]
-  }
+  },
+  discord_buttons: require('discord-buttons')
 };
 
 const directives = new Map();
