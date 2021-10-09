@@ -56,7 +56,7 @@ warning = debugmode ? "This bot is running in debug mode, no changes will be sav
 
 require("./economy.js")
 require("./commands.js")
-require("./prefix.js")
+require("./parsers.js")
 require("./buttons.js")
 require("./minigames.js")
 require('./developer')
@@ -103,7 +103,7 @@ client.on("message", (message) => {
                 Commands[command.toLowerCase()].call(message, args);
                 if (!debugmode) {
                     Economy.save();
-                } else console.log("- " + Colors.blue.colorize("Update of ") + Colors.blue.colorize("economy.json") + Colors.blue.colorize(" was cancelleddue to debug    mode being active"));
+                } else console.log("- " + Colors.blue.colorize("Update of ") + Colors.hblue.colorize("economy.json") + Colors.blue.colorize(" was cancelled due to debug mode being active"));
                 if (warning) {
                     message.channel.send(new Discord.MessageEmbed()
                         .setColor("#ff0000")
@@ -111,7 +111,7 @@ client.on("message", (message) => {
                         .setDescription(warning)
                         .setTimestamp());
                 }
-                console.log("- " + Colors.green.colorize("Command call completed   sucessfully:") +
+                console.log("- " + Colors.green.colorize("Command call completed sucessfully:") +
                     "\n\tCommand: " + command +
                     "\n\tArgs: " + args +
                     "\n\tTime taken: " + (Date.now() - start) +
@@ -121,7 +121,7 @@ client.on("message", (message) => {
                     "\n\tGuild name: " + message.guild.name);
             } catch (errormsg) {
                 if (errormsg instanceof Error) {
-                    console.error("- " + Colors.red.colorize("Command call ended byJavaScript  error:") +
+                    console.error("- " + Colors.red.colorize("Command call ended by JavaScript error:") +
                         "\n\tCommand: " + command +
                         "\n\tArgs: " + args +
                         "\n\tTime taken: " + (Date.now() - start) +
@@ -132,7 +132,7 @@ client.on("message", (message) => {
                         "\n\tError: " + errormsg.stack);
                     message.channel.send(errormsg.toString().slice(0, 1900));
                 } else if (typeof errormsg == "object") {
-                    console.error("- " + Colors.blue.colorize("Command call ended bymissing    argument:") +
+                    console.error("- " + Colors.blue.colorize("Command call ended by missing argument:") +
                         "\n\tCommand: " + command +
                         "\n\tArgs: " + args +
                         "\n\tTime taken: " + (Date.now() - start) +
@@ -144,7 +144,7 @@ client.on("message", (message) => {
                         "\n\tArgument name: " + errormsg.name);
                     message.channel.send(errormsg.msg.toString().slice(0, 1900));
                 } else if (errormsg == "Only my developers can use this command") {
-                    console.error("- " + Colors.blue.colorize("Command call aborted due tothe  user not being a developer:") +
+                    console.error("- " + Colors.blue.colorize("Command call aborted due to the user not being a developer:") +
                         "\n\tCommand: " + command +
                         "\n\tArgs: " + args +
                         "\n\tTime taken: " + (Date.now() - start) +
@@ -154,7 +154,7 @@ client.on("message", (message) => {
                         "\n\tGuild name: " + message.guild.name);
                     message.channel.send(errormsg);
                 } else {
-                    console.error("- " + Colors.yellow.colorize("Command call ended bythrown   error:") +
+                    console.error("- " + Colors.yellow.colorize("Command call ended by thrown error:") +
                         "\n\tCommand: " + command +
                         "\n\tArgs: " + args +
                         "\n\tTime taken: " + (Date.now() - start) +
