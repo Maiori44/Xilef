@@ -106,7 +106,7 @@ class EconomySystem {
             "\n\tAmount taken: " + amount)
     }
 
-    buy(amount, message, tmsg, fmsg) {
+    buy(amount, message, tmsg, fmsg, notax) {
         if (amount < 1) {
             if (message) {
                 message.channel.send("that amount is too low, pal")
@@ -119,14 +119,20 @@ class EconomySystem {
             return false
         }
         if (this.money >= amount) {
-            this.money = this.money - amount
+            const tax = amount * (this.rank < 500 ? 0 : this.rank - 500) / 100
+
+            this.money = this.money - amount - (notax ? 0 : tax)
             if (message && tmsg) {
                 message.channel.send(tmsg)
+                message.channel.send(`The purchase costed ${amount} (tax: ${(this.rank < 500 ? 0 : this.rank - 500)}%)`)
             }
+
             console.log("- " + Colors.purple.colorize("Sucessful attempt at buying from an EconomySystem:") +
                 "\n\tUser: " + this.user +
                 "\n\tCurrent DogeCoins: " + this.money +
-                "\n\tPrice: " + amount)
+                "\n\tPrice: " + amount +
+                "\n\tTax: " + tax +
+                "\n\tTotal price: " + (amount + tax))
             return true
         }
         if (message && fmsg) {
