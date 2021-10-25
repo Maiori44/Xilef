@@ -142,7 +142,13 @@ client.on("message", (message) => {
                         "\n\tGuild name: " + message.guild.name +
                         "\n\tArgument number: " + errormsg.num +
                         "\n\tArgument name: " + errormsg.name);
-                    message.channel.send(errormsg.msg.toString().slice(0, 1900));
+                    const ErrorEmbed = new Discord.MessageEmbed()
+                        .setColor("blurple")
+                        .setTitle("Missing argument " + (errormsg.num + 1) + "!")
+                        .setDescription(errormsg.msg.toString().slice(0, 1900))
+                        .setTimestamp()
+                        .setFooter("Missing argument name: **" + errormsg.name + "**")
+                    message.channel.send(ErrorEmbed)
                 } else if (errormsg == "Only my developers can use this command") {
                     console.error("- " + Colors.blue.colorize("Command call aborted due to the user not being a developer:") +
                         "\n\tCommand: " + command +

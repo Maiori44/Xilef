@@ -327,8 +327,6 @@ Commands.rawset = new Command("Directly alter any value of someone's EconomySyst
 	new RequiredArg(3, undefined, "not a number?", true)
 ])
 
-const NewProcess = require('child_process').spawn;
-
 Commands.shutdown = new Command("Shuts down the bot after a given time\nDeveloper only", (message, args) => {
     if (args[0]) {
         warning = args[0]

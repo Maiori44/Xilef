@@ -84,6 +84,10 @@ class EconomySystem {
             let msg = this.user + " gained " + amount + " DogeCoins!"
             if (!nobonus) {
                 msg = msg + " (+" + pbonus + " bonus)"
+                if (GetPercentual() <= 7) {
+                    message.channel.send("huh!? you found a Xilefund shard!")
+                    this.alterValue("xilefunds", 0.25)
+                }
             }
             message.channel.send(msg)
             console.log("- " + Colors.purple.colorize("Given DogeCoins to an EconomySystem:") +
