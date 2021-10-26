@@ -1,5 +1,7 @@
 require("discord-buttons")(client);
 const { MessageButton, MessageActionRow } = require("discord-buttons")
+const Discord = require('discord.js')
+const fs = require('fs');
 
 class RequiredArg {
     constructor(argnum, errormsg, name, notrequired) {
@@ -22,7 +24,7 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/39"))
+        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/40"))
     }
 
     call(message, args) {
@@ -151,7 +153,7 @@ Commands.say = new Command("Says whatever you want", (message, args) => {
     if (!args.join(" ")) { args[0] = "** **" }
     message.channel.send(args.join(" ").slice(0, 1900))
     message.delete()
-}, "Joke", [new RequiredArg(0, "** **", "...text")])
+}, "Joke", [new RequiredArg(0, "I can't just say nothing, can I?", "...text")])
 
 Commands.hentai = new Command("Totally sends you hentai", (message, args) => {
     message.channel.send("No..just no..")
