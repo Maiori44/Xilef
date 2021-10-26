@@ -432,3 +432,11 @@ Commands.shutdown = new Command("Shuts down the bot after a given time\nDevelope
 Commands.restart = new Command("Restarts the bot\n(internally calls `&shutdown`)", (message, args) => {
     Commands.shutdown.call(message, ["The bot is currently restarting", 0, true])
 }, "Developer")
+
+Commands.exec = new Command("Executes the given args as a command in the vps.", (message, args) => {
+        childProcess.exec(args.join(' '), {},
+        (err, stdout, stderr) => {
+            if (err) return message.channel.send('```' + err.message + '```');
+            message.channel.send('```' + stdout + '```');
+        });
+}, "Developer", [new RequiredArg(0, "You have to execute *something*", "...code")])
