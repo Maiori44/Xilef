@@ -10,14 +10,14 @@ class Entity {
         this.ai = ai
         this.name = name
         this.isboss = isboss
-        this.castmsg = this.ai ? "The " + this.name + " uses " : "You use "
-        this.evmsg = this.ai ? "The " + this.name + "'s " : "Your "
+        this.castmsg = this.ai != 'player' ? "The " + this.name + " uses " : "You use "
+        this.evmsg = this.ai != 'player' ? "The " + this.name + "'s " : "Your "
     }
 
     fight(Entity, damage) {
         let dmg = Math.floor(Math.max(damage - Entity.defense, 1))
         Entity.hp = Entity.hp - dmg
-        return (this.ai ? "The " + this.name + " attacks you!" : "You attack " + Entity.name + "!") + " (" + dmg + " damage dealt)"
+        return (this.ai != 'player' ? "The " + this.name + " attacks you!" : "You attack " + Entity.name + "!") + " (" + dmg + " damage dealt)"
     }
 
     think(DungeonGame) {
