@@ -6,6 +6,10 @@ const { inspect } = require("util");
 const Stream = require("stream");
 const VM = require('vm')
 
+function hasOwnProperty(object, key) {
+  return Object.prototype.hasOwnProperty.call(object, key);
+}
+
 const globals = {
   DEBUG: {
     AVAILABLE_MODULES: [
@@ -108,6 +112,79 @@ function evaluate(code, globals, config = {}) {
     breakOnSigint: true,
     timeout: config.timeout ?? 1000
   });
+}
+
+/**
+ * @template {Record<string, any>} O
+ * @template {Array<keyof O>} K
+ * @param {O} object
+ * @param {K} keys
+ * @returns {Pick<O, K>}
+ */
+function pick(object, keys) {
+  /** @type {O} */
+  const obj = Object(object);
+  const objPrototype = Object.getPrototypeOf(obj);
+
+  /** @type {Array<keyof O>} */
+  const picked = [];
+  /** @type {Array<string | number | symbol>} */
+  const pickedPrototype = [];
+
+  for (const key of keys) {
+    if (hasOwnProperty(obj, key)) picked.push(key);
+    else if (Reflect.has(objPrototype, key)) pickedPrototype.push(key);
+    else throw new TypeError(`No such property with name '${key}'`);
+  }
+
+  return Object.create(
+    pickedPrototype.length == 0
+      ? objPrototype
+      : pick(objPrototype, pickedPrototype),
+    picked.reduce((descriptors, key) => {
+      return Object.assign(descriptors, {
+        [key]: Object.getOwnPropertyDescriptor(obj, key),
+      });
+    }, {})
+  );
+}
+
+/**
+ * @template {Record<string, any>} O
+ * @template {Array<keyof O>} K
+ * @param {O} object
+ * @param {K} keys
+ * @returns {Omit<O, K>}
+ */
+function omit(object, keys) {
+  /** @type {O} */
+  const obj = Object(object);
+  const objPrototype = Object.getPrototypeOf(obj);
+  /** @type {Array<keyof O>} */
+  const omitted = [];
+  /** @type {Array<string | number | symbol>} */
+  const omittedPrototype = [];
+
+  for (const key of keys) {
+    if (hasOwnProperty(obj, key)) omitted.push(key);
+    else if (Reflect.has(objPrototype, key)) omittedPrototype.push(key);
+    else throw new TypeError(`No such property with name '${key}'`);
+  }
+
+  const picked = Object.getOwnPropertyNames(obj).filter(
+    (key) => !omitted.includes(key)
+  );
+
+  return Object.create(
+    omittedPrototype.length == 0
+      ? objPrototype
+      : this.omit(objPrototype, omittedPrototype),
+    picked.reduce((descriptors, key) => {
+      return Object.assign(descriptors, {
+        [key]: Object.getOwnPropertyDescriptor(obj, key),
+      });
+    }, {})
+  );
 }
 
 Commands.debug = new Command(description, async function (message) {

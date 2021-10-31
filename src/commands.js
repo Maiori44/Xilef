@@ -376,7 +376,7 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
         throw ("That number is a bit too low.")
     }
     let EconomySystem = Economy.getEconomySystem(message.author)
-    if (EconomySystem.buy(gamble, message, null, "You don't have enough DogeCoins to gamble " + gamble)) {
+    if (EconomySystem.buy(gamble, message, null, "You don't have enough DogeCoins to gamble " + gamble, true)) {
         let chance = Math.ceil(Math.random() * (gamble * 2))
         if (gamble >= 2500) {
             chance = chance - (gamble / 2)
