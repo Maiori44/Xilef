@@ -3,6 +3,7 @@ const { RequiredArg, Command } = require("./commands");
 const Discord = require("discord.js");
 const { Console } = require("console");
 const { inspect } = require("util");
+const { serialize, deserialize } = require("v8");
 const Stream = require("stream");
 const VM = require('vm')
 
@@ -264,11 +265,13 @@ Commands.debug = new Command(description, async function (message) {
       },
       util: {
         pick, omit,
+        /**
+         * @template {Record<string, any>} T
+         * @param {T} object
+         * @returns T
+         */
         clone(object) {
-          return Object.create(
-            Object.getPrototypeOf(object),
-            Object.getOwnPropertyDescriptors(object)
-          ).valueOf();
+          return deserialize(serialize(object))
         }
       }
     }
