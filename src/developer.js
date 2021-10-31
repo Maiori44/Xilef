@@ -184,6 +184,15 @@ Commands.debug = new Command(description, async function (message) {
         v_Types,                                         /* Minigames/v_roll.js              */
         MineSweeper,                                     /* Minigames/minesweeper.js         */
         Roshambo,                                        /* Minigames/rock paper scissors.js */
+      },
+      util: {
+        pick, omit,
+        clone(object) {
+          return Object.create(
+            Object.getPrototypeOf(object),
+            Object.getOwnPropertyDescriptors(object)
+          ).valueOf();
+        }
       }
     }
     globals.DEBUG.CUSTOM_MODULES = Object.keys(customModules)
