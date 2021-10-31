@@ -117,3 +117,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# Data files
+src/Data
