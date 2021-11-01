@@ -21,7 +21,6 @@ const globals = {
       'timers', 'url', 'util'
     ]
   },
-  discord_buttons: require('discord-buttons')
 };
 
 const directives = new Map();
@@ -313,7 +312,7 @@ Commands.debug = new Command(description, async function (message) {
 
       expressionEmbeds[0].setTitle('expression')
 
-      for (const embed of expressionEmbeds) message.channel.send(embed)
+      for (const embed of expressionEmbeds) message.channel.send({ embeds: [embed] })
     }
 
     if (stdout.length != 0) {
@@ -346,7 +345,7 @@ Commands.debug = new Command(description, async function (message) {
 
       stdoutEmbeds[0].setTitle('stdout')
 
-      for (const embed of stdoutEmbeds) message.channel.send(embed)
+      for (const embed of stdoutEmbeds) message.channel.send({ embeds: [embed] })
     }
 
     if (stderr.length != 0) {
@@ -379,16 +378,18 @@ Commands.debug = new Command(description, async function (message) {
 
       stderrEmbeds[0].setTitle('stderr')
 
-      for (const embed of stderrEmbeds) message.channel.send(embed)
+      for (const embed of stderrEmbeds) message.channel.send({ embeds: [embed] })
     }
   } catch (error) {
     console.error(error);
-    message.channel.send(
-      new Discord.MessageEmbed()
-        .setColor('RED')
-        .setTitle('error - debug')
-        .setDescription('```\n' + error + '\n```')
-    );
+    message.channel.send({
+      embeds: [
+        new Discord.MessageEmbed()
+          .setColor('RED')
+          .setTitle('error - debug')
+          .setDescription('```\n' + error + '\n```')
+      ]
+    });
   }
 }, 'Developer', [new RequiredArg(0, 'No code supplied.', 'code block', false)]);
 

@@ -1,7 +1,6 @@
 const { RequiredArg, Command } = require("./commands.js")
 const fs = require('fs')
 const { Console } = require("console")
-const { MessageMenu, MessageComponent } = require("discord-buttons")
 
 Prefix = {
   /**
@@ -165,22 +164,24 @@ Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, (message,
             message.channel.send("Aliases cleared successfully");
             break;
         case "list":
-            message.channel.send(
-                new Discord.MessageEmbed()
-                    .setTitle(`${message.author.username}'s aliases`)
-                    .setDescription(
-                        Object.keys(aliases.get(message.author.id) ?? {}).length > 0 ?
-                            '```properties\n' +
-                            Array.from(Object.entries(aliases.get(message.author.id) ?? {}))
-                                .map(([name, substitute]) =>
-                                    `${name} = ${/[^A-Za-z0-9_$]/.test(substitute)
-                                        ? '"' + substitute + '"'
-                                        : substitute
-                                    }`
-                                ).join('\n')
-                            + '\n```' : '```\n<empty>\n```'
-                    )
-                    .setFooter(`${Object.keys(aliases.get(message.author.id) ?? {}).length} aliases`)
+            message.channel.send({
+                embeds: [
+                    new Discord.MessageEmbed()
+                        .setTitle(`${message.author.username}'s aliases`)
+                        .setDescription(
+                            Object.keys(aliases.get(message.author.id) ?? {}).length > 0 ?
+                                '```properties\n' +
+                                Array.from(Object.entries(aliases.get(message.author.id) ?? {}))
+                                    .map(([name, substitute]) =>
+                                        `${name} = ${/[^A-Za-z0-9_$]/.test(substitute)
+                                            ? '"' + substitute + '"'
+                                            : substitute
+                                        }`
+                                    ).join('\n')
+                                + '\n```' : '```\n<empty>\n```'
+                                    .setFooter(`${Object.keys(aliases.get(message.author.id) ?? {}).length} aliases`))
+                                    ]
+            }
             )
             break;
         default:
