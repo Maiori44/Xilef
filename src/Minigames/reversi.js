@@ -156,7 +156,7 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
                     ReversiGame.checkLine(tile, x, y, 1, -1)
                     ReversiGame.turn = (ReversiGame.turn % 2) + 1
                     let validmoves = ReversiGame.findValidPositions(tile == Reversi.lightTile ? Reversi.darkTile : Reversi.lightTile)
-                    message.channel.send(ReversiGame.getMatchInfo())
+                    message.channel.send({ embeds: [ReversiGame.getMatchInfo()] })
                     if (validmoves == 0) {
                         validmoves = ReversiGame.findValidPositions(tile)
                         ReversiGame.turn = (ReversiGame.turn % 2) + 1
@@ -187,7 +187,7 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
                             Reversi.closeGame(message.author.id)
                         } else {
                             message.channel.send("No valid moves found! Skipping turn...")
-                            message.channel.send(ReversiGame.getMatchInfo())
+                            message.channel.send({ embeds: [ReversiGame.getMatchInfo() ]})
                         }
                     }
                     break
@@ -199,7 +199,7 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
         }
         case "board": {
             let [ReversiGame, playernum] = Reversi.getGame(message.author.id)
-            message.channel.send(ReversiGame.getMatchInfo())
+            message.channel.send({ embeds: [ReversiGame.getMatchInfo()] })
             break
         }
         default: {

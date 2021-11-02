@@ -150,11 +150,15 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
                 EconomySystem.give((200 * (EconomySystem.rank / 4)) / 2)
             } else {
                 EconomySystem.vgot.addFlag(v_got.value)
-                message.channel.send(new Discord.MessageEmbed()
-                    .setColor(message.member.displayHexColor)
-                    .setTitle(EconomySystem.user + "'s v_s")
-                    .setDescription(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
-                    .setTimestamp())
+                message.channel.send({
+                    embeds: [
+                        new Discord.MessageEmbed()
+                            .setColor(message.member.displayHexColor)
+                            .setTitle(EconomySystem.user + "'s v_s")
+                            .setDescription(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
+                            .setTimestamp()
+                    ]
+                })
                 if (EconomySystem.vgot.getBinary() == "111111111111111111111111111111111111111111111111111111111111") {
                     EconomySystem.award("v_", message)
                 }

@@ -209,7 +209,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
     args[0] = args[0].toLowerCase()
     switch (args[0]) {
         case "stats": {
-            message.channel.send(DrillerGame.getInfo(EconomySystem))
+            message.channel.send({ embeds: [DrillerGame.getInfo(EconomySystem)] })
             break
         }
         case "dig": {
@@ -284,7 +284,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             for (let i = 0; i < results.length; i++)
                 resultEmbed.addField("**Page " + (i + 1) + "** :", results[i], true);
 
-            message.channel.send(resultEmbed)
+            message.channel.send({ embeds: [resultEmbed] })
 
             break
         }

@@ -1,6 +1,5 @@
 const { RequiredArg, Command } = require("./../commands.js")
 const { Game, MPGame } = require("./../minigames.js")
-const { MessageButton, MessageActionRow } = require("discord-buttons")
 
 class RoshamboGame {
     constructor() {
@@ -24,16 +23,16 @@ class RoshamboGame {
     }
 
     sendOptions(message) {
-        const options = new MessageActionRow()
-        options.addComponent(new MessageButton()
+        const options = new Discord.MessageActionRow()
+        options.addComponents(new Discord.MessageButton()
             .setStyle("red")
             .setLabel("Rock")
             .setID("roshambo-" + this.host + "-rock"))
-        options.addComponent(new MessageButton()
+        options.addComponents(new Discord.MessageButton()
             .setStyle("green")
             .setLabel("Paper")
             .setID("roshambo-" + this.host + "-paper"))
-        options.addComponent(new MessageButton()
+        options.addComponents(new Discord.MessageButton()
             .setStyle("blurple")
             .setLabel("Scissors")
             .setID("roshambo-" + this.host + "-scissors"))
@@ -77,7 +76,7 @@ ButtonEvents.roshambo = async (button, id, optionname) => {
     RoshamboGame[chooser + "choice"] = optionname
     await button.reply.send("The " + chooser + " has chosen his move!")
     if (RoshamboGame.joinerchoice && RoshamboGame.hostchoice) {
-        RoshamboGame.message.channel.send(RoshamboGame.getMatchInfo())
+        RoshamboGame.message.channel.send({ embeds: [RoshamboGame.getMatchInfo()] })
         if (RoshamboGame.hostchoice == Roshambo.moves[RoshamboGame.joinerchoice].beats)
             RoshamboGame.awardWin("joiner", RoshamboGame.message)
         else if (RoshamboGame.joinerchoice == Roshambo.moves[RoshamboGame.hostchoice].beats)

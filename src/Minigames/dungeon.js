@@ -296,7 +296,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
     args[0] = args[0].toLowerCase()
     switch (args[0]) {
         case "stats": {
-            message.channel.send(DungeonGame.getInfo(EconomySystem))
+            message.channel.send({ embeds: [DungeonGame.getInfo(EconomySystem)] })
             break
         }
         case "explore": {
@@ -304,7 +304,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             if (!DungeonGame.explored) {
                 let InfoEmbed = DungeonGame.getInfo(EconomySystem)
                 InfoEmbed.addField("Latest event:", "There is nothing left in this floor...")
-                message.channel.send(InfoEmbed)
+                message.channel.send({ embeds: [InfoEmbed] })
                 return
             }
             let msg = ""
@@ -344,7 +344,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             }
             let InfoEmbed = DungeonGame.getInfo(EconomySystem)
             InfoEmbed.addField("Latest event:", msg)
-            message.channel.send(InfoEmbed)
+            message.channel.send({ embeds: [InfoEmbed] })
             break
         }
         case "ascend": {
@@ -360,7 +360,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             DungeonGame.explored = 2 + DungeonGame.floor
             let InfoEmbed = DungeonGame.getInfo(EconomySystem)
             InfoEmbed.addField("Latest event:", "You have reached floor " + DungeonGame.floor)
-            message.channel.send(InfoEmbed)
+            message.channel.send({ embeds: [InfoEmbed] })
             break
         }
         case "attack": {
@@ -398,7 +398,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             }
             const InfoEmbed = DungeonGame.getInfo(EconomySystem)
             InfoEmbed.addField("Latest event:", msg)
-            message.channel.send(InfoEmbed)
+            message.channel.send({ embeds: [InfoEmbed] })
             break
         }
         case "escape": {
@@ -407,7 +407,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                 DungeonGame.enemies = []
                 const InfoEmbed = DungeonGame.getInfo(EconomySystem)
                 InfoEmbed.addField("Latest event:", "You managed to escape!")
-                message.channel.send(InfoEmbed)
+                message.channel.send({ embeds: [InfoEmbed] })
                 return
             }
             let msg = "You tried to escape..but failed!"
@@ -416,7 +416,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             }
             const InfoEmbed = DungeonGame.getInfo(EconomySystem)
             InfoEmbed.addField("Latest event:", msg)
-            message.channel.send(InfoEmbed)
+            message.channel.send({ embeds: [InfoEmbed] })
             return
         }
         case "cashin": {

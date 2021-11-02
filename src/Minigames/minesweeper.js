@@ -116,7 +116,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
     args[0] = args[0].toLowerCase()
     switch (args[0]) {
         case "board": {
-            message.channel.send(MineSweeper.getGame(message.author.id).getBoardInfo(EconomySystem))
+            message.channel.send({ embeds: [MineSweeper.getGame(message.author.id).getBoardInfo(EconomySystem)] })
             return
         }
         case "dig": {
@@ -164,7 +164,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
                         if (!MineSweeperGame.board[Tileinfo.y] && !MineSweeperGame.board[Tileinfo.y][Tileinfo.x])
                             message.channel.send("That location is out of bounds.")
                         if (MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isbomb) {
-                            message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem,   true))
+                            message.channel.send({ embeds: [MineSweeperGame.getBoardInfo(EconomySystem, true)] })
                             MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
                             return 1
                         }
@@ -191,7 +191,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             } while (Queue.length > 0)
             // }
 
-            message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem))
+            message.channel.send({ embeds: [MineSweeperGame.getBoardInfo(EconomySystem)] })
             if (!MineSweeperGame.tilesleft) {
                 message.channel.send("You won!")
                 EconomySystem.give(300, message)
@@ -244,7 +244,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
                         message.channel.send("That location is out of bounds.")
                     }
 
-            return void message.channel.send(MineSweeperGame.getBoardInfo(EconomySystem))
+            return void message.channel.send({ embeds: [MineSweeperGame.getBoardInfo(EconomySystem)] })
         }
         default: {
             message.channel.send(MineSweeper.help.replace(/\&/g, Prefix.get(message.guild.id)))
