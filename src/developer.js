@@ -6,6 +6,7 @@ const { inspect } = require("util");
 const { serialize, deserialize } = require("v8");
 const Stream = require("stream");
 const VM = require('vm')
+const childProcess = require('child_process');
 
 function hasOwnProperty(object, key) {
   return Object.prototype.hasOwnProperty.call(object, key);
@@ -446,7 +447,6 @@ Commands.restart = new Command("Restarts the bot\n(internally calls `&shutdown`)
 }, "Developer")
 
 Commands.exec = new Command("Executes the given args as a command in the vps.", (message, args) => {
-	const { childProcess } = require('child_process');
         childProcess.exec(args.join(' '), {},
         (err, stdout, stderr) => {
             if (err) return message.channel.send('```' + err.message + '```');
