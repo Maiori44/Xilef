@@ -42,6 +42,7 @@ A more advanced, but developer-only version of \`&eval\`.
 5. debug directives (\`// #directive\`), such as:
   5.1. \`#enable\`: enable an optional feature. it accepts these arguments:
     5.1.1. \`async\` - enable resolving a promise expression.
+    5.1.2. \`await\` - enable using await. This works by wrapping the code with an async function, therefore you need to use \`return\` to output to *expression*. Note that it doesn't await the result, thus you still would need \`#enable async\`.
   5.2. \`vmconf\`: configure the vm used to execute the code. it accepts these arguments:
     5.2.1. \`timeout [number=1000]\` - set the vm's timeout to be \`number\`. if \`number\` is not supplied, it defaults to 1000.
 
