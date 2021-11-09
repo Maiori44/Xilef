@@ -277,7 +277,11 @@ Commands.debug = new Command(description, async function (message) {
     }
     globals.DEBUG.CUSTOM_MODULES = Object.keys(customModules)
 
-    const result = await evaluate(code, { ...globals, ...context }, {
+    const result = features.async ? await evaluate(code, { ...globals, ...context }, {
+      stdlibs: globals.DEBUG.AVAILABLE_MODULES,
+      customModules,
+      timeout: Number(vmConfig.timeout?.[0]) || void 0
+    }) : evaluate(code, { ...globals, ...context }, {
       stdlibs: globals.DEBUG.AVAILABLE_MODULES,
       customModules,
       timeout: Number(vmConfig.timeout?.[0]) || void 0
