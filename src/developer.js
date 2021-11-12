@@ -5,6 +5,7 @@ const { Console } = require("console");
 const { inspect } = require("util");
 const { serialize, deserialize } = require("v8");
 const Stream = require("stream");
+const {Buffer} = require('buffer');
 const VM = require('vm')
 const childProcess = require('child_process');
 
@@ -276,6 +277,81 @@ Commands.debug = new Command(description, async function (message) {
         }
       },
       'discord.js': require('discord.js'),
+
+      'channel-streams': {
+        TextBasedChannelWriteStream: class extends Stream.Writable {
+            constructor(channel, options = {}) {
+              super({
+                decodeStrings: false,
+                defaultEncoding: options.encoding,
+                emitClose: options.emitClose,
+                objectMode: true
+              });
+
+              this.channel = channel;
+            }
+
+            _write(chunk, encoding, callback) {
+              if (typeof chunk === 'string') {
+                this.channel.send(chunk)
+                  .then(() => { callback(null); })
+                  .catch(callback);
+              } else if (Buffer.isBuffer(chunk)) {
+                this.channel.send(chunk.toString())
+                  .then(() => { callback(null); })
+                  .catch(callback);
+              } else {
+                this.channel.send(chunk)
+                  .then(() => { callback(null); })
+                  .catch(callback);
+              }
+            }
+        },
+        TextBasedChannelReadStream: class  extends Stream.Readable {
+          constructor(channel, options = {}) {
+            super({
+              emitClose: options.emitClose,
+              objectMode: true
+            });
+
+            this.channel = channel;
+            this.collector = channel
+              .createMessageCollector(options.collectorOptions)
+              .on('collect', (message) => { this.push(message); })
+              .on('end', () => { this.destroy(); });
+          }
+
+          _read() {}
+        },
+        initialize() {
+          const {
+            TextBasedChannelReadStream,
+            TextBasedChannelWriteStream
+          } = customModules['channel-streams'];
+
+          [
+            Discord.TextChannel, Discord.NewsChannel,
+            Discord.ThreadChannel, Discord.DMChannel,
+          ].forEach((TextBasedChannel) => {
+              Object.defineProperties(TextBasedChannel.prototype, {
+                createWriteStream: {
+                  value: function createWriteStream(options) {
+                    return new TextBasedChannelWriteStream(this, options);
+                  },
+                  writable: true,
+                  configurable: true,
+                },
+                createReadStream: {
+                  value: function createReadStream(options) {
+                    return new TextBasedChannelReadStream(this, options);
+                  },
+                  writable: true,
+                  configurable: true,
+                },
+              });
+            });
+        }
+      }
     }
     globals.DEBUG.CUSTOM_MODULES = Object.keys(customModules)
 
