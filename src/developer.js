@@ -274,7 +274,8 @@ Commands.debug = new Command(description, async function (message) {
         clone(object) {
           return deserialize(serialize(object))
         }
-      }
+      },
+      'discord.js': require('discord.js'),
     }
     globals.DEBUG.CUSTOM_MODULES = Object.keys(customModules)
 
