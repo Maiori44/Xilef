@@ -97,7 +97,7 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
                     if (Connect4Game.board[y][x] == Connect4.emptyTile) {
                         Connect4Game.board[y][x] = tile
                         Connect4Game.turn = (Connect4Game.turn % 2) + 1
-                        message.channel.send(Connect4Game.getMatchInfo())
+                        message.channel.send({ embeds: [Connect4Game.getMatchInfo()] })
                         if ((Connect4Game.getDiscs(tile, x, y, 0, 1) + Connect4Game.getDiscs(tile, x, y, 0, -1)) >= 3 ||
                             (Connect4Game.getDiscs(tile, x, y, 1, 0) + Connect4Game.getDiscs(tile, x, y, -1, 0)) >= 3 ||
                             (Connect4Game.getDiscs(tile, x, y, -1, 1) + Connect4Game.getDiscs(tile, x, y, 1, -1)) >= 3 ||
@@ -123,7 +123,7 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
         }
         case "board": {
             let [Connect4Game, playernum] = Connect4.getGame(message.author.id)
-            message.channel.send(Connect4Game.getMatchInfo())
+            message.channel.send({ embeds: [Connect4Game.getMatchInfo()] })
             break
         }
         default: {

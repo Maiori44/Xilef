@@ -3,8 +3,14 @@ const { RequiredArg, Command } = require("./commands");
 const Discord = require("discord.js");
 const { Console } = require("console");
 const { inspect } = require("util");
+const { serialize, deserialize } = require("v8");
 const Stream = require("stream");
 const VM = require('vm')
+const childProcess = require('child_process');
+
+function hasOwnProperty(object, key) {
+  return Object.prototype.hasOwnProperty.call(object, key);
+}
 
 const globals = {
   DEBUG: {
@@ -16,7 +22,6 @@ const globals = {
       'timers', 'url', 'util'
     ]
   },
-  discord_buttons: require('discord-buttons')
 };
 
 const directives = new Map();
@@ -36,7 +41,8 @@ A more advanced, but developer-only version of \`&eval\`.
   4.3. \`VM_CONFIG\`: list the current vm's configuration. (See #5.2)
 5. debug directives (\`// #directive\`), such as:
   5.1. \`#enable\`: enable an optional feature. it accepts these arguments:
-    5.1.1. \`async\` - enable resolving a promise expression.
+    5.1.1. \`async\` - enable resolving a promise expression to *expression*.
+    5.1.2. \`await\` - enable using await outside an async function. This is done by wrapping the code within an async function. To output to *expression*, use \`return\`. Note that it doesn't await the result, so you will still need \`#enable async\`.
   5.2. \`vmconf\`: configure the vm used to execute the code. it accepts these arguments:
     5.2.1. \`timeout [number=1000]\` - set the vm's timeout to be \`number\`. if \`number\` is not supplied, it defaults to 1000.
 
@@ -108,6 +114,79 @@ function evaluate(code, globals, config = {}) {
     breakOnSigint: true,
     timeout: config.timeout ?? 1000
   });
+}
+
+/**
+ * @template {Record<string, any>} O
+ * @template {Array<keyof O>} K
+ * @param {O} object
+ * @param {K} keys
+ * @returns {Pick<O, K>}
+ */
+function pick(object, keys) {
+  /** @type {O} */
+  const obj = Object(object);
+  const objPrototype = Object.getPrototypeOf(obj);
+
+  /** @type {Array<keyof O>} */
+  const picked = [];
+  /** @type {Array<string | number | symbol>} */
+  const pickedPrototype = [];
+
+  for (const key of keys) {
+    if (hasOwnProperty(obj, key)) picked.push(key);
+    else if (Reflect.has(objPrototype, key)) pickedPrototype.push(key);
+    else throw new TypeError(`No such property with name '${key}'`);
+  }
+
+  return Object.create(
+    pickedPrototype.length == 0
+      ? objPrototype
+      : pick(objPrototype, pickedPrototype),
+    picked.reduce((descriptors, key) => {
+      return Object.assign(descriptors, {
+        [key]: Object.getOwnPropertyDescriptor(obj, key),
+      });
+    }, {})
+  );
+}
+
+/**
+ * @template {Record<string, any>} O
+ * @template {Array<keyof O>} K
+ * @param {O} object
+ * @param {K} keys
+ * @returns {Omit<O, K>}
+ */
+function omit(object, keys) {
+  /** @type {O} */
+  const obj = Object(object);
+  const objPrototype = Object.getPrototypeOf(obj);
+  /** @type {Array<keyof O>} */
+  const omitted = [];
+  /** @type {Array<string | number | symbol>} */
+  const omittedPrototype = [];
+
+  for (const key of keys) {
+    if (hasOwnProperty(obj, key)) omitted.push(key);
+    else if (Reflect.has(objPrototype, key)) omittedPrototype.push(key);
+    else throw new TypeError(`No such property with name '${key}'`);
+  }
+
+  const picked = Object.getOwnPropertyNames(obj).filter(
+    (key) => !omitted.includes(key)
+  );
+
+  return Object.create(
+    omittedPrototype.length == 0
+      ? objPrototype
+      : this.omit(objPrototype, omittedPrototype),
+    picked.reduce((descriptors, key) => {
+      return Object.assign(descriptors, {
+        [key]: Object.getOwnPropertyDescriptor(obj, key),
+      });
+    }, {})
+  );
 }
 
 Commands.debug = new Command(description, async function (message) {
@@ -184,11 +263,27 @@ Commands.debug = new Command(description, async function (message) {
         v_Types,                                         /* Minigames/v_roll.js              */
         MineSweeper,                                     /* Minigames/minesweeper.js         */
         Roshambo,                                        /* Minigames/rock paper scissors.js */
-      }
+      },
+      util: {
+        pick, omit,
+        /**
+         * @template {Record<string, any>} T
+         * @param {T} object
+         * @returns T
+         */
+        clone(object) {
+          return deserialize(serialize(object))
+        }
+      },
+      'discord.js': require('discord.js'),
     }
     globals.DEBUG.CUSTOM_MODULES = Object.keys(customModules)
 
-    const result = await evaluate(code, { ...globals, ...context }, {
+    const result = features.async ? await evaluate(code, { ...globals, ...context }, {
+      stdlibs: globals.DEBUG.AVAILABLE_MODULES,
+      customModules,
+      timeout: Number(vmConfig.timeout?.[0]) || void 0
+    }) : evaluate(code, { ...globals, ...context }, {
       stdlibs: globals.DEBUG.AVAILABLE_MODULES,
       customModules,
       timeout: Number(vmConfig.timeout?.[0]) || void 0
@@ -224,7 +319,7 @@ Commands.debug = new Command(description, async function (message) {
 
       expressionEmbeds[0].setTitle('expression')
 
-      for (const embed of expressionEmbeds) message.channel.send(embed)
+      for (const embed of expressionEmbeds) message.channel.send({ embeds: [embed] })
     }
 
     if (stdout.length != 0) {
@@ -257,7 +352,7 @@ Commands.debug = new Command(description, async function (message) {
 
       stdoutEmbeds[0].setTitle('stdout')
 
-      for (const embed of stdoutEmbeds) message.channel.send(embed)
+      for (const embed of stdoutEmbeds) message.channel.send({ embeds: [embed] })
     }
 
     if (stderr.length != 0) {
@@ -290,16 +385,18 @@ Commands.debug = new Command(description, async function (message) {
 
       stderrEmbeds[0].setTitle('stderr')
 
-      for (const embed of stderrEmbeds) message.channel.send(embed)
+      for (const embed of stderrEmbeds) message.channel.send({ embeds: [embed] })
     }
   } catch (error) {
     console.error(error);
-    message.channel.send(
-      new Discord.MessageEmbed()
-        .setColor('RED')
-        .setTitle('error - debug')
-        .setDescription('```\n' + error + '\n```')
-    );
+    message.channel.send({
+      embeds: [
+        new Discord.MessageEmbed()
+          .setColor('RED')
+          .setTitle('error - debug')
+          .setDescription('```\n' + error + '\n```')
+      ]
+    });
   }
 }, 'Developer', [new RequiredArg(0, 'No code supplied.', 'code block', false)]);
 
@@ -354,3 +451,11 @@ Commands.shutdown = new Command("Shuts down the bot after a given time\nDevelope
 Commands.restart = new Command("Restarts the bot\n(internally calls `&shutdown`)", (message, args) => {
     Commands.shutdown.call(message, ["The bot is currently restarting", 0, true])
 }, "Developer")
+
+Commands.exec = new Command("Executes the given args as a command in the vps.", (message, args) => {
+        childProcess.exec(args.join(' '), {},
+        (err, stdout, stderr) => {
+            if (err) return message.channel.send('```' + err.message + '```');
+            message.channel.send('```' + stdout + '```');
+        });
+}, "Developer", [new RequiredArg(0, "You have to execute *something*", "...code")])

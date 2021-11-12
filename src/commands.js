@@ -1,5 +1,4 @@
-require("discord-buttons")(client);
-const { MessageButton, MessageActionRow } = require("discord-buttons")
+
 const Discord = require('discord.js')
 const fs = require('fs');
 
@@ -47,17 +46,17 @@ class Command {
 exports.RequiredArg = RequiredArg
 exports.Command = Command
 
-const Buttons = new MessageActionRow()
-Buttons.addComponent(new MessageButton()
-    .setStyle("url")
+const Buttons = new Discord.MessageActionRow()
+Buttons.addComponents(new Discord.MessageButton()
+    .setStyle("LINK")
     .setURL("https://github.com/Felix-44/Xilef")
     .setLabel("Github page"))
-Buttons.addComponent(new MessageButton()
-    .setStyle("url")
+Buttons.addComponents(new Discord.MessageButton()
+    .setStyle("LINK")
     .setURL("https://discord.gg/Qyz5HgrxWg")
     .setLabel("Official server"))
-Buttons.addComponent(new MessageButton()
-    .setStyle("url")
+Buttons.addComponents(new Discord.MessageButton()
+    .setStyle("LINK")
     .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=275415091200&scope=bot")
     .setLabel("Invite bot"))
 
@@ -84,12 +83,12 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
         CommandInfoEmbed.addField("Syntax:", "arguments inside () are required, arguments inside [] can be omitted\narguments can have spaces using \" at the start and end of the argument\n" + syntax)
         let button
         if (Commands[args[0]].link) {
-            button = new MessageButton()
+            button = new Discord.MessageButton()
                 .setStyle("url")
                 .setURL(Commands[args[0]].link)
                 .setLabel(Commands[args[0]].category == "Game" ? "How to play" : "Github page")
         }
-        message.channel.send(CommandInfoEmbed, button)
+        message.channel.send({ embeds: [CommandInfoEmbed] }, button)
         return
     }
     const CommandsEmbed = new Discord.MessageEmbed()
@@ -109,16 +108,21 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
     for (let category in Categories) {
         CommandsEmbed.addField(category + " commands", "`" + Categories[category].join("` `") + "`", true)
     }
-    message.channel.send(CommandsEmbed, Buttons)
+    message.channel.send({ embeds: [CommandsEmbed] }, Buttons)
 }, "Utility", [new RequiredArg(0, undefined, "command name", true)])
 
 Commands.info = new Command("Shows info about the bot and this server's prefix", (message, args) => {
-    message.channel.send(new Discord.MessageEmbed()
-        .setColor("#0368f8")
-        .setTitle("Xilef info")
-        .setDescription("Bot created by <@621307633718132746>\nYou can check out the code on github")
-        .addField("This server's prefix:", "`" + Prefix.get(message.guild.id) + "`")
-        .setTimestamp(), Buttons)
+    message.channel.send({
+        embeds: [
+            new Discord.MessageEmbed()
+                .setColor("#0368f8")
+                .setTitle("Xilef info")
+                .setDescription("Bot created by <@621307633718132746>\nYou can check out the code on github")
+                .addField("This server's prefix:", "`" + Prefix.get(message.guild.id) + "`")
+                .setTimestamp()
+        ],
+        components: [Buttons]
+    })
 }, "Utility")
 
 //Joke commands
@@ -223,18 +227,26 @@ const SafeEval = require("safe-eval")
 
 Commands.eval = new Command("Evaluates the given args as JavaScript code, and returns the output", (message, args) => {
     try {
-        const output = SafeEval(args.join(" "))
-        message.channel.send(new Discord.MessageEmbed()
-            .setColor("#0368f8")
-            .setTitle("Output")
-            .setDescription("```js\n" + output + "```")
-            .setTimestamp())
+        const output = SafeEval(args.join(" "));
+        message.channel.send({
+            embeds: [
+                new Discord.MessageEmbed()
+                    .setColor("#0368f8")
+                    .setTitle("Output")
+                    .setDescription("```js\n" + output + "```")
+                    .setTimestamp()
+            ]
+        })
     } catch (error) {
-        message.channel.send(new Discord.MessageEmbed()
-            .setColor("#FF0000")
-            .setTitle("An error occured:")
-            .setDescription(error)
-            .setTimestamp())
+        message.channel.send({
+            embeds: [
+                new Discord.MessageEmbed()
+                    .setColor("#FF0000")
+                    .setTitle("An error occured:")
+                    .setDescription(error)
+                    .setTimestamp()
+            ]
+        })
     }
 }, "Math", [new RequiredArg(0, "You have to evalute *something*", "...code")])
 
@@ -244,35 +256,35 @@ const chadimage = new Discord.MessageAttachment("./src/Pictures/giga chad.jpg")
 
 Commands.chad = new Command("Sends a beautiful giga chad", (message, args) => {
     message.channel.send("epik")
-    message.channel.send(chadimage)
+    message.channel.send({ files: [chadimage] })
 }, "Images")
 
 const amogusimage = new Discord.MessageAttachment("./src/Pictures/amogus.gif")
 
 Commands.amogus = new Command("It's pretty sus", (message, args) => {
     message.channel.send("sus")
-    message.channel.send(amogusimage)
+    message.channel.send({ files: [amogusimage] })
 }, "Images")
 
 const sdrogoimage = new Discord.MessageAttachment("./src/Pictures/sdrogo.jpg")
 
 Commands.sdrogo = new Command("Sdrogo man is da wae", (message, args) => {
     message.channel.send("hm yes")
-    message.channel.send(sdrogoimage)
+    message.channel.send({ files: [sdrogoimage] })
 }, "Images")
 
 const vshitimage = new Discord.MessageAttachment("./src/Pictures/vshit.png")
 
 Commands.vshit = new Command("Vsauce here", (message, args) => {
     message.channel.send("hey vsauce, Michael here, could you get out of my bathroom?")
-    message.channel.send(vshitimage)
+    message.channel.send({ files: [vshitimage] })
 }, "Images")
 
 const uwuimage = new Discord.MessageAttachment("./src/Pictures/uwu.png")
 
 Commands.uwu = new Command("Sends a super cute kawaii image ^w^", (message, args) => {
     message.channel.send(":3")
-    message.channel.send(uwuimage)
+    message.channel.send({ files: [uwuimage] })
 }, "Images")
 
 const horseimages = [
@@ -286,7 +298,7 @@ const horseimages = [
 Commands.horse = new Command("Sends a random horse photo, idk why I made this", (message, args) => {
     message.channel.send("have a horse I guess")
     let horse = Math.floor(Math.random() * 6)
-    message.channel.send(horseimages[horse])
+    message.channel.send({ files: [horseimages[horse]] })
 }, "Images")
 
 Commands.whoasked = new Command("Finds out the person who asked", (message, args) => {
@@ -304,35 +316,37 @@ Commands.whoasked = new Command("Finds out the person who asked", (message, args
 Commands.stats = new Command("Shows a list of all your stats, like your money or rank\nyou can get other people's stats by pinging them", (message, args) => {
     let user = message.mentions.users.first() || message.author
     let EconomySystem = Economy.getEconomySystem(user)
-    message.channel.send(
-        new Discord.MessageEmbed()
-            .setColor(message.member.displayHexColor)
-            .setTitle(EconomySystem.user + "'s v_s")
-            .setDescription(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
-            .setTimestamp(),
-        new Discord.MessageEmbed()
-            .setColor(message.member.displayHexColor)
-            .setTitle(EconomySystem.user + "'s statistics")
-            .setDescription("```lua\nDogeCoins: " + EconomySystem.money +
-                "\nRank: " + EconomySystem.rank +
-                "\nXilefunds: " + EconomySystem.xilefunds + "```")
-            .addFields(
-                {
-                    name: "Singleplayer stats:", value:
-                        "```js\nImpostors found: " + EconomySystem.impostors +
-                        "\nDriller tier: " + EconomySystem.driller +
-                        "\nDungeon top floor: " + EconomySystem.floor +
-                        "\nMineSweeper matches won: " + EconomySystem.msweeper + "```", inline: true
-                },
-                {
-                    name: "Multiplayer stats:", value:
-                        "```lua\nReversi matches won: " + EconomySystem.reversi +
-                        "\nConnect four matches won: " + EconomySystem.connect4 +
-                        "\nRoshambo matches won: " + EconomySystem.roshambo + "```", inline: true
-                },
-                { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievements.binary, "❔ ???\n") }
-            )
-    )
+    message.channel.send({
+        embeds: [
+            new Discord.MessageEmbed()
+                .setColor(message.member.displayHexColor)
+                .setTitle(EconomySystem.user + "'s v_s")
+                .setDescription(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
+                .setTimestamp(),
+            new Discord.MessageEmbed()
+                .setColor(message.member.displayHexColor)
+                .setTitle(EconomySystem.user + "'s statistics")
+                .setDescription("```lua\nDogeCoins: " + EconomySystem.money +
+                    "\nRank: " + EconomySystem.rank +
+                    "\nXilefunds: " + EconomySystem.xilefunds + "```")
+                .addFields(
+                    {
+                        name: "Singleplayer stats:", value:
+                            "```js\nImpostors found: " + EconomySystem.impostors +
+                            "\nDriller tier: " + EconomySystem.driller +
+                            "\nDungeon top floor: " + EconomySystem.floor +
+                            "\nMineSweeper matches won: " + EconomySystem.msweeper + "```", inline: true
+                    },
+                    {
+                        name: "Multiplayer stats:", value:
+                            "```lua\nReversi matches won: " + EconomySystem.reversi +
+                            "\nConnect four matches won: " + EconomySystem.connect4 +
+                            "\nRoshambo matches won: " + EconomySystem.roshambo + "```", inline: true
+                    },
+                    { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievements.binary, "❔ ???\n") }
+                ),
+        ]
+    })
 }, "Economy", [new RequiredArg(0, undefined, "@person", true)])
 
 Commands.daily = new Command("Get some free DogeCoins, works only once per day", (message, args) => {
@@ -376,7 +390,7 @@ Commands.gamble = new Command("Gamble your money away cause you have a terrible 
         throw ("That number is a bit too low.")
     }
     let EconomySystem = Economy.getEconomySystem(message.author)
-    if (EconomySystem.buy(gamble, message, null, "You don't have enough DogeCoins to gamble " + gamble)) {
+    if (EconomySystem.buy(gamble, message, null, "You don't have enough DogeCoins to gamble " + gamble, true)) {
         let chance = Math.ceil(Math.random() * (gamble * 2))
         if (gamble >= 2500) {
             chance = chance - (gamble / 2)
@@ -406,7 +420,7 @@ Commands.leaderboard = new Command("See the users with the highest ranks", (mess
         lbnum++
         if (lbnum > 10) { break }
     }
-    message.channel.send(LeaderBoard)
+    message.channel.send({ embeds: [LeaderBoard] })
 }, "Economy")
 
 require("./xilefunds")

@@ -209,7 +209,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
     args[0] = args[0].toLowerCase()
     switch (args[0]) {
         case "stats": {
-            message.channel.send(DrillerGame.getInfo(EconomySystem))
+            message.channel.send({ embeds: [DrillerGame.getInfo(EconomySystem)] })
             break
         }
         case "dig": {
@@ -253,7 +253,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     if (currentOre.value != 0)
                         text += `, has a value of ${currentOre.value}\n`
                     log += text
-                    
+
                     DrillerGame.cash += currentOre.value
                     DrillerGame.depth++
 
@@ -273,7 +273,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             }
 
             const resultEmbed = DrillerGame.getInfo(EconomySystem)
-            
+
             let results = [];
             for (var i = 0; i < log.toString().length; i += 1024)
                 results.push(log.toString().substring(i, i + 1024));
@@ -284,7 +284,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             for (let i = 0; i < results.length; i++)
                 resultEmbed.addField("**Page " + (i + 1) + "** :", results[i], true);
 
-            message.channel.send(resultEmbed)
+            message.channel.send({ embeds: [resultEmbed] })
 
             break
         }
@@ -308,7 +308,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             if (EconomySystem.driller == 30) {
                 message.channel.send("Your driller arleady reached max tier.")
                 EconomySystem.award("driller", message)
-            } else if (EconomySystem.buy(Driller.tiers[EconomySystem.driller - 1], message, "Your driller reached tier " + (EconomySystem.driller + 1) + "! (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins spent)", "You don't have enough DogeCoins to upgrade your driller (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins needed)")) {
+            } else if (EconomySystem.buy(Driller.tiers[EconomySystem.driller - 1], message, "Your driller reached tier " + (EconomySystem.driller + 1) + "!", "You don't have enough DogeCoins to upgrade your driller (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins needed)")) {
                 EconomySystem.driller = EconomySystem.driller + 1
                 if (EconomySystem.driller == 30) {
                     EconomySystem.award("driller", message)

@@ -3,7 +3,14 @@ Discord = require('discord.js')
 
 debugmode = process.argv[2] == "-debug" ? true : false
 
-client = new Discord.Client()
+client = new Discord.Client({
+    intents: [
+        Discord.Intents.FLAGS.GUILDS,
+        Discord.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+        Discord.Intents.FLAGS.GUILD_MESSAGES,
+        Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS ,
+    ]
+})
 client.login(debugmode ? process.env.DEBUG : process.env.TOKEN)
 client.prefix = debugmode ? "beta&" : "&"
 
@@ -66,7 +73,7 @@ client.on("ready", () => {
     if (debugmode) console.log("- " + Colors.yellow.colorize("The current bot session is running in debug mode, no data will be saved"))
     client.user.setActivity("ping me for info")
 })
-client.on("message", (message) => {
+client.on("messageCreate", (message) => {
     if (message.author.bot) return
     if (message.guild === null) {
         message.author.send("I can't answer command calls from DMs, join my official server for that!\nhttps://discord.gg/Qyz5HgrxWg")
@@ -105,11 +112,15 @@ client.on("message", (message) => {
                     Economy.save();
                 } else console.log("- " + Colors.blue.colorize("Update of ") + Colors.hblue.colorize("economy.json") + Colors.blue.colorize(" was cancelled due to debug mode being active"));
                 if (warning) {
-                    message.channel.send(new Discord.MessageEmbed()
-                        .setColor("#ff0000")
-                        .setTitle("Warning")
-                        .setDescription(warning)
-                        .setTimestamp());
+                    message.channel.send({
+                        embeds: [
+                            new Discord.MessageEmbed()
+                                .setColor("#ff0000")
+                                .setTitle("Warning")
+                                .setDescription(warning)
+                                .setTimestamp()
+                        ]
+                    });
                 }
                 console.log("- " + Colors.green.colorize("Command call completed sucessfully:") +
                     "\n\tCommand: " + command +
@@ -148,7 +159,9 @@ client.on("message", (message) => {
                         .setDescription(errormsg.msg.toString().slice(0, 1900))
                         .setTimestamp()
                         .setFooter("Missing argument name: **" + errormsg.name + "**")
-                    message.channel.send(ErrorEmbed)
+                    message.channel.send({
+                        embeds: [ErrorEmbed]
+                    })
                 } else if (errormsg == "Only my developers can use this command") {
                     console.error("- " + Colors.blue.colorize("Command call aborted due to the user not being a developer:") +
                         "\n\tCommand: " + command +

@@ -1,4 +1,3 @@
-const { MessageButton, MessageActionRow, MessageMenuOption, MessageMenu } = require("discord-buttons")
 const { RequiredArg, Command } = require("./commands.js")
 
 class Poll {
@@ -40,31 +39,31 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
         throw ("You can only have 5 different options at max.")
     }
     let options = {}
-    let buttons = new MessageActionRow()
+    let buttons = new Discord.MessageActionRow()
     let argnum = -1
     for (let buttonname of args) {
         argnum = argnum + 1
         if (argnum < 2) continue
         options[buttonname] = 0
-        let button = new MessageButton()
+        let button = new Discord.MessageButton()
             .setStyle("blurple")
             .setLabel(buttonname)
             .setID("poll-" + message.id + "-" + buttonname);
-        buttons.addComponent(button)
+        buttons.addComponents(button)
     }
     if (args.length == 0 || !args[2]) {
-        buttons.addComponent(new MessageButton()
+        buttons.addComponents(new Discord.MessageButton()
             .setStyle("green")
             .setLabel("Yes")
             .setID("poll-" + message.id + "-Yes"))
-        buttons.addComponent(new MessageButton()
+        buttons.addComponents(new Discord.MessageButton()
             .setStyle("red")
             .setLabel("No")
             .setID("poll-" + message.id + "-No"))
         options["Yes"] = 0
         options["No"] = 0
     }
-    message.channel.send("Creating poll...", buttons).then(pollmessage => {
+    message.channel.send("Creating poll...", { components: [buttons] }).then(pollmessage => {
         const time = Math.min(parseFloat(args[1]) * 60 * 1000 || 300000, 0x7FFFFFFF)
         Polls[message.id] = new Poll(pollmessage, options, args[0] || message.author.username + "'s poll", Time.convertTime(time))
         Polls[message.id].update()
