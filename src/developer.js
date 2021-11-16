@@ -127,9 +127,9 @@ new Promise((resolve) => {
 
 /**
  * @typedef {object} EvaluatorOptions
- * @property {string[]?} EvaluatorOptions.stdlibs
- * @property {Record<string, unknown>?} EvaluatorOptions.customModules
- * @property {number?} EvaluatorOptions.timeout
+ * @property {?string[]} EvaluatorOptions.stdlibs
+ * @property {?Record<string, unknown>} EvaluatorOptions.customModules
+ * @property {?number} EvaluatorOptions.timeout
  */
 
 /**
@@ -140,8 +140,8 @@ new Promise((resolve) => {
  * @param {EvaluatorOptions} config - Configurations for use. Properties may include:
  * - **`stdlibs`** {`string[]`} - node standard library modules to put.
  * - **`customModules`** {`{[K: string]: unknown}`} - custom modules to put. these modules
- * - **`timeout`** {`{[K: string]: unknown}`} - the timout for the vm process.
  *   can be accessed by `require('debug:<module>')`
+ * - **`timeout`** {`number`} - the timout for the vm process.
  * @returns - The result of the last expression in the code. May be a {@link Promise}.
  */
 function evaluate(code, globals, config = {}) {
@@ -175,6 +175,7 @@ function evaluate(code, globals, config = {}) {
     timeout: config.timeout ?? 1000
   });
 }
+module.exports.evaluate = evaluate;
 
 /**
  * @template {Record<string, any>} O
