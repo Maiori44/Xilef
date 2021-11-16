@@ -101,9 +101,10 @@ A more advanced, but developer-only version of \`&eval\`.
   5.1. \`#enable\`: enable an optional feature. it accepts these arguments:
     5.1.1. \`async\` - enable resolving a promise expression to *expression*.
     5.1.2. \`await\` - enable using await outside an async function. This is done by wrapping the code within an async function. To output to *expression*, use \`return\`. Note that it doesn't await the result, so you will still need \`#enable async\`.
-    5.1.3. \`include (path)\` - include a standalone JavaScript code-block message. The path must be in the format \`<guildID/channelID/messageID>\`. One can also replace segments (excluding messageID) with \`~\` if the target is in the same guild/channel.
-  5.2. \`vmconf\`: configure the vm used to execute the code. it accepts these arguments:
+  5.2. \`#vmconf\`: configure the vm used to execute the code.  it accepts these arguments:
     5.2.1. \`timeout [number=1000]\` - set the vm's timeout to be \`number\`. if \`number\` is not supplied, it defaults to 1000.
+  5.3. \`#include\` - include a standalone JavaScript code-block message.  it accepts these arguments:
+    5.3.1. \`<path>\` - the path of the code to be included. It must be in the format \`<guildID/channelID/messageID>\`. One can also replace segments (excluding messageID) with \`~\` if the target is in the same guild/channel.
 
 **Notes**
 - You MUST use a code block with the JavaScript language tag (either \`js\` or \`javascript\`)
