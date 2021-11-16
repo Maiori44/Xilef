@@ -25,7 +25,64 @@ const globals = {
   },
 };
 
-const directives = new Map();
+/** @param {string} code */
+async function preprocess(code, extras) {
+  function parseDirectives(code) {
+    return code.split('\n')
+    .reduce((directives, line, index) => {
+      if (line.startsWith('// #')) {
+        return directives.concat({ value: line, loc: index });
+      } else return directives;
+    }, []);
+  }
+
+  const directivesGathered = parseDirectives(code);
+  if (debugmode) console.log(directivesGathered);
+
+  let preprocessed = code
+  for (const directive of directivesGathered) {
+    const [name, ...args] = directive.value.slice('// #'.length).split(/ +/g);
+
+    if (directives.has(name)) {
+      const result = await directives.get(name)(args, code, directive, extras);
+
+      if (result != undefined) {
+        const resultDirectives = parseDirectives(result);
+
+        if (resultDirectives.length !== 0) preprocessed = await preprocess(result, extras);
+        else preprocessed = result
+      }
+    } else throw new Error(`unknown directive: '#${name}'`);
+  }
+
+  return preprocessed
+}
+
+const directives = new Map()
+  .set('include', async ([rawPath], code, line, {message}) => {
+    const [, ...path] = Array.from(rawPath.match(/^<(~|\d+)\/(~|\d+)\/(~|\d+)>$/) ?? []);
+
+    if (path.length !== 3) throw new Error('invalid include path')
+
+    if (path[0] === '~') path[0] = message.guild.id;
+    if (path[1] === '~') path[1] = message.channel.id;
+    if (path[2] === '~')
+      throw new Error('messageID segment cannot be relative.')
+
+    const { content: rawIncluded } = await message.client.guilds.fetch(path[0])
+      .then((guild) => guild.channels.fetch(path[1]))
+      .then((channel) => channel.messages.fetch(path[2]));
+
+    const included = rawIncluded
+      .match(/```(?:js|javascript)\n([^]*)\n```/i)?.[1];
+
+    if (included == undefined) {
+      message.channel.send(`**error**: could not parse the code included.\n**hint**: you may have tried to include a plain text instead of a javascript tagged code-block.`);
+      throw new Error('could not parse the code included.');
+    }
+
+    return code.replace(line.value, included);
+  });
 
 const description = /* TODO: improve numbering */ `
 A more advanced, but developer-only version of \`&eval\`.
@@ -44,6 +101,7 @@ A more advanced, but developer-only version of \`&eval\`.
   5.1. \`#enable\`: enable an optional feature. it accepts these arguments:
     5.1.1. \`async\` - enable resolving a promise expression to *expression*.
     5.1.2. \`await\` - enable using await outside an async function. This is done by wrapping the code within an async function. To output to *expression*, use \`return\`. Note that it doesn't await the result, so you will still need \`#enable async\`.
+    5.1.3. \`include (path)\` - include a standalone JavaScript code-block message. The path must be in the format \`<guildID/channelID/messageID>\`. One can also replace segments (excluding messageID) with \`~\` if the target is in the same guild/channel.
   5.2. \`vmconf\`: configure the vm used to execute the code. it accepts these arguments:
     5.2.1. \`timeout [number=1000]\` - set the vm's timeout to be \`number\`. if \`number\` is not supplied, it defaults to 1000.
 
@@ -205,24 +263,16 @@ Commands.debug = new Command(description, async function (message) {
   try {
     /** @type {string} */
     const rawCode = message.content
-      .match(/```(?:js|javascript)\n([^]*)\n```/i)?.[1]
+      .match(/```(?:js|javascript)\n([^]*)\n```/i)?.[1];
 
     if (rawCode == undefined)
       return void message.channel.send(`**error**: could not parse the code supplied.\n**hint**: you may have put a plain text instead of a javascript tagged code-block (see \`${Prefix.get(message.guild.id)}help debug\`).`)
 
-    const directivesGathered = rawCode.split('\n')
-      .filter((line) => line.startsWith('// #'))
-
-    for (const directive of directivesGathered) {
-      const [name, ...args] = directive.slice('// #'.length).split(/ +/g);
-
-      if (directives.has(name)) directives.get(name)(args, rawCode)
-      else throw new Error(`unknown directive: '#${name}'`)
-    }
+    const preprocessed = await preprocess(rawCode, { message })
 
     const code = features.await
-      ? `async function main() {${rawCode}}; main()`
-      : rawCode;
+      ? `async function main() {${preprocessed}}; main()`
+      : preprocessed;
 
     /** @type {string[]} */
     const stdout = []
