@@ -243,7 +243,7 @@ Commands.eval = new Command("Evaluates the given args as JavaScript code, and re
                 new Discord.MessageEmbed()
                     .setColor("#FF0000")
                     .setTitle("An error occured:")
-                    .setDescription(error)
+                    .setDescription(`${error.name}: ${error.message}`)
                     .setTimestamp()
             ]
         })
