@@ -15,28 +15,85 @@ class RoshamboGame {
             .setTitle("Roshambo match")
             .setDescription((!this.hostchoice && !this.joinerchoice) ? "Both players have to decide their move!" : !(this.hostchoice && this.joinerchoice) ? "Someone still needs to make their choice!" : "Both players are ready!")
             .addFields(
-                { name: "Host (" + this.hostwins + " wins)", value: this.hostname + "\n" + ((this.hostchoice && this.joinerchoice) ? Roshambo.moves[this.hostchoice].hand : this.hostchoice ? "✅" : "❌"), inline: true },
+                { name: "Host (" + this.hostwins + " wins)", value: this.hostname + "\n" + ((this.hostchoice && this.joinerchoice) ? Roshambo.moves[this.hostchoice]?.hand : this.hostchoice ? "✅" : "❌"), inline: true },
                 { name: "Vs.", value: "** **", inline: true},
-                { name: "Joiner (" + this.joinerwins + " wins)", value: this.joinername + "\n" + ((this.hostchoice && this.joinerchoice) ? Roshambo.moves[this.joinerchoice].hand : this.joinerchoice ? "✅" : "❌"), inline: true },
+                { name: "Joiner (" + this.joinerwins + " wins)", value: this.joinername + "\n" + ((this.hostchoice && this.joinerchoice) ? Roshambo.moves[this.joinerchoice]?.hand : this.joinerchoice ? "✅" : "❌"), inline: true },
             )
             .setTimestamp()
     }
 
     sendOptions(message) {
-        const options = new Discord.MessageActionRow()
-        options.addComponents(new Discord.MessageButton()
-            .setStyle("red")
-            .setLabel("Rock")
-            .setID("roshambo-" + this.host + "-rock"))
-        options.addComponents(new Discord.MessageButton()
-            .setStyle("green")
-            .setLabel("Paper")
-            .setID("roshambo-" + this.host + "-paper"))
-        options.addComponents(new Discord.MessageButton()
-            .setStyle("blurple")
-            .setLabel("Scissors")
-            .setID("roshambo-" + this.host + "-scissors"))
-        message.channel.send("Loading moves...", options).then((newmessage) => newmessage.edit("", this.getMatchInfo()))
+        const actionRow = new Discord.MessageActionRow()
+            .addComponents(
+                new Discord.MessageButton({
+                    style: 'DANGER',
+                    label: 'Rock',
+                    customId: 'roshambo-' + this.host + '-rock'
+                }),
+                new Discord.MessageButton({
+                    style: 'SUCCESS',
+                    label: 'Paper',
+                    customId: 'roshambo-' + this.host + '-paper'
+                }),
+                new Discord.MessageButton({
+                    style: 'PRIMARY',
+                    label: 'Scissors',
+                    customId: 'roshambo-' + this.host + '-scissors'
+                }),
+            );
+
+        message.channel.send("Loading moves...")
+            .then((message) => message.edit({
+                content: null,
+                embeds: [this.getMatchInfo()],
+                components: [actionRow],
+            }))
+            .then((message) => {
+                const collector = message.createMessageComponentCollector({
+                    componentType: 'BUTTON',
+                    filter: (interaction) => {
+                        return [this.host, this.joiner].includes(interaction.user.id);
+                    }
+                });
+
+                collector.on('collect', async (interaction) => {
+                    const game = Roshambo.getGame(interaction.user.id)[0];
+                    const chooser = this.host === interaction.user.id
+                        ? "host"
+                        : "joiner";
+
+                    if (chooser === "joiner" && interaction.user.id !== game.joiner) {
+                        return void await interaction.reply({
+                            content: "You are not in this match",
+                            ephemeral: true
+                        });
+                    }
+
+                    await interaction.reply({
+                        content: "The " + chooser + " has chosen his move!"
+                    });
+
+                    game[chooser + "choice"] = interaction.customId
+                        .split('-')
+                        .slice(2)
+                        .join('-');
+
+                    if (game.joinerchoice && game.hostchoice) {
+                        await interaction.channel.send({ embeds: [game.getMatchInfo()] });
+
+                        if (game.hostchoice === Roshambo.moves[game.joinerchoice].beats) {
+                            game.awardWin("joiner", interaction.message);
+                        } else if (game.joinerchoice === Roshambo.moves[game.hostchoice].beats) {
+                            game.awardWin("host", interaction.message);
+                        } else await interaction.channel.send("It's a tie!");
+
+                        game.hostchoice = undefined;
+                        game.joinerchoice = undefined;
+                    }
+
+                    game.sendOptions(interaction.message);
+                });
+            });
     }
 
     awardWin(winner, message) {
@@ -65,28 +122,6 @@ Roshambo.help =
     "`&roshambo join (@user)` will make you join the pinged user's match if they are hosting\n" +
     "`&roshambo quit` will make you leave the current match, if you are the host the joiner will be kicked too\n" +
     "`&roshambo moves` shows the 3 moves of Roshambo, the match will start when both player choose one"
-
-ButtonEvents.roshambo = async (button, id, optionname) => {
-    const RoshamboGame = Roshambo.getGame(id)[0]
-    const chooser = id == button.clicker.id ? "host" : "joiner"
-    if (chooser == "joiner" && button.clicker.id != RoshamboGame.joiner) {
-        await button.reply.send("You are not in this match", true)
-        return
-    }
-    RoshamboGame[chooser + "choice"] = optionname
-    await button.reply.send("The " + chooser + " has chosen his move!")
-    if (RoshamboGame.joinerchoice && RoshamboGame.hostchoice) {
-        RoshamboGame.message.channel.send({ embeds: [RoshamboGame.getMatchInfo()] })
-        if (RoshamboGame.hostchoice == Roshambo.moves[RoshamboGame.joinerchoice].beats)
-            RoshamboGame.awardWin("joiner", RoshamboGame.message)
-        else if (RoshamboGame.joinerchoice == Roshambo.moves[RoshamboGame.hostchoice].beats)
-            RoshamboGame.awardWin("host", RoshamboGame.message)
-        else RoshamboGame.message.channel.send("It's a tie!")
-        RoshamboGame.hostchoice = undefined
-        RoshamboGame.joinerchoice = undefined
-        RoshamboGame.sendOptions(RoshamboGame.message)
-    }
-}
 
 Commands.roshambo = new Command("Beat your friend in a classic rock, paper, scissors match!\n\n" + Roshambo.help, (message, args) => {
     args[0] = args[0].toLowerCase()
