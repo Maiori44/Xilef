@@ -158,7 +158,7 @@ client.on("messageCreate", (message) => {
                         .setTitle("Missing argument " + (errormsg.num + 1) + "!")
                         .setDescription(errormsg.msg.toString().slice(0, 1900))
                         .setTimestamp()
-                        .setFooter("Missing argument name: **" + errormsg.name + "**")
+                        .setFooter("Missing argument name: " + errormsg.name)
                     message.channel.send({
                         embeds: [ErrorEmbed]
                     })
