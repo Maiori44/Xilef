@@ -373,7 +373,7 @@ Commands.rankup = new Command("Increases your rank if you have enough money\nthe
         : parseInt(args[0]) || 1
     for (let i = 1; i <= times; i++) {
         let needed = 100 * EconomySystem.rank
-        if (EconomySystem.buy(needed, message, undefined, EconomySystem.user + " needs " + (needed - EconomySystem.money) + " more DogeCoins for rank " + (EconomySystem.rank + 1))) {
+        if (EconomySystem.buy(needed, message, undefined, EconomySystem.user + " needs " + (needed - EconomySystem.money) + " more DogeCoins for rank " + (EconomySystem.rank + 1), true)) {
             EconomySystem.alterValue("rank", 1, 1000000000)
         } else break
     }
