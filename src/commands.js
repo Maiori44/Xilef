@@ -1,6 +1,7 @@
 
 const Discord = require('discord.js')
 const fs = require('fs');
+const { inspect } = require('util');
 
 class RequiredArg {
     constructor(argnum, errormsg, name, notrequired) {
@@ -223,17 +224,36 @@ Commands.clown = new Command("Given a person or a thing, the bot will say how mu
     }
 }, "Math", [new RequiredArg(0, "You're a clown at 100%, since you didn't even give me something or someone", "something")])
 
-const SafeEval = require("safe-eval")
+const { evaluate } = require('./developer');
 
 Commands.eval = new Command("Evaluates the given args as JavaScript code, and returns the output", (message, args) => {
     try {
-        const output = SafeEval(args.join(" "));
+        const EVAL = {
+            AVAILABLE_MODULES: [
+                'buffer', 'path',
+                'stream', 'string_decoder',
+                'url', 'util'
+            ]
+        };
+
+        const code = message.content.match(/```(?:js|javascript)\n([^]*)\n```/i)?.[1]
+            ?? args.join(" ")
+
+        const output = evaluate(code, {
+            EVAL, console: undefined // set to undefined because the
+                                     // default one doesnt even work
+        }, {
+            stdlibs: EVAL.AVAILABLE_MODULES,
+            timeout: 2000
+        });
         message.channel.send({
             embeds: [
                 new Discord.MessageEmbed()
                     .setColor("#0368f8")
                     .setTitle("Output")
-                    .setDescription("```js\n" + output + "```")
+                    .setDescription("```js\n" +
+                        (typeof output === 'string' ? output : inspect(output))
+                    + "\n```")
                     .setTimestamp()
             ]
         })
@@ -243,7 +263,7 @@ Commands.eval = new Command("Evaluates the given args as JavaScript code, and re
                 new Discord.MessageEmbed()
                     .setColor("#FF0000")
                     .setTitle("An error occured:")
-                    .setDescription(error)
+                    .setDescription(`${error.name}: ${error.message}`)
                     .setTimestamp()
             ]
         })
