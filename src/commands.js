@@ -247,7 +247,7 @@ Commands.eval = new Command("Evaluates the given args as JavaScript code, and re
             stdlibs: EVAL.AVAILABLE_MODULES,
             timeout: 2000
         });
-        if(message.content.includes("eval 0/"+ isNumberObject)){
+        if(message.content.includes("eval 0/"+ Number)){
             message.channel.send({
                 embeds: [
                     new Discord.MessageEmbed()
@@ -260,7 +260,7 @@ Commands.eval = new Command("Evaluates the given args as JavaScript code, and re
                 ]
             })
         }
-        else if(message.content.includes("eval "+ isNumberObject + "/0")){
+        else if(message.content.includes("eval "+ Number + "/0")){
             message.channel.send({
                 embeds: [
                     new Discord.MessageEmbed()
