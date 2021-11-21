@@ -247,7 +247,20 @@ Commands.eval = new Command("Evaluates the given args as JavaScript code, and re
             stdlibs: EVAL.AVAILABLE_MODULES,
             timeout: 2000
         });
-        if(message.content.includes("eval 0/"+ isNumberObject) || message.content.includes("eval "+ isNumberObject + "/0")){
+        if(message.content.includes("eval 0/"+ isNumberObject)){
+            message.channel.send({
+                embeds: [
+                    new Discord.MessageEmbed()
+                        .setColor("#0368f8")
+                        .setTitle("Output")
+                        .setDescription("```js\n" +
+                            ("NaN (clown!!!!!)")
+                        + "\n```")
+                        .setTimestamp()
+                ]
+            })
+        }
+        else if(message.content.includes("eval "+ isNumberObject + "/0")){
             message.channel.send({
                 embeds: [
                     new Discord.MessageEmbed()
