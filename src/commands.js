@@ -254,7 +254,7 @@ Commands.eval = new Command("Evaluates the given args as JavaScript code, and re
                         .setColor("#0368f8")
                         .setTitle("Output")
                         .setDescription("```js\n" +
-                            ("0")
+                            ("NaN (clown!!!!!)")
                         + "\n```")
                         .setTimestamp()
                 ]
