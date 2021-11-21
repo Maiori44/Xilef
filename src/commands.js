@@ -352,6 +352,12 @@ Commands.whoasked = new Command("Finds out the person who asked", (message, args
 Commands.stats = new Command("Shows a list of all your stats, like your money or rank\nyou can get other people's stats by pinging them", (message, args) => {
     let user = message.mentions.users.first() || message.author
     let EconomySystem = Economy.getEconomySystem(user)
+    if(EconomySystem.money % 1 != 0){
+        money = Math.round(EconomySystem.money);
+    }
+    else{
+        money = EconomySystem.money;
+    }
     message.channel.send({
         embeds: [
             new Discord.MessageEmbed()
@@ -362,7 +368,7 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
             new Discord.MessageEmbed()
                 .setColor(message.member.displayHexColor)
                 .setTitle(EconomySystem.user + "'s statistics")
-                .setDescription("```lua\nDogeCoins: " + EconomySystem.money +
+                .setDescription("```lua\nDogeCoins: " + money +
                     "\nRank: " + EconomySystem.rank +
                     "\nXilefunds: " + EconomySystem.xilefunds + "```")
                 .addFields(
