@@ -2,7 +2,6 @@
 const Discord = require('discord.js')
 const fs = require('fs');
 const { inspect } = require('util');
-const { isNumberObject } = require('util/types');
 
 class RequiredArg {
     constructor(argnum, errormsg, name, notrequired) {
@@ -247,33 +246,6 @@ Commands.eval = new Command("Evaluates the given args as JavaScript code, and re
             stdlibs: EVAL.AVAILABLE_MODULES,
             timeout: 2000
         });
-        if(message.content.includes("eval 0/"+ Number)){
-            message.channel.send({
-                embeds: [
-                    new Discord.MessageEmbed()
-                        .setColor("#0368f8")
-                        .setTitle("Output")
-                        .setDescription("```js\n" +
-                            ("NaN (clown!!!!!)")
-                        + "\n```")
-                        .setTimestamp()
-                ]
-            })
-        }
-        else if(message.content.includes("eval "+ Number + "/0")){
-            message.channel.send({
-                embeds: [
-                    new Discord.MessageEmbed()
-                        .setColor("#0368f8")
-                        .setTitle("Output")
-                        .setDescription("```js\n" +
-                            ("NaN (clown!!!!!)")
-                        + "\n```")
-                        .setTimestamp()
-                ]
-            })
-        }
-        else{
         message.channel.send({
             embeds: [
                 new Discord.MessageEmbed()
@@ -285,7 +257,6 @@ Commands.eval = new Command("Evaluates the given args as JavaScript code, and re
                     .setTimestamp()
             ]
         })
-    }
     } catch (error) {
         message.channel.send({
             embeds: [
