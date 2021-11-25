@@ -25,18 +25,28 @@ Brainfuck.run = (code) => {
             case "<": pointer = pointer == 0 ? 100 : pointer - 1; break
             case "[": {
                 if (memory[pointer] != 0) break
+                let scope = 0
                 i++
                 while (i < code.length) {
-                    if (code[i] == "]") break
+                    if (code[i] == "]") {
+                        if (scope == 0) break
+                        scope--
+                    }
+                    if (code[i] == "[") scope++
                     i++
                 }
                 break
             }
             case "]": {
                 if (memory[pointer] == 0) break
+                let scope = 0
                 i--
                 while (i > 0) {
-                    if (code[i] == "[") break
+                    if (code[i] == "[") {
+                        if (scope == 0) break
+                        scope--
+                    }
+                    if (code[i] == "]") scope++
                     i--
                 }
                 break
