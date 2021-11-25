@@ -11,7 +11,7 @@ class BrainfuckGame {
 Brainfuck = new Game(() => { return new BrainfuckGame() })
 Brainfuck.run = (code) => {
     if (!code) throw "No code will give no result"
-    const memory = [0]
+    const memory = new Uint8Array(100)
     const started = Date.now()
     let pointer = 0
     let output = ""
@@ -21,8 +21,8 @@ Brainfuck.run = (code) => {
         switch (char) {
             case "+": memory[pointer] = (memory[pointer] + 1) % 256; break
             case "-": memory[pointer] = memory[pointer] == 0 ? 255 : memory[pointer] - 1; break
-            case "<": pointer--; memory[pointer] = memory[pointer] ?? 0; break
-            case ">": pointer++; memory[pointer] = memory[pointer] ?? 0; break
+            case ">": pointer = (pointer + 1) % 101; break
+            case "<": pointer = pointer == 0 ? 100 : pointer - 1; break
             case "[": {
                 if (memory[pointer] != 0) break
                 i++
@@ -51,6 +51,7 @@ Brainfuck.run = (code) => {
     if (output != "") ResultEmbed.addField("Output:", "`" + output + "`")
     let memstr = "```js\n"
     for (let n in memory) {
+        if (memory[n] == 0) continue
         memstr += "[" + n + "] = " + memory[n] + "\n"
     }
     memstr += "```"
