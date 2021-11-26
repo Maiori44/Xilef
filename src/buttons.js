@@ -1,12 +1,13 @@
 const { RequiredArg, Command } = require("./commands.js")
 
 class Poll {
-    constructor(message, options, title, time) {
+    constructor(message, options, title, time, buttons) {
         this.message = message
         this.options = options
         this.users = {}
         this.title = title || "Unnamed Poll"
         this.time = time
+        this.buttons = buttons
     }
 
     update() {
@@ -28,7 +29,10 @@ class Poll {
         for (let buttonname of Object.keys(this.options)) {
             newmsg.addField(buttonname, this.options[buttonname], true)
         }
-        this.message.edit("", newmsg)
+        this.message.edit("", {
+            embeds: [newmsg],
+            components: [this.buttons]
+        })
     }
 }
 
@@ -67,7 +71,7 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
     }
     message.channel.send("Creating poll...", { components: [buttons] }).then(pollmessage => {
         const time = Math.min(parseFloat(args[1]) * 60 * 1000 || 300000, 0x7FFFFFFF)
-        Polls[message.id] = new Poll(pollmessage, options, args[0] || message.author.username + "'s poll", Time.convertTime(time))
+        Polls[message.id] = new Poll(pollmessage, options, args[0] || message.author.username + "'s poll", Time.convertTime(time), buttons)
         Polls[message.id].update()
         console.log("- " + Colors.cyan.colorize("Sucessfully created a poll:") +
             "\n\tCreator: " + message.author.username +
