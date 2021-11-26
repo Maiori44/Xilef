@@ -45,21 +45,23 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
         argnum = argnum + 1
         if (argnum < 2) continue
         options[buttonname] = 0
-        let button = new Discord.MessageButton()
-            .setStyle("blurple")
-            .setLabel(buttonname)
-            .setID("poll-" + message.id + "-" + buttonname);
-        buttons.addComponents(button)
+        buttons.addComponents(new Discord.MessageButton({
+            style: "PRIMARY",
+            label: buttonname,
+            customId: "poll-" + message.id + "-" + buttonname
+        }))
     }
     if (args.length == 0 || !args[2]) {
-        buttons.addComponents(new Discord.MessageButton()
-            .setStyle("green")
-            .setLabel("Yes")
-            .setID("poll-" + message.id + "-Yes"))
-        buttons.addComponents(new Discord.MessageButton()
-            .setStyle("red")
-            .setLabel("No")
-            .setID("poll-" + message.id + "-No"))
+        buttons.addComponents(new Discord.MessageButton({
+            style: "SUCCESS",
+            label: "Yes",
+            customId: "poll-" + message.id + "-Yes"
+        }))
+        buttons.addComponents(new Discord.MessageButton({
+            style: "FAILURE",
+            label: "No",
+            customId: "poll-" + message.id + "-No"
+        }))
         options["Yes"] = 0
         options["No"] = 0
     }
