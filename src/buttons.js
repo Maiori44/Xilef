@@ -29,7 +29,7 @@ class Poll {
         for (let buttonname of Object.keys(this.options)) {
             newmsg.addField(buttonname, toString(this.options[buttonname]), true)
         }
-        this.message.edit("", {
+        this.message.edit("** **", {
             embeds: [newmsg],
             components: [this.buttons]
         })
