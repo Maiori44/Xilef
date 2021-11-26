@@ -27,7 +27,7 @@ class Poll {
         }
         newmsg.setDescription(voters)
         for (let buttonname of Object.keys(this.options)) {
-            newmsg.addField(buttonname, this.options[buttonname], true)
+            newmsg.addField(buttonname, toString(this.options[buttonname]), true)
         }
         this.message.edit("", {
             embeds: [newmsg],
