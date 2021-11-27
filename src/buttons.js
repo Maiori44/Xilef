@@ -2,8 +2,6 @@ const { RequiredArg, Command } = require("./commands.js")
 
 class Poll {
   constructor(message, options, title, time) {
-    console.log(options)
-
     this.message = message
     this.options = options
     this.users = {}
@@ -15,19 +13,15 @@ class Poll {
       componentType: 'BUTTON',
     });
 
-    console.log(this.collector);
-
     this.collector.on('collect', (interaction) => {
       const option = interaction.component.label;
       const poll = Polls[interaction.message.id];
       const voter = poll.users[interaction.user.id];
 
       if (voter == interaction.component.label) {
-        console.log(voter, interaction.component.label)
         options[option] -= 1;
         delete poll.users[interaction.user.id];
       } else {
-        console.log(voter, options[option])
         if (voter) options[voter] -= 1;
 
         options[option] += 1;
