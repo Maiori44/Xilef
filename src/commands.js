@@ -1,7 +1,7 @@
 
 const Discord = require('discord.js')
-const fs = require('fs');
 const { inspect } = require('util');
+const evaluate = require('#evaluate');
 
 class RequiredArg {
     constructor(argnum, errormsg, name, notrequired) {
@@ -223,8 +223,6 @@ Commands.clown = new Command("Given a person or a thing, the bot will say how mu
             break
     }
 }, "Math", [new RequiredArg(0, "You're a clown at 100%, since you didn't even give me something or someone", "something")])
-
-const { evaluate } = require('./developer');
 
 Commands.eval = new Command("Evaluates the given args as JavaScript code, and returns the output", (message, args) => {
     try {

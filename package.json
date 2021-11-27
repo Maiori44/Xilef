@@ -11,5 +11,8 @@
   "dependencies": {
     "discord.js": "^13.3.0",
     "dotenv": "^10.0.0"
+  },
+  "imports": {
+    "#*": "./lib/*/index.js"
   }
 }
