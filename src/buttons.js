@@ -25,7 +25,7 @@ class Poll {
       if (voter == interaction.component.label) {
         console.log(voter, interaction.component.label)
         options[option] -= 1;
-        poll.users[interaction.user.id] = undefined;
+        delete poll.users[interaction.user.id];
       } else {
         console.log(voter, options[option])
         if (voter) options[voter] -= 1;
@@ -55,7 +55,7 @@ class Poll {
       .setTimestamp();
 
     let voters = "People who voted:\n" +
-      Object.keys(this.users).map((user) => '<@' + user.toString() + '>').join(" ") || "`none`";
+      (Object.keys(this.users).map((user) => '<@' + user.toString() + '>').join(" ") || "`none`");
 
     embed.setDescription(voters);
 
@@ -139,29 +139,3 @@ Commands.poll = new Command("Creates a poll where anyone can vote, you can have 
   new RequiredArg(5, undefined, "option 4", true),
   new RequiredArg(6, undefined, "option 5", true)
 ]);
-
-ButtonEvents = {
-    poll: async (button, id, optionname) => {
-        if (Polls[id]) {
-            let options = Polls[id].options
-            if (options[optionname] != undefined) {
-                
-            } else {
-                console.log("- " + Colors.yellow.colorize("Failed attempt at voting in a poll, the selected option doesn't exist:") +
-                    "\n\tVoter name: " + button.clicker.user.useroptionname +
-                    "\n\tVoter ID: " + button.clicker.id +
-                    "\n\tPoll ID: " + id +
-                    "\n\tPoll title: " + Polls[id].title +
-                    "\n\tRequested option name: " + optionname +
-                    "\n\tPoll options: " + JSON.stringify(Polls[id].options) +
-                    "\n\tPoll voters: " + JSON.stringify(Polls[id].users))
-                await button.reply.send("Somehow, that isn't one of the poll's option.", true)
-            }
-        } else {
-            console.log("- " + Colors.blue.colorize("Failed attempt at voting in a poll, the poll is closed/does not exist:") +
-                "\n\tRequested Poll ID: " + id +
-                "\n\tOption name: " + optionname)
-            await button.reply.send("This poll is closed.", true)
-        }
-    }
-}
