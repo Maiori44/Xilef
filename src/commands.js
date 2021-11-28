@@ -47,19 +47,22 @@ class Command {
 exports.RequiredArg = RequiredArg
 exports.Command = Command
 
-const Buttons = new Discord.MessageActionRow()
-Buttons.addComponents(new Discord.MessageButton()
-    .setStyle("LINK")
-    .setURL("https://github.com/Felix-44/Xilef")
-    .setLabel("Github page"))
-Buttons.addComponents(new Discord.MessageButton()
-    .setStyle("LINK")
-    .setURL("https://discord.gg/Qyz5HgrxWg")
-    .setLabel("Official server"))
-Buttons.addComponents(new Discord.MessageButton()
-    .setStyle("LINK")
-    .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=275415091200&scope=bot")
-    .setLabel("Invite bot"))
+const Buttons = new Discord.MessageActionRow({
+    components: [
+        new Discord.MessageButton()
+            .setStyle("LINK")
+            .setURL("https://github.com/Felix-44/Xilef")
+            .setLabel("Github page"),
+        new Discord.MessageButton()
+            .setStyle("LINK")
+            .setURL("https://discord.gg/Qyz5HgrxWg")
+            .setLabel("Official server"),
+        new Discord.MessageButton()
+            .setStyle("LINK")
+            .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=275415091200&scope=bot")
+            .setLabel("Invite bot"),
+    ]
+});
 
 Commands = {}
 
@@ -85,11 +88,16 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
         let button
         if (Commands[args[0]].link) {
             button = new Discord.MessageButton()
-                .setStyle("url")
+                .setStyle("LINK")
                 .setURL(Commands[args[0]].link)
                 .setLabel(Commands[args[0]].category == "Game" ? "How to play" : "Github page")
         }
-        message.channel.send({ embeds: [CommandInfoEmbed] }, button)
+        message.channel.send({
+            embeds: [CommandInfoEmbed],
+            components: [
+                new Discord.MessageActionRow({ components: [button] })
+            ]
+        });
         return
     }
     const CommandsEmbed = new Discord.MessageEmbed()
@@ -109,7 +117,7 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
     for (let category in Categories) {
         CommandsEmbed.addField(category + " commands", "`" + Categories[category].join("` `") + "`", true)
     }
-    message.channel.send({ embeds: [CommandsEmbed] }, Buttons)
+    message.channel.send({ embeds: [CommandsEmbed], components: [Buttons]})
 }, "Utility", [new RequiredArg(0, undefined, "command name", true)])
 
 Commands.info = new Command("Shows info about the bot and this server's prefix", (message, args) => {
