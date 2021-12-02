@@ -69,7 +69,7 @@ Brainfuck = {
     help:
         "`&brainfuck show` shows the current challenge\n" + 
         "`&brainfuck solve (code)` tries to solve the challenge with the given code\n" +
-        "`&brainfuck sandbox (code/message ID) [input]` runs any given code"
+        "`&brainfuck sandbox (code) [input]` runs any given code"
 }
 
 Commands.brainfuck = new Command("Solve challenges with this esoteric language\n\n" + Brainfuck.help, (message, args) => {
