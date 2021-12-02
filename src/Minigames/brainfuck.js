@@ -49,7 +49,7 @@ Brainfuck = {
         const ResultEmbed = new Discord.MessageEmbed()
             .setColor("#0368f8")
             .setTitle("Brainfuck code results:")
-            .setDescription("code run in " + Time.convertTime(Date.now() - started))
+            .setFooter("code ran in " + Time.convertTime(Date.now() - started))
         if (output != "") ResultEmbed.addField("Output:", "`" + output + "`")
         let memstr = "```js\n"
         for (let n in memory) {
@@ -57,7 +57,7 @@ Brainfuck = {
             memstr += "[" + n + "] = " + memory[n] + "\n"
         }
         memstr += "```"
-        ResultEmbed.addField("Memory:", memstr)
+        ResultEmbed.setDescription(`**Memory:** ${memstr}`)
         return [ResultEmbed, output == this.sentence]
     },
     sentence: Math.random().toString(36).substr(2, 5),
