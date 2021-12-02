@@ -124,7 +124,7 @@ class EconomySystem {
             return false
         }
         if (this.money >= amount) {
-            const tax = amount * (this.rank < 500 ? 0 : this.rank - 500) / 100
+            const tax = amount * Math.round((this.rank < 500 ? 0 : this.rank - 500) / 100);
 
             this.money = this.money - Math.min(this.money - (notax ? 0 : tax), this.money);
             if (message && tmsg) {

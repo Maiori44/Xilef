@@ -47,19 +47,22 @@ class Command {
 exports.RequiredArg = RequiredArg
 exports.Command = Command
 
-const Buttons = new Discord.MessageActionRow()
-Buttons.addComponents(new Discord.MessageButton()
-    .setStyle("LINK")
-    .setURL("https://github.com/Felix-44/Xilef")
-    .setLabel("Github page"))
-Buttons.addComponents(new Discord.MessageButton()
-    .setStyle("LINK")
-    .setURL("https://discord.gg/Qyz5HgrxWg")
-    .setLabel("Official server"))
-Buttons.addComponents(new Discord.MessageButton()
-    .setStyle("LINK")
-    .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=275415091200&scope=bot")
-    .setLabel("Invite bot"))
+const Buttons = new Discord.MessageActionRow({
+    components: [
+        new Discord.MessageButton()
+            .setStyle("LINK")
+            .setURL("https://github.com/Felix-44/Xilef")
+            .setLabel("Github page"),
+        new Discord.MessageButton()
+            .setStyle("LINK")
+            .setURL("https://discord.gg/Qyz5HgrxWg")
+            .setLabel("Official server"),
+        new Discord.MessageButton()
+            .setStyle("LINK")
+            .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=275415091200&scope=bot")
+            .setLabel("Invite bot"),
+    ]
+});
 
 Commands = {}
 
@@ -85,11 +88,16 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
         let button
         if (Commands[args[0]].link) {
             button = new Discord.MessageButton()
-                .setStyle("url")
+                .setStyle("LINK")
                 .setURL(Commands[args[0]].link)
                 .setLabel(Commands[args[0]].category == "Game" ? "How to play" : "Github page")
         }
-        message.channel.send({ embeds: [CommandInfoEmbed] }, button)
+        message.channel.send({
+            embeds: [CommandInfoEmbed],
+            components: [
+                new Discord.MessageActionRow({ components: [button] })
+            ]
+        });
         return
     }
     const CommandsEmbed = new Discord.MessageEmbed()
@@ -109,7 +117,7 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
     for (let category in Categories) {
         CommandsEmbed.addField(category + " commands", "`" + Categories[category].join("` `") + "`", true)
     }
-    message.channel.send({ embeds: [CommandsEmbed] }, Buttons)
+    message.channel.send({ embeds: [CommandsEmbed], components: [Buttons]})
 }, "Utility", [new RequiredArg(0, undefined, "command name", true)])
 
 Commands.info = new Command("Shows info about the bot and this server's prefix", (message, args) => {
@@ -340,31 +348,39 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
         embeds: [
             new Discord.MessageEmbed()
                 .setColor(message.member.displayHexColor)
-                .setTitle(EconomySystem.user + "'s v_s")
-                .setDescription(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
-                .setTimestamp(),
-            new Discord.MessageEmbed()
-                .setColor(message.member.displayHexColor)
                 .setTitle(EconomySystem.user + "'s statistics")
                 .setDescription("```lua\nDogeCoins: " + EconomySystem.money +
                     "\nRank: " + EconomySystem.rank +
                     "\nXilefunds: " + EconomySystem.xilefunds + "```")
                 .addFields(
                     {
-                        name: "Singleplayer stats:", value:
+                        name: "Singleplayer stats:",
+                        value:
                             "```js\nImpostors found: " + EconomySystem.impostors +
                             "\nDriller tier: " + EconomySystem.driller +
                             "\nDungeon top floor: " + EconomySystem.floor +
-                            "\nMineSweeper matches won: " + EconomySystem.msweeper + "```", inline: true
+                            "\nMineSweeper matches won: " + EconomySystem.msweeper + "```",
+                        inline: true
                     },
                     {
-                        name: "Multiplayer stats:", value:
+                        name: "Multiplayer stats:",
+                        value:
                             "```lua\nReversi matches won: " + EconomySystem.reversi +
                             "\nConnect four matches won: " + EconomySystem.connect4 +
-                            "\nRoshambo matches won: " + EconomySystem.roshambo + "```", inline: true
+                            "\nRoshambo matches won: " + EconomySystem.roshambo + "```",
+                        inline: true
                     },
-                    { name: "Achievements:", value: EconomySystem.achievments.getBinary(Achievements.binary, "❔ ???\n") }
+                    {
+                        name: "Achievements:",
+                        value: EconomySystem.achievments.getBinary(Achievements.binary, "❔ ???\n")
+                    }
                 ),
+
+            new Discord.MessageEmbed()
+                .setColor(message.member.displayHexColor)
+                .setTitle(EconomySystem.user + "'s v_s")
+                .setDescription(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
+                .setTimestamp(),
         ]
     })
 }, "Economy", [new RequiredArg(0, undefined, "@person", true)])

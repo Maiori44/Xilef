@@ -306,7 +306,7 @@ Commands.debug = new Command(description, async function (message) {
         RequiredArg, Command, Commands, aliases,         /* commands.js                      */
         Stocks,                                          /* xilefunds.js                     */
         Prefix,                                          /* prefix.js                        */
-        Polls, ButtonEvents,                             /* buttons                          */
+        Polls,                                           /* buttons                          */
 
         Amongus,                                         /* Minigames/crew.js                */
         Driller,                                         /* Minigames/driller.js             */

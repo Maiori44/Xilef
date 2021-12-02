@@ -85,13 +85,14 @@ client.on("messageCreate", (message) => {
     }
 
     const prefix = Prefix.get(message.guild.id)
+
+    if (message.content.trim() == "<@!" + client.user.id + ">" || message.content.trim() == "<@" + client.user.id + ">") {
+        Commands.info.action(message); return;
+    }
+
     if (!message.content.startsWith(prefix)) return;
 
-
     function handler(message) {
-        if (message.content.trim() == "<@!" + client.user.id + ">" || message.content.trim() == "<@" + client.user.id + ">") {
-            Commands.info.action(message); return;
-        }
         let start = Date.now()
         // create a regular expresion that matches either any string inside of doublequotes,   or any string without spaces that is outside of double quotes
         let regex = /"([^"]*?)"|[^ ]+/gm
