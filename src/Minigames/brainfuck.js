@@ -94,7 +94,7 @@ Commands.brainfuck = new Command("Solve challenges with this esoteric language\n
             break
         }
         case "sandbox": {
-            const [ResultEmbed, isCorrect] = Brainfuck.run(code)
+            const [ResultEmbed, isCorrect] = Brainfuck.run(args[1] || "")
             message.channel.send({embeds: [ResultEmbed]})
             if (isCorrect) {
                 message.channel.send("Hey! are you trying to figure out the solution to the challenge!?\njust to be sure I won't let you submit this answer for 20 minutes")
