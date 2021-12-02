@@ -82,8 +82,8 @@ Commands.brainfuck = new Command("Solve challenges with this esoteric language\n
             const time = Date.now()
             const EconomySystem = Economy.getEconomySystem(message.author)
             const diff = time - EconomySystem.bftime
-            if (diff < Time.minute * 10) {
-                message.channel.send(`You already completed a BrainFuck challenge recently...come back in ${Time.convertTime(Time.minute * 10 - diff)}`)
+            if (diff < Time.minute * 2) {
+                message.channel.send(`You already completed a BrainFuck challenge recently...come back in ${Time.convertTime(Time.minute * 2 - diff)}`)
                 break
             }
             const code = args[1] || ""
