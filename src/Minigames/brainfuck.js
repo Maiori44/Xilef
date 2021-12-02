@@ -61,7 +61,7 @@ Brainfuck = {
             if (memory[n] == 0) continue
             memstr += "[" + n + "] = " + memory[n] + "\n"
         }
-        memstr += "```"
+        memstr += memstr != "```js\n" ? "```" : "//memory is empty...\n```"
         ResultEmbed.setDescription(`**Memory:** ${memstr}`)
         return [ResultEmbed, output == this.sentence]
     },
