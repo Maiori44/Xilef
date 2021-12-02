@@ -11,8 +11,8 @@ Brainfuck = {
             if (Date.now() - started >= Time.second * 30) throw "Too much time passed..."
             const char = code[i]
             switch (char) {
-                case "+": memory[pointer] = (memory[pointer] + 1) % 256; break
-                case "-": memory[pointer] = memory[pointer] == 0 ? 255 : memory[pointer] - 1; break
+                case "+": memory[pointer] += 1; break
+                case "-": memory[pointer] -= 1; break
                 case ">": pointer = (pointer + 1) % 101; break
                 case "<": pointer = pointer == 0 ? 100 : pointer - 1; break
                 case "[": {
