@@ -1,7 +1,7 @@
 const { RequiredArg, Command } = require("./../commands.js")
 
 Brainfuck = {
-    run(code) {
+    run(code, input) {
         if (!code) throw "No code will give no result"
         const memory = new Uint8Array(100)
         const started = Date.now()
@@ -44,13 +44,18 @@ Brainfuck = {
                     break
                 }
                 case ".": output += String.fromCharCode(memory[pointer]); break
+                case ",": { 
+                    const char = input?.shift() ?? ""
+                    memory[pointer] = char.charCodeAt()
+                    break
+                }
             }
         }
         const ResultEmbed = new Discord.MessageEmbed()
             .setColor("#0368f8")
             .setTitle("Brainfuck code results:")
             .setFooter("code ran in " + Time.convertTime(Date.now() - started))
-        if (output != "") ResultEmbed.addField("Output:", "`" + output + "`")
+        if (output != "") ResultEmbed.addField("Output:", "```" + output + "```")
         let memstr = "```js\n"
         for (let n in memory) {
             if (memory[n] == 0) continue
@@ -64,7 +69,7 @@ Brainfuck = {
     help:
         "`&brainfuck show` shows the current challenge\n" + 
         "`&brainfuck solve (code)` tries to solve the challenge with the given code\n" +
-        "`&brainfuck sandbox (code)` runs any given code"
+        "`&brainfuck sandbox (code/message ID) [input]` runs any given code"
 }
 
 Commands.brainfuck = new Command("Solve challenges with this esoteric language\n\n" + Brainfuck.help, (message, args) => {
@@ -94,7 +99,7 @@ Commands.brainfuck = new Command("Solve challenges with this esoteric language\n
             break
         }
         case "sandbox": {
-            const [ResultEmbed, isCorrect] = Brainfuck.run(args[1] || "")
+            const [ResultEmbed, isCorrect] = Brainfuck.run(args[1] || "", [...args[2] ?? ""])
             message.channel.send({embeds: [ResultEmbed]})
             if (isCorrect) {
                 message.channel.send("Hey! are you trying to figure out the solution to the challenge!?\njust to be sure I won't let you submit this answer for 20 minutes")
