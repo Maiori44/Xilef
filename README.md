@@ -15,4 +15,6 @@ Official discord server join link : https://discord.gg/Qyz5HgrxWg
 - Minesweeper : The classic minesweeper game.
 - Reversi : A (slightly) rarer board game played with two people.
 - Roshambo : Simply rock paper scissors.
+- BrainFuck: Figure out this esoteric language!
+- Clash: build a small village and fight other's! (COMING SOON)
 - More coming soon.
