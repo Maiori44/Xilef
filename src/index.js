@@ -59,44 +59,6 @@ GetPercentual = () => {
     return Math.floor(Math.random() * 101)
 }
 
-class Matrix {
-    #matrix = []
-
-    constructor(x, y, start) {
-        this.width = x
-        this.height = y
-        for (let cy = 0; cy < y; cy++) {
-            this.#matrix[cy] = []
-            for (let cx = 0; cx < x; cx++) {
-                this.#matrix[cy][cx] = start
-            }
-        }
-    }
-
-    *[Symbol.iterator]() {
-        for (let y of this.#matrix) {
-            for (let x of y) {
-                yield x
-            }
-        }
-    }
-
-    #checkBounds(x, y) {
-        if (x < 0 || x >= this.width) throw new Error(`tried to access out of bounds location (${x}), matrix width is ${this.width}`)
-        if (y < 0 || y >= this.height) throw new Error(`tried to access out of bounds location (${y}), matrix height is ${this.height}`)
-    }
-
-    set(x, y, value) {
-        this.#checkBounds(x, y)
-        this.#matrix[y][x] = value
-    }
-
-    at(x, y) {
-        this.#checkBounds(x, y)
-        return this.#matrix[y][x]
-    }
-}
-
 warning = debugmode ? "This bot is running in debug mode, no changes will be saved" : undefined
 
 require("./economy.js")
