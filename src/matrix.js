@@ -93,6 +93,17 @@ class Matrix {
         this.#checkBounds(x, y)
         return this.#matrix[y][x]
     }
+
+    getCell(x, y) {
+        this.#checkBounds(x, y)
+        return new MatrixCell(this.#matrix, x, y)
+    }
+
+    addRow(start) {
+        this.height += 1
+        const newRow = new Array(this.width).fill(start)
+        this.#matrix.push(newRow)
+    }
 }
 
 exports.Matrix = Matrix
