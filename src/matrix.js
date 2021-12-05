@@ -1,4 +1,4 @@
-class MatrixSetter {
+class MatrixCell {
     #matrix
 
     constructor(matrix, x, y) {
@@ -7,8 +7,12 @@ class MatrixSetter {
         this.y = y
     }
 
-    set set(value) {
-        this.#matrix.set(x, y, value)
+    get value() {
+        return this.#matrix[this.y][this.x]
+    }
+
+    set value(value) {
+        this.#matrix[this.y][this.x] = value
     }
 }
 
@@ -31,17 +35,17 @@ class Matrix {
     }
 
     *[Symbol.iterator]() {
-        for (let y of this.#matrix) {
-            for (let x of y) {
-                yield [x, new MatrixSetter(this.#matrix, x, y)]
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                yield new MatrixCell(this.#matrix, x, y)
             }
         }
     }
     
     *lines() {
-        for (let y of this.#matrix) {
-            for (let x of y) {
-                yield [x, new MatrixSetter(this.#matrix, x, y)]
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                yield [new MatrixCell(this.#matrix, x, y), null]
             }
             yield ["\n", y]
         }
@@ -63,17 +67,17 @@ class Matrix {
 
     set(x, y, value) {
         this.#checkBounds(x, y)
-        if (value) {this.#matrix[y][x] = value; return this}
-        return new MatrixSetter(this.#matrix, x, y)
+        this.#matrix[y][x] = value
+        return this
     }
 
     map(func) {
         const NewMatrix = new Matrix(this.width, this.height)
-        for (const [i, setter] of this) {
-            NewMatrix.set(setter.x, setter.y, i)
+        for (const cell of this) {
+            NewMatrix.set(cell.x, cell.y, cell.value)
         }
-        for (const [i, setter] of NewMatrix) {
-            setter.set = func(i)
+        for (const cell of NewMatrix) {
+            cell.value = func(cell)
         }
         return NewMatrix
     }
