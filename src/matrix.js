@@ -37,6 +37,16 @@ class Matrix {
         }
     }
 
+    #checkSingleBounds(n, name, length, lname) {
+        if (typeof n != "number") throw new Error(`tried to access invalid ${name} location (${n})`)
+        if (n < 0 || n >= length) throw new Error(`tried to access out of bounds location (${n}), matrix ${lname} is ${length}`)
+    }
+
+    #checkBounds(x, y) {
+        this.#checkSingleBounds(x, "X", this.width, "width")
+        this.#checkSingleBounds(y, "Y", this.height, "height")
+    }
+
     get matrix() {
         return Object.freeze([...this.#matrix].map((row) => Object.freeze([...row])))
     }
@@ -58,9 +68,18 @@ class Matrix {
         }
     }
 
-    #checkBounds(x, y) {
-        if (x < 0 || x >= this.width) throw new Error(`tried to access out of bounds location (${x}), matrix width is ${this.width}`)
-        if (y < 0 || y >= this.height) throw new Error(`tried to access out of bounds location (${y}), matrix height is ${this.height}`)
+    *column(x) {
+        this.#checkSingleBounds(x, "X", this.length, "length")
+        for (let y = 0; y < this.height; y++) {
+            yield new MatrixCell(this.#matrix, x, y)
+        }
+    }
+
+    *row(y) {
+        this.#checkSingleBounds(y, "Y", this.height, "height")
+        for (let y = 0; y < this.height; y++) {
+            yield new MatrixCell(this.#matrix, x, y)
+        }
     }
 
     checkBounds(x, y) {
@@ -99,10 +118,29 @@ class Matrix {
         return new MatrixCell(this.#matrix, x, y)
     }
 
+    addColumn(start) {
+        this.width += 1
+        for (let y = 0; y < this.height; y++) {
+            this.#matrix[y].push(start)
+        }
+    }
+
+    removeColumn() {
+        this.width -= 1
+        for (let y = 0; y < this.height; y++) {
+            this.#matrix[y].pop()
+        }
+    }
+
     addRow(start) {
         this.height += 1
         const newRow = new Array(this.width).fill(start)
         this.#matrix.push(newRow)
+    }
+
+    removeRow() {
+        this.height -= 1
+        this.#matrix.pop()
     }
 }
 
