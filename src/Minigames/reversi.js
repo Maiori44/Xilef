@@ -1,28 +1,24 @@
 const { RequiredArg, Command } = require("./../commands.js")
-const { Game, MPGame } = require("./../minigames.js")
+const { MPGame } = require("./../minigames.js")
+const { Matrix } = require("./../matrix.js")
 
 class ReversiGame {
     constructor() {
-        this.board = []
-        for (var y = 0; y < 8; y++) {
-            this.board[y] = []
-            for (var x = 0; x < 8; x++) {
-                this.board[y][x] = Reversi.emptyTile
-            }
-        }
-        this.board[3][3] = Reversi.lightTile
-        this.board[3][4] = Reversi.darkTile
-        this.board[4][3] = Reversi.darkTile
-        this.board[4][4] = Reversi.lightTile
+        this.board = new Matrix(8, 8, Reversi.emptyTile)
+            .set(3, 3, Reversi.lightTile)
+            .set(3, 4, Reversi.darkTile)
+            .set(4, 3, Reversi.darkTile)
+            .set(4, 4, Reversi.lightTile)
     }
 
     getMatchInfo() {
         let board = ""
-        for (var y = 0; y < 8; y++) {
-            for (var x = 0; x < 8; x++) {
-                board = board + this.board[y][x]
+        for (const [Cell, y] of this.board.lines()) {
+            if (y === null) {
+                board += Cell.value
+                continue
             }
-            board = board + y + "\n"
+            board += y + "\n"
         }
         board = board + ":zero::one::two::three::four::five::six::seven:\n"
         board = board.replace("0\n", ":zero:\n")
@@ -51,13 +47,13 @@ class ReversiGame {
         let cx = startx + dirx
         let cy = starty + diry
         let tilestochange = []
-        while (this.board[cy] && this.board[cy][cx]) {
-            if (this.board[cy][cx] == checktile) {
+        while (this.board.checkBounds(cx, cy)) {
+            if (this.board.compare(cx, cy, checktile)) {
                 tilestochange.push([cy, cx])
-            } else if (tilestochange.length > 0 && this.board[cy][cx] == tile) {
+            } else if (tilestochange.length > 0 && this.board.compare(cx, cy, tile)) {
                 if (!dontfill) {
                     for (let tileinfo of tilestochange) {
-                        this.board[tileinfo[0]][tileinfo[1]] = tile
+                        this.board.set(tileinfo[1], tileinfo[0], tile)
                     }
                 }
                 return true
@@ -72,14 +68,15 @@ class ReversiGame {
 
     findValidPositions(tile) {
         let valids = 0
-        for (var y = 0; y < 8; y++) {
-            for (var x = 0; x < 8; x++) {
-                if ((this.board[y][x] == Reversi.emptyTile || this.board[y][x] == Reversi.validTile) && (this.checkLine(tile, x, y, 1, 0, true) || this.checkLine(tile, x, y, 1, 1, true) || this.checkLine(tile, x, y, 0, 1, true) || this.checkLine(tile, x, y, -1, 1, true) || this.checkLine(tile, x, y, -1, 0, true) || this.checkLine(tile, x, y, -1, -1, true) || this.checkLine(tile, x, y, 0, -1, true) || this.checkLine(tile, x, y, 1, -1, true))) {
-                    valids = valids + 1
-                    this.board[y][x] = Reversi.validTile
-                } else if (this.board[y][x] == Reversi.validTile) {
-                    this.board[y][x] = Reversi.emptyTile
-                }
+        for (const Cell of this.board) {
+            const checktile = Cell.value
+            const x = Cell.x
+            const y = Cell.y
+            if ((checktile == Reversi.emptyTile || checktile == Reversi.validTile) && (this.checkLine(tile, x, y, 1, 0, true) || this.checkLine(tile, x, y, 1, 1, true) || this.checkLine(tile, x, y, 0, 1, true) || this.checkLine(tile, x, y, -1, 1, true) || this.checkLine(tile, x, y, -1, 0, true) || this.checkLine(tile, x, y, -1, -1, true) || this.checkLine(tile, x, y, 0, -1, true) || this.checkLine(tile, x, y, 1, -1, true))) {
+                valids = valids + 1
+                Cell.value = Reversi.validTile
+            } else if (checktile == Reversi.validTile) {
+                Cell.value = Reversi.emptyTile
             }
         }
         return valids
@@ -88,13 +85,12 @@ class ReversiGame {
     getTotalDiscs() {
         let blackdiscs = 0
         let whitediscs = 0
-        for (var y = 0; y < 8; y++) {
-            for (var x = 0; x < 8; x++) {
-                if (this.board[y][x] == Reversi.darkTile) {
-                    blackdiscs = blackdiscs + 1
-                } else if (this.board[y][x] == Reversi.lightTile) {
-                    whitediscs = whitediscs + 1
-                }
+        for (const Cell of this.board) {
+            const tile = Cell.value
+            if (tile == Reversi.darkTile) {
+                blackdiscs += 1
+            } else if (tile == Reversi.lightTile) {
+                whitediscs += 1
             }
         }
         return [blackdiscs, whitediscs]
@@ -142,10 +138,10 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
             if (isNaN(x) || isNaN(y)) {
                 throw (`You need to give valid coordinates for where to place your disk\nExample: \`${Prefix.get(message.guild.id)}reversi place 0 0\` will place your disk in the top left corner`)
             }
-            if (ReversiGame.board[y] && ReversiGame.board[y][x]) {
+            if (ReversiGame.board.checkBounds(x, y)) {
                 let tile = ReversiGame.turn == 1 ? Reversi.darkTile : Reversi.lightTile
-                if (ReversiGame.board[y][x] == Reversi.validTile) {
-                    ReversiGame.board[y][x] = tile
+                if (ReversiGame.board.compare(x, y, Reversi.validTile)) {
+                    ReversiGame.board.set(x, y, tile)
                     ReversiGame.checkLine(tile, x, y, 1, 0)
                     ReversiGame.checkLine(tile, x, y, 1, 1)
                     ReversiGame.checkLine(tile, x, y, 0, 1)
@@ -198,7 +194,7 @@ Commands.reversi = new Command("Capture as most disks as possible to win the mat
             }
         }
         case "board": {
-            let [ReversiGame, playernum] = Reversi.getGame(message.author.id)
+            let [ReversiGame] = Reversi.getGame(message.author.id)
             message.channel.send({ embeds: [ReversiGame.getMatchInfo()] })
             break
         }

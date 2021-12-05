@@ -1,5 +1,6 @@
 const { RequiredArg, Command } = require("./../commands.js")
-const { Game, MPGame } = require("./../minigames.js")
+const { Game } = require("./../minigames.js")
+const { Matrix } = require("./../matrix.js")
 
 class MineSweeperCell {
     constructor() {
@@ -34,37 +35,27 @@ class MineSweeperGame {
             [Math.floor(Math.random() * 9), Math.floor(Math.random() * 9)],
             [Math.floor(Math.random() * 9), Math.floor(Math.random() * 9)],
         ]
-        this.board = []
-        for (let y = 0; y < 9; y++) {
-            this.board[y] = []
-            for (let x = 0; x < 9; x++) {
-                this.board[y][x] = new MineSweeperCell()
-            }
-        }
+        this.board = new Matrix(9, 9).map(() => {return new MineSweeperCell()})
         for (let i = 0; i <= 9; i++) {
             while (true) {
-                if (!this.board[bomblocations[i][0]][bomblocations[i][1]].isbomb) {
-                    this.board[bomblocations[i][0]][bomblocations[i][1]].isbomb = true
+                if (!this.board.at(bomblocations[i][0], bomblocations[i][1]).isbomb) {
+                    this.board.at(bomblocations[i][0], bomblocations[i][1]).isbomb = true
                     break
                 }
                 bomblocations[i][0] = Math.floor(Math.random() * 9)
                 bomblocations[i][1] = Math.floor(Math.random() * 9)
             }
         }
-        for (let y = 0; y < 9; y++) {
-            for (let x = 0; x < 9; x++) {
-                this.board[y][x].setNearbyCells(this.board, x, y)
-            }
+        for (const Cell of this.board) {
+            Cell.value.setNearbyCells(this.board.matrix, Cell.x, Cell.y)
         }
     }
 
     get tilesleft() {
         let tiles = -10
-        for (let y = 0; y < 9; y++) {
-            for (let x = 0; x < 9; x++) {
-                if (!this.board[y][x].isrevealed) {
-                    tiles = tiles + 1
-                }
+        for (const Cell of this.board) {
+            if (!Cell.value.isrevealed) {
+                tiles = tiles + 1
             }
         }
         return tiles
@@ -72,17 +63,18 @@ class MineSweeperGame {
 
     getBoardInfo(EconomySystem, gameover) {
         let board = ""
-        for (let y = 0; y < 9; y++) {
-            for (let x = 0; x < 9; x++) {
-                board = board + (gameover && this.board[y][x].isbomb ?
+        for (const [Cell, y] of this.board.lines()) {
+            if (y === null) {
+                board += (gameover && Cell.value.isbomb ?
                     "💥" :
-                    this.board[y][x].isrevealed ?
-                        MineSweeper.numToTile[this.board[y][x].nearbybombs] :
-                        (this.board[y][x].isflagged ? "<:flag:877088652600172544>" : "<:ms:876134777701412904>"))
+                    Cell.value.isrevealed ?
+                        MineSweeper.numToTile[Cell.value.nearbybombs] :
+                        (Cell.value.isflagged ? "<:flag:877088652600172544>" : "<:ms:876134777701412904>"))
+                continue
             }
-            board = board + y + "\n"
+            board += y + "\n"
         }
-        board = board + ":zero::one::two::three::four::five::six::seven::eight:\n"
+        board += ":zero::one::two::three::four::five::six::seven::eight:\n"
         board = board.replace("0\n", ":zero:\n")
         board = board.replace("1\n", ":one:\n")
         board = board.replace("2\n", ":two:\n")
@@ -141,8 +133,6 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             const x = parsePosition(args[1])
             const y = parsePosition(args[2])
 
-            console.log(x,y);
-
             if ([...x,...y].some(isNaN)) {
                 message.channel.send(`You need to give valid coordinates for where to dig\nExample: \`${Prefix.get(message.guild.id)}msweeper dig 0 0\` will dig the tile in the top left corner\n\nYou could also put a range (N-N) or a comma seperated list of positions (N,N,...)\nExample: \`${Prefix.get(message.guild.id)}msweeper dig 0-8 0,2,4,6,8\``)
                 return
@@ -161,17 +151,19 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
                         CheckNeighbors.push(Queue.pop())
                     }
                     for (const Tileinfo of CheckNeighbors) {
-                        if (!MineSweeperGame.board[Tileinfo.y] && !MineSweeperGame.board[Tileinfo.y][Tileinfo.x])
+                        if (!MineSweeperGame.board.checkBounds(Tileinfo.x, Tileinfo.y))
                             message.channel.send("That location is out of bounds.")
-                        if (MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isbomb) {
+
+                        const Cell = MineSweeperGame.board.at(Tileinfo.x, Tileinfo.y)
+                        if (Cell.isbomb) {
                             message.channel.send({ embeds: [MineSweeperGame.getBoardInfo(EconomySystem, true)] })
                             MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
                             return 1
                         }
 
-                        if (!MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isbomb &&    !MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isrevealed) {
-                            MineSweeperGame.board[Tileinfo.y][Tileinfo.x].isrevealed = true
-                            if (!MineSweeperGame.board[Tileinfo.y][Tileinfo.x].nearbybombs)     {
+                        if (!Cell.isbomb && !Cell.isrevealed) {
+                            Cell.isrevealed = true
+                            if (!Cell.nearbybombs) {
                                 const px = Math.min(Tileinfo.x + 1, 8)
                                 const mx = Math.max(Tileinfo.x - 1, 0)
                                 const py = Math.min(Tileinfo.y + 1, 8)
@@ -225,8 +217,6 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             const x = parsePosition(args[1])
             const y = parsePosition(args[2])
 
-            console.log(args[1],args[2], {x,y});
-
             if ([...x,...y].some(isNaN)) {
                 message.channel.send(`You need to give valid coordinates for where to place the flag\nExample: \`${Prefix.get(message.guild.id)}msweeper flag 0 0\` will place the flag in the top left corner of the board\n\nYou could also put a range (N-N) or a comma seperated list of positions (N,N,...)\nExample: \`${Prefix.get(message.guild.id)}msweeper flag 0-8 0,2,4,6,8\``)
                 return
@@ -236,10 +226,9 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
 
             for (const xs of x)
                 for (const ys of y)
-                    if (MineSweeperGame.board[ys] && MineSweeperGame.board[ys][xs]) {
-                        MineSweeperGame.board[ys][xs].isflagged =
-                            !MineSweeperGame.board[ys][xs].isflagged
-
+                    if (MineSweeperGame.board.checkBounds(xs, ys)) {
+                        const Cell = MineSweeperGame.board.at(xs, ys)
+                        Cell.isflagged = !Cell.isflagged
                     } else {
                         message.channel.send("That location is out of bounds.")
                     }

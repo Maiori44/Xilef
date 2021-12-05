@@ -1,25 +1,17 @@
 const { RequiredArg, Command } = require("./../commands.js")
-const { Game, MPGame } = require("./../minigames.js")
+const { MPGame } = require("./../minigames.js")
+const { Matrix } = require("./../matrix.js")
 
 class Connect4Game {
     constructor() {
-        this.board = []
-        for (var y = 0; y < 6; y++) {
-            this.board[y] = []
-            for (var x = 0; x < 7; x++) {
-                this.board[y][x] = Connect4.emptyTile
-            }
-        }
+        this.board = new Matrix(7, 6, Connect4.emptyTile)
         this.finished = false
     }
 
     getMatchInfo() {
         let board = ":zero::one::two::three::four::five::six:\n"
-        for (var y = 0; y < 6; y++) {
-            for (var x = 0; x < 7; x++) {
-                board = board + this.board[y][x]
-            }
-            board = board + "\n"
+        for (const [Cell, y] of this.board.lines()) {
+            board += y ? "\n" : Cell.value
         }
         return new Discord.MessageEmbed()
             .setColor("#0078d7")
@@ -37,12 +29,10 @@ class Connect4Game {
         let cx = startx + dirx
         let cy = starty + diry
         let tilesfound = 0
-        while (this.board[cy] && this.board[cy][cx]) {
-            if (this.board[cy][cx] == checktile) {
-                tilesfound = tilesfound + 1
-            } else {
-                break
-            }
+        while (this.board.checkBounds(cx, cy)) {
+            if (this.board.compare(cx, cy, checktile)) {
+                tilesfound += 1
+            } else break
             cx = cx + dirx
             cy = cy + diry
         }
@@ -94,8 +84,8 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
             if (x >= 0 && x <= 6) {
                 let tile = Connect4Game.turn == 1 ? Connect4.yellowTile : Connect4.redTile
                 for (var y = 5; y > -1; y--) {
-                    if (Connect4Game.board[y][x] == Connect4.emptyTile) {
-                        Connect4Game.board[y][x] = tile
+                    if (Connect4Game.board.compare(x, y, Connect4.emptyTile)) {
+                        Connect4Game.board.set(x, y, tile)
                         Connect4Game.turn = (Connect4Game.turn % 2) + 1
                         message.channel.send({ embeds: [Connect4Game.getMatchInfo()] })
                         if ((Connect4Game.getDiscs(tile, x, y, 0, 1) + Connect4Game.getDiscs(tile, x, y, 0, -1)) >= 3 ||
