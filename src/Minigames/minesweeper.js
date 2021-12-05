@@ -46,15 +46,15 @@ class MineSweeperGame {
                 bomblocations[i][1] = Math.floor(Math.random() * 9)
             }
         }
-        for (const cell of this.board) {
-            cell.value.setNearbyCells(this.board.matrix, cell.x, cell.y)
+        for (const Cell of this.board) {
+            Cell.value.setNearbyCells(this.board.matrix, Cell.x, Cell.y)
         }
     }
 
     get tilesleft() {
         let tiles = -10
-        for (const cell of this.board) {
-            if (cell.value.isrevealed) {
+        for (const Cell of this.board) {
+            if (!Cell.value.isrevealed) {
                 tiles = tiles + 1
             }
         }
@@ -63,13 +63,13 @@ class MineSweeperGame {
 
     getBoardInfo(EconomySystem, gameover) {
         let board = ""
-        for (const [cell, y] of this.board.lines()) {
+        for (const [Cell, y] of this.board.lines()) {
             if (y === null) {
-                board += (gameover && cell.value.isbomb ?
+                board += (gameover && Cell.value.isbomb ?
                     "💥" :
-                    cell.value.isrevealed ?
-                        MineSweeper.numToTile[cell.value.nearbybombs] :
-                        (cell.value.isflagged ? "<:flag:877088652600172544>" : "<:ms:876134777701412904>"))
+                    Cell.value.isrevealed ?
+                        MineSweeper.numToTile[Cell.value.nearbybombs] :
+                        (Cell.value.isflagged ? "<:flag:877088652600172544>" : "<:ms:876134777701412904>"))
                 continue
             }
             board += y + "\n"
@@ -154,16 +154,16 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
                         if (!MineSweeperGame.board.checkBounds(Tileinfo.x, Tileinfo.y))
                             message.channel.send("That location is out of bounds.")
 
-                        const cell = MineSweeperGame.board.at(Tileinfo.x, Tileinfo.y)
-                        if (cell.isbomb) {
+                        const Cell = MineSweeperGame.board.at(Tileinfo.x, Tileinfo.y)
+                        if (Cell.isbomb) {
                             message.channel.send({ embeds: [MineSweeperGame.getBoardInfo(EconomySystem, true)] })
                             MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
                             return 1
                         }
 
-                        if (!cell.isbomb && !cell.isrevealed) {
-                            cell.isrevealed = true
-                            if (!cell.nearbybombs) {
+                        if (!Cell.isbomb && !Cell.isrevealed) {
+                            Cell.isrevealed = true
+                            if (!Cell.nearbybombs) {
                                 const px = Math.min(Tileinfo.x + 1, 8)
                                 const mx = Math.max(Tileinfo.x - 1, 0)
                                 const py = Math.min(Tileinfo.y + 1, 8)
@@ -227,8 +227,8 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             for (const xs of x)
                 for (const ys of y)
                     if (MineSweeperGame.board.checkBounds(xs, ys)) {
-                        const cell = MineSweeperGame.board.at(xs, ys)
-                        cell.isflagged = !cell.isflagged
+                        const Cell = MineSweeperGame.board.at(xs, ys)
+                        Cell.isflagged = !Cell.isflagged
                     } else {
                         message.channel.send("That location is out of bounds.")
                     }

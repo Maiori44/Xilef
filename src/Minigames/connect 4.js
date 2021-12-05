@@ -10,8 +10,8 @@ class Connect4Game {
 
     getMatchInfo() {
         let board = ":zero::one::two::three::four::five::six:\n"
-        for (const [cell, y] of this.board.lines()) {
-            board += y ? "\n" : cell.value
+        for (const [Cell, y] of this.board.lines()) {
+            board += y ? "\n" : Cell.value
         }
         return new Discord.MessageEmbed()
             .setColor("#0078d7")
