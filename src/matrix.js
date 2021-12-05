@@ -19,6 +19,13 @@ class MatrixCell {
 class Matrix {
     #matrix = []
 
+    /**
+    * creates a new Matrix
+    * @class
+    * @param {number} x - the width of the Matrix
+    * @param {number} y - the height of the Matrix
+    * @param {any} start - default value given to every cell in the Matrix
+    */
     constructor(x, y, start) {
         this.width = x
         this.height = y
