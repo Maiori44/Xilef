@@ -10,7 +10,7 @@ class Connect4Game {
 
     getMatchInfo() {
         let board = ":zero::one::two::three::four::five::six:\n"
-        for (let i of this.board) {
+        for (const [i] of this.board.lines()) {
             board += i
         }
         return new Discord.MessageEmbed()
