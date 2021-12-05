@@ -26,15 +26,27 @@ class Matrix {
         }
     }
 
+    get matrix() {
+        return Object.freeze([...this.#matrix].map((row) => Object.freeze([...row])))
+    }
+
     *[Symbol.iterator]() {
         for (let y of this.#matrix) {
             for (let x of y) {
-                yield x
+                yield [x, new MatrixSetter(this.#matrix, x, y)]
             }
-            yield "\n"
         }
     }
     
+    *lines() {
+        for (let y of this.#matrix) {
+            for (let x of y) {
+                yield [x, new MatrixSetter(this.#matrix, x, y)]
+            }
+            yield ["\n", y]
+        }
+    }
+
     #checkBounds(x, y) {
         if (x < 0 || x >= this.width) throw new Error(`tried to access out of bounds location (${x}), matrix width is ${this.width}`)
         if (y < 0 || y >= this.height) throw new Error(`tried to access out of bounds location (${y}), matrix height is ${this.height}`)
@@ -51,8 +63,19 @@ class Matrix {
 
     set(x, y, value) {
         this.#checkBounds(x, y)
-        if (value) {this.#matrix[y][x] = value; return}
+        if (value) {this.#matrix[y][x] = value; return this}
         return new MatrixSetter(this.#matrix, x, y)
+    }
+
+    map(func) {
+        const NewMatrix = new Matrix(this.width, this.height)
+        for (const [i, setter] of this) {
+            NewMatrix.set(setter.x, setter.y, i)
+        }
+        for (const [i, setter] of NewMatrix) {
+            setter.set = func(i)
+        }
+        return NewMatrix
     }
 
     at(x, y) {
