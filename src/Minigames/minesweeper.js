@@ -62,32 +62,16 @@ class MineSweeperGame {
     }
 
     getBoardInfo(EconomySystem, gameover) {
-        let board = ""
-        for (const [Cell, y] of this.board.lines()) {
-            if (y === null) {
-                board += (gameover && Cell.value.isbomb ?
+        return new Discord.MessageEmbed()
+            .setColor("#d3d3d3")
+            .setTitle(EconomySystem.user + "'s MineSweeper board")
+            .setDescription(this.board.toString((Cell) => {
+                return (gameover && Cell.value.isbomb ?
                     "💥" :
                     Cell.value.isrevealed ?
                         MineSweeper.numToTile[Cell.value.nearbybombs] :
                         (Cell.value.isflagged ? "<:flag:877088652600172544>" : "<:ms:876134777701412904>"))
-                continue
-            }
-            board += y + "\n"
-        }
-        board += ":zero::one::two::three::four::five::six::seven::eight:\n"
-        board = board.replace("0\n", ":zero:\n")
-        board = board.replace("1\n", ":one:\n")
-        board = board.replace("2\n", ":two:\n")
-        board = board.replace("3\n", ":three:\n")
-        board = board.replace("4\n", ":four:\n")
-        board = board.replace("5\n", ":five:\n")
-        board = board.replace("6\n", ":six:\n")
-        board = board.replace("7\n", ":seven:\n")
-        board = board.replace("8\n", ":eight:\n")
-        return new Discord.MessageEmbed()
-            .setColor("#d3d3d3")
-            .setTitle(EconomySystem.user + "'s MineSweeper board")
-            .setDescription(board)
+            }))
             .setFooter(gameover ? "Game Over" : this.tilesleft + " tiles left")
             .setTimestamp()
     }

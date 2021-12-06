@@ -9,14 +9,10 @@ class Connect4Game {
     }
 
     getMatchInfo() {
-        let board = ":zero::one::two::three::four::five::six:\n"
-        for (const [Cell, y] of this.board.lines()) {
-            board += y ? "\n" : Cell.value
-        }
         return new Discord.MessageEmbed()
             .setColor("#0078d7")
             .setTitle("Connect4 match")
-            .setDescription(board)
+            .setDescription(":zero::one::two::three::four::five::six:\n" + this.board.toString(undefined, true))
             .addFields(
                 { name: "Host (yellow)", value: this.hostname, inline: true },
                 { name: "Joiner (red)", value: this.joinername, inline: true },

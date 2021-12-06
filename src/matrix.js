@@ -16,6 +16,8 @@ class MatrixCell {
     }
 }
 
+const numToCell = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"]
+
 class Matrix {
     #matrix = []
 
@@ -80,6 +82,28 @@ class Matrix {
         for (let x = 0; x < this.width; x++) {
             yield new MatrixCell(this.#matrix, x, y)
         }
+    }
+
+    toString(func = (Cell) => {return Cell.value}, nopos = false) {
+        if (!nopos && (this.width > 10 || this.height > 10)) throw new Error("Matrix coordinates can only be converted for matrixes 10x10 or smaller, set nopos to true")
+        let result = ""
+        for (const [Cell, y] of this.lines()) {
+            if (y === null) {
+                result += func(Cell)
+                continue
+            }
+            if (!nopos) result += y
+            result += "\n"
+        }
+        if (!nopos) {
+            for (let x = 0; x < this.width; x++) {
+                result += numToCell[x]
+            }
+            for (let y = 0; y < this.height; y++) {
+                result = result.replace(y + "\n", numToCell[y] + "\n")
+            }
+        }
+        return result
     }
 
     checkBounds(x, y) {

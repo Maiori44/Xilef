@@ -12,28 +12,11 @@ class ReversiGame {
     }
 
     getMatchInfo() {
-        let board = ""
-        for (const [Cell, y] of this.board.lines()) {
-            if (y === null) {
-                board += Cell.value
-                continue
-            }
-            board += y + "\n"
-        }
-        board = board + ":zero::one::two::three::four::five::six::seven:\n"
-        board = board.replace("0\n", ":zero:\n")
-        board = board.replace("1\n", ":one:\n")
-        board = board.replace("2\n", ":two:\n")
-        board = board.replace("3\n", ":three:\n")
-        board = board.replace("4\n", ":four:\n")
-        board = board.replace("5\n", ":five:\n")
-        board = board.replace("6\n", ":six:\n")
-        board = board.replace("7\n", ":seven:\n")
         let [blackdiscs, whitediscs] = this.getTotalDiscs()
         return new Discord.MessageEmbed()
             .setColor("#009900")
             .setTitle("Reversi match")
-            .setDescription(board)
+            .setDescription(this.board.toString())
             .addFields(
                 { name: "Host (dark)", value: this.hostname + "\n" + blackdiscs + " disks", inline: true },
                 { name: "Joiner (light)", value: this.joinername + "\n" + whitediscs + " disks", inline: true },
