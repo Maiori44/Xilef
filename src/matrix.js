@@ -147,6 +147,7 @@ class Matrix {
         for (let y = 0; y < this.height; y++) {
             this.#matrix[y].push(start)
         }
+        return this
     }
 
     removeColumn() {
@@ -154,17 +155,20 @@ class Matrix {
         for (let y = 0; y < this.height; y++) {
             this.#matrix[y].pop()
         }
+        return this
     }
 
     addRow(start) {
         this.height += 1
         const newRow = new Array(this.width).fill(start)
         this.#matrix.push(newRow)
+        return this
     }
 
     removeRow() {
         this.height -= 1
         this.#matrix.pop()
+        return this
     }
 }
 
