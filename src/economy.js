@@ -37,6 +37,8 @@ class FlagSystem {
     }
 }
 
+const { ClashMatrix } = require("./Minigames/clash.js")
+
 class EconomySystem {
     constructor(username, backup) {
         backup = backup || {}
