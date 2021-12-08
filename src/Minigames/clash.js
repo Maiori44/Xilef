@@ -6,7 +6,7 @@ class ClashMatrix extends Matrix {
         super(10, 10, ":black_large_square:")
         let udata = ""
         for (let i = 0; i < data.length; i++) {
-            const amount = parseInt(data[i++])
+            const amount = data[i++].charCodeAt()
             const char = data[i]
             udata += char.repeat(amount)
         }
@@ -25,23 +25,44 @@ class ClashMatrix extends Matrix {
             const building = Cell.value
             if (building == currentBuilding) amount++
             else {
-                data += amount + building
+                data += String.fromCharCode(amount) + currentBuilding
                 currentBuilding = building
                 amount = 1
             }
         }
+        data += String.fromCharCode(amount) + currentBuilding
+        return data
+    }
+
+    getTotal(building) {
+        let amount = 0
+        for (const Cell of this) {
+            if (Cell.value == building) amount++
+        }
+        if (amount > 30) throw "Something seems to be either broken or corrupted, please contact my creator (**Felix44#0073**)"
+        return amount
     }
 }
 
 exports.ClashMatrix = ClashMatrix
 
 Clash = {
-    buildings: {
+    emojis: {
+        N: ":black_large_square:",
         T: "these texts",
         M: "are placeholders",
         C: "for when",
         X: "the emojies",
         B: "will be read"
+    },
+    buildings: {
+        //"town hall": "T",
+        "mine": "M",
+        "dogecoin mine": "M",
+        "cannon": "C",
+        "x-bow": "X",
+        "x bow": "X",
+        "barracks": "B"
     },
     help:
         "`&clash show [@user]` shows your/the pinged user's village\n" +
@@ -55,16 +76,39 @@ Clash = {
 }
 
 Commands.clash = new Command("Build your village and attack other's!\n\n" + Clash.help, (message, args) => {
+    const EconomySystem = Economy.getEconomySystem(message.author)
+    const ClashMatrix = EconomySystem.clash
     const command = args[0].toLowerCase()
     switch (command) {
-        /*"**Town Hall:**\n\tevery village has only one, an attacker will steal all your collected DogeCoins if you don't protect it!\n\n" +
-                "**DogeCoin Mine:**\n\tsomehow extracts DogeCoins from underground, protect it from attackers!\n\n" +
-                "**Cannon:** "*/
+        case "show": {
+            message.channel.send(ClashMatrix.toString())
+            break
+        }
+        case "build": {
+            const building = Clash.buildings[args[1].toLowerCase()]
+            const total = ClashMatrix.getTotal(building)
+            if (total == 30) {message.channel.send("You already build 30 of these, you can't build more"); return}
+            const x = parseInt(args[2])
+            const y = parseInt(args[3])
+            if (isNaN(x) || isNaN(y)) {
+                message.channe.send("Now that position you just gave me...it doesn't make sense")
+                return
+            }
+            if (!ClashMatrix.checkBounds(x, y)) {
+                message.channel.send("Now that position you just old me...it's out of bounds")
+                return
+            }
+            const price = 500 * EconomySystem.rank
+            if (EconomySystem.buy(price, message, "Sucessfully built your " + args[1], "You lack money for this building, you need " + price)) {
+                ClashMatrix.set(x, y, building)
+            }
+            break
+        }
         case "buildings": {
             const InfoEmbed = new Discord.MessageEmbed()
                 .setColor("#FFA500")
                 .setTitle("Buildings")
-                .setDescription(`Every building costs ${500 * Economy.getEconomySystem(message.user).rank} to build and you can only have 30 of every building\nexcept the town hall, there is and must always be one for every village`)
+                .setDescription(`Every building costs ${500 * EconomySystem.rank} to build and you can only have 30 of every building\nexcept the town hall, there is and must always be one for every village`)
                 .addFields(
                     {
                         name: "Town Hall",
@@ -76,7 +120,21 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
                         value: "somehow extracts DogeCoins from underground, protect it from attackers!",
                         inline: true
                     },
-                    
+                    {
+                        name: "Cannon",
+                        value: "powerful defense, can only shoot downwards",
+                        inline: true
+                    },
+                    {
+                        name: "X-Bow",
+                        value: "not as powerful as a cannon, but can shoot everywhere",
+                        inline: true
+                    },
+                    {
+                        name: "Barracks",
+                        value: "increases the max power you can use in an attack by 3",
+                        inline: true
+                    }
                 )
             message.channel.send({ embeds: [InfoEmbed] })
             return
