@@ -86,6 +86,9 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
         }
         case "build": {
             const building = Clash.buildings[args[1].toLowerCase()]
+            if (!building) {
+                message.channel.send("I have no clue what a " + args[1] + " is.\nIf you have no clue what you can build either, try `&clash buildings`".replace(/\&/g, Prefix.get(message.guild.id)))
+            }
             const total = ClashMatrix.getTotal(building)
             if (total == 30) {message.channel.send("You already build 30 of these, you can't build more"); return}
             const x = parseInt(args[2])
@@ -95,7 +98,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
                 return
             }
             if (!ClashMatrix.checkBounds(x, y)) {
-                message.channel.send("Now that position you just old me...it's out of bounds")
+                message.channel.send("Now that position you just told me...it's out of bounds")
                 return
             }
             const price = 500 * EconomySystem.rank
