@@ -99,7 +99,7 @@ Commands.stocks = new Command("Buy and sell Xilefunds\n\n" + Stocks.help, (messa
                     }
                     client.users.cache.get(Stocks.auction.buyerid).createDM().then((BuyerDMChannel) => {
                         const BuyerEconomySystem = Economy.getEconomySystem({ id: Stocks.auction.buyerid, username: Stocks.auction.buyer })
-                        if (BuyerEconomySystem.buy(Stocks.auction.price)) {
+                        if (BuyerEconomySystem.buy(Stocks.auction.price, undefined, undefined, undefined, true)) {
                             EconomySystem.give(Stocks.auction.price, undefined, true)
                             EconomySystem.alterValue("xilefunds", -1)
                             BuyerEconomySystem.alterValue("xilefunds", 1)
