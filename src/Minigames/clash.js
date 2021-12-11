@@ -34,6 +34,14 @@ class ClashMatrix extends Matrix {
         return data
     }
 
+    toEmbed(name) {
+        const MatrixEmbed = new Discord.MessageEmbed()
+            .setColor("#FFA500")
+            .setTitle(name + "'s village")
+            .setDescription(this.map((Cell) => {return Clash.emojis[Cell.value]}).toString())
+        return MatrixEmbed
+    }
+
     getTotal(building) {
         let amount = 0
         for (const Cell of this) {
@@ -48,21 +56,23 @@ exports.ClashMatrix = ClashMatrix
 
 Clash = {
     emojis: {
-        N: ":black_large_square:",
-        T: "these texts",
-        M: "are placeholders",
-        C: "for when",
-        X: "the emojies",
-        B: "will be read"
+        N: ":green_square:",
+        T: "<:townhall:919125796868743210>",
+        M: ":mine:",
+        C: ":cannon:",
+        X: ":crossbow:",
+        B: ":barracks:"
     },
     buildings: {
-        //"town hall": "T",
         "mine": "M",
         "dogecoin mine": "M",
         "cannon": "C",
         "x-bow": "X",
         "x bow": "X",
-        "barracks": "B"
+        "crossbow": "X",
+        "cross bow": "X",
+        "barracks": "B",
+        "barrack": "B"
     },
     help:
         "`&clash show [@user]` shows your/the pinged user's village\n" +
@@ -81,7 +91,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
     const command = args[0].toLowerCase()
     switch (command) {
         case "show": {
-            message.channel.send(ClashMatrix.toString())
+            message.channel.send({ embeds: [ClashMatrix.toEmbed(EconomySystem.user) ]})
             break
         }
         case "build": {
@@ -129,7 +139,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
                         inline: true
                     },
                     {
-                        name: "X-Bow",
+                        name: "CrossBow",
                         value: "not as powerful as a cannon, but can shoot everywhere",
                         inline: true
                     },
