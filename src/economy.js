@@ -57,7 +57,7 @@ class EconomySystem {
         this.vgot = new FlagSystem(60, backup?.vgot) //flag system for the different v_s
         this.bftime = backup?.bftime || 1 //last time they completed a brainfuck challenge
         this.achievments = new FlagSystem(9, backup?.achievments) //flag system for the achievements
-        this.clash = new ClashMatrix(backup?.clash || "AT_A") //clash base
+        this.clash = new ClashMatrix(backup?.clash || "NT_N") //clash base
         console.log("- " + Colors.purple.colorize(!backup ? "Created EconomySystem of " : "Restored EconomySystem of ") + Colors.hpurple.colorize(this.user))
     }
 
