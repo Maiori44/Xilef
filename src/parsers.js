@@ -1,23 +1,7 @@
-const { RequiredArg, Command } = require("./commands.js")
+const { RequiredArg, Command, Commands } = require("./commands.js")
 const fs = require('fs')
-
-Prefix = {
-  /**
-   * @param {string} guildID
-   * @returns {string} - The guild's prefix. fallbacks to the global prefix (client.prefix)
-   */
-  get(guildID) {
-    return debugmode ? "beta&" : (this.read()[guildID] ?? client.prefix)
-  },
-
-  /**
-   * Gets the whole prefixes.json
-   * @returns {{[string in string]: string}}
-   */
-  read() {
-    return JSON.parse(fs.readFileSync("./src/Data/prefixes.json", "utf8"))
-  }
-}
+const { Collection } = require('discord.js')
+const { client, Colors, Prefix} = require('./constants.js');
 
 Commands.prefix = new Command('Changes the prefix for the current server. Put `default` as the argument of `prefix` to reset the current server-prefix to the global prefix\nThe user needs \"Manage Guild\" permissions for this command', (message, args) => {
   if (debugmode) {
@@ -57,7 +41,7 @@ Commands.prefix = new Command('Changes the prefix for the current server. Put `d
   console.log("- " + Colors.purple.colorize("Successfully updated file ") + Colors.hpurple.colorize("prefixes.json"))
 }, 'Utility', [new RequiredArg(0, 'Missing `prefix` argument', 'prefix')])
 
-aliases = new class extends Discord.Collection {
+aliases = new class extends Collection {
     constructor() {
         super();
         this.reload();
@@ -289,6 +273,7 @@ Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, async (me
     new RequiredArg(1, undefined, "argument 1", true),
   new RequiredArg(1, undefined, "argument 2", true),
 ])
+
 client.on('clickMenu', async (/** @type {MessageComponent} */ menu) => {
     if (menu.values[0] == "empty") return
     delete aliases.get(menu.clicker.id)[menu.values[0]]
