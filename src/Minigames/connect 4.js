@@ -1,15 +1,17 @@
 const { RequiredArg, Command, Commands } = require("./../commands.js")
 const { MPGame } = require("./../minigames.js")
 const { Matrix } = require("./../matrix.js")
+const { MessageEmbed } = require('discord.js')
+const { Prefix, GetPercentual } = require('../constants.js')
 
 class Connect4Game {
     constructor() {
-        this.board = new Matrix(7, 6, Connect4.emptyTile)
+        this.board = new Matrix(7, 6, connect4.emptyTile)
         this.finished = false
     }
 
     getMatchInfo() {
-        return new Discord.MessageEmbed()
+        return new MessageEmbed()
             .setColor("#0078d7")
             .setTitle("Connect4 match")
             .setDescription(":zero::one::two::three::four::five::six:\n" + this.board.toString(undefined, true))
@@ -36,39 +38,40 @@ class Connect4Game {
     }
 }
 
-Connect4 = new MPGame((message) => {
-    Connect4.hosts[message.author.id] = new Connect4Game()
-    return Connect4.hosts[message.author.id]
+const connect4 = new MPGame((message) => {
+    connect4.hosts[message.author.id] = new Connect4Game()
+    return connect4.hosts[message.author.id]
 })
-Connect4.emptyTile = "<:blue_square:870714439836516454>"
-Connect4.yellowTile = "<:yellow_circle:870716292515106846>"
-Connect4.redTile = "<:red_circle:870716292640964618>"
-Connect4.help =
+
+connect4.emptyTile = "<:blue_square:870714439836516454>"
+connect4.yellowTile = "<:yellow_circle:870716292515106846>"
+connect4.redTile = "<:red_circle:870716292640964618>"
+connect4.help =
     "`&connect4 host` will make you host a match, the person who hosts a match is always yellow\n" +
     "`&connect4 join (@user)` will make you join the pinged user's match if they are hosting\n" +
     "`&connect4 quit` will make you leave the current match, if you are the host the joiner will be kicked too\n" +
     "`&connect4 place (x)` places a disc in the given x\n" +
     "`&connect4 board` shows the board of the current match, the users playing and who's turn it is"
 
-Commands.connect4 = new Command("Make a line of 4 discs in any directions to win (warning: you need a friend)\n\n" + Connect4.help, (message, args) => {
+Commands.connect4 = new Command("Make a line of 4 discs in any directions to win (warning: you need a friend)\n\n" + connect4.help, (message, args) => {
     args[0] = args[0].toLowerCase()
     switch (args[0]) {
         case "host": {
-            Connect4.makeGame(message)
+            connect4.makeGame(message)
             break
         }
         case "join": {
-            Connect4.connectGame(message)
+            connect4.connectGame(message)
             break
         }
         case "quit": {
-            message.channel.send(Connect4.leaveGame(message.author.id))
+            message.channel.send(connect4.leaveGame(message.author.id))
             break
         }
         case "place": {
-            let [Connect4Game, playernum] = Connect4.getGame(message.author.id)
+            let [Connect4Game, playernum] = connect4.getGame(message.author.id)
             if (Connect4Game.finished) {
-                throw ("This match arleady ended.")
+                throw ("This match already ended.")
             }
             if (playernum != Connect4Game.turn) {
                 throw ("It's not your turn yet.")
@@ -78,9 +81,9 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
                 throw (`You need to give a valid x for where to place your disc\nExample: \`${Prefix.get(message.guild.id)}connect4 place 0\` will place your disc in the leftmost column`)
             }
             if (x >= 0 && x <= 6) {
-                let tile = Connect4Game.turn == 1 ? Connect4.yellowTile : Connect4.redTile
+                let tile = Connect4Game.turn == 1 ? connect4.yellowTile : connect4.redTile
                 for (var y = 5; y > -1; y--) {
-                    if (Connect4Game.board.compare(x, y, Connect4.emptyTile)) {
+                    if (Connect4Game.board.compare(x, y, connect4.emptyTile)) {
                         Connect4Game.board.set(x, y, tile)
                         Connect4Game.turn = (Connect4Game.turn % 2) + 1
                         message.channel.send({ embeds: [Connect4Game.getMatchInfo()] })
@@ -97,7 +100,7 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
                             if (EconomySystem.connect4 >= 15) {
                                 EconomySystem.award("connect4", message)
                             }
-                            Connect4.closeGame(message.author.id)
+                            connect4.closeGame(message.author.id)
                         }
                         return
                     }
@@ -108,13 +111,13 @@ Commands.connect4 = new Command("Make a line of 4 discs in any directions to win
             }
         }
         case "board": {
-            let [Connect4Game, playernum] = Connect4.getGame(message.author.id)
+            let [Connect4Game, playernum] = connect4.getGame(message.author.id)
             message.channel.send({ embeds: [Connect4Game.getMatchInfo()] })
             break
         }
         default: {
-            message.channel.send(Connect4.help.replace(/\&/g, Prefix.get(message.guild.id)))
+            message.channel.send(connect4.help.replace(/\&/g, Prefix.get(message.guild.id)))
             return
         }
     }
-}, "Game",[new RequiredArg(0, Connect4.help, "command"), new RequiredArg(1, undefined, "argument 1", true)], "https://en.wikipedia.org/wiki/Connect_Four")
+}, "Game",[new RequiredArg(0, connect4.help, "command"), new RequiredArg(1, undefined, "argument 1", true)], "https://en.wikipedia.org/wiki/Connect_Four")
