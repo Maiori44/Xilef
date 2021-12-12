@@ -5,7 +5,6 @@ const { Commands } = require("./commands.js");
 
 require("./economy.js")
 require("./parsers.js")
-require("./Commands/poll.js")
 require("./minigames.js")
 require('./developer.js')
 
