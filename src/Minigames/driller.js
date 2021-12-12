@@ -1,4 +1,4 @@
-const { RequiredArg, Command } = require("./../commands.js")
+const { RequiredArg, Command, Commands } = require("./../commands.js")
 const { Game, MPGame } = require("./../minigames.js")
 
 class DrillerGame {
@@ -262,7 +262,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     if (currentOre.tier > EconomySystem.driller) {
                         log += "Your driller cannot dig any further, please upgrade it when possible. Automatically cashing in."
 
-                        message.channel.send("Your driller comes back, and gives you all the DogeCoins it had collected.")
+                        message.channel.send("Your driller came back, and gave you all the DogeCoins it had collected.")
                         EconomySystem.give(DrillerGame.cash, message)
                         DrillerGame.reset(EconomySystem)
 
@@ -306,7 +306,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
         }
         case "upgrade": {
             if (EconomySystem.driller == 30) {
-                message.channel.send("Your driller arleady reached max tier.")
+                message.channel.send("Your driller already reached max tier.")
                 EconomySystem.award("driller", message)
             } else if (EconomySystem.buy(Driller.tiers[EconomySystem.driller - 1], message, "Your driller reached tier " + (EconomySystem.driller + 1) + "!", "You don't have enough DogeCoins to upgrade your driller (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins needed)")) {
                 EconomySystem.driller = EconomySystem.driller + 1
