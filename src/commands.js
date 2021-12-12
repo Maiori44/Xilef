@@ -77,6 +77,7 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
             .setDescription(Commands[args[0]].description.replace(/\&/g, Prefix.get(message.guild.id)))
             .setTimestamp()
             .setFooter(Object.keys(Commands).length + " total commands")
+
         let syntax = `\`${Prefix.get(message.guild.id)}` + args[0]
         if (Commands[args[0]].requiredargs) {
             for (const arg of Commands[args[0]].requiredargs) {
@@ -94,9 +95,8 @@ Commands.help = new Command("Shows a list of all commands or detailed info of a 
         }
         message.channel.send({
             embeds: [CommandInfoEmbed],
-            components: [
-                new Discord.MessageActionRow({ components: [button] })
-            ]
+            components: button == undefined ? []
+                : [new Discord.MessageActionRow({ components: [button] })]
         });
         return
     }
