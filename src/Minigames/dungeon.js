@@ -10,43 +10,37 @@ class Entity {
         this.ai = ai
         this.name = name
         this.isboss = isboss
-        this.castmsg = this.ai != 'player' ? "The " + this.name + " uses " : "You use "
-        this.evmsg = this.ai != 'player' ? "The " + this.name + "'s " : "Your "
+        this.castmsg = this.ai ? "The " + this.ai + " uses " : "You use "
+        this.evmsg = this.ai ? "The " + this.ai + "'s " : "Your "
     }
 
     fight(Entity, damage) {
         let dmg = Math.floor(Math.max(damage - Entity.defense, 1))
         Entity.hp = Entity.hp - dmg
-        return (this.ai != 'player' ? "The " + this.name + " attacks you!" : "You attack " + Entity.name + "!") + " (" + dmg + " damage dealt)"
+        return (this.ai ? "The " + this.ai + " attacks you!" : "You attack " + Entity.ai + "!") + " (" + dmg + " damage dealt)"
     }
 
     think(DungeonGame) {
         const omana = this.mana
         let msg = "The " + this.ai + " does nothing.."
         if (Dungeon.thinkers[this.ai]) msg = Dungeon.thinkers[this.ai](DungeonGame, this)
-        if (this.ai == "player" && omana == this.mana) {
+        if (omana == this.mana) {
             this.mana = Math.min(this.mana + 10 * DungeonGame.floor, 2000)
         }
-        this.hp = Math.floor(this.hp)
-        this.mana = Math.floor(this.mana)
-        this.attack = Math.floor(this.attack)
-        this.defense = Math.floor(this.defense)
         return msg
     }
 }
 
 class Attack {
-    constructor(name, cost, effect, nonmagic) {
+    constructor(name, cost, effect) {
         this.name = name
         this.cost = cost
         this.effect = effect
-        this.nonmagic = nonmagic || false
     }
 
     use(Attacker, Attacked) {
         if (Attacker.mana < this.cost) throw ("You need " + this.cost + " mana for this spell")
         Attacker.mana = Attacker.mana - this.cost
-        if (Attacker.ai == "player" && !this.nonmagic) Attacker.usedmagic = true
         return Attacker.castmsg + this.name + "!\n" + this.effect(Attacker, Attacked)
     }
 }
@@ -55,7 +49,7 @@ class DungeonGame {
     constructor() {
         this.floor = 1
         this.cash = 0
-        this.player = new Entity(100, 100, 40, 20, "player", "You")
+        this.player = new Entity(100, 100, 40, 20)
         this.explored = 3
         this.enemies = []
     }
@@ -67,7 +61,7 @@ class DungeonGame {
     reset() {
         this.floor = 1
         this.cash = 0
-        this.player = new Entity(100, 100, 40, 20, "player", "You")
+        this.player = new Entity(100, 100, 40, 20)
         this.explored = 3
         this.enemies = []
     }
@@ -103,348 +97,78 @@ class DungeonGame {
 
 Dungeon = new Game(() => { return new DungeonGame() })
 Dungeon.enemies = [
-    // surface
-    [50, 0, 20, 0, "slime", "green slime"],
-    [60, 0, 40, 15, "skeleton", "skeleton"],
-    [100, 100, 45, 20, "rock-elemental", "rock elemental"],
-    [55, 0, 35, 10, "goblin", "goblin novice"],
-    [45, 0, 25, 5, "bat", "cave bat"],
-    [150, 100, 60, 30, "lost-spirit", "lost spirit", true],
-    // overgrown
-    [80, 0, 40, 5, "slime", "moss slime"],
-    [110, 0, 60, 25, "skeleton", "overgrown skeleton"],
-    [200, 200, 65, 40, "vine-monster", "vine monster"],
-    [100, 0, 70, 20, "goblin", "goblin brute"],
-    [120, 0, 50, 10, "bat", "jungle bat"],
-    [300, 200, 90, 60, "nature-elemental", "nature elemental", true],
-    // crystal
-    [160, 0, 45, 20, "slime", "crystaline slime"],
-    [240, 0, 85, 35, "skeleton", "prism skeleton"],
-    [400, 300, 90, 60, "gemstone-golem", "gemstone golem"],
-    [250, 0, 80, 30, "goblin", "goblin crusher"],
-    [210, 0, 65, 15, "bat", "glowing bat"],
-    [600, 300, 120, 90, "crystal-elemental", "crystal elemental", true],
-    // spirit
-    [270, 0, 60, 40, "slime", "howling slime"],
-    [320, 0, 90, 40, "skeleton", "skeleton summoner"],
-    [600, 400, 100, 80, "great spirit", "great spirit"],
-    [310, 0, 85, 40, "goblin", "goblin spiritualist"],
-    [300, 0, 75, 20, "bat", "albino bat"],
-    [900, 400, 150, 120, "power-ghost", "power ghost", true],
-    // dark
-    [360, 0, 90, 50, "slime", "void slime"],
-    [430, 0, 90, 50, "skeleton", "voidhammer skeleton"],
-    [800, 500, 135, 100, "void-ghost", "void ghost"],
-    [415, 0, 90, 50, "goblin", "ambush goblin"],
-    [400, 0, 90, 25, "bat", "great bat"],
-    [1200, 500, 180, 150, "the-void", "the void", true],
-    // magma
-    [460, 0, 105, 60, "slime", "magma slime"],
-    [500, 0, 105, 60, "skeleton", "skeleton incinerator"],
-    [1000, 600, 160, 120, "bone-snake", "bone-snake"],
-    [500, 0, 105, 60, "goblin", "goblin firewarrior"],
-    [500, 0, 105, 30, "bat", "lava bat"],
-    [1500, 600, 210, 180, "lava-elemental", "lava elemental", true],
-    // blight
-    [600, 0, 120, 70, "slime", "blighted slime"],
-    [600, 0, 120, 70, "skeleton", "infected skeleton"],
-    [1200, 700, 180, 140, "blight-orb", "blight orb"],
-    [600, 0, 120, 70, "goblin", "mutated goblin"],
-    [600, 0, 120, 70, "bat", "corrupted bat"],
-    [1800, 700, 240, 210, "radiant-core", "radiant core", true],
-    // error
-    [700, 0, 135, 80, "slime", "mistake slime"],
-    [700, 0, 135, 80, "skeleton", "skerrorton"],
-    [1400, 100, 180, 0, "loading-window", "download window"],
-    [700, 0, 135, 80, "goblin", "gobboblin"],
-    [700, 0, 135, 80, "bat", "bullet bat"],
-    [2100, 800, 270, 240, "error", "ZXJyb3I=", true],
-    // ancient
-    [800, 0, 150, 90, "slime", "primordial slime"],
-    [800, 0, 150, 90, "skeleton", "ancient skeleton"],
-    [1600, 900, 225, 180, "ancient-swordmaster", "ancient swordmaster"],
-    [800, 0, 150, 90, "goblin", "goblin cyclops"],
-    [800, 0, 150, 90, "bat", "irontooth bat"],
-    [2400, 900, 300, 210, "Giygas clone", "Giygas clone", true],
-    // element
-    [900, 0, 165, 100, "slime", "core slime"],
-    [900, 0, 165, 100, "skeleton", "plasmabone skeleton"],
-    [1800, 1000, 220, 200, "amoled-elemental", "amoled elemental"],
-    [900, 0, 165, 100, "goblin", "goblin elemental"],
-    [900, 0, 165, 100, "bat", "ultrabat"],
-    [2700, 1000, 320, 300, "true-elemental", "true elemental", true],
-    // hell
-    [1000, 0, 180, 110, "slime", "inferno slime"],
-    [1000, 0, 180, 110, "skeleton", "everburn skeleton"],
-    [2000, 1000, 270, 220, "ruined-elemental", "ruined elemental"],
-    [1000, 0, 180, 110, "goblin", "ashhammer goblin"],
-    [1000, 0, 180, 110, "bat", "hellstone bat"],
-    [3000, 1000, 360, 330, "Calamitas clone", "Calamitas clone", true],
+    [40, 0, 25, 0, "slime", "slime"],
+    [55, 0, 30, 0, "zombie", "zombie"],
+    [90, 0, 40, 5, "goblin", "goblin"],
+    [80, 0, 60, 20, "skeleton", "skeleton"],
+    [65, 0, 40, 10, "skeleton archer", "skeleton archer"],
+    [75, 100, 50, 5, "skeleton mage", "skeleton mage"],
+    [200, 0, 40, 0, "slime", "big slime"],
+    [125, 125, 125, 0, "ghost", "ghost"],
+    [400, 0, 90, 75, "goblin", "armored goblin"],
+    [350, 0, 80, 60, "skeleton", "skeleton brute"],
+    [150, 0, 110, 160, "mimic", "mimic"],
+    [300, 150, 75, 69, "meme fanatic", "meme fanatic"],
+    [400, 0, 100, 100, "golem", "mini golem"],
+    [300, 175, 125, 40, "ghost", "spectre"],
+    [500, 0, 25, 0, "slime", "abyss slime"],
+    [600, 0, 200, 110, "golem", "golem"],
+    [900, 200, 250, 150, "meme fanatic", "meme lunatic"],
+    [1000, 175, 125, 40, "ghost", "great ghost"],
+    [2000, 400, 250, 300, "golem", "power golem"],
+    [3000, 2000, 300, 350, "Giygas clone", "Giygas clone", true],
+    /*/TIER 2
+    [400, 0, 250, 0, "slime"],
+    [550, 0, 300, 0, "zombie"],
+    [900, 0, 400, 50, "goblin"],
+    [800, 0, 600, 200, "skeleton"],
+    [650, 0, 400, 100, "skeleton archer"],
+    [750, 1000, 500, 50, "skeleton mage"],
+    [2000, 0, 400, 0, "slime"], //big slime
+    [1250, 1250, 1250, 0, "ghost"],
+    [4000, 0, 900, 750, "goblin"], //armored goblin
+    [3500, 0, 800, 600, "skeleton"], //skeleton brute
+    [1500, 0, 1100, 1600, "mimic"],
+    [3000, 1500, 750, 690, "meme fanatic"],
+    [4000, 0, 1000, 1000, "golem"], //mini golem
+    [3000, 1750, 12500, 4000, "ghost"], //spectre
+    [5000, 0, 2500, 0, "slime"], //abyss slime
+    [6000, 0, 2000, 1100, "golem"],
+    [9000, 2000, 2500, 1500, "meme fanatic"], //meme lunatic
+    [10000, 1750, 1250, 400, "ghost"], //great ghost
+    [20000, 4000, 2500, 3000, "golem"], //power golem
+    [30000, 20000, 3000, 3500, "Supreme Calamitas clone", true],
+    commented out cuz im too lazy to add names to them too considering they will be replaced*/
 ]
 Dungeon.thinkers = {
     slime: (DungeonGame, Entity) => {
         if (GetPercentual() <= 20) {
             return Entity.fight(DungeonGame.player, Entity.attack)
         }
-        return `The ${Entity.name} hops around..`
+        return "The slime hops around.."
     },
-    skeleton: (DungeonGame, Entity) => {
-        if (DungeonGame.player.attack > Entity.defense * 1.7) {
-            Entity.defense = Math.floor(Entity.defense * 1.7)
-            return `The ${Entity.name} drinks..milk..\nThe skeleton defense increases!`
-        }
-        return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
-    },
-    "rock-elemental": (DungeonGame, Entity) => {
-        const chance = GetPercentual()
-        if (Entity.mana < 25 || chance == 100) {
-            Entity.mana = 100
-            return "The rock elemental absorbs rocks around it\nThe rock elemental mana increases!"
-        } else if (chance < 60) {
-            Entity.mana -= 25
-            return "The rock elemental throws rock at you!\n" +
-                Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
-                Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
-                Entity.fight(DungeonGame.player, Entity.attack)
-        }
-        return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
-    },
-    goblin: (DungeonGame, Entity) => {
-        if (GetPercentual() <= 20) {
-            return `The ${Entity.name} charges!\n` +
-                Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2)) + "\n" +
-                Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2)) + "\n" +
-                Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2))
-        }
-        DungeonGame.cash = Math.max(DungeonGame.cash - 20, 0)
-        return Dungeon.attacks.slash.use(Entity, DungeonGame.player) + `\nThe ${Entity.name} steals some of your money!`
-    },
-    bat: (DungeonGame, Bat) => {
-        if (Bat.mana >= 150) {
-            return Dungeon.attacks.leech.use(Bat, DungeonGame.player)
-        } else if (GetPercentual() <= 35) {
-            DungeonGame.enemies.push(new Entity(Bat.hp * 0.8, Bat.mana + 50, Bat.attack * 1.8, Bat.defense, "bat", Bat.name))
-            return `The ${Bat.name} calls for help!\nAnother bat joined the fight!`
-        }
-        return Bat.fight(DungeonGame.player, Bat.attack)
-    },
-    "lost-spirit": (DungeonGame, Entity) => {
-        if (Entity.mana >= 25 && DungeonGame.player.defense >= 40) {
-            Entity.mana -= 25
-            DungeonGame.player.defense = DungeonGame.player.defense * 0.8
-            return "The lost spirit haunts you..\nYour defense decreased!"
-        }
-        Entity.mana += 10
-        return Entity.fight(DungeonGame.player, Entity.attack)
-    },
-    "vine-monster": (DungeonGame, Entity) => {
-        if (GetPercentual() >= 50 && Entity.mana >= 25) {
-            Entity.mana -= 25
-            DungeonGame.player.attack = DungeonGame.player.attack * 0.7
-            return Dungeon.attacks.slash.use(Entity, DungeonGame.player) + "\nYour attack decreased!"
-        }
-        Entity.mana += 10
-        return Dungeon.attacks.slash.use(Entity, DungeonGame.player) + "\n" + Dungeon.attacks.slash.use(Entity, DungeonGame.player)
-    },
-    "nature-elemental": (DungeonGame, Elemental) => {
-        if (GetPercentual() >= 45 && Elemental.mana >= 50) {
-            Elemental.mana -= 50
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[8]))
-            return "The nature elemental grows more!\nA vine monster joined the fight!"
-        }
-        Elemental.attack = Elemental.attack * 1.4
-        Elemental.defense = Elemental.defense * 1.4
-        Elemental.mana = Elemental.mana * 1.4
-        Elemental.hp = Elemental.hp * 1.4
-        return "The nature elemental grows more!\nThe nature elemental stats increased!"
-    },
-    "gemstone-golem": (DungeonGame, Entity) => {
-        const chance = GetPercentual()
-        if (chance <= 40 && Entity.mana >= 50) {
-            return Dungeon.attacks.ice.use(Entity, DungeonGame.player)
-        } else if (Entity.mana >= 25) {
-            return Dungeon.attacks.fire.use(Entity, DungeonGame.player)
-        } else {
-            Entity.mana += 75
-            return "The gemstone golem charges his gems..and restores mana!"
-        }
-    },
-    "crystal-elemental": (DungeonGame, Entity) => {
-        if (DungeonGame.player.usedmagic && Entity.mana >= 50) {
-            return "The crystal elemental senses your magic attack!\n" +
-                Dungeon.attacks.ice.use(Entity, DungeonGame.player)
-        }
-        Entity.mana += 30
-        Entity.defense *= 1.2
-        return "The crystal elemental doesn't sense you...\nThe crystal elemental defense increased!"
-    },
-    "great spirit": (DungeonGame, Entity) => {
-        if (Entity.mana >= 40 && DungeonGame.player.defense >= 300) {
-            Entity.mana -= 40
-            DungeonGame.player.attack = DungeonGame.player.attack * 0.6
-            return "The lost spirit haunts you..\nYour defense decreased!"
-        }
-        Entity.mana += 10
-        return Entity.fight(DungeonGame.player, Entity.attack)
-    },
-    "power-ghost": (DungeonGame, Ghost) => {
-        if (GetPercentual() >= 45 && Ghost.mana >= 50) {
-            Ghost.mana -= 50
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[5]))
-            return "The power ghost grows more!\nA lost spirit joined the fight!"
-        }
-        Ghost.mana += 15
-        return "The power ghost observes you..."
-    },
-    "void-ghost": (DungeonGame, Ghost) => {
-        if (GetPercentual() >= 45 && Ghost.mana >= 100) {
-            return Dungeon.attacks.thunder.use(Ghost, DungeonGame.player) +
-                "\nThe void-ghost launches a ball of swirling blackened Void tentacles at you!"
-        }
-        Ghost.mana += 75
-        return Dungeon.attacks.ice.use(Ghost, DungeonGame.player) +
-            "\nit's piercing gaze is on the verge of sucking your soul out!"
-    },
-    "the-void": (DungeonGame, Void) => {
-        if (GetPercentual() < 50 && Void.mana >= 100) {
-            Void.mana -= 50
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[28]))
-            return Dungeon.attacks.ice.use(Void, DungeonGame.player) +
-                "\nThe swirling mass of void pulses, and a hord of bats appear out of the darkness..."
-        } else if (GetPercentual() > 50 && Void.mana >= 100) {
-            Void.mana -= 50
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[27]))
-            return Dungeon.attacks.ice.use(Void, DungeonGame.player) +
-                "\nThe swirling mass of void pulses, and a gang of goblins appear out of the darkness..."
-        } else if (GetPercentual() = 50 && Void.mana >= 100) {
-            Void.mana -= 50
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[25]))
-            return Dungeon.attacks.ice.use(Void, DungeonGame.player) +
-                "\nThe swirling mass of void pulses, and the skeletons lining the walls take life..."
-        }
-        Void.mana += 500
-        return "The void has no shape, and never ran out of mana in the first place..."
-    },
-    "bone-snake": (DungeonGame, Entity) => {
-        if (GetPercentual() <= 50 && Entity.mana >= 50) {
-            Entity.mana -= 50
-            return Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
-                Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
-                Entity.fight(DungeonGame.player, Entity.attack) +
-                "\nWhere'd it go? Ah, right, in the ground..."
-        }
-        Entity.mana += 75
-        return Dungeon.attacks.fire.use(Entity, DungeonGame.player) + "\nThe bone snake shot a ball of fire, roasting your defence to pieces!"
-    },
-    "lava-elemental": (DungeonGame, Entity) => {
-        if (Entity.mana >= 25) {
-            let msg = "You are caught in a huge fire storm!"
-            for (let i = 1; i <= 3; i++) {
-                if (Entity.mana < 25) break;
-                msg = msg + "\nIt hit " + i + (i == 1 ? " time" : " times") + "!\n" +
-                    Dungeon.attacks.fire.use(Entity, DungeonGame.player)
-            }
-            return msg
-        }
-        Entity.mana += 100
-        return "The lava elemental surrounds itself with lava, preparing for the next attack..."
-    },
-    "blight-orb": (DungeonGame, Entity) => {
-        if (DungeonGame.enemies.length == 1) {
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[36]))
-            return "The blight orb calls for help..\nAnother blight orb joined the fight!"
-        }
-        for (const Enemy of DungeonGame.enemies) {
-            Enemy.defense *= 1.3
-        }
-
-        return Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
-               "The blight orb light envelopses the other enemies!\nTheir defense increased!"
-    },
-    "radiant-core": (DungeonGame, Entity) => {
-        if (DungeonGame.enemies.length <= 4) {
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[36]))
-            return "The the radiant core pulses for help..\nA blight orb joined the fight!"
-        }
-        for (const Enemy of DungeonGame.enemies) {
-            Enemy.defense *= 1.5
-            Enemy.attack *= 1.5
-        }
-        return "The blight orb light envelopses the other enemies!\nTheir defense and attack increased!\n(careful of this one, things might get out of hand real fast)"
-    },
-    "download-window": (DungeonGame, Entity) => {
-        if (Entity.mana >= 300) return "Download window crashes and burns!\n" + Entity.fight(DungeonGame.player, 800)
-        else {
-            Entity.mana += 100
-            return "Download window is still at 99%"
-        }
-    },
-    "error": (DungeonGame, Entity) => {
-        if (Entity.mana >= 100) {
-            Entity.mana -= 100
-            const Player = DungeonGame.player
-            Player.attack *= parseFloat("0." + toString(Math.ceil(Math.random() * 9)))
-            Player.defense *= parseFloat("0." + toString(Math.ceil(Math.random() * 9)))
-            return "WW91IGNhbm5vdCB1bmRlcnN0YW5kIHdoYXQgdGhlIGVycm9yIGRvZXMKWW91ciBhdHRhY2sgYW5kIGRlZmVuc2UgZGVjcmVhc2VkIQ=="
-        }
-        Entity.attack *= parseFloat("1." + toString(Math.ceil(Math.random() * 5)))
-        Entity.defense *= parseFloat("1." + toString(Math.ceil(Math.random() * 5)))
-        Entity.fight(DungeonGame.player, Entity.attack)
-        return "WW91IGZlZWwgcGFpbg=="
-    },
-    "ancient-swordmaster": (DungeonGame, Entity) => {
-         if (GetPercentual() <= 50) {
-             return Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
-                    Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
-                    Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
-                    Entity.fight(DungeonGame.player, Entity.attack) + "\n" +
-                    Entity.fight(DungeonGame.player, Entity.attack)
-         }
-         Entity.mana += 50
-         return "He swings the blade in graceful arcs. He is excited to fight his new sparring partner!" + "\n" +
-                Dungeon.attacks.ice.use(Entity, DungeonGame.player)
-    },
-    "amoled-elemental": (DungeonGame, Entity) => {
-         if (GetPercentual() <= 50 & Entity.mana > 50) {
-             return Dungeon.attacks.fire.use(Entity, DungeonGame.player) + "\n" +
-                    Dungeon.attacks.fire.use(Entity, DungeonGame.player)
-         }
-         Entity.mana += 50
-         Entity.defence *= 1.3
-         return "A tough wedge of rock and stone... it looks to be hardening even more!"
-    },
-     "true-elemental": (DungeonGame, Entity) => {
-        if (DungeonGame.enemies.length == 1) {
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[35]))
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[2]))
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[11]))
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[17]))
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[54]))
-            return "The elementals came to their master once again..."
-        }
-        for (const Enemy of DungeonGame.enemies) {
-            Enemy.defense *= 1.5
-        }
-        return "The sight of their master powers the elementals onward. Their defence sharply rose!"
-    },
-     "ruined-elemental": (DungeonGame, Entity) => {
-        if (GetPercentual() <= 50) {
-            DungeonGame.enemies.push(new Entity(...Dungeon.enemies[61]))
-            return "Its crumbling body splits into 2...It is broken, not dead"
-        }
-        for (let i = 0; i <= DungeonGame.enemies.length; i++) {
-            Entity.fight(DungeonGame.player, Entity.attack)
-        }
-        return (DungeonGame.enemies.length == 1 ? "It" : "They") + " seem to get stronger with numbers. And you just got whaled on!"
-    },
-}
-
-/*Dungeon.thinkers = {
     zombie: (DungeonGame, Entity) => {
         let msg = "The zombie becomes more vicious!\nThe zombie attack increased!\n"
         Entity.attack = Entity.attack * 1.1
         msg = msg + Entity.fight(DungeonGame.player, Entity.attack)
         return msg
+    },
+    goblin: (DungeonGame, Entity) => {
+        if (GetPercentual() <= 20) {
+            return "The goblin charges!\n" +
+                Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2)) + "\n" +
+                Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2)) + "\n" +
+                Entity.fight(DungeonGame.player, Math.floor(Entity.attack / 2))
+        }
+        DungeonGame.cash = Math.max(DungeonGame.cash - 20, 0)
+        return Dungeon.attacks.slash.use(Entity, DungeonGame.player) + "\nThe goblin steals some of your money!"
+    },
+    skeleton: (DungeonGame, Entity) => {
+        if (DungeonGame.player.attack > Entity.defense * 1.5) {
+            Entity.defense = Math.floor(Entity.defense * 1.5)
+            return "The skeleton drinks..milk..\nThe skeleton defense increases!"
+        }
+        return Dungeon.attacks.slash.use(Entity, DungeonGame.player)
     },
     "skeleton archer": (DungeonGame, Entity) => {
         if (GetPercentual() <= 40) {
@@ -516,11 +240,11 @@ Dungeon.thinkers = {
         Entity.mana = 20000
         return "Supreme Calamitas recharges..and restores all of its mana!"
     },
-}*/
+}
 Dungeon.attacks = {
     slash: new Attack("Slash", 0, (Attacker, Attacked) => {
         return Attacker.fight(Attacked, Attacker.attack)
-    }, true),
+    }),
     fire: new Attack("Fire Storm", 25, (Attacker, Attacked) => {
         const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 0.6)) +
             "\n" + Attacked.evmsg + "defence decreased!"
@@ -531,12 +255,6 @@ Dungeon.attacks = {
         const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 1.4)) +
             "\n" + Attacked.evmsg + "mana decreased!"
         Attacked.mana = Math.floor(Attacked.mana * 0.6)
-        return msg
-    }),
-    shockwave: new Attack("Shockwave", 50, (Attacker, Attacked) => {
-        const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 0.5)) +
-            "\n" + Attacked.evmsg + "attack decreased!"
-        Attacked.attack = Math.floor(Attacked.attack * 0.7)
         return msg
     }),
     ground: new Attack("Earthquake", 75, (Attacker, Attacked) => {
@@ -559,16 +277,8 @@ Dungeon.attacks = {
         if (chance <= 30) return "..the attack misses!"
         const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 2)) +
             "\n" + Attacked.evmsg + "attack decreased!\n" + Attacked.evmsg + "defense decreased!"
-        Attacked.attack = Math.floor(Attacked.attack * 0.7)
+        Attacked.attack = Math.floor(Attacked.defense * 0.7)
         Attacked.defense = Math.floor(Attacked.defense * 0.7)
-        return msg
-    }),
-    leech: new Attack("Leech", 150, (Attacker, Attacked) => {
-        const chance = GetPercentual()
-        if (chance <= 40) return "..the attack misses!"
-        const msg = Attacker.fight(Attacked, Math.floor(Attacker.attack * 0.7)) +
-            "\n" + Attacked.evmsg + "got life stealed!"
-        Attacker.hp += Math.floor(Attacker.attack * 0.7)
         return msg
     }),
 }
@@ -590,7 +300,6 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
             break
         }
         case "explore": {
-            DungeonGame.player.usedmagic = false
             let ohp = DungeonGame.player.hp
             if (!DungeonGame.explored) {
                 let InfoEmbed = DungeonGame.getInfo(EconomySystem)
@@ -660,10 +369,8 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                     "`&dungeon attack slash` the basic attack, costs 0\n" +
                     "`&dungeon attack fire` does slightly less damage but reduces enemy defense, costs 25\n" +
                     "`&dungeon attack ice` does slightly more damage and reduces enemy mana, costs 50\n" +
-                    "`&dungeon attack shockwave` does half damage and reduces enemy attack, costs 50\n" +
                     "`&dungeon attack ground` same damage as slash but hits all enemies, costs 75\n" +
-                    "`&dungeon attack thunder` does double damage and reduces both enemy attack and defense, but has a 30% chance of missing, costs 100\n" +
-                    "`&dungeon attack leech` a brutal attack that does 70% damage and has a 40% chance of missing, but regains health based on damage dealt, costs 150\n")
+                    "`&dungeon attack thunder` does double damage and reduces both enemy attack and defense, but has a 30% chance of missing, costs 100\n")
                     .replace(/\&/g, Prefix.get(message.guild.id))
                 )
                 return
@@ -672,7 +379,6 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                 message.channel.send("There are no enemies to attack..")
                 return
             }
-            DungeonGame.player.usedmagic = false
             let msg = Dungeon.attacks[args[1]].use(DungeonGame.player, DungeonGame.enemies.slice(-1)[0])
             for (let index = 0; index <= DungeonGame.enemies.length - 1; index++) {
                 let Enemy = DungeonGame.enemies[index]
@@ -687,7 +393,7 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
                     DungeonGame.player.mana = Math.min(Math.floor(DungeonGame.player.mana + boost * 2), 2000)
                     DungeonGame.player.attack = Math.min(Math.floor(DungeonGame.player.attack + boost), DungeonGame.statmax)
                     DungeonGame.player.defense = Math.min(Math.floor(DungeonGame.player.defense + boost), DungeonGame.statmax)
-                    index = -1
+                    index = 0
                 } else msg = msg + "\n" + Enemy.think(DungeonGame)
             }
             const InfoEmbed = DungeonGame.getInfo(EconomySystem)
@@ -698,7 +404,6 @@ Commands.dungeon = new Command("Find treasures and fight enemies\n\n" + Dungeon.
         case "escape": {
             const chance = GetPercentual()
             if (chance > DungeonGame.floor * 2) {
-                DungeonGame.player.usedmagic = false
                 DungeonGame.enemies = []
                 const InfoEmbed = DungeonGame.getInfo(EconomySystem)
                 InfoEmbed.addField("Latest event:", "You managed to escape!")
