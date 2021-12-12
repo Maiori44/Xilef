@@ -1,3 +1,5 @@
+const { Colors } = require('./constants.js')
+
 class FlagSystem {
     constructor(totalflags, flags) {
         this.value = flags ? BigInt(flags) : BigInt(0)
