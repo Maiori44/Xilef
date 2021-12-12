@@ -56,7 +56,7 @@ const GetPercentual = () => {
     return Math.floor(Math.random() * 101)
 }
 
-const Debugging = (process.argv[2] == "-debug" ? true : false);
+const isDebugging = (process.argv[2] == "-debug" ? true : false);
 
 const Prefix = {
     /**
@@ -64,7 +64,7 @@ const Prefix = {
      * @returns {string} - The guild's prefix. fallbacks to the global prefix (client.prefix)
      */
     get(guildID) {
-      return Debugging ? "beta&" : (this.read()[guildID] ?? client.prefix)
+      return isDebugging ? "beta&" : (this.read()[guildID] ?? client.prefix)
     },
   
     /**
@@ -99,6 +99,6 @@ module.exports = {
     Prefix,
     Colors,
     GetPercentual,
-    Debugging,
+    isDebugging,
     Buttons
 }

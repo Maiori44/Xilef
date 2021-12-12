@@ -1,6 +1,6 @@
-const { client, Colors, Prefix, Debugging } = require('./constants.js');
+const { client, Colors, Prefix, isDebugging } = require('./constants.js');
 const { MessageEmbed } = require('discord.js');
-const warning = Debugging ? "This bot is running in debug mode, no changes will be saved" : undefined;
+const warning = isDebugging ? "This bot is running in debug mode, no changes will be saved" : undefined;
 const { Commands } = require("./commands.js");
 
 require("./economy.js")
@@ -9,12 +9,12 @@ require("./Commands/poll.js")
 require("./minigames.js")
 require('./developer.js')
 
-client.login(Debugging ? process.env.DEBUG : process.env.TOKEN)
-client.prefix = Debugging ? "beta&" : "&"
+client.login(isDebugging ? process.env.DEBUG : process.env.TOKEN)
+client.prefix = isDebugging ? "beta&" : "&"
 
 client.once("ready", () => {
     console.log("- Bot ready")
-    if (Debugging) console.log("- " + Colors.yellow.colorize("The current bot session is running in debug mode, no data will be saved"))
+    if (isDebugging) console.log("- " + Colors.yellow.colorize("The current bot session is running in debug mode, no data will be saved"))
     client.user.setActivity("ping me for info")
 })
 
@@ -54,7 +54,7 @@ client.on("messageCreate", (message) => {
         } else if (Commands[command]) {
             try {
                 Commands[command.toLowerCase()].call(message, args);
-                if (!Debugging) {
+                if (!isDebugging) {
                     Economy.save();
                 } else console.log("- " + Colors.blue.colorize("Update of ") + Colors.hblue.colorize("economy.json") + Colors.blue.colorize(" was cancelled due to debug mode being active"));
                 if (warning) {
