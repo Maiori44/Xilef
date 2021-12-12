@@ -1,4 +1,4 @@
-const { RequiredArg, Command } = require("./commands");
+const { RequiredArg, Command, Commands } = require("./commands");
 
 const Discord = require("discord.js");
 const { Console } = require("console");

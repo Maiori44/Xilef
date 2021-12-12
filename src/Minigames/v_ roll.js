@@ -1,5 +1,5 @@
 const { Message, Webhook } = require("discord.js")
-const { RequiredArg, Command } = require("./../commands.js")
+const { RequiredArg, Command, Commands } = require("./../commands.js")
 
 v_Types = {
     binary: [

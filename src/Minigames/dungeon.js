@@ -1,4 +1,4 @@
-const { RequiredArg, Command } = require("./../commands.js")
+const { RequiredArg, Command, Commands } = require("./../commands.js")
 const { Game, MPGame } = require("./../minigames.js")
 
 class Entity {
