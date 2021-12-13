@@ -1,4 +1,4 @@
-const { Colors } = require('./constants.js')
+const { Colors, GetPercentual } = require('./constants.js')
 
 class FlagSystem {
     constructor(totalflags, flags) {
