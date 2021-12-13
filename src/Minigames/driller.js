@@ -186,7 +186,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                 return
             }
             if (DrillerGame.hp == 100 * EconomySystem.driller) {
-                message.channel.send("Your driller is arleady in perfect condition.")
+                message.channel.send("Your driller is already in perfect condition.")
             } else if (EconomySystem.buy(cost, message, "Your driller recovered " + cost + " hp! (" + cost + " DogeCoins spent)", "You need " + (cost - EconomySystem.money) + " more DogeCoins for this.")) {
                 DrillerGame.hp = Math.min(DrillerGame.hp + cost, 100 * EconomySystem.driller)
             }

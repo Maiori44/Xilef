@@ -28,7 +28,7 @@ class MPGame {
     makeGame(message) {
         if (this.joiners[message.author.id]) {
             console.log("- " + Colors.blue.colorize("Aborted attempt at creating a new MPGame"))
-            throw ("You arleady are in someone else's match.")
+            throw ("You already are in someone else's match.")
         }
         let Game = this.gamemaker(message)
         Game.host = message.author.id
@@ -54,8 +54,8 @@ class MPGame {
 
     connectGame(message) {
         if (this.hosts[message.author.id]) {
-            console.log("- " + Colors.blue.colorize("Aborted attempt at joining a MPGame, the user is arleady in a match"))
-            throw ("You are arleady hosting a match yourself.")
+            console.log("- " + Colors.blue.colorize("Aborted attempt at joining a MPGame, the user is already in a match"))
+            throw ("You are already hosting a match yourself.")
         }
         let host = message.mentions.users.first()
         if (!host) {
@@ -66,8 +66,8 @@ class MPGame {
             console.log("- " + Colors.blue.colorize("Aborted attempt at joining a MPGame, the given host is not hosting any match"))
             throw ("Could not find the match.")
         } else if (this.hosts[host.id].joinername != "`none`") {
-            console.log("- " + Colors.blue.colorize("Aborted attempt at joining a MPGame, the requested match has arleady a joiner"))
-            throw ("Someone is arleady inside this match.")
+            console.log("- " + Colors.blue.colorize("Aborted attempt at joining a MPGame, the requested match has already a joiner"))
+            throw ("Someone is already inside this match.")
         }
         this.joiners[message.author.id] = this.hosts[host.id]
         this.joiners[message.author.id].joiner = message.author.id
