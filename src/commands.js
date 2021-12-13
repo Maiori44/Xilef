@@ -297,7 +297,7 @@ function ReadStream(readableStream) {
 
 Commands.lua = new Command("Runs the given Lua code, and returns the stdout", (message, args) => {
     const code = (message.content.match(/```(?:lua)\n([^]*)\n```/i)?.[1] ?? args.join(" ")).replaceAll("\"", "'")
-    const luaprocess = spawn("./src/Lua/luajit.exe", ["-e", `setfenv(1, {print = print, math = math}); ${code}`])
+    const luaprocess = spawn("./src/Lua/bin/luajit-2.1.0-beta3", ["-e", `setfenv(1, {print = print, math = math}); ${code}`])
     const timeout = setTimeout(() => {
         luaprocess.kill()
         const ErrorEmbed = new Discord.MessageEmbed()
