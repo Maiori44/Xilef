@@ -1,57 +1,64 @@
 const { RequiredArg, Command, Commands } = require("./../commands.js")
 const { Game, MPGame } = require("./../minigames.js")
 
+const members = ['red', 'blue', 'green', 'pink', 'orange', 'yellow', 'black', 'white', 'purple', 'cyan']
+
+const helpMessage =
+    "`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n" +
+    "`&crew eject (color)` to eject a crewmate out, you can only eject once"
+
+const Amongus = new Game(() => {
+    let Amogus = new AmogusGame()
+    Amogus.reset()
+    return Amogus
+})
+
 class AmogusGame {
-    constructor() {
-        this.turns = 0
-        this.crew = {}
-    }
+    turns = 0
+    crew = []
 
     reset() {
         this.turns = 7
-        this.crew.red = Math.ceil(Math.random() * 10)
-        this.crew.blue = Math.ceil(Math.random() * 10)
-        this.crew.green = Math.ceil(Math.random() * 10)
-        this.crew.pink = Math.ceil(Math.random() * 10)
-        this.crew.orange = Math.ceil(Math.random() * 10)
-        this.crew.yellow = Math.ceil(Math.random() * 10)
-        this.crew.black = Math.ceil(Math.random() * 10)
-        this.crew.white = Math.ceil(Math.random() * 10)
-        this.crew.purple = Math.ceil(Math.random() * 10)
-        this.crew.cyan = Math.ceil(Math.random() * 10)
+
+        for (let member of members) {
+            const crewmate = {
+                crewname: member,
+                sussiness: Math.ceil(Math.random() * 10)
+            }
+            this.crew.push(crewmate)
+
+            console.log(crewmate)
+        }
     }
 
-    getSussier() {
+    getSussiest() {
         let sussier = 0
         let crewname = ""
-        for (let crew in this.crew) {
-            if (this.crew[crew] > sussier) {
-                sussier = this.crew[crew]
-                crewname = crew
+        for (let iter = 0; iter < this.crew.length; iter++) {
+            if (this.crew[iter].sussiness > sussier) {
+                sussier = this.crew[iter].sussiness
+                crewname = this.crew[iter].crewname
             }
         }
         return crewname
     }
 }
 
-Amongus = new Game(() => {
-    let Amogus = new AmogusGame()
-    Amogus.reset()
-    return Amogus
-})
-Amongus.help =
-    "`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n" +
-    "`&crew eject (color)` to eject a crewmate out, you can only eject once"
 
-Commands.crew = new Command("Find the imposter!\n\n" + Amongus.help + "\npossible options for crewmates are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.", (message, args) => {
+
+Commands.crew = new Command("Find the imposter!\n\n" + helpMessage + "\nPossible options for crewmates are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.", (message, args) => {
     let Amogus = Amongus.getGame(message.author.id)
     let aturn = Amogus.turns
     args[1] = args[1].toLowerCase()
+    const target = Amogus.crew.find(m => m.crewname === args[1])
+    if (!target) {
+        message.channel.send(args[1] + " does not exist, lol");
+        return
+    }
     switch (args[0]) {
         case "examine": {
-            if (!Amogus.crew[args[1]]) { message.channel.send(args[1] + " does not exist, lol"); return }
             let killchance = (Math.random() * 10) - Amogus.turns
-            switch (Amogus.crew[args[1]]) {
+            switch (target.sussiness) {
                 case 1: {
                     message.channel.send(args[1] + " is doing his tasks.")
                     break
@@ -106,9 +113,9 @@ Commands.crew = new Command("Find the imposter!\n\n" + Amongus.help + "\npossibl
             break
         }
         case "eject": {
-            let impostor = Amogus.getSussier()
-            if (!Amogus.crew[args[1]]) { message.channel.send(args[1] + " does not exist, lol"); return }
-            else if (args[1] == impostor || Amogus.crew[args[1]] == 10) {
+            let impostor = Amogus.getSussiest()
+
+            if (target.crewname == impostor || target.sussiness == 10) {
                 message.channel.send(args[1] + " was the impostor! congrats!")
                 let EconomySystem = Economy.getEconomySystem(message.author)
                 EconomySystem.give(120 - (10 * aturn), message)
@@ -131,13 +138,14 @@ Commands.crew = new Command("Find the imposter!\n\n" + Amongus.help + "\npossibl
     }
     Amogus.turns = Math.max(Amogus.turns - 1, 0)
     if (Amogus.turns == 0) {
-        message.channel.send("The impostor killed you!\nThe impostor was " + Amogus.getSussier() + ".\nGame over.")
+        message.channel.send("The impostor killed you!\nThe impostor was " + Amogus.getSussiest() + ".\nGame over.")
         let EconomySystem = Economy.getEconomySystem(message.author)
         EconomySystem.steal(30 + (10 * aturn), message)
-        Amogus.reset()
+        delete Amogus
     } else {
         message.channel.send(Amogus.turns + " turns left.")
     }
-}, "Game", [new RequiredArg(0, Amongus.help, "command"),
+
+}, "Game", [new RequiredArg(0, helpMessage, "command"),
 new RequiredArg(1, "You need to choose the color of the crewmate if you want to do anything to them, " +
     "possible options are: Red, Blue, Green, Pink, Orange, Yellow, Black, White, Purple, Cyan.", "color")])
