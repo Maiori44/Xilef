@@ -296,9 +296,17 @@ function ReadStream(readableStream) {
 }
 
 Commands.lua = new Command("Runs the given Lua code, and returns the stdout", (message, args) => {
-    const code = message.content.match(/```(?:lua)\n([^]*)\n```/i)?.[1] ?? args.join(" ")
-    code.replaceAll("\"", "'")
+    const code = (message.content.match(/```(?:lua)\n([^]*)\n```/i)?.[1] ?? args.join(" ")).replaceAll("\"", "'")
     const luaprocess = spawn("./src/Lua/luajit.exe", ["-e", `setfenv(1, {print = print, math = math}); ${code}`])
+    const timeout = setTimeout(() => {
+        luaprocess.kill()
+        const ErrorEmbed = new Discord.MessageEmbed()
+            .setColor("#FF0000")
+            .setTitle("An error occured:")
+            .setDescription("```\nScript execution timed out after 2000ms\n```")
+            .setTimestamp()
+        message.channel.send({embeds: [ErrorEmbed]})
+    }, 2000)
     ReadStream(luaprocess.stderr).then(output => {
         if (output == "") return
         const ErrorEmbed = new Discord.MessageEmbed()
@@ -306,7 +314,7 @@ Commands.lua = new Command("Runs the given Lua code, and returns the stdout", (m
             .setTitle("An error occured:")
             .setDescription("```\n" + output.toString("utf8").slice(36) + "\n```")
             .setTimestamp()
-        message.channel.send({embeds: [ErrorEmbed]})
+        message.channel.send({embeds: [ErrorEmbed]}).then(() => clearTimeout(timeout))
     })
     ReadStream(luaprocess.stdout).then(output => {
         if (output == "") return
@@ -315,9 +323,9 @@ Commands.lua = new Command("Runs the given Lua code, and returns the stdout", (m
             .setTitle("Output")
             .setDescription("```lua\n" + output.toString("utf8") + "\n```")
             .setTimestamp()
-        message.channel.send({embeds: [ResultEmbed]})
+        message.channel.send({embeds: [ResultEmbed]}).then(() => clearTimeout(timeout))
     })
-}, "Math", [new RequiredArg(0, "You have to evalute *something*", "...code")])
+}, "Math", [new RequiredArg(0, "Yeah uh, you need to give the interpreter some code, you know?", "...code")])
 
 //images commands
 
