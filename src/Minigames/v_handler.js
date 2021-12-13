@@ -1,7 +1,7 @@
 const { Message, Webhook } = require("discord.js")
-const { RequiredArg, Command, Commands } = require("./../commands.js")
+const { RequiredArg, Command } = require("../commands.js")
 
-v_Types = {
+const vTypes = {
     binary: [
         "<:abyssv_c:873259417041268746>",
         "<:concernedv_c:873259417708154880>",
@@ -134,7 +134,7 @@ v_Types = {
     ]
 }
 
-Commands.roll = new Command('Get a random funny looking "v_", try to collect all 60!', (message, args) => {
+Commands.roll = new Command('Get a random funny looking "v_", try to collect all 60!', (message) => {
     let hour = Date.now()
     let EconomySystem = Economy.getEconomySystem(message.author)
     let diff = hour - EconomySystem.vhour
@@ -142,7 +142,7 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
         if (EconomySystem.buy(200 * (EconomySystem.rank / 4), message, undefined, "You don't have enough DogeCoins for a v_ (" + 200 * (EconomySystem.rank / 4) + " DogeCoins needed)", true)) {
             let chance = GetPercentual()
             let rarity = chance >= 90 ? "legendary" : chance >= 50 ? "common" : chance >= 20 ? "rare" : "epic"
-            let v_s = v_Types[rarity]
+            let v_s = vTypes[rarity]
             let v_got = v_s[Math.floor(Math.random() * v_s.length)]
             message.channel.send("You got " + v_got.id + "! (" + rarity + "!)")
             if (EconomySystem.vgot.checkFlag(v_got.value)) {
@@ -155,7 +155,7 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
                         new Discord.MessageEmbed()
                             .setColor(message.member.displayHexColor)
                             .setTitle(EconomySystem.user + "'s v_s")
-                            .setDescription(EconomySystem.vgot.getBinary(v_Types.binary, "❔"))
+                            .setDescription(EconomySystem.vgot.getBinary(vTypes.binary, "❔"))
                             .setTimestamp()
                     ]
                 })
@@ -171,7 +171,7 @@ Commands.roll = new Command('Get a random funny looking "v_", try to collect all
 }, "Game")
 
 Commands.vsend = new Command("Send the v_s you have collected as messages!", (message, args) => {
-    const requestedv_ = [...v_Types.common, ...v_Types.rare, ...v_Types.epic, ...v_Types.legendary].find(({id}) =>
+    const requestedv_ = [...vTypes.common, ...vTypes.rare, ...vTypes.epic, ...vTypes.legendary].find(({id}) =>
         id.startsWith('<:' + args[0]))
     if (!requestedv_) {
         message.channel.send("Could not find the v_\nperhaps you mistyped?")
