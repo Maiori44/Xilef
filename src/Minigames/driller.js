@@ -41,6 +41,8 @@ const tiers = [
     80696969
 ]
 
+const ores = []
+
 class DrillerGame {
     constructor(EconomySystem) {
         this.depth = 0
