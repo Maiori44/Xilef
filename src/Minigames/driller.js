@@ -1,5 +1,5 @@
 const { RequiredArg, Command, Commands } = require("./../commands.js")
-const { Game, MPGame } = require("./../minigames.js")
+const { Game } = require("./../minigames.js")
 
 class DrillerGame {
     constructor(EconomySystem) {
