@@ -2,7 +2,7 @@ const { RequiredArg, Command, Commands } = require("./../commands.js")
 const { MPGame } = require("./../minigames.js")
 const { Matrix } = require("./../matrix.js")
 const { MessageEmbed } = require('discord.js')
-const { Prefix, GetPercentual } = require('../constants.js')
+const { Prefix } = require('../constants.js')
 
 class Connect4Game {
     constructor() {
