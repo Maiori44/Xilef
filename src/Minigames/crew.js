@@ -139,7 +139,7 @@ Commands.crew = new Command("Find the imposter!\n\n" + helpMessage + "\nPossible
         message.channel.send("The impostor killed you!\nThe impostor was " + Amogus.getSussiest() + ".\nGame over.")
         let EconomySystem = Economy.getEconomySystem(message.author)
         EconomySystem.steal(30 + (10 * aturn), message)
-        delete Amogus
+        Amogus.reset()
     } else {
         message.channel.send(Amogus.turns + " turns left.")
     }
