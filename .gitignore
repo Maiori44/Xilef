@@ -119,3 +119,6 @@ dist
 
 # Data files
 src/Data
+
+# Lua stuff
+src/Lua

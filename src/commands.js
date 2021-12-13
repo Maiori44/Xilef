@@ -24,7 +24,7 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/42"))
+        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/43"))
     }
 
     call(message, args) {
@@ -277,6 +277,55 @@ Commands.eval = new Command("Evaluates the given args as JavaScript code, and re
         })
     }
 }, "Math", [new RequiredArg(0, "You have to evalute *something*", "...code")])
+
+const { spawn } = require("child_process");
+
+function ReadStream(readableStream) {
+    const chunks = [];
+  
+    return new Promise((resolve, reject) => {
+        readableStream.on('data', (chunk) => {
+            chunks.push(Buffer.from(chunk));
+        });
+        readableStream.on('error', reject);
+  
+        readableStream.on('end', () => {
+            resolve(Buffer.concat(chunks));
+        });
+    });
+}
+
+Commands.lua = new Command("Runs the given Lua code, and returns the stdout", (message, args) => {
+    const code = (message.content.match(/```(?:lua)\n([^]*)\n```/i)?.[1] ?? args.join(" ")).replaceAll("\"", "'")
+    const luaprocess = spawn("./src/Lua/luajit.exe", ["-e", `setfenv(1, {print = print, math = math}); ${code}`])
+    const timeout = setTimeout(() => {
+        luaprocess.kill()
+        const ErrorEmbed = new Discord.MessageEmbed()
+            .setColor("#FF0000")
+            .setTitle("An error occured:")
+            .setDescription("```\nScript execution timed out after 2000ms\n```")
+            .setTimestamp()
+        message.channel.send({embeds: [ErrorEmbed]})
+    }, 2000)
+    ReadStream(luaprocess.stderr).then(output => {
+        if (output == "") return
+        const ErrorEmbed = new Discord.MessageEmbed()
+            .setColor("#FF0000")
+            .setTitle("An error occured:")
+            .setDescription("```\n" + output.toString("utf8").slice(36) + "\n```")
+            .setTimestamp()
+        message.channel.send({embeds: [ErrorEmbed]}).then(() => clearTimeout(timeout))
+    })
+    ReadStream(luaprocess.stdout).then(output => {
+        if (output == "") return
+        const ResultEmbed = new Discord.MessageEmbed()
+            .setColor("#000080")
+            .setTitle("Output")
+            .setDescription("```lua\n" + output.toString("utf8") + "\n```")
+            .setTimestamp()
+        message.channel.send({embeds: [ResultEmbed]}).then(() => clearTimeout(timeout))
+    })
+}, "Math", [new RequiredArg(0, "Yeah uh, you need to give the interpreter some code, you know?", "...code")])
 
 //images commands
 
