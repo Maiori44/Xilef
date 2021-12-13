@@ -19,16 +19,19 @@ class AmogusGame {
     impostorIndex = 0
 
     reset() {
+        this.crew = []
+
         this.turns = 7
 
-        const sussinessPool = [...Array(10).keys()]
+        const sussinessPool = [...Array(11).keys()].splice(0).sort((a, b) => 0.5 - Math.random()) // get stack overflown
 
         crewmateNames.forEach((crewmateName, index) => {
 
-            const crewmateSussiness = sussinessPool.splice(Math.ceil(Math.random() * 10))[0]
+            const crewmateSussiness = sussinessPool.pop()
 
-            if (crewmateSussiness == 10) 
-                impostorIndex = index;
+            if (crewmateSussiness == 10) {
+                this.impostorIndex = index;
+            } 
             
             const crewmate = {
                 crewname: crewmateName,
@@ -109,7 +112,7 @@ Commands.crew = new Command("Find the imposter!\n\n" + helpMessage + "\nPossible
             break
         }
         case "eject": {
-            let impostor = Amogus.crew[Amogus.impostorIndex]
+            let impostor = Amogus.crew[Amogus.impostorIndex].crewname
 
             if (target.crewname == impostor || target.sussiness == 10) {
                 message.channel.send(args[1] + " was the impostor! congrats!")
@@ -134,7 +137,7 @@ Commands.crew = new Command("Find the imposter!\n\n" + helpMessage + "\nPossible
     }
     Amogus.turns = Math.max(Amogus.turns - 1, 0)
     if (Amogus.turns == 0) {
-        message.channel.send("The impostor killed you!\nThe impostor was " + Amogus.crew[Amogus.impostorIndex] + ".\nGame over.")
+        message.channel.send("The impostor killed you!\nThe impostor was " + Amogus.crew[Amogus.impostorIndex].crewname + ".\nGame over.")
         let EconomySystem = Economy.getEconomySystem(message.author)
         EconomySystem.steal(30 + (10 * aturn), message)
         Amogus.reset()
