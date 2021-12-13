@@ -1,5 +1,6 @@
 const { RequiredArg, Command, Commands } = require("./../commands.js")
 const { Game } = require("./../minigames.js")
+const { MessageEmbed } = require('discord.js')
 
 class DrillerGame {
     constructor(EconomySystem) {
@@ -16,7 +17,7 @@ class DrillerGame {
     }
 
     getInfo(EconomySystem) {
-        return new Discord.MessageEmbed()
+        return new MessageEmbed()
             .setColor("#964B00")
             .setTitle(EconomySystem.user + "'s Driller stats")
             .setDescription("```lua\ndepth: " + this.depth +
