@@ -26,8 +26,6 @@ class AmogusGame {
                 sussiness: Math.ceil(Math.random() * 10)
             }
             this.crew.push(crewmate)
-
-            console.log(crewmate)
         }
     }
 
