@@ -2,6 +2,45 @@ const { RequiredArg, Command, Commands } = require("./../commands.js")
 const { Game } = require("./../minigames.js")
 const { MessageEmbed } = require('discord.js')
 
+const helpMessage =
+    "`&driller stats` says the stats of your driller\n" +
+    "`&driller dig [depth]` makes the driller dig deeper, finding treasures..or lava!\n" +
+    "`&driller repair (amount/\"max\")` repairs the driller, it won't be free though\n" +
+    "`&driller upgrade` upgrades your driller forever, very expensive\n" +
+    "`&driller cashin` get all the DogeCoins the driller got, and reset the game"
+
+const tiers = [
+    1000,
+    5000,
+    16000,
+    40000,
+    75000,
+    125000,
+    200000,
+    250000,
+    300000,
+    370000,
+    600000,
+    1400000,
+    5000000,
+    5500000,
+    6500000,
+    8000000,
+    10000000,
+    12500000,
+    15500000,
+    19000000,
+    23000000,
+    27500000,
+    32500000,
+    38000000,
+    44000000,
+    50500000,
+    57500000,
+    69420420,
+    80696969
+]
+
 class DrillerGame {
     constructor(EconomySystem) {
         this.depth = 0
@@ -16,7 +55,7 @@ class DrillerGame {
         this.hp = 100 * EconomySystem.driller
     }
 
-    getInfo(EconomySystem) {
+    getInfoEmbed(EconomySystem) {
         return new MessageEmbed()
             .setColor("#964B00")
             .setTitle(EconomySystem.user + "'s Driller stats")
@@ -48,51 +87,13 @@ class DrillerOre {
 
 Driller = new Game((EconomySystem) => { return new DrillerGame(EconomySystem) })
 
-Driller.tiers = [
-    1000,
-    5000,
-    16000,
-    40000,
-    75000,
-    125000,
-    200000,
-    250000,
-    300000,
-    370000,
-    600000,
-    1400000,
-    5000000,
-    5500000,
-    6500000,
-    8000000,
-    10000000,
-    12500000,
-    15500000,
-    19000000,
-    23000000,
-    27500000,
-    32500000,
-    38000000,
-    44000000,
-    50500000,
-    57500000,
-    69420420,
-    80696969
-]
-Driller.help =
-    "`&driller stats` says the stats of your driller\n" +
-    "`&driller dig [depth]` makes the driller dig deeper, finding treasures..or lava!\n" +
-    "`&driller repair (amount/\"max\")` repairs the driller, it won't be free though\n" +
-    "`&driller upgrade` upgrades your driller forever, very expensive\n" +
-    "`&driller cashin` get all the DogeCoins the driller got, and reset the game"
-
-Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n" + Driller.help, (message, args) => {
+Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n" + helpMessage, (message, args) => {
     let EconomySystem = Economy.getEconomySystem(message.author)
     let DrillerGame = Driller.getGame(message.author.id, EconomySystem)
     args[0] = args[0].toLowerCase()
     switch (args[0]) {
         case "stats": {
-            message.channel.send({ embeds: [DrillerGame.getInfo(EconomySystem)] })
+            message.channel.send({ embeds: [DrillerGame.getInfoEmbed(EconomySystem)] })
             break
         }
         case "dig": {
@@ -118,7 +119,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                 let hurtchance = GetPercentual();
                 if (DrillerGame.hitlava) hurtchance = hurtchance * 2
 
-                let currentOre = Driller.Ores[DrillerGame.depth]
+                let currentOre = Driller.Ores
                 if (currentOre.tier > EconomySystem.driller) {
 
                     log += "Your driller can't dig any further, please upgrade it to dig further. For now, cashin to get the money you found."
@@ -155,7 +156,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
 
             }
 
-            const resultEmbed = DrillerGame.getInfo(EconomySystem)
+            const resultEmbed = DrillerGame.getInfoEmbed(EconomySystem)
 
             let results = [];
             for (var i = 0; i < log.toString().length; i += 1024)
@@ -191,7 +192,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             if (EconomySystem.driller == 30) {
                 message.channel.send("Your driller already reached max tier.")
                 EconomySystem.award("driller", message)
-            } else if (EconomySystem.buy(Driller.tiers[EconomySystem.driller - 1], message, "Your driller reached tier " + (EconomySystem.driller + 1) + "!", "You don't have enough DogeCoins to upgrade your driller (" + Driller.tiers[EconomySystem.driller - 1] + " DogeCoins needed)")) {
+            } else if (EconomySystem.buy(tiers[EconomySystem.driller - 1], message, "Your driller reached tier " + (EconomySystem.driller + 1) + "!", "You don't have enough DogeCoins to upgrade your driller (" + tiers[EconomySystem.driller - 1] + " DogeCoins needed)")) {
                 EconomySystem.driller = EconomySystem.driller + 1
                 if (EconomySystem.driller == 30) {
                     EconomySystem.award("driller", message)
@@ -206,7 +207,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             break
         }
         default: {
-            message.channel.send(Driller.help.replace(/\&/g, Prefix.get(message.guild.id)))
+            message.channel.send(helpMessage.replace(/\&/g, Prefix.get(message.guild.id)))
             return
         }
     }
@@ -215,4 +216,4 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
         EconomySystem.steal(25 * DrillerGame.depth, message)
         DrillerGame.reset(EconomySystem)
     }
-}, "Game", [new RequiredArg(0, Driller.help, "command"), new RequiredArg(1, undefined, "argument", true)])
+}, "Game", [new RequiredArg(0, helpMessage, "command"), new RequiredArg(1, undefined, "argument", true)])
