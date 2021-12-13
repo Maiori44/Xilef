@@ -103,14 +103,14 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
 
             let depth = parseInt(args[1]);
 
-            if (depth < 1) {
-                message.channel.send("What are you doing? You can only go forward, sorry my friend.");
-                return;
-            }
-
             if (isNaN(depth)) {
                 depth = 1;
             }
+
+            if (depth < 1) {
+                message.channel.send("What are you doing? You can only go forward, sorry my friend.");
+                return;
+            }            
 
             let log = [];
 
@@ -119,10 +119,11 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     log += "You died!"
                     break
                 }
+
                 let hurtchance = GetPercentual();
                 if (DrillerGame.hitlava) hurtchance = hurtchance * 2
-
-                let currentOre = Driller.Ores[depth]
+                    
+                let currentOre = ores[x]
                 if (currentOre.tier > EconomySystem.driller) {
 
                     log += "Your driller can't dig any further, please upgrade it to dig further. For now, cashin to get the money you found."
