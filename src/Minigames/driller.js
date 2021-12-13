@@ -1,5 +1,5 @@
 const { RequiredArg, Command, Commands } = require("./../commands.js")
-const { GetPercentual } = require('../constants')
+const { GetPercentual, Prefix } = require('../constants')
 const { Game } = require("./../minigames.js")
 const { MessageEmbed } = require('discord.js')
 
