@@ -1,7 +1,7 @@
 const { RequiredArg, Command, Commands } = require("./../commands.js")
 const { Game, MPGame } = require("./../minigames.js")
 
-const members = ['red', 'blue', 'green', 'pink', 'orange', 'yellow', 'black', 'white', 'purple', 'cyan']
+const crewmateNames = ['red', 'blue', 'green', 'pink', 'orange', 'yellow', 'black', 'white', 'purple', 'cyan']
 
 const helpMessage =
     "`&crew examine (color)` to examine a crewmate, the impostor might find you though...\n" +
@@ -16,29 +16,27 @@ const Amongus = new Game(() => {
 class AmogusGame {
     turns = 0
     crew = []
+    impostorIndex = 0
 
     reset() {
         this.turns = 7
 
-        for (let member of members) {
-            const crewmate = {
-                crewname: member,
-                sussiness: Math.ceil(Math.random() * 10)
-            }
-            this.crew.push(crewmate)
-        }
-    }
+        const sussinessPool = [...Array(10).keys()]
 
-    getSussiest() {
-        let sussier = 0
-        let crewname = ""
-        for (let iter = 0; iter < this.crew.length; iter++) {
-            if (this.crew[iter].sussiness > sussier) {
-                sussier = this.crew[iter].sussiness
-                crewname = this.crew[iter].crewname
+        crewmateNames.forEach((crewmateName, index) => {
+
+            const crewmateSussiness = sussinessPool.splice(Math.ceil(Math.random() * 10))[0]
+
+            if (crewmateSussiness == 10) 
+                impostorIndex = index;
+            
+            const crewmate = {
+                crewname: crewmateName,
+                sussiness: crewmateSussiness
             }
-        }
-        return crewname
+
+            this.crew.push(crewmate)
+        })
     }
 }
 
@@ -111,7 +109,7 @@ Commands.crew = new Command("Find the imposter!\n\n" + helpMessage + "\nPossible
             break
         }
         case "eject": {
-            let impostor = Amogus.getSussiest()
+            let impostor = Amogus.crew[Amogus.impostorIndex]
 
             if (target.crewname == impostor || target.sussiness == 10) {
                 message.channel.send(args[1] + " was the impostor! congrats!")
@@ -136,7 +134,7 @@ Commands.crew = new Command("Find the imposter!\n\n" + helpMessage + "\nPossible
     }
     Amogus.turns = Math.max(Amogus.turns - 1, 0)
     if (Amogus.turns == 0) {
-        message.channel.send("The impostor killed you!\nThe impostor was " + Amogus.getSussiest() + ".\nGame over.")
+        message.channel.send("The impostor killed you!\nThe impostor was " + Amogus.crew[Amogus.impostorIndex] + ".\nGame over.")
         let EconomySystem = Economy.getEconomySystem(message.author)
         EconomySystem.steal(30 + (10 * aturn), message)
         Amogus.reset()
