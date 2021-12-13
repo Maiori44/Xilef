@@ -1,4 +1,5 @@
-const { RequiredArg, Command } = require("./commands.js")
+const { Colors } = require('./constants.js')
+const fs = require('fs')
 
 class Game {
     constructor(gamemaker) {
@@ -128,15 +129,14 @@ class MPGame {
     }
 }
 
-exports.Game = Game
-exports.MPGame = MPGame
+module.exports = {
+    Game,
+    MPGame
+}
 
-require("./Minigames/crew.js")
-require("./Minigames/driller.js")
-require("./Minigames/dungeon.js")
-require("./Minigames/reversi.js")
-require("./Minigames/connect 4.js")
-require("./Minigames/v_ roll.js")
-require("./Minigames/minesweeper.js")
-require("./Minigames/rock paper scissors.js")
-require("./Minigames/brainfuck.js")
+var normalizedPath = require("path").join(__dirname, "./Minigames");
+
+fs.readdirSync(normalizedPath).forEach(function(file) {
+    require("./Minigames/" + file);
+  });
+  
