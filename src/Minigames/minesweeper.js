@@ -1,7 +1,14 @@
 const { RequiredArg, Command, Commands } = require("./../commands.js")
 const { Game } = require("./../minigames.js")
 const { Matrix } = require("./../matrix.js")
+const { MessageEmbed } = require('discord.js')
 
+const numToTile = [":black_large_square:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:"]
+const helpMessage =
+    "`&msweeper board` shows the current board\n" +
+    "`&msweeper dig (x) (y)` digs in the given location, the dug tile will give information about the nearby tiles..or explode!\n" +
+    "`&msweeper flag (x) (y)` puts a flag in the given location, does nothing, but can be used to remember the mines locations"
+    
 class MineSweeperCell {
     constructor() {
         this.isbomb = false
@@ -35,7 +42,9 @@ class MineSweeperGame {
             [Math.floor(Math.random() * 9), Math.floor(Math.random() * 9)],
             [Math.floor(Math.random() * 9), Math.floor(Math.random() * 9)],
         ]
-        this.board = new Matrix(9, 9).map(() => {return new MineSweeperCell()})
+
+        this.board = new Matrix(9, 9).map(() => { return new MineSweeperCell() })
+
         for (let i = 0; i <= 9; i++) {
             while (true) {
                 if (!this.board.at(bomblocations[i][0], bomblocations[i][1]).isbomb) {
@@ -61,15 +70,15 @@ class MineSweeperGame {
         return tiles
     }
 
-    getBoardInfo(EconomySystem, gameover) {
-        return new Discord.MessageEmbed()
+    getBoardInfoEmbed(EconomySystem, gameover) {
+        return new MessageEmbed()
             .setColor("#d3d3d3")
             .setTitle(EconomySystem.user + "'s MineSweeper board")
             .setDescription(this.board.toString((Cell) => {
                 return (gameover && Cell.value.isbomb ?
                     "💥" :
                     Cell.value.isrevealed ?
-                        MineSweeper.numToTile[Cell.value.nearbybombs] :
+                        numToTile[Cell.value.nearbybombs] :
                         (Cell.value.isflagged ? "<:flag:877088652600172544>" : "<:ms:876134777701412904>"))
             }))
             .setFooter(gameover ? "Game Over" : this.tilesleft + " tiles left")
@@ -80,19 +89,15 @@ class MineSweeperGame {
 MineSweeper = new Game(() => {
     return new MineSweeperGame()
 })
-MineSweeper.numToTile = [":black_large_square:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:"]
-MineSweeper.help =
-    "`&msweeper board` shows the current board\n" +
-    "`&msweeper dig (x) (y)` digs in the given location, the dug tile will give information about the nearby tiles..or explode!\n" +
-    "`&msweeper flag (x) (y)` puts a flag in the given location, does nothing, but can be used to remember the mines locations"
+numToTile = [":black_large_square:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:"]
 
-Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" + MineSweeper.help, (message, args) => {
+Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" + helpMessage, (message, args) => {
     const MineSweeperGameConstructor = MineSweeperGame
     let EconomySystem = Economy.getEconomySystem(message.author)
     args[0] = args[0].toLowerCase()
     switch (args[0]) {
         case "board": {
-            message.channel.send({ embeds: [MineSweeper.getGame(message.author.id).getBoardInfo(EconomySystem)] })
+            message.channel.send({ embeds: [MineSweeper.getGame(message.author.id).getBoardInfoEmbed(EconomySystem)] })
             return
         }
         case "dig": {
@@ -117,7 +122,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             const x = parsePosition(args[1])
             const y = parsePosition(args[2])
 
-            if ([...x,...y].some(isNaN)) {
+            if ([...x, ...y].some(isNaN)) {
                 message.channel.send(`You need to give valid coordinates for where to dig\nExample: \`${Prefix.get(message.guild.id)}msweeper dig 0 0\` will dig the tile in the top left corner\n\nYou could also put a range (N-N) or a comma seperated list of positions (N,N,...)\nExample: \`${Prefix.get(message.guild.id)}msweeper dig 0-8 0,2,4,6,8\``)
                 return
             }
@@ -128,7 +133,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             const MineSweeperGame = MineSweeper.getGame(message.author.id)
 
             let CheckNeighbors = []
-            let Queue = x.map(x=> y.map(y=> ({x,y}) )).flat()
+            let Queue = x.map(x => y.map(y => ({ x, y }))).flat()
             do {
                 if (Queue.length) {
                     for (let i = 0; i < Queue.length; i++) {
@@ -140,7 +145,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
 
                         const Cell = MineSweeperGame.board.at(Tileinfo.x, Tileinfo.y)
                         if (Cell.isbomb) {
-                            message.channel.send({ embeds: [MineSweeperGame.getBoardInfo(EconomySystem, true)] })
+                            message.channel.send({ embeds: [MineSweeperGame.getBoardInfoEmbed(EconomySystem, true)] })
                             MineSweeper.list[message.author.id] = new MineSweeperGameConstructor()
                             return 1
                         }
@@ -167,7 +172,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             } while (Queue.length > 0)
             // }
 
-            message.channel.send({ embeds: [MineSweeperGame.getBoardInfo(EconomySystem)] })
+            message.channel.send({ embeds: [MineSweeperGame.getBoardInfoEmbed(EconomySystem)] })
             if (!MineSweeperGame.tilesleft) {
                 message.channel.send("You won!")
                 EconomySystem.give(300, message)
@@ -201,7 +206,7 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
             const x = parsePosition(args[1])
             const y = parsePosition(args[2])
 
-            if ([...x,...y].some(isNaN)) {
+            if ([...x, ...y].some(isNaN)) {
                 message.channel.send(`You need to give valid coordinates for where to place the flag\nExample: \`${Prefix.get(message.guild.id)}msweeper flag 0 0\` will place the flag in the top left corner of the board\n\nYou could also put a range (N-N) or a comma seperated list of positions (N,N,...)\nExample: \`${Prefix.get(message.guild.id)}msweeper flag 0-8 0,2,4,6,8\``)
                 return
             }
@@ -217,15 +222,15 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
                         message.channel.send("That location is out of bounds.")
                     }
 
-            return void message.channel.send({ embeds: [MineSweeperGame.getBoardInfo(EconomySystem)] })
+            return void message.channel.send({ embeds: [MineSweeperGame.getBoardInfoEmbed(EconomySystem)] })
         }
         default: {
-            message.channel.send(MineSweeper.help.replace(/\&/g, Prefix.get(message.guild.id)))
+            message.channel.send(helpMessage.replace(/\&/g, Prefix.get(message.guild.id)))
             return
         }
     }
 }, "Game", [
-    new RequiredArg(0, MineSweeper.help, "command"),
+    new RequiredArg(0, helpMessage, "command"),
     new RequiredArg(1, undefined, "argument 1", true),
     new RequiredArg(2, undefined, "argument 2", true)
 ], "https://en.wikipedia.org/wiki/Minesweeper_(video_game)")
