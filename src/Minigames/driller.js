@@ -1,4 +1,5 @@
 const { RequiredArg, Command, Commands } = require("./../commands.js")
+const { GetPercentual } = require('../constants')
 const { Game } = require("./../minigames.js")
 const { MessageEmbed } = require('discord.js')
 
@@ -121,7 +122,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                 let hurtchance = GetPercentual();
                 if (DrillerGame.hitlava) hurtchance = hurtchance * 2
 
-                let currentOre = Driller.Ores
+                let currentOre = Driller.Ores[depth]
                 if (currentOre.tier > EconomySystem.driller) {
 
                     log += "Your driller can't dig any further, please upgrade it to dig further. For now, cashin to get the money you found."
