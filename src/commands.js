@@ -312,7 +312,7 @@ Commands.lua = new Command("Runs the given Lua code, and returns the stdout", (m
         const ErrorEmbed = new Discord.MessageEmbed()
             .setColor("#FF0000")
             .setTitle("An error occured:")
-            .setDescription("```\n" + output.toString("utf8").slice(36) + "\n```")
+            .setDescription("```\n" + output.toString("utf8").slice(49) + "\n```")
             .setTimestamp()
         message.channel.send({embeds: [ErrorEmbed]}).then(() => clearTimeout(timeout))
     })
