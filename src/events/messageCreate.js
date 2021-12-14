@@ -1,9 +1,9 @@
-const { Prefix, Colors, client, Commands, isDebugging } = require('../constants.js')
+const { Prefix, Colors, Commands, isDebugging } = require('../constants.js')
 const { MessageEmbed } = require('discord.js')
 const warning = isDebugging ? "This bot is running in debug mode, no changes will be saved" : undefined;
 
 
-module.exports = (message) => {
+module.exports = (client, message) => {
     if (message.author.bot) return
     if (message.guild === null) {
         message.author.send("I can't answer command calls from DMs, join my official server for that!\nhttps://discord.gg/Qyz5HgrxWg")
