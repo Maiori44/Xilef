@@ -1,6 +1,6 @@
-const { RequiredArg, Command, Commands } = require("./../commands.js")
-const { Game } = require("./../minigames.js")
-const { Matrix } = require("./../matrix.js")
+const { RequiredArg, Command, Commands } = require("../../commands.js")
+const { Game } = require("../../minigames.js")
+const { Matrix } = require("../../matrix.js")
 const { MessageEmbed } = require('discord.js')
 
 const numToTile = [":black_large_square:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:"]

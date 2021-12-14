@@ -1,5 +1,5 @@
-const { RequiredArg, Command, Commands } = require("./../commands.js")
-const { Game, MPGame } = require("./../minigames.js")
+const { RequiredArg, Command, Commands } = require("../../commands.js")
+const { Game, MPGame } = require("../../minigames.js")
 
 class Entity {
     constructor(hp, mana, attack, defense, ai, name, isboss) {

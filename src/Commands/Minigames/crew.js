@@ -1,5 +1,5 @@
-const { RequiredArg, Command, Commands } = require("./../commands.js")
-const { Game, MPGame } = require("./../minigames.js")
+const { RequiredArg, Command, Commands } = require("../../commands.js")
+const { Game, MPGame } = require("../../minigames.js")
 
 const crewmateNames = ['red', 'blue', 'green', 'pink', 'orange', 'yellow', 'black', 'white', 'purple', 'cyan']
 

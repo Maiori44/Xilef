@@ -1,5 +1,5 @@
-const { RequiredArg, Command, Commands } = require("./../commands.js")
-const { Time } = require('../constants.js')
+const { RequiredArg, Command, Commands } = require("../../commands.js")
+const { Time } = require('../../constants.js')
 const { MessageEmbed } = require('discord.js')
 
 const brainfuck = {

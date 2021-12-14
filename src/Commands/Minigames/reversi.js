@@ -1,7 +1,7 @@
-const { RequiredArg, Command, Commands } = require("./../commands.js")
-const { MPGame } = require("./../minigames.js")
+const { RequiredArg, Command, Commands } = require("../../commands.js")
+const { MPGame } = require("../../minigames.js")
 const { MessageEmbed } = require('discord.js')
-const { Matrix } = require("./../matrix.js")
+const { Matrix } = require("../../matrix.js")
 
 const emptyTile = "<:green_square:869976853090271323>"
 const validTile = "<:orange_square:869976862615543818>"
