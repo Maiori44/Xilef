@@ -34,11 +34,26 @@ class ClashMatrix extends Matrix {
         return data
     }
 
-    toEmbed(name) {
+    toEmbed(EconomySystem) {
+        const BuildsNum = {}
         const MatrixEmbed = new Discord.MessageEmbed()
             .setColor("#FFA500")
-            .setTitle(name + "'s village")
-            .setDescription(this.map((Cell) => {return Clash.emojis[Cell.value]}).toString())
+            .setTitle(EconomySystem.user + "'s village")
+            .setTimestamp()
+            .setDescription(this.map((Cell) => {
+                const build = Cell.value
+                if (BuildsNum[build]) BuildsNum[build]++
+                else {BuildsNum[build] = 1}
+                return Clash.emojis[build]
+            }).toString())
+        delete BuildsNum.N
+        delete BuildsNum.T
+        console.log(JSON.stringify(BuildsNum))
+        for (const build of Object.keys(BuildsNum)) {
+            console.log(build)
+            MatrixEmbed.addField(Clash.emojis[build], BuildsNum[build] + " built", true)
+        }
+        MatrixEmbed.setFooter(`DogeCoins gained: ${BuildsNum.M ?? 0} every second`)
         return MatrixEmbed
     }
 
@@ -56,12 +71,12 @@ exports.ClashMatrix = ClashMatrix
 
 Clash = {
     emojis: {
-        N: ":green_square:",
+        N: ":black_large_square:",
         T: "<:townhall:919125796868743210>",
-        M: ":mine:",
-        C: ":cannon:",
-        X: ":crossbow:",
-        B: ":barracks:"
+        M: "<:mine:919125796889722890>",
+        C: "<:cannon:919125796793241680>",
+        X: "<:crossbow:919125796830978088>",
+        B: "<:barracks:920442549796237403>"
     },
     buildings: {
         "mine": "M",
@@ -86,15 +101,17 @@ Clash = {
 }
 
 Commands.clash = new Command("Build your village and attack other's!\n\n" + Clash.help, (message, args) => {
-    const EconomySystem = Economy.getEconomySystem(message.author)
-    const ClashMatrix = EconomySystem.clash
     const command = args[0].toLowerCase()
     switch (command) {
         case "show": {
-            message.channel.send({ embeds: [ClashMatrix.toEmbed(EconomySystem.user) ]})
+            const EconomySystem = Economy.getEconomySystem(message.mentions.users.first() || message.author)
+            const ClashMatrix = EconomySystem.clash
+            message.channel.send({ embeds: [ClashMatrix.toEmbed(EconomySystem) ]})
             break
         }
         case "build": {
+            const EconomySystem = Economy.getEconomySystem(message.author)
+            const ClashMatrix = EconomySystem.clash
             const building = Clash.buildings[args[1].toLowerCase()]
             if (!building) {
                 message.channel.send("I have no clue what a " + args[1] + " is.\nIf you have no clue what you can build either, try `&clash buildings`".replace(/\&/g, Prefix.get(message.guild.id)))
@@ -104,7 +121,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
             const x = parseInt(args[2])
             const y = parseInt(args[3])
             if (isNaN(x) || isNaN(y)) {
-                message.channe.send("Now that position you just gave me...it doesn't make sense")
+                message.channel.send("Now that position you just gave me...it doesn't make sense")
                 return
             }
             if (!ClashMatrix.checkBounds(x, y)) {
@@ -118,6 +135,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
             break
         }
         case "buildings": {
+            const EconomySystem = Economy.getEconomySystem(message.author)
             const InfoEmbed = new Discord.MessageEmbed()
                 .setColor("#FFA500")
                 .setTitle("Buildings")
