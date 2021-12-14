@@ -1,4 +1,3 @@
-const fs = require('fs');
 const { Colors, Prefix } = require('./constants.js');
 
 class RequiredArg {
@@ -48,9 +47,3 @@ module.exports = {
     Command,
     RequiredArg
 }
-
-var normalizedPath = require("path").join(__dirname, "./Commands");
-
-fs.readdirSync(normalizedPath).forEach(function(file) {
-  require("./Commands/" + file);
-});

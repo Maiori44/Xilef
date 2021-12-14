@@ -133,10 +133,3 @@ module.exports = {
     Game,
     MPGame
 }
-
-var normalizedPath = require("path").join(__dirname, "./Minigames");
-
-fs.readdirSync(normalizedPath).forEach(function(file) {
-    require("./Minigames/" + file);
-  });
-  
