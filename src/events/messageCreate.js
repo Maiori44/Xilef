@@ -1,5 +1,6 @@
 const { Prefix, Colors, Commands, isDebugging } = require('../constants.js')
 const { MessageEmbed } = require('discord.js')
+const fs = require('fs')
 const warning = isDebugging ? "This bot is running in debug mode, no changes will be saved" : undefined;
 
 
