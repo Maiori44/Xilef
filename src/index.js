@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const { Collection } = require('discord.js');
 
+require('./commands.js');
 require("./economy.js")
 require("./parsers.js")
 require("./minigames.js")
