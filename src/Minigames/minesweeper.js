@@ -89,7 +89,6 @@ class MineSweeperGame {
 MineSweeper = new Game(() => {
     return new MineSweeperGame()
 })
-numToTile = [":black_large_square:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:"]
 
 Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" + helpMessage, (message, args) => {
     const MineSweeperGameConstructor = MineSweeperGame
