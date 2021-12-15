@@ -53,7 +53,18 @@ class ClashMatrix extends Matrix {
             console.log(build)
             MatrixEmbed.addField(Clash.emojis[build], BuildsNum[build] + " built", true)
         }
-        MatrixEmbed.setFooter(`DogeCoins gained: ${BuildsNum.M ?? 0} every second`)
+        MatrixEmbed.addFields(
+            {
+                name: "DogeCoins production:",
+                value: `${BuildsNum.M ?? 0} every second`,
+                inline: false
+            },
+            {
+                name: "Attack Power:",
+                value: (1 + 3 * (BuildsNum.M ?? 0)).toString(),
+                inline: false
+            }
+        )
         return MatrixEmbed
     }
 
