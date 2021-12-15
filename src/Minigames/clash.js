@@ -122,6 +122,10 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
             break
         }
         case "build": {
+            if (!args[1]) {
+                message.channel.send("Uh-huh, I'll build your \" \" immediately.")
+                return
+            }
             const EconomySystem = Economy.getEconomySystem(message.author)
             const ClashMatrix = EconomySystem.clash
             const building = Clash.buildings[args[1].toLowerCase()]
