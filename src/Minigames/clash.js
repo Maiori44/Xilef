@@ -1,3 +1,4 @@
+const { MessageActionRow } = require("discord.js");
 const { RequiredArg, Command } = require("./../commands.js")
 const { Matrix } = require("./../matrix.js")
 
@@ -81,6 +82,14 @@ class ClashMatrix extends Matrix {
 exports.ClashMatrix = ClashMatrix
 
 Clash = {
+    names: {
+        N: "Empty Tile",
+        T: "Town Hall",
+        M: "DogeCoin Mine",
+        C: "Cannon",
+        X: "Crossbow",
+        B: "Barracks"
+    },
     emojis: {
         N: ":black_large_square:",
         T: "<:townhall:919125796868743210>",
@@ -152,7 +161,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
             const mines = ClashMatrix.getTotal("M")
             const seconds = Math.floor((Date.now() - EconomySystem.clashtime) / 1000)
             EconomySystem.give(Math.min(mines * seconds, mines * 10000), message)
-            EconomySystem.clashtime = Date.now() 
+            EconomySystem.clashtime = Date.now()
             break
         }
         case "buildings": {
@@ -190,6 +199,125 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
                 )
             message.channel.send({ embeds: [InfoEmbed] })
             return
+        }
+
+        case 'remove': {
+        const villageMatrix = Economy.getEconomySystem(message.author).clash;
+          const selected = new Set();
+
+          message.channel.send({
+            content: 'Selected:\n\n`nothing`',
+            components: [
+              ...[...villageMatrix]
+                .reduce((chunks, entry, index) => {
+                  const chunkIndex = Math.floor(index / 25);
+
+                  (chunks[chunkIndex] ??= []).push(entry);
+
+                  return chunks;
+                }, [])
+                .map((cells, chunkIndex) => {
+                  return new Discord.MessageActionRow({
+                    components: [
+                      new Discord.MessageSelectMenu({
+                        customId: 'remove-select-menu#' + chunkIndex,
+                        placeholder: 'Choose which building to remove',
+                        maxValues: cells.length,
+                        options: cells.map(({value, x, y}) => ({
+                          label: Clash.names[value],
+                          description: `${x}, ${y}`,
+                          value: `${value}-${x}-${y}`
+                          }))
+                      })
+                    ]
+                  });
+                }),
+
+              new Discord.MessageActionRow({
+                components: [
+                  new Discord.MessageButton({
+                    customId: 'selector-delete',
+                    style: 'DANGER',
+                    label: 'Delete',
+                  }),
+                ]
+              }),
+            ]
+          })
+            .then((selector) => {
+              const collector = selector.createMessageComponentCollector({
+                componentType: 'SELECT_MENU',
+                async filter(interaction) {
+                  const isSameUser = interaction.user.id === message.author.id;
+
+                  if (!isSameUser) {
+                    await interaction.reply({
+                      content: "You can't delete someone else's building",
+                      ephemeral: true
+                    });
+                  }
+
+                  return isSameUser;
+                }
+              });
+
+              collector.on('collect', async (interaction) => {
+                for (const v of interaction.values) {
+                  const [, rawX, rawY] = v.split('-');
+
+                  if ([...selected].some(({ x: cellX, y: cellY }) => cellX === Number(rawX) && cellY === Number(rawY))) {
+                    selected.delete([...selected].find(({ x: cellX, y: cellY }) => cellX === Number(rawX) && cellY === Number(rawY)));
+                  } else {
+                    selected.add(villageMatrix.getCell(Number(rawX), Number(rawY)));
+                  }
+                }
+
+
+                  return void interaction.update({
+                    content: 'Selected:\n\n' +
+                      ([...selected].map((tile) => {
+                        return `${Clash.emojis[tile.value]} (${tile.x}, ${tile.y})`;
+                      }).join('\n') || '`nothing`')
+                  });
+              });
+
+              return selector.awaitMessageComponent({
+                componentType: 'BUTTON',
+                async filter(interaction) {
+                  const isSameUser = interaction.user.id === message.author.id;
+                  const isSelected = selected.size !== 0;
+
+                  if (!isSameUser) {
+                    await interaction.reply({
+                      content: "You can't delete someone else's alias",
+                      ephemeral: true
+                    });
+                  }
+
+                  if (!isSelected) {
+                    await interaction.reply({
+                      content: "Deleting nothing...",
+                      ephemeral: true
+                    });
+                  } else collector.stop();
+
+                  return isSameUser && isSelected;
+                }
+              });
+            })
+            .then((interaction) => {
+              for (const cell of selected) {
+                cell.value = 'N';
+              }
+
+              interaction.update({
+                content: "Successfully removed " +
+                  [...selected].map((tile) => {
+                    return `${Clash.emojis[tile.value]} (${tile.x}, ${tile.y})`;
+                  }).join(', ')
+              })
+            });
+          break;
         }
         default: message.channel.send(Clash.help.replace(/\&/g, Prefix.get(message.guild.id)))
     }
