@@ -105,6 +105,7 @@ Clash = {
         "`&clash buildings` shows a list of all buildings and what they do\n" +
         "`&clash build (name) (x) (y)` places the desired building in the given location\n" +
         "`&clash cashin` collects all the money your mines did\n" +
+        "`&clash move (x start) (y start) (x end) (y end)`" +
         "`&clash attack (@user) (power) (x)` attacks the pinged user at the given x\n" +
         "the attack will target the southest building in the given x\n" +
         "the more power the attack is the more it can survive the defenses\n" +
@@ -144,6 +145,26 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
                 ClashMatrix.set(x, y, building)
                 if (building == "M") EconomySystem.clashtime = Date.now()
             }
+            break
+        }
+        case "move": {
+            const xStart = parseInt(args[1])
+            const yStart = parseInt(args[2])
+            const xEnd = parseInt(args[3])
+            const yEnd = parseInt(args[4])
+            if ([xStart, yStart, xEnd, yEnd].some(Number.isNaN)) {
+                message.channel.send("Now these positions you just gave me...they don't make sense")
+                return
+            }
+            const EconomySystem = Economy.getEconomySystem(message.author)
+            const ClashMatrix = EconomySystem.clash
+            if (!ClashMatrix.checkBounds(xStart, yStart) || !ClashMatrix.checkBounds(xEnd, yEnd)) {
+                message.channel.send("Now these positions you just gave me...they are out of bounds")
+                return
+            }
+            const [B1, B2] = [ClashMatrix.at(xStart, yStart), ClashMatrix.at(xEnd, yEnd)]
+            ClashMatrix.set(xEnd, yEnd, B1)
+            ClashMatrix.set(xStart, yStart, B2)
             break
         }
         case "cashin": {
@@ -198,4 +219,5 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
     new RequiredArg(1, undefined, "arg 1", true),
     new RequiredArg(2, undefined, "arg 2", true),
     new RequiredArg(3, undefined, "arg 3", true),
+    new RequiredArg(4, undefined, "arg 4", true)
 ])
