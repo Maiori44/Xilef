@@ -57,7 +57,8 @@ class EconomySystem {
         this.vgot = new FlagSystem(60, backup?.vgot) //flag system for the different v_s
         this.bftime = backup?.bftime || 1 //last time they completed a brainfuck challenge
         this.achievments = new FlagSystem(9, backup?.achievments) //flag system for the achievements
-        this.clash = new ClashMatrix(backup?.clash || "NT_N") //clash base
+        this.clash = new ClashMatrix(backup?.clash || "NT_N") //clash default base
+        this.clashtime = backup?.clashtime || 1 //last time money was taken from the mines in &clash
         console.log("- " + Colors.purple.colorize(!backup ? "Created EconomySystem of " : "Restored EconomySystem of ") + Colors.hpurple.colorize(this.user))
     }
 
@@ -88,6 +89,7 @@ class EconomySystem {
             if (!nobonus) {
                 msg = msg + " (+" + pbonus + " bonus)"
                 if (GetPercentual() <= 7) {
+                if (amount > 5000 && GetPercentual() <= 7) {
                     message.channel.send("huh!? you found a Xilefund shard!")
                     this.alterValue("xilefunds", 0.25)
                 }

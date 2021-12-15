@@ -131,7 +131,17 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
             const price = 500 * EconomySystem.rank
             if (EconomySystem.buy(price, message, "Sucessfully built your " + args[1], "You lack money for this building, you need " + price)) {
                 ClashMatrix.set(x, y, building)
+                if (building == "M") EconomySystem.clashtime = Date.now()
             }
+            break
+        }
+        case "cashin": {
+            const EconomySystem = Economy.getEconomySystem(message.author)
+            const ClashMatrix = EconomySystem.clash
+            const mines = ClashMatrix.getTotal("M")
+            const seconds = Math.floor((Date.now() - EconomySystem.clashtime) / 1000)
+            EconomySystem.give(Math.min(mines * seconds, mines * 10000), message)
+            EconomySystem.clashtime = Date.now() 
             break
         }
         case "buildings": {
