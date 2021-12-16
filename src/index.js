@@ -68,7 +68,7 @@ require("./buttons.js")
 require("./minigames.js")
 require('./developer')
 
-client.on("ready", () => {
+client.on("ready", (message) => {
     console.log("- Bot ready")
     if (debugmode) console.log("- " + Colors.yellow.colorize("The current bot session is running in debug mode, no data will be saved"))
     client.user.setActivity("ping me for help, Guild counter:" + message.client.guilds.cache.size)
