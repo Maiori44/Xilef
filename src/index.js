@@ -71,7 +71,7 @@ require('./developer')
 client.on("ready", (message) => {
     console.log("- Bot ready")
     if (debugmode) console.log("- " + Colors.yellow.colorize("The current bot session is running in debug mode, no data will be saved"))
-    client.user.setActivity("ping me for help, Guild counter:" + message.client.guilds.cache.size)
+    client.user.setActivity("ping me for help)
 })
 client.on("messageCreate", (message) => {
     if (message.author.bot) return
