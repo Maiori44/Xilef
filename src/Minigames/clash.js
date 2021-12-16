@@ -114,7 +114,8 @@ Clash = {
         "`&clash buildings` shows a list of all buildings and what they do\n" +
         "`&clash build (name) (x) (y)` places the desired building in the given location\n" +
         "`&clash cashin` collects all the money your mines did\n" +
-        "`&clash move (x start) (y start) (x end) (y end)`" +
+        "`&clash move (x start) (y start) (x end) (y end)` swaps 2 buildings\n" +
+        "`&clash remove` shows you a menu to remove buildings" +
         "`&clash attack (@user) (power) (x)` attacks the pinged user at the given x\n" +
         "the attack will target the southest building in the given x\n" +
         "the more power the attack is the more it can survive the defenses\n" +
@@ -234,10 +235,12 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
             content: 'Selected:\n\n`nothing`',
             components: [
               ...[...villageMatrix]
-                .reduce((chunks, entry, index) => {
+                .reduce((chunks, cell) => {
+                  let index = 0
+                  if (cell.value === "N" || cell.value === "T") return chunks;
                   const chunkIndex = Math.floor(index / 25);
-
-                  (chunks[chunkIndex] ??= []).push(entry);
+                  index++;
+                  (chunks[chunkIndex] ??= []).push(cell);
 
                   return chunks;
                 }, [])
@@ -331,16 +334,16 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
               });
             })
             .then((interaction) => {
-              for (const cell of selected) {
-                cell.value = 'N';
-              }
-
               interaction.update({
                 content: "Successfully removed " +
                   [...selected].map((tile) => {
                     return `${Clash.emojis[tile.value]} (${tile.x}, ${tile.y})`;
                   }).join(', ')
               })
+
+              for (const cell of selected) {
+                cell.value = 'N';
+              }
             });
           break;
         }
