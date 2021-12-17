@@ -1,6 +1,23 @@
 const { Command } = require('../command.js')
 const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
 
+const Buttons = new MessageActionRow({
+    components: [
+        new MessageButton()
+            .setStyle("LINK")
+            .setURL("https://github.com/Felix-44/Xilef")
+            .setLabel("Github page"),
+        new MessageButton()
+            .setStyle("LINK")
+            .setURL("https://discord.gg/Qyz5HgrxWg")
+            .setLabel("Official server"),
+        new MessageButton()
+            .setStyle("LINK")
+            .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=275415091200&scope=bot")
+            .setLabel("Invite bot"),
+    ]
+});
+
 module.exports = [new Command({
     name: "help",
     description: "Shows a list of all commands or detailed info of a specific command, if given its name",
