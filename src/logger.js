@@ -1,4 +1,6 @@
 const { Command } = require("./command")
+const fs = require('fs')
+const path = require('path')
 
 const colors = {
     white: "\033[97m",
@@ -119,10 +121,11 @@ const loggableEventColors = {
 
 /**
  * @typedef {"cmdSuccess" | "fsSuccess" | "instanceCreationSuccess" | "warning" | "jsError" } LoggableEvent
- * @typedef {{logFolderPath: String, canLog: LoggableEvent[], useColors: boolean}} LoggerOptions
+ * @typedef {{logFolderPath: String, canLog: LoggableEvent[], useColors: boolean, useLogFile: boolean}} LoggerOptions
  * @type {LoggerOptions} 
  */
 const defaultOptions = {
+    useLogFile: true,
     logFolderPath: "src/data/logs/",
     canLog: ["cmdSuccess", "jsError", "warning"],
     useColors: true
@@ -169,7 +172,15 @@ class Logger {
     }
 
     _write(text, event) {
-        console.log(new ColorMap(`[${event}] ${text}`).colorRange(loggableEventColors[event], 1, event.length + 1).toString())
+        let baseLogText = `[${event}] ${text}`
+        
+        // console
+        console.log(new ColorMap(baseLogText).colorRange(loggableEventColors[event], 1, event.length + 1).toString())
+
+        // append to logfile
+        if (this.options.useLogFile) {
+            fs.appendFileSync(path.join(this.options.logFolderPath, Date.now()), baseLogText)
+        }
     }
 
     /**
