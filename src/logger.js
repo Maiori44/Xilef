@@ -207,6 +207,7 @@ class Logger {
 
 module.exports = {
     ColorMap,
+    Logger,
     /**
      * @param {LoggerOptions} options
      */
