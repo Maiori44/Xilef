@@ -146,44 +146,45 @@ class Logger {
          */
         this.options = opts
 
+        fs.stat(this.options.logFolderPath, (err, stats) => {
+            if (!stats)
+                return
+            if (stats.size > 4096) // delete if more than 4MB
+                fs.rmSync(this.options.logFolderPath, { recursive: true, force: true })
+        })
+
         let today = new Date()
         let logFilePath = 
             today.getFullYear() + "-" + 
             (today.getMonth() + 1) + "-" + 
             today.getDate() + "--" + 
-            today.getHours() + "-" + 
-            today.getMinutes() + "-" + 
+            today.getHours() + ":" + 
+            today.getMinutes() + ":" + 
             today.getSeconds() // clean this up wtf man
         
-        this.logFilePath = path.join(this.options.logFolderPath + logFilePath)
+        this.logFilePath = path.join(this.options.logFolderPath + logFilePath + ".log")
+
     }
 
     commandSuccess(text) {
-        if (!this.canLog("cmdSuccess"))
-            return
         this._write(text, "cmdSuccess")
     }
 
     fileSystemOperationSuccess(text) {
-        if (!this.canLog("fsSuccess"))
-            return
         this._write(text, "fsSuccess")
     }
 
     instanceCreationSuccess(text) {
-        if (!this.canLog("instanceCreationSuccess"))
-            return
         this._write(text, "instanceCreationSuccess")
     }
 
     warning(text) {
-        if (!this.canLog("warning"))
-            return
-
         this._write(text, "warning")
     }
 
     _write(text, event) {
+        if (!this.canLog(event))
+            return
         let baseLogText = `[${event}] ${text}`.replace(/\n{2,}$/g, '')
         
         // console
@@ -200,7 +201,7 @@ class Logger {
      * @returns {boolean}
      */
     canLog(logLevel) {
-        return (!this.options[logLevel] ? true : false)
+        return ((!this.options.canLog.find(level => level == logLevel)) ? false : true)
     }
 }
 
