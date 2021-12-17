@@ -113,14 +113,15 @@ class ColorMap {
 
 const loggableEventColors = {
     "cmdSuccess": "green",
+    "clientReady": "green",
     "fsSuccess": "purple",
     "instanceCreationSuccess": "cyan",
     "warning": "yellow",
-    "jsError": "red"
+    "jsError": "red",
 }
 
 /**
- * @typedef {"cmdSuccess" | "fsSuccess" | "instanceCreationSuccess" | "warning" | "jsError" } LoggableEvent
+ * @typedef {"cmdSuccess" | "fsSuccess" | "instanceCreationSuccess" | "warning" | "jsError" | "clientReady"} LoggableEvent
  * @typedef {{logFolderPath: String, canLog: LoggableEvent[], useColors: boolean, useLogFile: boolean}} LoggerOptions
  * @type {LoggerOptions} 
  */
@@ -138,12 +139,23 @@ class Logger {
     constructor(options) {
         let opts = {}
         Object.assign(opts, defaultOptions) // sneaky lil method
-        Object.assign(opts, options) // keep this order, so that defaultOptions can get overriden instead of the opposite 
+        Object.assign(opts, options) // keep this order, so that defaultOptions can get overriden instead of the opposite
 
         /**
          * @type {LoggerOptions}
          */
         this.options = opts
+
+        let today = new Date()
+        let logFilePath = 
+            today.getFullYear() + "-" + 
+            (today.getMonth() + 1) + "-" + 
+            today.getDate() + "--" + 
+            today.getHours() + "-" + 
+            today.getMinutes() + "-" + 
+            today.getSeconds() // clean this up wtf man
+        
+        this.logFilePath = path.join(this.options.logFolderPath + logFilePath)
     }
 
     commandSuccess(text) {
@@ -172,14 +184,14 @@ class Logger {
     }
 
     _write(text, event) {
-        let baseLogText = `[${event}] ${text}`
+        let baseLogText = `[${event}] ${text}`.replace(/\n{2,}$/g, '')
         
         // console
         console.log(new ColorMap(baseLogText).colorRange(loggableEventColors[event], 1, event.length + 1).toString())
 
         // append to logfile
         if (this.options.useLogFile) {
-            fs.appendFileSync(path.join(this.options.logFolderPath, Date.now()), baseLogText)
+            fs.appendFileSync(this.logFilePath, baseLogText) // regex to replace multiple end-of-line characters at the end of the string with a single one
         }
     }
 
