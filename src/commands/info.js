@@ -1,7 +1,7 @@
 const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
 const { Command } = require('../command.js')
 
-module.exports = new Command({
+module.exports = [new Command({
     name: "info",
     description: "Shows info about the bot and this server's prefix",
     category: "Utility",
@@ -34,4 +34,4 @@ module.exports = new Command({
             components: [buttons]
         })
     }
-})
+})]

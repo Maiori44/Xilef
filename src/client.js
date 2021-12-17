@@ -19,7 +19,7 @@ class LocalClient extends Client {
         this.prefix = this.debugging ? "beta&" : "&"
         this.economy = {
             list: JSON.parse(fs.readFileSync('./src/data/economy.json', 'utf-8')),
-            
+
             // /**
             //  * 
             //  * @param {Number} discordId The user's discord ID
@@ -40,15 +40,15 @@ class LocalClient extends Client {
             async save() {
                 let newJson = JSON.parse(fs.readFileSync('./src/data/economy.json', 'utf-8'))
 
-                newJson = { ...json, ...this.list}
+                newJson = { ...json, ...this.list }
 
                 fs.writeFile('./src/data/economy.json', JSON.stringify(newJson, null, 4), 'utf-8')
             }
-        
-        
+
+
         }
-        this.logger = Logger.create({ 
-            canLog: this.debugging ? [ "cmdSuccess", "fsSuccess", "instanceCreationSuccess", "jsError", "warning", "clientReady" ] : [ "cmdSuccess", "jsError", "warning", "clientReady" ],
+        this.logger = Logger.create({
+            canLog: this.debugging ? ["cmdSuccess", "fsSuccess", "instanceCreationSuccess", "jsError", "warning", "clientReady"] : ["cmdSuccess", "jsError", "warning", "clientReady"],
             useLogFile: !this.debugging // when debugging do not use a log file
         })
     }
@@ -59,22 +59,21 @@ class LocalClient extends Client {
             for (const dirent of dirents) {
                 const res = path.resolve(dir, dirent.name);
                 if (dirent.isDirectory()) {
-                    yield * getFilesRecursively(res);
+                    yield* getFilesRecursively(res);
                 } else {
                     yield res;
                 }
             }
         }
 
-        ;(async () => {
+        ; (async () => {
             for await (const file of getFilesRecursively('./src/commands')) {
                 if (!file.endsWith('.js')) continue;
-                /**
-                 * @type {Command}
-                 */
-                const command = require(`${file}`)
-                this.logger.fileSystemOperationSuccess("Loaded command '" + command.name + "' successfully (" + (this.commands.size + 1) + " commands loaded)")
-                this.commands.set(command.name, command)
+
+                require(`${file}`).forEach((command) => {
+                    this.logger.fileSystemOperationSuccess("Loaded command '" + command.name + "' successfully (" + (this.commands.size + 1) + " commands loaded)")
+                    this.commands.set(command.name, command)
+                })
             }
         })()
 

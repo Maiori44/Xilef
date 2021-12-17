@@ -1,6 +1,6 @@
 const { Command } = require('../command.js')
 
-module.exports = new Command({
+module.exports = [ new Command({
     name: "dice",
     description: "Gives you a number from 1 to 6 and maybe judges your result",
     category: "Math",
@@ -16,4 +16,4 @@ module.exports = new Command({
                 break
         }
     }
-})
+})]

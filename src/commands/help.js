@@ -1,9 +1,10 @@
 const { Command } = require('../command.js')
 const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
 
-module.exports = new Command({
+module.exports = [new Command({
     name: "help",
     description: "Shows a list of all commands or detailed info of a specific command, if given its name",
+    category: "Utility",
     async run(message, args, client) {
         args[0] = args[0] ? args[0].toLowerCase() : undefined
 
@@ -67,4 +68,4 @@ module.exports = new Command({
         }
         message.channel.send({ embeds: [CommandsEmbed], components: [Buttons] })
     }
-})
+})]
