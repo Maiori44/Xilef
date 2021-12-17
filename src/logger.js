@@ -191,7 +191,7 @@ class Logger {
 
         // append to logfile
         if (this.options.useLogFile) {
-            fs.appendFileSync(this.logFilePath, baseLogText) // regex to replace multiple end-of-line characters at the end of the string with a single one
+            fs.appendFileSync(this.logFilePath, baseLogText + '\n')
         }
     }
 
