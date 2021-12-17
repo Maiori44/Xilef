@@ -207,12 +207,5 @@ class Logger {
 
 module.exports = {
     ColorMap,
-    Logger,
-    /**
-     * @param {LoggerOptions} options
-     */
-    create(options) {
-        const logger = new Logger(options)
-        return logger
-    }
+    Logger
 }
