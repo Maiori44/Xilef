@@ -73,7 +73,7 @@ class LocalClient extends Client {
                  * @type {Command}
                  */
                 const command = require(`${file}`)
-                this.logger.commandSuccess("Loaded command '" + command.name + "' successfully")
+                this.logger.fileSystemOperationSuccess("Loaded command '" + command.name + "' successfully")
                 this.commands.set(command.name, command)
             }
         })()
@@ -86,7 +86,7 @@ class LocalClient extends Client {
                  * @type {Event}
                  */
                 const event = require(`./events/${file}`)
-                console.log(`Event ${event.event} loaded`);
+                this.logger.fileSystemOperationSuccess("Loaded event '" + event.event + "' successfully")
                 this.on(event.event, event.run.bind(null, this))
             })
 
