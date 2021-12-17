@@ -4,7 +4,6 @@ const { Client, Collection } = require('discord.js')
 const { Command } = require('./command.js')
 const { XilefUser, Balance } = require('./economy.js')
 const Logger = require('./logger.js')
-const { Event } = require('./event.js')
 const fs = require('fs')
 const path = require('path')
 
@@ -16,7 +15,7 @@ class LocalClient extends Client {
          * @type {Collection<string, Command>}
          */
         this.commands = new Collection()
-        this.debugging = process.argv[2] == "-debug" ? true : false
+        this.debugging = (process.argv[2] == "-debug") ? true : false
         this.prefix = this.debugging ? "beta&" : "&"
         this.economy = {
             list: JSON.parse(fs.readFileSync('./src/data/economy.json', 'utf-8')),
@@ -49,7 +48,7 @@ class LocalClient extends Client {
         
         }
         this.logger = Logger.create({ 
-            canLog: this.debugging ? [ "cmdSuccess", "fsSuccess", "instanceCreationSuccess", "jsError", "warning" ] : undefined,
+            canLog: this.debugging ? [ "cmdSuccess", "fsSuccess", "instanceCreationSuccess", "jsError", "warning", "clientReady" ] : [ "cmdSuccess", "jsError", "warning", "clientReady" ],
             useLogFile: !this.debugging // when debugging do not use a log file
         })
     }
@@ -83,9 +82,6 @@ class LocalClient extends Client {
         fs.readdirSync('./src/events/')
             .filter(file => file.endsWith('.js'))
             .forEach((file) => {
-                /**
-                 * @type {Event}
-                 */
                 const event = require(`./events/${file}`)
                 this.logger.fileSystemOperationSuccess("Loaded event '" + event.event + "' successfully")
                 this.on(event.event, event.run.bind(null, this))
