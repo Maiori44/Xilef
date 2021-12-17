@@ -74,7 +74,7 @@ class LocalClient extends Client {
                  * @type {Command}
                  */
                 const command = require(`${file}`)
-                this.logger.fileSystemOperationSuccess("Loaded command '" + command.name + "' successfully")
+                this.logger.fileSystemOperationSuccess("Loaded command '" + command.name + "' successfully (" + (this.commands.size + 1) + " commands loaded)")
                 this.commands.set(command.name, command)
             }
         })()
