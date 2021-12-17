@@ -49,7 +49,8 @@ class LocalClient extends Client {
         
         }
         this.logger = Logger.create({ 
-            canLog: this.debugging ? [ "cmdSuccess", "fsSuccess", "instanceCreationSuccess", "jsError", "warning" ] : undefined
+            canLog: this.debugging ? [ "cmdSuccess", "fsSuccess", "instanceCreationSuccess", "jsError", "warning" ] : undefined,
+            useLogFile: !this.debugging // when debugging do not use a log file
         })
     }
 
@@ -89,7 +90,6 @@ class LocalClient extends Client {
                 this.logger.fileSystemOperationSuccess("Loaded event '" + event.event + "' successfully")
                 this.on(event.event, event.run.bind(null, this))
             })
-
         this.login(token)
     }
 }
