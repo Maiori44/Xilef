@@ -2,6 +2,8 @@
 
 const Discord = require("discord.js");
 
+const { LocalClient } = require('./client.js')
+
 /**
  * @template {keyof Discord.ClientEvents} K
  */
