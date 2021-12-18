@@ -102,8 +102,8 @@ Commands.brainfuck = new Command("Solve challenges with this esoteric language\n
             const [ResultEmbed, isCorrect] = Brainfuck.run(args[1] || "", [...args[2] ?? ""])
             message.channel.send({embeds: [ResultEmbed]})
             if (isCorrect) {
-                message.channel.send("Hey! are you trying to figure out the solution to the challenge!?\njust to be sure I won't let you submit this answer for 20 minutes")
-                Economy.getEconomySystem(message.author).bftime = Date.now() + Time.minute * 10
+                message.channel.send("Hey! are you trying to figure out the solution to the challenge!?\njust to be sure I won't let you submit this answer for 10 minutes")
+                Economy.getEconomySystem(message.author).bftime = Date.now() + Time.minute * 9
             }
             break
         }
