@@ -2,8 +2,8 @@ require('dotenv').config()
 
 const { Client, Collection } = require('discord.js')
 const { Command } = require('./command.js')
-const { XilefUser, Balance } = require('./economy.js')
-const Logger = require('./logger.js')
+const { Logger } = require('./logger.js')
+const { EconomySystem } = require('./economy.js')
 const fs = require('fs')
 const path = require('path')
 
@@ -17,39 +17,12 @@ class LocalClient extends Client {
         this.commands = new Collection()
         this.debugging = (process.argv[2] == "-debug") ? true : false
         this.prefix = this.debugging ? "beta&" : "&"
-        this.economy = {
-            list: JSON.parse(fs.readFileSync('./src/data/economy.json', 'utf-8')),
-
-            // /**
-            //  * 
-            //  * @param {Number} discordId The user's discord ID
-            //  * @returns {XilefUser}
-            //  */
-            // getUser(discordId) {
-            //     if (!this.list[discordId]) {
-            //         this.list[discordId] = new XilefUser({ 
-            //             discordId = discordId, 
-            //             driller = 0,
-            //             balance = new Balance()
-            //         })
-            //     }
-            // },
-            async reload() {
-                this.list = JSON.parse(fs.readFileSync('./src/data/economy.json', 'utf-8'))
-            },
-            async save() {
-                let newJson = JSON.parse(fs.readFileSync('./src/data/economy.json', 'utf-8'))
-
-                newJson = { ...json, ...this.list }
-
-                fs.writeFile('./src/data/economy.json', JSON.stringify(newJson, null, 4), 'utf-8')
-            }
-
-
-        }
-        this.logger = Logger.create({
-            canLog: this.debugging ? ["cmdSuccess", "fsSuccess", "instanceCreationSuccess", "jsError", "warning", "clientReady"] : ["cmdSuccess", "jsError", "warning", "clientReady"],
+        this.logger = new Logger({
+            canLog: this.debugging ? ["cmdSuccess", "fsSuccess", "instanceCreationSuccess", "jsError", "warning", "clientReady", "dbSuccess", "miscInfo "] : ["cmdSuccess", "jsError", "warning", "clientReady", "miscInfo"],
             useLogFile: !this.debugging // when debugging do not use a log file
+        })
+        this.economy = new EconomySystem({
+            logger: this.logger
         })
     }
 
