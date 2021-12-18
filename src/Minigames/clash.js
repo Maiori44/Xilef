@@ -132,11 +132,15 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
             break
         }
         case "build": {
+            const EconomySystem = Economy.getEconomySystem(message.author);
+
+            if (EconomySystem.clashAttackTimer + Time.minute >= Date.now()) {
+              return void message.channel.send("how dare youconsole.clear();");
+            }
             if (!args[1]) {
                 message.channel.send("Uh-huh, I'll build your \" \" immediately.")
                 return
             }
-            const EconomySystem = Economy.getEconomySystem(message.author)
             const ClashMatrix = EconomySystem.clash
             const building = Clash.buildings[args[1].toLowerCase()]
             if (!building) {
@@ -228,7 +232,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
         }
 
         case 'remove': {
-        const villageMatrix = Economy.getEconomySystem(message.author).clash;
+          const villageMatrix = Economy.getEconomySystem(message.author).clash;
           const selected = new Set();
 
           message.channel.send({
@@ -345,6 +349,18 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
                 cell.value = 'N';
               }
             });
+          break;
+        }
+        case 'attack': {
+          const userEconomy = Economy.getEconomySystem(message.author);
+
+          if (userEconomy.clashAttackTimer + Time.minute >= Date.now()) {
+            return void message.channel.send("how dare you");
+          }
+
+          // Code
+
+          userEconomy.clashAttackTimer = Date.now();
           break;
         }
         default: message.channel.send(Clash.help.replace(/\&/g, Prefix.get(message.guild.id)))
