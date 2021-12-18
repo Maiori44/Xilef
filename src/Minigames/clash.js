@@ -131,6 +131,38 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
             message.channel.send({ embeds: [ClashMatrix.toEmbed(EconomySystem) ]})
             break
         }
+        case "attack": {
+			if (!args[1]) {
+				message.channel.send("Aight I'll attack nobody if you so insist.")
+				return
+			}
+			const AttackedES = Economy.getEconomySystem(message.mentions.users.first() || {id: args[1]})
+			const AttackedMatrix = AttackedES.clash
+			if (AttackedMatrix.getTotal("N") = 99) {
+				message.channel.send("Are you seriously gonna attack a noob? Cringe.")
+				return
+			}
+			const x = parseInt(args[2])
+            if (isNaN(x)) {
+                message.channel.send("Now that position you just gave me...it doesn't make sense")
+                return
+            }
+            if (!ClashMatrix.checkBounds(x, 0)) {
+                message.channel.send("Now that position you just told me...it's out of bounds")
+                return
+            }
+			const EconomySystem = Economy.getEconomySystem(message.author)
+			const power = args[2]
+			if (power > EconomySystem.clash.getTotal("B") * 3 + 1) {
+				message.channel.send("You don't have enough barracks for an attack this powerful.")
+				return
+			}
+			if (EconomySystem.buy(power * 1000, message, "Time to go to war!", "Poor people don't get war, they get messages saying them they don't have enough money", true)) {
+				let defense = AttackedMatrix.getTotal("X")
+				//to be continued
+			}
+			break
+        }
         case "build": {
             if (!args[1]) {
                 message.channel.send("Uh-huh, I'll build your \" \" immediately.")
