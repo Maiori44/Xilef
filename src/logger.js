@@ -114,6 +114,7 @@ class ColorMap {
 const loggableEventColors = {
     "cmdSuccess": "green",
     "clientReady": "green",
+    "miscInfo": "blue",
     "fsSuccess": "purple",
     "instanceCreationSuccess": "cyan",
     "warning": "yellow",
@@ -121,7 +122,7 @@ const loggableEventColors = {
 }
 
 /**
- * @typedef {"cmdSuccess" | "fsSuccess" | "instanceCreationSuccess" | "warning" | "jsError" | "clientReady"} LoggableEvent
+ * @typedef {"cmdSuccess" | "fsSuccess" | "instanceCreationSuccess" | "warning" | "jsError" | "clientReady" | "miscInfo"} LoggableEvent
  * @typedef {{logFolderPath: String, canLog: LoggableEvent[], useColors: boolean, useLogFile: boolean}} LoggerOptions
  * @type {LoggerOptions} 
  */
@@ -182,13 +183,21 @@ class Logger {
         this._write(text, "warning")
     }
 
+    miscInfo(text) {
+        this._write(text, "miscInfo")
+    }
+
+    jsError(text) {
+        this._write(text, "jsError")
+    }
+
     _write(text, event) {
         if (!this.canLog(event))
             return
         let baseLogText = `[${event}] ${text}`.replace(/\n{2,}$/g, '')
         
         // console
-        console.log(new ColorMap(baseLogText).colorRange(loggableEventColors[event], 1, event.length + 1).toString())
+        console.log(new ColorMap(baseLogText).colorRange(loggableEventColors[event] || colors.white, 1, event.length + 1).toString())
 
         // append to logfile
         if (this.options.useLogFile) {
