@@ -84,7 +84,11 @@ class EconomySystem {
     loadBson() {
         const rawFileContents = fs.readFileSync(saveFilePath)
 
-        this.#users = BSON.deserialize(rawFileContents)
+        const deserialized = BSON.deserialize(rawFileContents)
+
+        Object.keys(deserialized).forEach(key => {
+            this.#users.set(key, deserialized[key])
+        })
 
         this.logger.fileSystemOperationSuccess("Successfully loaded economy from economy.bson")
     }
@@ -114,6 +118,7 @@ class EconomySystem {
 
 module.exports = {
     Balance,
-    EconomySystem
+    EconomySystem,
+    XilefUser
 }
 
