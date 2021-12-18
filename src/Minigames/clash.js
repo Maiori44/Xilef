@@ -152,6 +152,9 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
                 return
             }
 			const EconomySystem = Economy.getEconomySystem(message.author)
+			if (EconomySystem.clashAttackTimer + Time.minute >= Date.now()) {
+				return void message.channel.send("You were already attacked recently!, take some time to rest will ya?");
+			}
 			const power = args[2]
 			if (power > EconomySystem.clash.getTotal("B") * 3 + 1) {
 				message.channel.send("You don't have enough barracks for an attack this powerful.")
@@ -160,6 +163,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 			if (EconomySystem.buy(power * 1000, message, "Time to go to war!", "Poor people don't get war, they get messages saying them they don't have enough money", true)) {
 				let defense = AttackedMatrix.getTotal("X")
 				//to be continued
+				AttackedES.clashAttackTimer = Date.now()
 			}
 			break
         }
@@ -381,18 +385,6 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
                 cell.value = 'N';
               }
             });
-          break;
-        }
-        case 'attack': {
-          const userEconomy = Economy.getEconomySystem(message.author);
-
-          if (userEconomy.clashAttackTimer + Time.minute >= Date.now()) {
-            return void message.channel.send("how dare you");
-          }
-
-          // Code
-
-          userEconomy.clashAttackTimer = Date.now();
           break;
         }
         default: message.channel.send(Clash.help.replace(/\&/g, Prefix.get(message.guild.id)))

@@ -59,6 +59,7 @@ class EconomySystem {
         this.achievments = new FlagSystem(9, backup?.achievments) //flag system for the achievements
         this.clash = new ClashMatrix(backup?.clash || "NT_N") //clash default base
         this.clashtime = backup?.clashtime || 1 //last time money was taken from the mines in &clash
+        this.clashAttackTimer = backup?.clashAttackTimer || 1 //time when user was attacked
         console.log("- " + Colors.purple.colorize(!backup ? "Created EconomySystem of " : "Restored EconomySystem of ") + Colors.hpurple.colorize(this.user))
     }
 
