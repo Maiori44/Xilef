@@ -45,11 +45,11 @@ class XilefUser {
             if (options[key] && requiredKeys.includes(key))
                 requiredKeys.booleanCorrespondent[index] = true
         })
-        
+
         if (requiredKeys.booleanCorrespondent.find(b => b == false))
             throw new Error("Required key of XilefUser not found.")
-            // if every element of requireKeys matches with a key of the options param, then it won't throw an error
-            // this allows to expand the list of required keys without too much work in case the bot grows bigger whilst also keeping the code somewhat clean (better than `if (!options.money)`... for each key we wanna check)
+        // if every element of requireKeys matches with a key of the options param, then it won't throw an error
+        // this allows to expand the list of required keys without too much work in case the bot grows bigger whilst also keeping the code somewhat clean (better than `if (!options.money)`... for each key we wanna check)
 
         this.money = options.money
         this.rank = options.rank
@@ -72,28 +72,30 @@ class EconomySystem {
         this.logger = options.logger
         this.#users = new Collection()
 
-        this.createUser("852882606629847050", new XilefUser({
-            money: -1,
-            rank: -1
-        }))
-
-        this.updateBson()
-        this.loadBson()
+        try {
+            this.#loadBson()
+        } catch {
+            this.setUser("852882606629847050", new XilefUser({
+                money: -1,
+                rank: -1
+            }))
+        }
     }
 
-    loadBson() {
+    #loadBson() {
         const rawFileContents = fs.readFileSync(saveFilePath)
 
         const deserialized = BSON.deserialize(rawFileContents)
 
         Object.keys(deserialized).forEach(key => {
             this.#users.set(key, deserialized[key])
+            this.logger.fileSystemOperationSuccess(`Loaded <${key}> from economy.bson`)
         })
 
-        this.logger.fileSystemOperationSuccess("Successfully loaded economy from economy.bson")
+        this.logger.fileSystemOperationSuccess("Successfully loaded entire economy from economy.bson")
     }
 
-    updateBson() {
+    #updateBson() {
         fs.writeFileSync(saveFilePath, BSON.serialize(this.#users, { ignoreUndefined: false }))
 
         this.logger.fileSystemOperationSuccess("Successfully saved entire economy to economy.bson")
@@ -103,16 +105,15 @@ class EconomySystem {
         return this.#users.get(discordId)
     }
 
-    changeUser(discordId, xilefUser) {
-        this.#users.set(discordId, xilefUser)
-    }
-
-    createUser(discordId, xilefUser) {
-        if (this.#users.get(discordId, xilefUser))
-            return
+    setUser(discordId, xilefUser) {
+        const user = this.#users.get(discordId)
+        if (!user) {
+            this.logger.instanceCreationSuccess(`Created a new instance of a user: \n<${discordId}> {\n ${JSON.stringify({ xilefUser })} \n}\n`)
+        }
 
         this.#users.set(discordId, xilefUser)
-        this.logger.instanceCreationSuccess(`Created a new instance of a user: \n<${discordId}> {\n ${JSON.stringify({xilefUser})} \n}\n`)
+
+        this.#updateBson()
     }
 }
 
