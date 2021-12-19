@@ -4,37 +4,6 @@ const fs = require('fs')
 const BSON = require('bson')
 const saveFilePath = './src/data/economy.bson'
 
-class Balance {
-    /**
-     * @type {Number}
-     */
-    #value
-
-    constructor() {
-        this.#value = 0
-    }
-
-    getValue() { return this.#value }
-
-    /**
-     * 
-     * @param {Number} amount The amount to add to the balance
-     */
-    add(amount) {
-        this.#value += amount
-    }
-
-    /**
-     * 
-     * @param {Number} amount The amount to remove from the balance
-     */
-    remove(amount) {
-        this.#value -= amount
-        if (this.#value < 0)
-            this.#value = 0
-    }
-}
-
 class XilefUser {
     constructor(options) {
         // check if options has these keys (below)
