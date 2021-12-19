@@ -1,4 +1,3 @@
-const { Command } = require("./command")
 const fs = require('fs')
 const path = require('path')
 
