@@ -26,7 +26,12 @@ module.exports = [
                     .setColor(message.member.displayHexColor)
                     .setTitle(user.username + "'s statistics")
                     .setDescription("```lua\nDogeCoins: " + userData.money +
-                        "\nRank: " + userData.rank + "```") 
+                        "\nRank: " + userData.rank + "```")
+                    .addFields({
+                        name: "Acquired v_s: ",
+                        value: userData.vgot.getFormattedBinary(client.achievements.binary, "❔ ???\n")
+                    }
+                    )
                         
                         /*+
                         "\nXilefunds: " + userData.xilefunds + "```")*/
