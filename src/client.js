@@ -1,7 +1,6 @@
 require('dotenv').config()
 
 const { Client, Collection } = require('discord.js')
-const { Command } = require('./command.js')
 const { Logger } = require('./logger.js')
 const { EconomySystem } = require('./economy.js')
 const fs = require('fs')
@@ -24,6 +23,20 @@ class LocalClient extends Client {
         this.economy = new EconomySystem({
             logger: this.logger
         })
+        this.achievements = {
+            first: ["<:golden_medal:874402462902128656> reach 1st place in the leaderboard", 1],
+            reversi: ["<:black_circle:869976829811884103> win 15 reversi matches", 2],
+            connect4: ["<:yellow_circle:870716292515106846> win 15 connect 4 matches", 3],
+            crew: ["<:imposter:874402966084395058> eject 25 impostors in crew", 4],
+            driller: ["<:driller:874403362827796530> reach tier 30 in driller", 5],
+            v_: ["<:v_c:873259417557151765> find all v_s", 6],
+            dungeon: ["<:dungeon:875809577487192116> reach floor 50 in dungeon", 7],
+            msweeper: ["💥 win at minesweeper 10 times", 8],
+            roshambo: [":rock: win at roshambo 25 times", 9]
+        }
+        this.achievements.binary = Object.keys(this.achievements).map(key =>
+            this.achievements[key][0] + "\n"
+        )
     }
 
     start(token) {
