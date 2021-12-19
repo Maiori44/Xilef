@@ -70,7 +70,7 @@ class ColorMap {
 
         let sections = [this.#baseText.slice(0, index), this.#baseText.slice(index)]
 
-        this.#baseText = sections[0] + colors[color] + sections[1] + colors["white"] + colors["hblack"]
+        this.#baseText = sections[0] + colors[color] + sections[1] + colors["reset"]
 
         return this
     }
@@ -86,7 +86,7 @@ class ColorMap {
 
         let sections = [this.#baseText.slice(0, index), this.#baseText.slice(index)]
 
-        this.#baseText = colors[color] + sections[0] + colors["white"] + colors["hblack"] + sections[1]
+        this.#baseText = colors[color] + sections[0] + colors["reset"] + sections[1]
 
         return this
     }
@@ -100,7 +100,7 @@ class ColorMap {
         if (!colors[color])
             throw "That color doesn't exist!"
 
-        this.#baseText = colors[color] + this.#baseText + colors["white"] + colors["hblack"]
+        this.#baseText = colors[color] + this.#baseText + colors["reset"]
 
         return this
     }
