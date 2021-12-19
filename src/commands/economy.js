@@ -12,15 +12,6 @@ module.exports = [
 
             let userData = client.economy.getUser(user.id)
 
-            if (!userData) {
-                client.economy.setUser(user.id, new XilefUser({
-                    money: 0,
-                    rank: 0
-                }))
-
-                userData = client.economy.getUser(user.id)
-            }
-
             const embeds = [
                 new MessageEmbed()
                     .setColor(message.member.displayHexColor)
@@ -29,9 +20,12 @@ module.exports = [
                         "\nRank: " + userData.rank + "```")
                     .addFields({
                         name: "Acquired v_s: ",
-                        value: userData.vgot.getFormattedBinary(client.achievements.binary, "❔ ???\n")
-                    }
-                    )
+                        value: userData.vgot.getFormattedBinary(client.funnyFaces.binary, "❔")
+                    },
+                    {
+                        name: "Achievements: ",
+                        value: userData.achievements.getFormattedBinary(client.achievements.binary, "❔ ???\n")
+                    })
                         
                         /*+
                         "\nXilefunds: " + userData.xilefunds + "```")*/
