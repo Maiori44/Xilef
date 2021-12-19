@@ -227,5 +227,6 @@ Commands.msweeper = new Command("Isolate all the mines, and dont explode!\n\n" +
 }, "Game", [
     new RequiredArg(0, MineSweeper.help, "command"),
     new RequiredArg(1, undefined, "argument 1", true),
-    new RequiredArg(2, undefined, "argument 2", true)
+    new RequiredArg(2, undefined, "argument 2", true),
+    new RequiredArg(3, undefined, "argument 3", true)
 ], "https://en.wikipedia.org/wiki/Minesweeper_(video_game)")
