@@ -49,9 +49,7 @@ class ClashMatrix extends Matrix {
             }).toString())
         delete BuildsNum.N
         delete BuildsNum.T
-        console.log(JSON.stringify(BuildsNum))
         for (const build of Object.keys(BuildsNum)) {
-            console.log(build)
             MatrixEmbed.addField(Clash.emojis[build], BuildsNum[build] + " built", true)
         }
         MatrixEmbed.addFields(
@@ -62,7 +60,7 @@ class ClashMatrix extends Matrix {
             },
             {
                 name: "Attack Power:",
-                value: (1 + 3 * (BuildsNum.M ?? 0)).toString(),
+                value: (1 + 3 * (BuildsNum.B ?? 0)).toString(),
                 inline: false
             }
         )
@@ -74,8 +72,7 @@ class ClashMatrix extends Matrix {
         for (const Cell of this) {
             if (Cell.value == building) amount++
         }
-        if (amount > 30) throw "Something seems to be either broken or corrupted, please contact my creator (**Felix44#0073**)"
-        return amount
+		return amount
     }
 }
 
@@ -103,7 +100,7 @@ Clash = {
         "dogecoin mine": "M",
         "cannon": "C",
         "x-bow": "X",
-        "x bow": "X",
+        "xbow": "X",
         "crossbow": "X",
         "cross bow": "X",
         "barracks": "B",
@@ -115,7 +112,7 @@ Clash = {
         "`&clash build (name) (x) (y)` places the desired building in the given location\n" +
         "`&clash cashin` collects all the money your mines did\n" +
         "`&clash move (x start) (y start) (x end) (y end)` swaps 2 buildings\n" +
-        "`&clash remove` shows you a menu to remove buildings" +
+        "`&clash remove` shows you a menu to remove buildings\n" +
         "`&clash attack (@user) (power) (x)` attacks the pinged user at the given x\n" +
         "the attack will target the southest building in the given x\n" +
         "the more power the attack is the more it can survive the defenses\n" +
@@ -138,16 +135,16 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 			}
 			const AttackedES = Economy.getEconomySystem(message.mentions.users.first() || {id: args[1]})
 			const AttackedMatrix = AttackedES.clash
-			if (AttackedMatrix.getTotal("N") = 99) {
+			if (AttackedMatrix.getTotal("N") == 99) {
 				message.channel.send("Are you seriously gonna attack a noob? Cringe.")
 				return
 			}
-			const x = parseInt(args[2])
+			const x = parseInt(args[3])
             if (isNaN(x)) {
                 message.channel.send("Now that position you just gave me...it doesn't make sense")
                 return
             }
-            if (!ClashMatrix.checkBounds(x, 0)) {
+            if (!AttackedMatrix.checkBounds(x, 0)) {
                 message.channel.send("Now that position you just told me...it's out of bounds")
                 return
             }
@@ -160,10 +157,38 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 				message.channel.send("You don't have enough barracks for an attack this powerful.")
 				return
 			}
+			let defense = AttackedMatrix.getTotal("X")
+			let y = NaN
+			for (const Cell of AttackedMatrix.column(x)) {
+				const build = Cell.value
+				if (build == "C") defense += 2
+				if (build != "N") y = Cell.y
+			}
+			if (isNaN(y)) {
+				return void message.channel.send("Damn there sure is nothing to attack in this column")
+			}
 			if (EconomySystem.buy(power * 1000, message, "Time to go to war!", "Poor people don't get war, they get messages saying them they don't have enough money", true)) {
-				let defense = AttackedMatrix.getTotal("X")
-				//to be continued
 				AttackedES.clashAttackTimer = Date.now()
+				if (defense >= power) {
+					return void message.channel.send("Damn this guy's defenses sure are strong, you lost.")
+				}
+				const BrokeCell = AttackedMatrix.getCell(x, y)
+				switch (BrokeCell.value) {
+					case "M": EconomySystem.give(10000, message); break
+					case "T": {
+						let amount = 5000
+						for (const Cell of AttackedMatrix) {
+							if (Cell.value == "M") {
+								amount += 10000
+								Cell.value = "N"
+							}
+						}
+						EconomySystem.give(amount, message)
+						message.channel.send("Man you sure showed him who's boss huh?")
+					}
+				}
+				BrokeCell.value = "N"
+				message.channel.send("Congraturations you won the battle, *but not the war.*")
 			}
 			break
         }
@@ -171,7 +196,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
             const EconomySystem = Economy.getEconomySystem(message.author);
 
             if (EconomySystem.clashAttackTimer + Time.minute >= Date.now()) {
-              return void message.channel.send("how dare youconsole.clear();");
+            	return void message.channel.send("Dude you were just attacked, take a minute to rest and plan your violent revenge.");
             }
             if (!args[1]) {
                 message.channel.send("Uh-huh, I'll build your \" \" immediately.")
@@ -194,6 +219,9 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
                 message.channel.send("Now that position you just told me...it's out of bounds")
                 return
             }
+			if (!ClashMatrix.compare(x, y, "N")) {
+				return void message.channel.send("Dude you're gonna build on top of something else, move it first")
+			}
             const price = 500 * EconomySystem.rank
             if (EconomySystem.buy(price, message, "Sucessfully built your " + args[1], "You lack money for this building, you need " + price)) {
                 ClashMatrix.set(x, y, building)
