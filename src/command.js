@@ -1,6 +1,7 @@
 /** @format */
 
 const { Message } = require("discord.js");
+const { LocalClient } = require('./client.js')
 
 class Command {
 	/**
