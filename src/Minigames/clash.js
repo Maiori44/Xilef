@@ -230,10 +230,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 			break
 		}
 		case "move": {
-			const xStart = parseInt(args[1])
-			const yStart = parseInt(args[2])
-			const xEnd = parseInt(args[3])
-			const yEnd = parseInt(args[4])
+			const [xStart, yStart, xEnd, yEnd] = args.slice(1, 5).map((arg) => parseInt(arg))
 			if ([xStart, yStart, xEnd, yEnd].some(Number.isNaN)) {
 				message.channel.send("Now these positions you just gave me...they don't make sense")
 				return
