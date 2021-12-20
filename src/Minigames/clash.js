@@ -249,6 +249,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 			const [B1, B2] = [ClashMatrix.at(xStart, yStart), ClashMatrix.at(xEnd, yEnd)]
 			ClashMatrix.set(xEnd, yEnd, B1)
 			ClashMatrix.set(xStart, yStart, B2)
+			message.channel.send("Swapped the 2 tiles with no problemo")
 			break
 		}
 		case "cashin": {
