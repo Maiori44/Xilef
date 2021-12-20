@@ -221,7 +221,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 			const ClashMatrix = EconomySystem.clash
 			const building = Clash.buildings[args[1].toLowerCase()]
 			if (!building) {
-				message.channel.send("I have no clue what a " + args[1] + " is.\nIf you have no clue what you can build either, try `&clash buildings`".replace(/\&/g, Prefix.get(message.guild.id)))
+				return void message.channel.send("I have no clue what a " + args[1] + " is.\nIf you have no clue what you can build either, try `&clash buildings`".replace(/\&/g, Prefix.get(message.guild.id)))
 			}
 			const total = ClashMatrix.getTotal(building)
 			if (total == 30) {message.channel.send("You already build 30 of these, you can't build more"); return}
@@ -260,6 +260,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 			const [B1, B2] = [ClashMatrix.at(xStart, yStart), ClashMatrix.at(xEnd, yEnd)]
 			ClashMatrix.set(xEnd, yEnd, B1)
 			ClashMatrix.set(xStart, yStart, B2)
+			message.channel.send("Swapped the 2 tiles with no problemo")
 			break
 		}
 		case "cashin": {
