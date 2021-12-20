@@ -149,11 +149,15 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 				return
 			}
 			const EconomySystem = Economy.getEconomySystem(message.author)
+			const ClashMatrix = EconomySystem.clash
+			if (ClashMatrix == AttackedES) {
+				return void message.channel.send("I do not approve suicide.")
+			}
 			if (EconomySystem.clashAttackTimer + Time.minute >= Date.now()) {
 				return void message.channel.send("You were already attacked recently!, take some time to rest will ya?");
 			}
 			const power = args[2]
-			if (power > EconomySystem.clash.getTotal("B") * 3 + 1) {
+			if (power > ClashMatrix.getTotal("B") * 3 + 1) {
 				message.channel.send("You don't have enough barracks for an attack this powerful.")
 				return
 			}
@@ -174,7 +178,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 				}
 				const BrokeCell = AttackedMatrix.getCell(x, y)
 				switch (BrokeCell.value) {
-					case "M": EconomySystem.give(10000, message); break
+					case "M": EconomySystem.give(10000, message); BrokeCell.value = "N"; break
 					case "T": {
 						let amount = 5000
 						for (const Cell of AttackedMatrix) {
@@ -185,9 +189,10 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 						}
 						EconomySystem.give(amount, message)
 						message.channel.send("Man you sure showed him who's boss huh?")
+						break
 					}
+					default: BrokeCell.value = "N"
 				}
-				BrokeCell.value = "N"
 				message.channel.send("Congraturations you won the battle, *but not the war.*")
 			}
 			break
