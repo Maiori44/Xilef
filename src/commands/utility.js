@@ -1,5 +1,6 @@
 const { Command } = require('../command.js')
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
+const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
+const { run } = require('../events/messageCreate.js');
 
 const Buttons = new MessageActionRow({
     components: [
@@ -121,6 +122,14 @@ module.exports = [
                 ],
                 components: [buttons]
             })
+        }
+    }),
+    new Command({
+        name: "sleep",
+        description: "Tests the bot asynchronous command handling",
+        category: "Utility",
+        async run(message, args, client) {
+            await new Promise(resolve => setTimeout(() => resolve(message.reply("Ended sleep")), 10000));
         }
     })
 ]
