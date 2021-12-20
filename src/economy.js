@@ -37,26 +37,30 @@ class FlagSystem {
     }
 }
 
+const { ClashMatrix } = require("./Minigames/clash.js")
+
 class EconomySystem {
     constructor(username, backup) {
-        backup = backup || {}
-        this.money = backup.money || 0 //the amount of DogeCoins the user has
-        this.rank = backup.rank || 1 //their leaderboard rank
+        this.money = backup?.money || 0 //the amount of DogeCoins the user has
+        this.rank = backup?.rank || 1 //their leaderboard rank
         this.user = username //their username
-        this.xilefunds = backup.xilefunds || 0 //the amount of xilefunds the user has
-        this.impostors = backup.impostors || 0 //the amount of times they won in &crew
-        this.driller = backup.driller || 1 //their &driller tier
-        this.floor = backup.floor || 0 //their record in &dungeon
-        this.msweeper = backup.msweeper || 0 //the amount of times they won in &msweeper
-        this.day = backup.day || 1 //last time they got &daily
-        this.reversi = backup.reversi || 0 //the amount of times they won in &reversi
-        this.connect4 = backup.connect4 || 0 //the amount of times they won in &connect4
-        this.roshambo = backup.roshambo || 0 //the amount of times they wont in &roshambo
-        this.vhour = backup.vhour || 1 //last time they rolled
-        this.vgot = new FlagSystem(60, backup.vgot) //flag system for the different v_s
-        this.bftime = backup.bftime || 1 //last time they completed a brainfuck challenge
-        this.achievments = new FlagSystem(9, backup.achievments) //flag system for the achievements
-        console.log("- " + Colors.purple.colorize(Object.keys(backup).length === 0 ? "Created EconomySystem of " : "Restored EconomySystem of ") + Colors.hpurple.colorize(this.user))
+        this.xilefunds = backup?.xilefunds || 0 //the amount of xilefunds the user has
+        this.impostors = backup?.impostors || 0 //the amount of times they won in &crew
+        this.driller = backup?.driller || 1 //their &driller tier
+        this.floor = backup?.floor || 0 //their record in &dungeon
+        this.msweeper = backup?.msweeper || 0 //the amount of times they won in &msweeper
+        this.day = backup?.day || 1 //last time they got &daily
+        this.reversi = backup?.reversi || 0 //the amount of times they won in &reversi
+        this.connect4 = backup?.connect4 || 0 //the amount of times they won in &connect4
+        this.roshambo = backup?.roshambo || 0 //the amount of times they wont in &roshambo
+        this.vhour = backup?.vhour || 1 //last time they rolled
+        this.vgot = new FlagSystem(60, backup?.vgot) //flag system for the different v_s
+        this.bftime = backup?.bftime || 1 //last time they completed a brainfuck challenge
+        this.achievments = new FlagSystem(9, backup?.achievments) //flag system for the achievements
+        this.clash = new ClashMatrix(backup?.clash || "NT_N") //clash default base
+        this.clashtime = backup?.clashtime || 1 //last time money was taken from the mines in &clash
+        this.clashAttackTimer = backup?.clashAttackTimer || 1 //time when user was attacked
+        console.log("- " + Colors.purple.colorize(!backup ? "Created EconomySystem of " : "Restored EconomySystem of ") + Colors.hpurple.colorize(this.user))
     }
 
     alterValue(valuename, amount, max) {
@@ -85,7 +89,7 @@ class EconomySystem {
             let msg = this.user + " gained " + amount + " DogeCoins!"
             if (!nobonus) {
                 msg = msg + " (+" + pbonus + " bonus)"
-                if (GetPercentual() <= 7) {
+                if (amount > 5000 && GetPercentual() <= 7) {
                     message.channel.send("huh!? you found a Xilefund shard!")
                     this.alterValue("xilefunds", 0.25)
                 }

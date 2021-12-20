@@ -8,7 +8,8 @@ client = new Discord.Client({
         Discord.Intents.FLAGS.GUILDS,
         Discord.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
         Discord.Intents.FLAGS.GUILD_MESSAGES,
-        Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS ,
+        Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        Discord.Intents.FLAGS.GUILD_PRESENCES
     ]
 })
 client.login(debugmode ? process.env.DEBUG : process.env.TOKEN)
