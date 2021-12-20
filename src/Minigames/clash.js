@@ -150,7 +150,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 			}
 			const EconomySystem = Economy.getEconomySystem(message.author)
 			const ClashMatrix = EconomySystem.clash
-			if (ClashMatrix == AttackedES) {
+			if (ClashMatrix == AttackedMatrix) {
 				return void message.channel.send("I do not approve suicide.")
 			}
 			if (EconomySystem.clashAttackTimer + Time.minute >= Date.now()) {
