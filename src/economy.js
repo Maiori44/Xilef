@@ -60,15 +60,16 @@ class EconomySystem {
         this.clash = new ClashMatrix(backup?.clash || "NT_N") //clash default base
         this.clashtime = backup?.clashtime || 1 //last time money was taken from the mines in &clash
         this.clashAttackTimer = backup?.clashAttackTimer || 1 //time when user was attacked
+        this.clashTrophies = backup?.clashTrophies || 0
         console.log("- " + Colors.purple.colorize(!backup ? "Created EconomySystem of " : "Restored EconomySystem of ") + Colors.hpurple.colorize(this.user))
     }
 
-    alterValue(valuename, amount, max) {
+    alterValue(valuename, amount, max = Infinity, min = 0) {
         console.log("- " + Colors.purple.colorize("Altered a value of an EconomySystem:") +
             "\n\tUser: " + this.user +
             "\n\tValue: " + valuename +
             "\n\tAmount: " + amount)
-        this[valuename] = Math.min(this[valuename] + amount, max || Infinity)
+        this[valuename] = Math.max(Math.min(this[valuename] + amount, max), min)
     }
 
     award(name, message) {
