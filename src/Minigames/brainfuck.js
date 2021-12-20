@@ -93,6 +93,8 @@ Commands.brainfuck = new Command("Solve challenges with this esoteric language\n
                 message.channel.send("You completed the BrainFuck challenge!")
                 EconomySystem.give(Math.floor(Brainfuck.sentence.length / code.length * 100000), message)
                 Brainfuck.sentence = Math.random().toString(36).substr(2, Math.ceil(Math.random() * 10))
+                EconomySystem.alterValue("bfs", 1)
+                if (EconomySystem.bfs == 30) EconomySystem.award("brainfuck", message)
                 break
             } else message.channel.send(`Sadly, the output is not the desired one (${Brainfuck.sentence})`)
             EconomySystem.bftime = time

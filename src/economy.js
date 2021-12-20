@@ -41,26 +41,27 @@ const { ClashMatrix } = require("./Minigames/clash.js")
 
 class EconomySystem {
     constructor(username, backup) {
-        this.money = backup?.money || 0 //the amount of DogeCoins the user has
-        this.rank = backup?.rank || 1 //their leaderboard rank
+        this.money = backup?.money ?? 0 //the amount of DogeCoins the user has
+        this.rank = backup?.rank ?? 1 //their leaderboard rank
         this.user = username //their username
-        this.xilefunds = backup?.xilefunds || 0 //the amount of xilefunds the user has
-        this.impostors = backup?.impostors || 0 //the amount of times they won in &crew
-        this.driller = backup?.driller || 1 //their &driller tier
-        this.floor = backup?.floor || 0 //their record in &dungeon
-        this.msweeper = backup?.msweeper || 0 //the amount of times they won in &msweeper
-        this.day = backup?.day || 1 //last time they got &daily
-        this.reversi = backup?.reversi || 0 //the amount of times they won in &reversi
-        this.connect4 = backup?.connect4 || 0 //the amount of times they won in &connect4
-        this.roshambo = backup?.roshambo || 0 //the amount of times they wont in &roshambo
-        this.vhour = backup?.vhour || 1 //last time they rolled
+        this.xilefunds = backup?.xilefunds ?? 0 //the amount of xilefunds the user has
+        this.impostors = backup?.impostors ?? 0 //the amount of times they won in &crew
+        this.driller = backup?.driller ?? 1 //their &driller tier
+        this.floor = backup?.floor ?? 0 //their record in &dungeon
+        this.msweeper = backup?.msweeper ?? 0 //the amount of times they won in &msweeper
+        this.day = backup?.day ?? 1 //last time they got &daily
+        this.reversi = backup?.reversi ?? 0 //the amount of times they won in &reversi
+        this.connect4 = backup?.connect4 ?? 0 //the amount of times they won in &connect4
+        this.roshambo = backup?.roshambo ?? 0 //the amount of times they won in &roshambo
+        this.vhour = backup?.vhour ?? 1 //last time they rolled
         this.vgot = new FlagSystem(60, backup?.vgot) //flag system for the different v_s
-        this.bftime = backup?.bftime || 1 //last time they completed a brainfuck challenge
-        this.achievments = new FlagSystem(9, backup?.achievments) //flag system for the achievements
-        this.clash = new ClashMatrix(backup?.clash || "NT_N") //clash default base
-        this.clashtime = backup?.clashtime || 1 //last time money was taken from the mines in &clash
-        this.clashAttackTimer = backup?.clashAttackTimer || 1 //time when user was attacked
-        this.clashTrophies = backup?.clashTrophies || 0
+        this.bftime = backup?.bftime ?? 1 //last time they completed a brainfuck challenge
+        this.bfs = backup?.bfs ?? 0 //amount of times they completed brainfuck challenges
+        this.achievments = new FlagSystem(11, backup?.achievments) //flag system for the achievements
+        this.clash = new ClashMatrix(backup?.clash ?? "NT_N") //clash default base
+        this.clashtime = backup?.clashtime ?? 1 //last time money was taken from the mines in &clash
+        this.clashAttackTimer = backup?.clashAttackTimer ?? 1 //time when user was attacked
+        this.clashTrophies = backup?.clashTrophies ?? 0 //tre trophies the user has
         console.log("- " + Colors.purple.colorize(!backup ? "Created EconomySystem of " : "Restored EconomySystem of ") + Colors.hpurple.colorize(this.user))
     }
 
@@ -193,7 +194,9 @@ Achievements = {
     v_: new Economy.flag("<:v_c:873259417557151765> find all v_s", 6),
     dungeon: new Economy.flag("<:dungeon:875809577487192116> reach floor 50 in dungeon", 7),
     msweeper: new Economy.flag("💥 win at minesweeper 10 times", 8),
-    roshambo: new Economy.flag(":rock: win at roshambo 25 times", 9)
+    roshambo: new Economy.flag(":rock: win at roshambo 25 times", 9),
+    brainfuck: new Economy.flag(":brain: complete 30 BrainFuck challenges", 9),
+    clash: new Economy.flag(Clash.emojis.B + " gain 2000 trophies", 11)
 }
 Achievements.binary = [
     Achievements.first.id + "\n",

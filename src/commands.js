@@ -408,7 +408,8 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
                             "```js\nImpostors found: " + EconomySystem.impostors +
                             "\nDriller tier: " + EconomySystem.driller +
                             "\nDungeon top floor: " + EconomySystem.floor +
-                            "\nMineSweeper matches won: " + EconomySystem.msweeper + "```",
+                            "\nMineSweeper matches won: " + EconomySystem.msweeper +
+                            "\nBrainFuck challenges completed: " + EconomySystem.bfs + "```",
                         inline: true
                     },
                     {
@@ -416,7 +417,8 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
                         value:
                             "```lua\nReversi matches won: " + EconomySystem.reversi +
                             "\nConnect four matches won: " + EconomySystem.connect4 +
-                            "\nRoshambo matches won: " + EconomySystem.roshambo + "```",
+                            "\nRoshambo matches won: " + EconomySystem.roshambo +
+                            "\nClash Trophies: " + EconomySystem.clashTrophies + "```",
                         inline: true
                     },
                     {

@@ -174,11 +174,19 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 			if (EconomySystem.buy(power * 1000, message, "Time to go to war!", "Poor people don't get war, they get messages saying them they don't have enough money", true)) {
 				AttackedES.clashAttackTimer = Date.now()
 				if (defense >= power) {
+					EconomySystem.alterValue("clashTrophies", -15)
+					AttackedES.alterValue("clashTrophies", 15)
 					return void message.channel.send("Damn this guy's defenses sure are strong, you lost.")
 				}
 				const BrokeCell = AttackedMatrix.getCell(x, y)
 				switch (BrokeCell.value) {
-					case "M": EconomySystem.give(10000, message); BrokeCell.value = "N"; break
+					case "M": {
+						EconomySystem.alterValue("clashTrophies", 10)
+						AttackedES.alterValue("clashTrophies", -10)
+						EconomySystem.give(10000, message)
+						BrokeCell.value = "N"
+						break
+					}
 					case "T": {
 						let amount = 5000
 						for (const Cell of AttackedMatrix) {
@@ -187,6 +195,8 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 								Cell.value = "N"
 							}
 						}
+						EconomySystem.alterValue("clashTrophies", amount / 100)
+						AttackedES.alterValue("clashTrophies", -(amount / 100))
 						EconomySystem.give(amount, message)
 						message.channel.send("Man you sure showed him who's boss huh?")
 						break
@@ -194,6 +204,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 					default: BrokeCell.value = "N"
 				}
 				message.channel.send("Congraturations you won the battle, *but not the war.*")
+				if (EconomySystem.clashTrophies >= 2000) EconomySystem.award("clash", message)
 			}
 			break
 		}
