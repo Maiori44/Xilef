@@ -195,7 +195,7 @@ Achievements = {
     dungeon: new Economy.flag("<:dungeon:875809577487192116> reach floor 50 in dungeon", 7),
     msweeper: new Economy.flag("💥 win at minesweeper 10 times", 8),
     roshambo: new Economy.flag(":rock: win at roshambo 25 times", 9),
-    brainfuck: new Economy.flag(":brain: complete 30 BrainFuck challenges", 9),
+    brainfuck: new Economy.flag(":brain: complete 30 BrainFuck challenges", 10),
     clash: new Economy.flag(Clash.emojis.B + " gain 2000 trophies", 11)
 }
 Achievements.binary = [
@@ -207,7 +207,9 @@ Achievements.binary = [
     Achievements.v_.id + "\n",
     Achievements.dungeon.id + "\n",
     Achievements.msweeper.id + "\n",
-    Achievements.roshambo.id + "\n"
+    Achievements.roshambo.id + "\n",
+    Achievements.brainfuck.id + "\n",
+    Achievements.clash.id + "\n"
 ]
 
 for (let ID of Object.keys(Economy.list)) {

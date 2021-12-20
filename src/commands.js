@@ -409,7 +409,7 @@ Commands.stats = new Command("Shows a list of all your stats, like your money or
                             "\nDriller tier: " + EconomySystem.driller +
                             "\nDungeon top floor: " + EconomySystem.floor +
                             "\nMineSweeper matches won: " + EconomySystem.msweeper +
-                            "\nBrainFuck challenges completed: " + EconomySystem.bfs + "```",
+                            "\nBrainFuck challenges won: " + EconomySystem.bfs + "```",
                         inline: true
                     },
                     {
