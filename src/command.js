@@ -1,11 +1,18 @@
 /** @format */
 
-const { Message } = require("discord.js");
+const { Message, Collection } = require("discord.js");
 const { LocalClient } = require('./client.js')
 
+class RequiredArg {
+	constructor(options) {
+		this.errorMsg = options.errorMsg;
+		this.argIndex = options.argIndex;
+		this.argName = options.argName;
+	}
+}
 class Command {
 	/**
-	 * @typedef {{name: string, description: string, permission: Discord.PermissionString, category: String, run: (message: Message, args: string[], client: LocalClient) => Promise<void>}} CommandOptions
+	 * @typedef {{name: string, description: string, permission: Discord.PermissionString, requiredArgs: RequiredArg[], category: String, run: (message: Message, args: string[], client: LocalClient) => Promise<void>, subCommands: Collection<String, Command>}} CommandOptions
 	 * @param {CommandOptions} options
 	 */
 	constructor(options) {
@@ -14,9 +21,12 @@ class Command {
 		this.permission = options.permission || 0;
 		this.category = options.category;
 		this.run = options.run;
+		this.subCommands = options.subCommands ?? new Collection();
+		this.requiredArgs = options.requiredArgs;
 	}
 }
 
 module.exports = {
-	Command
+	Command,
+	RequiredArg
 }
