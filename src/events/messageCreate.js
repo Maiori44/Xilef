@@ -5,7 +5,6 @@ const { Command } = require('../command.js')
 const runners = new Collection()
 
 module.exports = new Event("messageCreate", async (client, message) => {
-    console.log(JSON.stringify(client.commands.find(x => x.name == "crew")))
     if (message.author.bot) return;
     if (!message.content.startsWith(client.prefix)) return;
     if (runners.get(message.author.id) === true) return;
