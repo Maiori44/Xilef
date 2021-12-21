@@ -1,13 +1,16 @@
+const { Collection } = require('discord.js');
 const { Event } = require('../event.js')
 
-module.exports = new Event("messageCreate", (client, message) => {
-    if (message.author.bot) return;
+const runners = new Collection()
 
+module.exports = new Event("messageCreate", async (client, message) => {
+    if (message.author.bot) return;
     if (!message.content.startsWith(client.prefix)) return;
+    if (runners.get(message.author.id) === true) return;
 
     const args = message.content.substring(client.prefix.length).split(/ +/);
 
-    const command = client.commands.find(cmd => cmd.name == args[0]);
+    let command = await client.commands.find(cmd => cmd.name == args[0]);
 
     if (!command) return message.reply(`${args[0]} is not a valid command!`);
 
@@ -17,8 +20,34 @@ module.exports = new Event("messageCreate", (client, message) => {
         return message.reply(
             `You do not have the permission \`${command.permission}\` to run this command!`
         );
-    
+
+    const possibleSubCommand = await command.subCommands.get(args[1])
+
+    if (possibleSubCommand) {
+        command = possibleSubCommand
+        args.shift()
+    }
+
     args.shift()
 
-    command.run(message, args, client);
+    // requiredarg handling
+    if (command.requiredArgs) {
+        const missingArgs = command.requiredArgs;
+
+        command.requiredArgs.forEach(value => {
+            if (args[value.argIndex])
+                missingArgs.splice(missingArgs.indexOf(value), 1)
+        })
+
+        if (missingArgs.length != 0)
+            return message.reply(`${missingArgs.map(arg => arg.errorMsg).join(', ')}`)
+    }
+
+    // command running
+
+    runners.set(message.author.id, true)
+    command.run(message, args, client)
+        .then(() =>
+            runners.set(message.author.id, false)
+        )
 });

@@ -4,8 +4,6 @@ const fs = require('fs')
 const BSON = require('bson')
 const saveFilePath = './src/data/economy.bson'
 
-const Long = BSON.Long
-
 class UserBinaryData {
     /**
      * 
@@ -13,30 +11,34 @@ class UserBinaryData {
      */
     constructor(totalFlags, binary) {
         /**
-         * @type {Long}
+         * @type {String}
          */
-        this.binary = binary ? Long(binary) : Long(0)
+        this.binary = binary ? binary : "0"
         this.totalFlags = totalFlags
     }
 
     getBinary() {
-        return this.binary.toString(2)
+        return this.binary
     }
 
     /**
      * Will set the bit at `position` (set to 1)
-     * @param {Long} position 
+     * @param {Number} position 
      */
     setflagAt(position) {
-        this.binary |= Long(1) << Long(position) // cool operator i found
+        let binaryNumber = parseInt(this.binary, 2)
+        binaryNumber |= (1 << position) // cool operator i found
+        this.binary = binaryNumber.toString(2)
     }
 
     /**
      * Will clear the bit at `position` (set to 0)
-     * @param {Long} position 
+     * @param {Number} position 
      */
     clearFlagAt(position) {
-        this.binary &= ~(Long(1) << Long(position))
+        let binaryNumber = parseInt(this.binary, 2)
+        binaryNumber &= ~(Number(1) << Number(position))
+        this.binary = binaryNumber.toString(2)
     }
 
     /**
@@ -45,7 +47,7 @@ class UserBinaryData {
      * @returns {boolean}
      */
     isFlagSet(position) {
-        return ((this.binary >> position) & 1) == 1
+        return ((parseInt(this.binary, 2) >> position) & 1) == 1
     }
 
     /**
@@ -58,14 +60,14 @@ class UserBinaryData {
         replace1 = replace1 || []
         replace1.reverse()
 
-        const binaryString = this.binary.toString(2)
-        let bits = ("0".repeat(this.totalFlags - binaryString.length) + binaryString).split('')
+        let bits = ("0".repeat(this.totalFlags - this.binary.length) + this.binary).split('')
 
         for (let i = 0; i < bits.length; i++) {
             if (bits[i] == "0")
                 bits[i] = replace0
-            else
+            else 
                 bits[i] = replace1[i]
+            
         }
 
         replace1.reverse()
@@ -118,16 +120,17 @@ class EconomySystem {
         this.logger = options.logger
         this.#users = new Collection()
 
+        this.setUser("830008177156292609", new XilefUser({
+            money: -1,
+            rank: -1,
+            vgot: new UserBinaryData(60, "1".repeat(60)),
+            achievements: new UserBinaryData(9, "1".repeat(9))
+        }))
+
         try {
             this.#loadBson()
         } catch {
-            this.logger.warning("Creating XDT Framework user due to no data fetched from " + saveFilePath)
-            this.setUser("830008177156292609", new XilefUser({
-                money: -1,
-                rank: -1,
-                vgot: new UserBinaryData(60, "1111"),
-                achievements: new UserBinaryData(9, "1111111")
-            }))
+            this.logger.warning("Failed to load BSON " + saveFilePath)
         }
     }
 
