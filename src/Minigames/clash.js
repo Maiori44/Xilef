@@ -277,7 +277,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 			const InfoEmbed = new Discord.MessageEmbed()
 				.setColor("#FFA500")
 				.setTitle("Buildings")
-				.setDescription(`Every building costs ${500 * EconomySystem.rank} to build and you can only have 30 of every building\nexcept the town hall, there is and must always be one for every village`)
+				.setDescription(`Every building costs ${250 * EconomySystem.rank} to build and you can only have 30 of every building\nexcept the town hall, there is and must always be one for every village`)
 				.addFields(
 					{
 						name: "Town Hall",
