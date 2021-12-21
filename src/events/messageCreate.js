@@ -1,9 +1,11 @@
-const { Collection } = require('discord.js');
+const { Collection, MessageEmbed } = require('discord.js');
 const { Event } = require('../event.js')
+const { Command } = require('../command.js')
 
 const runners = new Collection()
 
 module.exports = new Event("messageCreate", async (client, message) => {
+    console.log(JSON.stringify(client.commands.find(x => x.name == "crew")))
     if (message.author.bot) return;
     if (!message.content.startsWith(client.prefix)) return;
     if (runners.get(message.author.id) === true) return;
@@ -11,18 +13,13 @@ module.exports = new Event("messageCreate", async (client, message) => {
 
     const args = message.content.substring(client.prefix.length).split(/ +/);
 
-    let command = await client.commands.find(cmd => cmd.name == args[0]);
+    let command = await client.commands.get(args[0]);
 
     if (!command) return message.reply(`${args[0]} is not a valid command!`);
 
     const permission = message.member.permissions.has(command.permission, true);
 
-    if (!permission)
-        return message.reply(
-            `You do not have the permission \`${command.permission}\` to run this command!`
-        );
-
-    const possibleSubCommand = await command.subCommands.get(args[1])
+    const possibleSubCommand = await command.subCommands.find(subcmd => subcmd.name == args[1])
 
     if (possibleSubCommand) {
         command = possibleSubCommand
@@ -31,17 +28,29 @@ module.exports = new Event("messageCreate", async (client, message) => {
 
     args.shift()
 
+    if (!permission)
+        return message.reply(
+            `You do not have the permission \`${command.permission}\` to run this command!`
+        );
+
     // requiredarg handling
     if (command.requiredArgs) {
-        const missingArgs = command.requiredArgs;
-
-        command.requiredArgs.forEach(value => {
-            if (args[value.argIndex])
-                missingArgs.splice(missingArgs.indexOf(value), 1)
+        let missingArgs = [...command.requiredArgs]
+        command.requiredArgs.forEach(requiredArg => {
+            if (requiredArg.validValues.includes(args[requiredArg.argIndex])) {
+                missingArgs.splice(missingArgs.indexOf(requiredArg), 1)
+            }
         })
 
-        if (missingArgs.length != 0)
-            return message.reply(`${missingArgs.map(arg => arg.errorMsg).join(', ')}`)
+        if (missingArgs.length != 0) {
+            const missingArgEmbed = new MessageEmbed()
+                .setColor(message.member.displayColor)
+                .setTitle("Unmatched required argument : " + missingArgs[0].argName)
+                .setDescription(" \nError message : `" + missingArgs[0].errorMsg + "`")
+                .setTimestamp()
+
+            return message.reply({ embeds: [missingArgEmbed] })
+        }
     }
 
     // command running
@@ -51,4 +60,7 @@ module.exports = new Event("messageCreate", async (client, message) => {
         .then(() =>
             runners.set(message.author.id, false)
         )
+        .catch((err) => {
+            client.logger.jsError("Failed to execute command! (" + err + ")")
+        })
 });
