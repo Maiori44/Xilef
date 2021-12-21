@@ -4,10 +4,15 @@ const { Message, Collection } = require("discord.js");
 const { LocalClient } = require('./client.js')
 
 class RequiredArg {
+	/**
+	 * @typedef {{errorMsg: String, argIndex: Number, argName: String, validValues?: string[]}}
+	 * @param {RequiredArgOptions} options 
+	 */
 	constructor(options) {
 		this.errorMsg = options.errorMsg;
 		this.argIndex = options.argIndex;
 		this.argName = options.argName;
+		this.validValues = options.validValues ?? []
 	}
 }
 class Command {
@@ -21,7 +26,7 @@ class Command {
 		this.permission = options.permission || 0;
 		this.category = options.category;
 		this.run = options.run;
-		this.subCommands = options.subCommands ?? new Collection();
+		this.subCommands = options.subCommands;
 		this.requiredArgs = options.requiredArgs;
 	}
 }
