@@ -27,7 +27,7 @@ class AmongusGame {
         this.crew = []
 
         const suspiciousnesses = [...Array(10).keys()]
-        const crewNamesCopy = crewNames
+        const crewNamesCopy = [...crewNames]
 
         let iteration = 0
         while (suspiciousnesses.length) {
