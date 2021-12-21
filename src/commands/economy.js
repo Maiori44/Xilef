@@ -19,16 +19,17 @@ module.exports = [
                     .setDescription("```lua\nDogeCoins: " + userData.money +
                         "\nRank: " + userData.rank + "```")
                     .addFields({
-                        name: "Acquired v_s: ",
-                        value: userData.vgot.getFormattedBinary(client.funnyFaces.binary, "❔")
-                    },
-                    {
                         name: "Achievements: ",
                         value: userData.achievements.getFormattedBinary(client.achievements.binary, "❔ ???\n")
-                    })
-                        
-                        /*+
-                        "\nXilefunds: " + userData.xilefunds + "```")*/
+                    }),
+                new MessageEmbed()
+                    .setColor(message.member.displayHexColor)
+                    .setTitle(user.username + "'s statistics")
+                    .setDescription("Acquired v_s: \n" + userData.vgot.getFormattedBinary(client.funnyFaces.binary, "❔"))
+                ]
+
+                /*+
+                "\nXilefunds: " + userData.xilefunds + "```")*/
                 // .addFields(
                 //     {
                 //         name: "Singleplayer stats:",
@@ -52,7 +53,6 @@ module.exports = [
                 //         value: EconomySystem.achievments.getBinary(Achievements.binary, "❔ ???\n")
                 //     }
                 // )
-            ]
 
             message.channel.send({ embeds: embeds })
         }
