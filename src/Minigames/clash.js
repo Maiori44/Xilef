@@ -238,7 +238,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 			if (!ClashMatrix.compare(x, y, "N")) {
 				return void message.channel.send("Dude you're gonna build on top of something else, move it first")
 			}
-			const price = 500 * EconomySystem.rank
+			const price = 250 * EconomySystem.rank
 			if (EconomySystem.buy(price, message, "Sucessfully built your " + args[1], "You lack money for this building, you need " + price)) {
 				ClashMatrix.set(x, y, building)
 				if (building == "M") EconomySystem.clashtime = Date.now()
