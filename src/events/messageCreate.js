@@ -60,6 +60,8 @@ module.exports = new Event("messageCreate", async (client, message) => {
             runners.set(message.author.id, false)
         )
         .catch((err) => {
-            client.logger.jsError("Failed to execute command! (" + err + ")")
+            const errMsg = "Failed to execute command! (" + err + ")"
+            message.reply(errMsg)
+            client.logger.jsError(errMsg)
         })
 });
