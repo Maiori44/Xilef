@@ -7,6 +7,7 @@ module.exports = new Event("messageCreate", async (client, message) => {
     if (message.author.bot) return;
     if (!message.content.startsWith(client.prefix)) return;
     if (runners.get(message.author.id) === true) return;
+    if (!message.inGuild()) return;
 
     const args = message.content.substring(client.prefix.length).split(/ +/);
 
