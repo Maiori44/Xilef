@@ -314,17 +314,17 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 			const villageMatrix = Economy.getEconomySystem(message.author).clash;
 			const selected = new Set();
 
+			let villageMatrixCellIndex = 0;
 			message.channel
 				.send({
 					content: "Selected:\n\n`nothing`",
 					components: [
 						...[...villageMatrix]
 							.reduce((chunks, cell) => {
-								let index = 0;
 								if (cell.value === "N" || cell.value === "T")
 									return chunks;
-								const chunkIndex = Math.floor(index / 25);
-								index++;
+								const chunkIndex = Math.floor(villageMatrixCellIndex / 25);
+								villageMatrixCellIndex++;
 								(chunks[chunkIndex] ??= []).push(cell);
 
 								return chunks;
