@@ -458,6 +458,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 									}, ${tile.y})`;
 								})
 								.join(", "),
+						components: []
 					});
 
 					for (const cell of selected) {
