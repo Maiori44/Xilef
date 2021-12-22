@@ -154,7 +154,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 				return void message.channel.send("I do not approve suicide.")
 			}
 			if (EconomySystem.clashAttackTimer + Time.minute >= Date.now()) {
-				return void message.channel.send("You were already attacked recently!, take some time to rest will ya?");
+				return void message.channel.send("Too much war is bad for your health, take some time to rest.");
 			}
 			const power = args[2]
 			if (power > ClashMatrix.getTotal("B") * 3 + 1) {
@@ -195,6 +195,7 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 								Cell.value = "N"
 							}
 						}
+						EconomySystem.clashAttackTimer = Date.now()
 						EconomySystem.alterValue("clashTrophies", amount / 100)
 						AttackedES.alterValue("clashTrophies", -(amount / 100))
 						EconomySystem.give(amount, message)
