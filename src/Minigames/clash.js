@@ -311,124 +311,160 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 		}
 
 		case 'remove': {
-		  const villageMatrix = Economy.getEconomySystem(message.author).clash;
-		  const selected = new Set();
+			const villageMatrix = Economy.getEconomySystem(message.author).clash;
+			const selected = new Set();
 
-		  message.channel.send({
-			content: 'Selected:\n\n`nothing`',
-			components: [
-			  ...[...villageMatrix]
-				.reduce((chunks, cell) => {
-				  let index = 0
-				  if (cell.value === "N" || cell.value === "T") return chunks;
-				  const chunkIndex = Math.floor(index / 25);
-				  index++;
-				  (chunks[chunkIndex] ??= []).push(cell);
-
-				  return chunks;
-				}, [])
-				.map((cells, chunkIndex) => {
-				  return new Discord.MessageActionRow({
+			message.channel
+				.send({
+					content: "Selected:\n\n`nothing`",
 					components: [
-					  new Discord.MessageSelectMenu({
-						customId: 'remove-select-menu#' + chunkIndex,
-						placeholder: 'Choose which building to remove',
-						maxValues: cells.length,
-						options: cells.map(({value, x, y}) => ({
-						  label: Clash.names[value],
-						  description: `${x}, ${y}`,
-						  value: `${value}-${x}-${y}`
-						  }))
-					  })
-					]
-				  });
-				}),
+						...[...villageMatrix]
+							.reduce((chunks, cell) => {
+								let index = 0;
+								if (cell.value === "N" || cell.value === "T")
+									return chunks;
+								const chunkIndex = Math.floor(index / 25);
+								index++;
+								(chunks[chunkIndex] ??= []).push(cell);
 
-			  new Discord.MessageActionRow({
-				components: [
-				  new Discord.MessageButton({
-					customId: 'selector-delete',
-					style: 'DANGER',
-					label: 'Delete',
-				  }),
-				]
-			  }),
-			]
-		  })
-			.then((selector) => {
-			  const collector = selector.createMessageComponentCollector({
-				componentType: 'SELECT_MENU',
-				async filter(interaction) {
-				  const isSameUser = interaction.user.id === message.author.id;
+								return chunks;
+							}, [])
+							.map((cells, chunkIndex) => {
+								return new Discord.MessageActionRow({
+									components: [
+										new Discord.MessageSelectMenu({
+											customId:
+												"remove-select-menu#" + chunkIndex,
+											placeholder:
+												"Choose which building to remove",
+											maxValues: cells.length,
+											options: cells.map(
+												({ value, x, y }) => ({
+													label: Clash.names[value],
+													description: `${x}, ${y}`,
+													value: `${value}-${x}-${y}`,
+												})
+											),
+										}),
+									],
+								});
+							}),
 
-				  if (!isSameUser) {
-					await interaction.reply({
-					  content: "You can't delete someone else's building",
-					  ephemeral: true
+						new Discord.MessageActionRow({
+							components: [
+								new Discord.MessageButton({
+									customId: "selector-delete",
+									style: "DANGER",
+									label: "Delete",
+								}),
+							],
+						}),
+					],
+				})
+				.then((selector) => {
+					const collector = selector.createMessageComponentCollector({
+						componentType: "SELECT_MENU",
+						async filter(interaction) {
+							const isSameUser =
+								interaction.user.id === message.author.id;
+
+							if (!isSameUser) {
+								await interaction.reply({
+									content:
+										"You can't delete someone else's building",
+									ephemeral: true,
+								});
+							}
+
+							return isSameUser;
+						},
 					});
-				  }
 
-				  return isSameUser;
-				}
-			  });
+					collector.on("collect", async (interaction) => {
+						for (const v of interaction.values) {
+							const [, rawX, rawY] = v.split("-");
 
-			  collector.on('collect', async (interaction) => {
-				for (const v of interaction.values) {
-				  const [, rawX, rawY] = v.split('-');
+							if (
+								[...selected].some(
+									({ x: cellX, y: cellY }) =>
+										cellX === Number(rawX) &&
+										cellY === Number(rawY)
+								)
+							) {
+								selected.delete(
+									[...selected].find(
+										({ x: cellX, y: cellY }) =>
+											cellX === Number(rawX) &&
+											cellY === Number(rawY)
+									)
+								);
+							} else {
+								selected.add(
+									villageMatrix.getCell(
+										Number(rawX),
+										Number(rawY)
+									)
+								);
+							}
+						}
 
-				  if ([...selected].some(({ x: cellX, y: cellY }) => cellX === Number(rawX) && cellY === Number(rawY))) {
-					selected.delete([...selected].find(({ x: cellX, y: cellY }) => cellX === Number(rawX) && cellY === Number(rawY)));
-				  } else {
-					selected.add(villageMatrix.getCell(Number(rawX), Number(rawY)));
-				  }
-				}
-
-
-				  return void interaction.update({
-					content: 'Selected:\n\n' +
-					  ([...selected].map((tile) => {
-						return `${Clash.emojis[tile.value]} (${tile.x}, ${tile.y})`;
-					  }).join('\n') || '`nothing`')
-				  });
-			  });
-
-			  return selector.awaitMessageComponent({
-				componentType: 'BUTTON',
-				async filter(interaction) {
-				  const isSameUser = interaction.user.id === message.author.id;
-				  const isSelected = selected.size !== 0;
-
-				  if (!isSameUser) {
-					await interaction.reply({
-					  content: "You can't delete someone else's alias",
-					  ephemeral: true
+						return void interaction.update({
+							content:
+								"Selected:\n\n" +
+								([...selected]
+									.map((tile) => {
+										return `${Clash.emojis[tile.value]} (${
+											tile.x
+										}, ${tile.y})`;
+									})
+									.join("\n") || "`nothing`"),
+						});
 					});
-				  }
 
-				  if (!isSelected) {
-					await interaction.reply({
-					  content: "Deleting nothing...",
-					  ephemeral: true
+					return selector.awaitMessageComponent({
+						componentType: "BUTTON",
+						async filter(interaction) {
+							const isSameUser =
+								interaction.user.id === message.author.id;
+							const isSelected = selected.size !== 0;
+
+							if (!isSameUser) {
+								await interaction.reply({
+									content:
+										"You can't delete someone else's alias",
+									ephemeral: true,
+								});
+							}
+
+							if (!isSelected) {
+								await interaction.reply({
+									content: "Deleting nothing...",
+									ephemeral: true,
+								});
+							} else collector.stop();
+
+							return isSameUser && isSelected;
+						},
 					});
-				  } else collector.stop();
+				})
+				.then((interaction) => {
+					interaction.update({
+						content:
+							"Successfully removed " +
+							[...selected]
+								.map((tile) => {
+									return `${Clash.emojis[tile.value]} (${
+										tile.x
+									}, ${tile.y})`;
+								})
+								.join(", "),
+					});
 
-				  return isSameUser && isSelected;
-				}
-			  });
-			})
-			.then((interaction) => {
-			  interaction.update({
-				content: "Successfully removed " +
-				  [...selected].map((tile) => {
-					return `${Clash.emojis[tile.value]} (${tile.x}, ${tile.y})`;
-				  }).join(', ')
-			  })
-
-			  for (const cell of selected) {
-				cell.value = 'N';
-			  }
-			});
-		  break;
+					for (const cell of selected) {
+						cell.value = "N";
+					}
+				});
+			break;
 		}
 		default: message.channel.send(Clash.help.replace(/\&/g, Prefix.get(message.guild.id)))
 	}
