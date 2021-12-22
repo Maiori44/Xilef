@@ -213,80 +213,101 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             break
         }
         case "dig": {
+            let depth = Number.parseInt(args[1]);
 
-            let depth = parseInt(args[1]);
+            if (Number.isNaN(depth)) depth = 1;
 
             if (depth < 1) {
                 message.channel.send("What are you doing? You can only go forward, sorry my friend.");
                 return;
             }
 
-            if (isNaN(depth)) {
-                depth = 1;
-            }
 
-            let log = [];
+            const log = [];
 
-            for (let x = 1; x <= depth; x++) {
+            for (let i = 0; i < depth; i++) {
                 if (DrillerGame.hp <= 0) {
-                    log += "You died!"
-                    break
-                }
-                let hurtchance = GetPercentual();
-                if (DrillerGame.hitlava) hurtchance = hurtchance * 2
-
-                let currentOre = Driller.Ores[DrillerGame.depth]
-                if (currentOre.tier > EconomySystem.driller) {
-
-                    log += "Your driller can't dig any further, please upgrade it to dig further. For now, cashin to get the money you found."
+                    log.push("You died!");
                     break;
                 }
 
-                if (hurtchance <= currentOre.lavachance) {
-                    const lostHp = Math.max((7 * DrillerGame.depth), 1)
-                    DrillerGame.hp -= lostHp
-                    DrillerGame.hitlava = true
-                    log += `Hit lava (lost ${lostHp} HP => ${DrillerGame.hp}) \n`
+                let hurtChance = GetPercentual();
+
+                if (DrillerGame.hitlava) hurtChance *= 2;
+
+                const currentOre = Driller.Ores[DrillerGame.depth];
+
+                if (currentOre.tier > EconomySystem.driller) {
+                    log.push("Your driller can't dig any further, please upgrade it to dig further. For now, cashin to get the money you found.");
+                    break;
                 }
-                else {
-                    let text = `Found ${currentOre.name}`
-                    if (currentOre.value != 0)
-                        text += `, has a value of ${currentOre.value}\n`
-                    log += text
 
-                    DrillerGame.cash += currentOre.value
-                    DrillerGame.depth++
+                if (hurtChance <= currentOre.lavachance) {
+                    const lostHP = Math.max(DrillerGame.depth * 7, 1);
 
-                    DrillerGame.hitlava = false
+                    DrillerGame.hp -= lostHP;
+                    DrillerGame.hitlava = true;
+
+                    log.push(`Hit lava (lost ${lostHP} HP => ${DrillerGame.hp})`);
+                } else {
+                    let text = `Found ${currentOre.name}`;
+
+                    if (currentOre.value != 0) text += `, has a value of ${currentOre.value}`;
+
+                    log.push(text);
+
+                    DrillerGame.cash += currentOre.value;
+                    DrillerGame.depth++;
+
+                    DrillerGame.hitlava = false;
 
                     if (currentOre.tier > EconomySystem.driller) {
-                        log += "Your driller cannot dig any further, please upgrade it when possible. Automatically cashing in."
+                        log.push("Your driller cannot dig any further, please upgrade it when possible. Automatically cashing in.");
 
-                        message.channel.send("Your driller comes back, and gives you all the DogeCoins it had collected.")
-                        EconomySystem.give(DrillerGame.cash, message)
-                        DrillerGame.reset(EconomySystem)
-
-                        break
+                        EconomySystem.give(DrillerGame.cash, message);
+                        DrillerGame.reset(EconomySystem);
+                        message.channel.send("Your driller comes back, and gives you all the DogeCoins it had collected.");
+                        break;
                     }
                 }
-
             }
 
-            const resultEmbed = DrillerGame.getInfo(EconomySystem)
+            const embed = DrillerGame.getInfo(EconomySystem);
 
-            let results = [];
-            for (var i = 0; i < log.toString().length; i += 1024)
-                results.push(log.toString().substring(i, i + 1024));
+            let logPageStart = 0;
+            let logPageLength = 0;
+            for (let i = 0; i < log.length; i++) {
+                if (logPageLength + log[i].length >= 1024) {
+                    embed.addField(
+                        `**Page ${embed.fields.length + 1}**`,
+                        log.slice(logPageStart, i).join('\n'),
+                        true
+                    );
 
-            if (results.length > 1)
-                resultEmbed.addField("Warning : ", "The ore log has been split up to allow it to be sent.")
+                    logPageStart = i;
+                    logPageLength = 0;
+                } else logPageLength += log[i].length + 1
+            }
 
-            for (let i = 0; i < results.length; i++)
-                resultEmbed.addField("**Page " + (i + 1) + "** :", results[i], true);
+            embed.addField(
+                `**Page ${embed.fields.length + 1}**`,
+                log.slice(logPageStart, log.length).join('\n'),
+                true
+            );
 
-            message.channel.send({ embeds: [resultEmbed] })
+            // let results = [];
+            // for (var i = 0; i < log.toString().length; i += 1024)
+            //     results.push(log.toString().substring(i, i + 1024));
 
-            break
+            // if (results.length > 1)
+            //     embed.addField("Warning : ", "The ore log has been split up to allow it to be sent.")
+
+            // for (let i = 0; i < results.length; i++)
+            //     embed.addField("**Page " + (i + 1) + "** :", results[i], true);
+
+            message.channel.send({ embeds: [embed] })
+
+            break;
         }
         case "repair": {
             const cost =
