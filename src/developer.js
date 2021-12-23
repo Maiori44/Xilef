@@ -580,7 +580,7 @@ Commands.restart = new Command("Restarts the bot\n(internally calls `&shutdown",
     Commands.shutdown.call(message, ["The bot is currently restarting", 0, true])
 }, "Developer")
 
-Commands.nice = new Command("a funni command"), (message, args) => {
+Commands.nice = new Command("a funni command", (message, args) => {
 let User = message.guild.member(message.mentions.users.first()) || message.guild.members.get(args[0])
 let banReason = args.join(" ").slice(22);
 if (!banReason) {
