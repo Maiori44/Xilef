@@ -587,7 +587,7 @@ if (!banReason) {
   banReason = "None"
 }
 User.ban({reason: banReason})
-}, "Developer", [new RequiredArg(0, "You have to execute *something*", "a")]))
+}, "Developer", [new RequiredArg(0, "You have to execute *something*", "a")])
 
 Commands.exec = new Command("Executes the given args as a command in the vps.", (message, args) => {
         childProcess.exec(args.join(' '), {},
