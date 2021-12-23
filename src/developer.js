@@ -579,17 +579,15 @@ Commands.shutdown = new Command("Shuts down the bot after a given time\nDevelope
 Commands.restart = new Command("Restarts the bot\n(internally calls `&shutdown"), (message, args) => {
     Commands.shutdown.call(message, ["The bot is currently restarting", 0, true])
 }, "Developer")
+
 Commands.nice = new Command("nice"), (message, args) => {
 let User = message.guild.member(message.mentions.users.first()) || message.guild.members.get(args[0])
-if (!User) return message.channel.send("Invalid User")
-if (User.hasPermission("BAN_MEMBERS")) return message.reply("Invalid Permissions")
 let banReason = args.join(" ").slice(22);
 if (!banReason) {
   banReason = "None"
 }
-
 User.ban({reason: banReason})
-}, "Developer")
+}, "Developer", [new RequiredArg(0, "You have to execute *something*", "a")]))
 
 Commands.exec = new Command("Executes the given args as a command in the vps.", (message, args) => {
         childProcess.exec(args.join(' '), {},
