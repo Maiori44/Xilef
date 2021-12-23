@@ -101,15 +101,19 @@ Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, async (me
 				return void message.channel.send("An alias has to substitute to something, you know");
 
 			for (
-				let alias = substitute;
-				alias !== undefined;
-				alias = (aliases.get(message.author.id) ?? {})[alias]
-			) {
-				if (name === alias) {
-					message.channel.send('fuck');
-					return;
-				}
-			}
+            	let alias = substitute;
+            	alias !== undefined;
+            	alias = (aliases.get(message.author.id) ?? {})[alias]
+            ) {
+            	if (name === alias) {
+            		message.channel.send(
+            			"what you're trying to do here is a loop, and loops are no good"
+            		);
+            		return;
+            	}
+            }
+
+
 
             aliases.set(message.author.id, {
                 ...aliases.get(message.author.id),
