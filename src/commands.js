@@ -305,7 +305,7 @@ Commands.lua = new Command("Runs the given Lua code, and returns the stdout", (m
         const ErrorEmbed = new Discord.MessageEmbed()
             .setColor("#FF0000")
             .setTitle("An error occured:")
-            .setDescription("```\nScript execution timed out after 2000ms\n```")
+            .setDescription("```\nScript execution timed out after 4000ms\n```")
             .setTimestamp()
         message.channel.send({embeds: [ErrorEmbed]})
     }, 4000)
