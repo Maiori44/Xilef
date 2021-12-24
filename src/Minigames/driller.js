@@ -285,13 +285,13 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
                     );
 
                     logPageStart = i;
-                    logPageLength = 0;
+                    logPageLength = log[i].length + 1;
                 } else logPageLength += log[i].length + 1
             }
 
             embed.addField(
                 `**Page ${embed.fields.length + 1}**`,
-                log.slice(logPageStart, log.length).join('\n'),
+                log.slice(logPageStart).join('\n'),
                 true
             );
 
