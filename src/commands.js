@@ -295,9 +295,11 @@ function ReadStream(readableStream) {
     });
 }
 
+const basecode = fs.readFileSync("./src/Lua/base.lua", "utf8")
+
 Commands.lua = new Command("Runs the given Lua code, and returns the stdout", (message, args) => {
-    const code = (message.content.match(/```(?:lua)\n([^]*)\n```/i)?.[1] ?? args.join(" ")).replaceAll("\"", "'")
-    const luaprocess = spawn("./src/Lua/luajit", ["-e", `setfenv(1, {print = print, math = math}); ${code}`])
+    const code = (basecode.slice(0, 22) + (message.content.match(/```(?:lua)\n([^]*)\n```/i)?.[1] ?? args.join(" ")) + basecode.slice(21)).replaceAll("\"", "'")
+    const luaprocess = spawn("./src/Lua/luajit", ["-e", code])
     const timeout = setTimeout(() => {
         luaprocess.kill()
         const ErrorEmbed = new Discord.MessageEmbed()
@@ -312,7 +314,7 @@ Commands.lua = new Command("Runs the given Lua code, and returns the stdout", (m
         const ErrorEmbed = new Discord.MessageEmbed()
             .setColor("#FF0000")
             .setTitle("An error occured:")
-            .setDescription("```\n" + output.toString("utf8").slice(49) + "\n```")
+            .setDescription("```\n" + output.toString("utf8").slice(36) + "\n```")
             .setTimestamp()
         message.channel.send({embeds: [ErrorEmbed]}).then(() => clearTimeout(timeout))
     })
