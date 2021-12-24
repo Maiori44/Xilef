@@ -1,9 +1,6 @@
 const { LocalClient } = require('./client.js')
 const { Intents } = require('discord.js')
 
-require('./economy.js')
-require('./logger.js')
-
 const client = new LocalClient(
     [
         Intents.FLAGS.GUILDS,
