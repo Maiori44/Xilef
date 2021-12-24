@@ -308,7 +308,7 @@ Commands.lua = new Command("Runs the given Lua code, and returns the stdout", (m
             .setDescription("```\nScript execution timed out after 2000ms\n```")
             .setTimestamp()
         message.channel.send({embeds: [ErrorEmbed]})
-    }, 2000)
+    }, 4000)
     ReadStream(luaprocess.stderr).then(output => {
         if (output == "") return
         const ErrorEmbed = new Discord.MessageEmbed()
@@ -323,7 +323,7 @@ Commands.lua = new Command("Runs the given Lua code, and returns the stdout", (m
         const ResultEmbed = new Discord.MessageEmbed()
             .setColor("#000080")
             .setTitle("Output")
-            .setDescription("```lua\n" + output.toString("utf8") + "\n```")
+            .setDescription("```lua\n" + (output.toString("utf8").trim() || "--stdout is empty...") + "\n```")
             .setTimestamp()
         message.channel.send({embeds: [ResultEmbed]}).then(() => clearTimeout(timeout))
     })
