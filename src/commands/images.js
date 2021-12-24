@@ -1,17 +1,17 @@
 const { Command } = require('../command.js')
 const { MessageAttachment } = require('discord.js')
 
-const chadImage = new MessageAttachment("./assets/images/giga chad.jpg")
-const amogusimage = new MessageAttachment("./assets/images/amogus.gif")
-const sdrogoimage = new MessageAttachment("./assets/images/sdrogo.jpg")
-const vshitimage = new MessageAttachment("./assets/images/vshit.png")
-const uwuimage = new MessageAttachment("./assets/images/uwu.png")
+const chadImage = new MessageAttachment("./assets/giga chad.jpg")
+const amogusimage = new MessageAttachment("./assets/amogus.gif")
+const sdrogoimage = new MessageAttachment("./assets/sdrogo.jpg")
+const vshitimage = new MessageAttachment("./assets/vshit.png")
+const uwuimage = new MessageAttachment("./assets/uwu.png")
 const horseimages = [
-    new MessageAttachment("./assets/images/Horse/horse1.jpg"),
-    new MessageAttachment("./assets/images/Horse/horse2.jpg"),
-    new MessageAttachment("./assets/images/Horse/horse3.jpg"),
-    new MessageAttachment("./assets/images/Horse/horse4.jpg"),
-    new MessageAttachment("./assets/images/Horse/horse5.jpg"),
+    new MessageAttachment("./assets/Horse/horse1.jpg"),
+    new MessageAttachment("./assets/Horse/horse2.jpg"),
+    new MessageAttachment("./assets/Horse/horse3.jpg"),
+    new MessageAttachment("./assets/Horse/horse4.jpg"),
+    new MessageAttachment("./assets/Horse/horse5.jpg"),
 ]
 
 module.exports = [
