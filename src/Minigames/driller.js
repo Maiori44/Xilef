@@ -277,7 +277,7 @@ Commands.driller = new Command("Dig deeper and deeper to find the treasures\n\n"
             let logPageStart = 0;
             let logPageLength = 0;
             for (let i = 0; i < log.length; i++) {
-                if (logPageLength + log[i].length >= 1024) {
+                if (logPageLength + log[i].length + 1 >= 1024) {
                     embed.addField(
                         `**Page ${embed.fields.length + 1}**`,
                         log.slice(logPageStart, i).join('\n'),
