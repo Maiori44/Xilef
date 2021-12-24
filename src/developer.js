@@ -576,7 +576,7 @@ Commands.shutdown = new Command("Shuts down the bot after a given time\nDevelope
     new RequiredArg(2, undefined, "restart?", true)
 ])
 
-Commands.restart = new Command("Restarts the bot\n(internally calls `&shutdown`)", (message, args) => {
+Commands.restart = new Command("Restarts the bot\n(internally calls `&shutdown", (message, args) => {
     Commands.shutdown.call(message, ["The bot is currently restarting", 0, true])
 }, "Developer")
 
