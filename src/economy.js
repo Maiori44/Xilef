@@ -76,14 +76,14 @@ class UserBinaryData {
     }
 }
 
-class XilefUser {
+class XilefUserData {
     constructor(options) {
         const optionsKeys = Object.keys(options)
         if (
             !optionsKeys.includes("money") ||
             !optionsKeys.includes("rank")
         )
-            throw new Error("Missing required key of XilefUser")
+            throw new Error("Missing required key of XilefUserData")
 
         this.money = options.money
         this.rank = options.rank
@@ -94,7 +94,7 @@ class XilefUser {
     }
 
     static getEmptyUser() {
-        return new XilefUser({
+        return new XilefUserData({
             money: 0,
             rank: 0,
             vgot: new UserBinaryData(60, "0"),
@@ -105,14 +105,14 @@ class XilefUser {
 
 class EconomySystem {
     /**
-     * @type {Collection<String, XilefUser>}
+     * @type {Collection<String, XilefUserData>}
      */
     #users
 
     constructor() {
         this.#users = new Collection()
 
-        this.setUser("830008177156292609", new XilefUser({
+        this.setUser("830008177156292609", new XilefUserData({
             money: -1,
             rank: -1,
             vgot: new UserBinaryData(60, "1".repeat(60)),
@@ -137,7 +137,7 @@ class EconomySystem {
             const userCreationOptions = {}
             Object.assign(userCreationOptions, rawUserData)
 
-            this.#users.set(key, new XilefUser(userCreationOptions))
+            this.#users.set(key, new XilefUserData(userCreationOptions))
             economyLogger.log(`Loaded <${key}> from economy.bson \n(${JSON.stringify(userCreationOptions)})`)
         })
 
@@ -157,7 +157,7 @@ class EconomySystem {
      */
     getUser(discordId) {
         if (!this.#users.get(discordId) && typeof discordId == "string") {
-            this.setUser(discordId, XilefUser.getEmptyUser())
+            this.setUser(discordId, XilefUserData.getEmptyUser())
         }
         return this.#users.get(discordId)
     }
@@ -175,6 +175,6 @@ class EconomySystem {
 
 module.exports = {
     EconomySystem,
-    XilefUser
+    XilefUser: XilefUserData
 }
 
