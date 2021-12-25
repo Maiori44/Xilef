@@ -1,6 +1,6 @@
 const { Collection, MessageEmbed } = require('discord.js');
 const { Event } = require('../event.js')
-const { Command } = require('../command.js')
+const { eventLogger } = require('../constants.js');
 
 const runners = new Collection()
 
@@ -55,13 +55,15 @@ module.exports = new Event("messageCreate", async (client, message) => {
     // command running
 
     runners.set(message.author.id, true)
+    eventLogger.log(`executing`)
     command.run(message, args, client)
-        .then(() =>
+        .then(() => {
             runners.set(message.author.id, false)
-        )
+            eventLogger.info("successfully executed command %s for %s (%s) in %s", command.name, message.author.id, message.author.tag, client.channels.cache.get(message.channelId))
+        })
         .catch((err) => {
             const errMsg = "Failed to execute command! (" + err + ")"
             message.reply(errMsg)
-            client.logger.jsError(errMsg)
+            eventLogger.error(errMsg)
         })
 });
