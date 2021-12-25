@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js')
 const { Command } = require('../command.js')
-const { XilefUser } = require('../economy.js')
+const { funnyFaces, achievements } = require('../constants.js')
 
 module.exports = [
     new Command({
@@ -20,12 +20,12 @@ module.exports = [
                         "\nRank: " + userData.rank + "```")
                     .addFields({
                         name: "Achievements: ",
-                        value: userData.achievements.getFormattedBinary(client.achievements.binary, "❔ ???\n")
+                        value: userData.achievements.getFormattedBinary(achievements.binary, "❔ ???\n")
                     }),
                 new MessageEmbed()
                     .setColor(message.member.displayHexColor)
                     .setTitle(user.username + "'s statistics")
-                    .setDescription("Acquired v_s: \n" + userData.vgot.getFormattedBinary(client.funnyFaces.binary, "❔"))
+                    .setDescription("Acquired v_s: \n" + userData.vgot.getFormattedBinary(funnyFaces.binary, "❔"))
                 ]
 
                 /*+
