@@ -39,7 +39,8 @@ const achievements = {
     dungeon: ["<:dungeon:875809577487192116> reach floor 50 in dungeon", 7],
     msweeper: ["💥 win at minesweeper 10 times", 8],
     roshambo: [":rock: win at roshambo 25 times", 9],
-    clash: [ ]
+    brainfuck: ["🧠 complete 30 BrainFuck challenges", 10],   
+    clash: ["<:barracks:920442549796237403> gain 2000 trophies", 11]
 }
 
 achievements.binary = Object.keys(achievements).map(key =>
