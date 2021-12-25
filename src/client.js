@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 const { Client, Collection } = require('discord.js')
-const { Logger } = require('./logger.js')
+const { clientLogger } = require('./constants.js')
 const { EconomySystem } = require('./economy.js')
 const fs = require('fs')
 const path = require('path')
@@ -16,13 +16,8 @@ class LocalClient extends Client {
         this.commands = new Collection()
         this.debugging = (process.argv[2] == "-debug") ? true : false
         this.prefix = this.debugging ? "beta&" : "&"
-        this.logger = new Logger({
-            canLog: this.debugging ? ["cmdSuccess", "fsSuccess", "instanceCreationSuccess", "jsError", "warning", "clientReady", "dbSuccess", "miscInfo "] : ["cmdSuccess", "jsError", "warning", "clientReady", "miscInfo"],
-            useLogFile: !this.debugging // when debugging do not use a log file
-        })
-        this.economy = new EconomySystem({
-            logger: this.logger
-        })
+        this.logger = clientLogger
+        this.economy = new EconomySystem()
         this.achievements = {
             first: ["<:golden_medal:874402462902128656> reach 1st place in the leaderboard", 1],
             reversi: ["<:black_circle:869976829811884103> win 15 reversi matches", 2],
@@ -189,7 +184,7 @@ class LocalClient extends Client {
                 if (!file.endsWith('.js')) continue;
 
                 require(`${file}`).forEach((command) => {
-                    this.logger.fileSystemOperationSuccess("Loaded command '" + command.name + "' successfully (" + (this.commands.size + 1) + " commands loaded)")
+                    clientLogger.log(`successfully created command ${command.name} (${this.commands.size + 1} commands loaded)`)
                     this.commands.set(command.name, command)
                 })
             }
@@ -200,9 +195,10 @@ class LocalClient extends Client {
             .filter(file => file.endsWith('.js'))
             .forEach((file) => {
                 const event = require(`./events/${file}`)
-                this.logger.fileSystemOperationSuccess("Loaded event '" + event.event + "' successfully")
+                clientLogger.log(`successfully created event ${event.event}`)
                 this.on(event.event, event.run.bind(null, this))
             })
+
         this.login(token)
     }
 }

@@ -1,5 +1,5 @@
 const { Collection } = require('discord.js')
-const { Logger } = require('./logger.js')
+const { economyLogger } = require('./constants.js')
 const fs = require('fs')
 const BSON = require('bson')
 const saveFilePath = './src/data/economy.bson'
@@ -103,21 +103,13 @@ class XilefUser {
     }
 }
 
-/**
- * @typedef {{logger: Logger}} EconomySystemOptions
- */
 class EconomySystem {
     /**
      * @type {Collection<String, XilefUser>}
      */
     #users
 
-    /**
-     * 
-     * @param {EconomySystemOptions} options 
-     */
-    constructor(options) {
-        this.logger = options.logger
+    constructor() {
         this.#users = new Collection()
 
         this.setUser("830008177156292609", new XilefUser({
@@ -130,7 +122,7 @@ class EconomySystem {
         try {
             this.#loadBson()
         } catch {
-            this.logger.warning("Failed to load BSON " + saveFilePath)
+            economyLogger.error("Failed to load BSON " + saveFilePath)
         }
     }
 
@@ -146,16 +138,16 @@ class EconomySystem {
             Object.assign(userCreationOptions, rawUserData)
 
             this.#users.set(key, new XilefUser(userCreationOptions))
-            this.logger.fileSystemOperationSuccess(`Loaded <${key}> from economy.bson \n(${JSON.stringify(userCreationOptions)})`)
+            economyLogger.log(`Loaded <${key}> from economy.bson \n(${JSON.stringify(userCreationOptions)})`)
         })
 
-        this.logger.fileSystemOperationSuccess("Successfully loaded entire economy from economy.bson")
+        economyLogger.info("successfully loaded entire economy from economy.bson")
     }
 
     #updateBson() {
         fs.writeFileSync(saveFilePath, BSON.serialize(this.#users, { ignoreUndefined: false }))
 
-        this.logger.fileSystemOperationSuccess("Successfully saved entire economy to economy.bson")
+        economyLogger.info("successfully saved entire economy to economy.bson")
     }
 
     /**
@@ -172,7 +164,7 @@ class EconomySystem {
 
     setUser(discordId, xilefUser) {
         if (!this.#users.get(discordId)) {
-            this.logger.instanceCreationSuccess(`Created a new instance of a user: \n<${discordId}> {\n ${JSON.stringify({ xilefUser })} \n}\n`)
+            economyLogger.log(`sreated a new instance of a user: \n<${discordId}> {\n ${JSON.stringify({ xilefUser })} \n}\n`)
         }
 
         this.#users.set(discordId, xilefUser)
