@@ -18,12 +18,16 @@ module.exports = new Event("messageCreate", async (client, message) => {
 
     const permission = message.member.permissions.has(command.permission, true);
 
-    const possibleSubCommand = await command.subCommands.find(subcmd => subcmd.name == args[1])
-
-    if (possibleSubCommand) {
-        command = possibleSubCommand
-        args.shift()
+    if (command.subCommands) {
+        const possibleSubCommand = await command.subCommands.find(subcmd => subcmd.name == args[1])
+        
+        if (possibleSubCommand) {
+            command = possibleSubCommand
+            args.shift()
+        }
     }
+
+    
 
     args.shift()
 
