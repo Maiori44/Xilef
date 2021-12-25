@@ -1,4 +1,4 @@
-const { Command } = require('../command.js')
+const { Command, RequiredArg } = require('../command.js')
 const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
 const { run } = require('../events/messageCreate.js');
 
@@ -17,7 +17,7 @@ const Buttons = new MessageActionRow({
             .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=275415091200&scope=bot")
             .setLabel("Invite bot"),
     ]
-});
+})
 
 module.exports = [
     new Command({
@@ -25,69 +25,51 @@ module.exports = [
         description: "Shows a list of all commands or detailed info of a specific command, if given its name",
         category: "Utility",
         async run(message, args, client) {
-            args[0] = args[0] ? args[0].toLowerCase() : undefined
-            if (args[0] && client.commands.has(args[0])) {
-                const targetCommand = client.commands.get(args[0])
+            function getCmdData(command, parentName) {
+                if (!parentName) parentName = ""
+                else parentName += " "
 
-                const CommandInfoEmbed = new MessageEmbed()
-                    .setColor("#0368f8")
-                    .setTitle(args[0])
-                    .setDescription(targetCommand.description.replace(/\&/g, client.prefix)) // TODO : implement guild-based prefixes
-                    .setTimestamp()
-                    .setFooter(client.commands.size + " total commands")
-
-                let syntax = `\`${client.prefix}` + args[0]
-
-                // if (Commands[args[0]].requiredargs) {
-                //     for (const arg of Commands[args[0]].requiredargs) {
-                //         syntax = syntax + " " + (arg.notrequired ? "[" : "(") + arg.name + (arg.notrequired ? "]" : ")")
-                //     }
-                // }
-
-                syntax += "`"
-
-                CommandInfoEmbed.addField("Syntax : ", "arguments inside () are required, arguments inside [] can be omitted\narguments can have spaces using \" at the start and end of the argument\n" + syntax)
-
-                let button
-
-                if (targetCommand.link) {
-                    button
-                        .setStyle("LINK")
-                        .setURL(targetCommand.link)
-                        .setLabel(targetCommand.category == "Game" ? "How to play" : "Github Page")
-                }
-
-                message.channel.send({
-                    embeds: [CommandInfoEmbed],
-                    components: (button == undefined) ? [] : [new MessageActionRow({ components: [button] })]
-                })
-
-                return
+                return client.prefix + parentName + command.name +
+                    command.requiredArgs
+                        .sort((a, b) => a.valueIndex - b.valueIndex)
+                        .map(arg =>
+                            ` <${arg.argName}${arg.validValues.length > 0
+                                ? ` (can be: \`${arg.validValues.join(', ')}\`)`
+                                : ''
+                            }> `)
             }
 
-            const CommandsEmbed = new MessageEmbed()
-                .setColor("#0368f8")
-                .setTitle("List of all commands:")
-                .setDescription(`You can do \`${client.prefix}help (command name)\` to have a brief description of the command`)
-                .setTimestamp()
-                .setFooter(client.commands.size + " total commands")
+            if (args[0]) {
+                const requestedCommand = client.commands.get(args[0])
 
-            let categories = {}
-
-            client.commands.forEach((cmd, index) => {
-
-                if (!cmd.category)
-                    return
-                if (!categories[cmd.category]) {
-                    categories[cmd.category] = []
+                if (requestedCommand) {
+                    const commandDataEmbed = new MessageEmbed()
+                        .setTitle(requestedCommand.name)
+                        .setDescription(`"${requestedCommand.description}"`)
+                        .addFields({
+                            name: "Syntax",
+                            value: getCmdData(requestedCommand)
+                        }, {
+                            name: "Subcommands",
+                            value: requestedCommand.subCommands == undefined || requestedCommand.subCommands.length == 0
+                                ? "This command does not have any subcommands."
+                                : requestedCommand.subCommands.map(cmd => getCmdData(cmd, requestedCommand.name)).join('\n')
+                        }, {
+                            name: "Category",
+                            value: requestedCommand.category ?? "No category specified."
+                        }, {
+                            name: "General syntax",
+                            value: "- Arguments inside `[]` can be ommited; \n- Arguments inside `<>` must be added or the command will not execute; \n- Arguments can only have spaces if you put them between __double quote marks__ \"like this\" \n"
+                        })
+                        .setTimestamp()
+                        .setFooter(client.commands.size + " total commands")
+                    message.channel.send({ embeds: [commandDataEmbed] })
+                } else {
+                    message.reply("That command does not exist! Use `help` without arguments at all to get a list of ")
                 }
-                categories[cmd.category].push(cmd)
-            })
+            } else {
 
-            for (let category in categories) {
-                CommandsEmbed.addField(category + " commands", "`" + categories[category].join("` `") + "`", true)
             }
-            message.channel.send({ embeds: [CommandsEmbed], components: [Buttons] })
         }
     }),
     new Command({
@@ -126,10 +108,36 @@ module.exports = [
     }),
     new Command({
         name: "sleep",
-        description: "Tests the bot asynchronous command handling",
+        description: "Tests the bot asynchronous command handling \nThe command won't block the main thread but since you are technically 'running' a command, any inputs of yours will be ignored.",
         category: "Utility",
+        requiredArgs: [
+            new RequiredArg({
+                argName: "time",
+                argIndex: 0,
+                errorMsg: "You need to specify a valid time (in seconds, from one to ten) to sleep for.",
+                validValues: [...Array(10).keys()].map(t => (t + 1).toString())
+            })
+        ],
+        subCommands: [
+            new Command({
+                name: "milliseconds",
+                description: "Allows you to use milliseconds instead of seconds.",
+                category: "Utility",
+                requiredArgs: [
+                    new RequiredArg({
+                        argName: "ms",
+                        argIndex: 0,
+                        errorMsg: "You need to specify a valid time (in milliseconds, may not exceed 10'000)",
+                    })
+                ],
+                async run(message, args, client) {
+                    if (parseInt(args[0]) > 10000) throw "You need to specify a value below or equal to 10000!"
+                    await new Promise(resolve => setTimeout(() => resolve(message.reply("Ended sleep")), parseInt(args[0])))
+                }
+            })
+        ],
         async run(message, args, client) {
-            await new Promise(resolve => setTimeout(() => resolve(message.reply("Ended sleep")), 10000));
+            await new Promise(resolve => setTimeout(() => resolve(message.reply("Ended sleep")), parseInt(args[0]) * 1000));
         }
     })
 ]
