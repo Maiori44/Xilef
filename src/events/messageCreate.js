@@ -55,11 +55,11 @@ module.exports = new Event("messageCreate", async (client, message) => {
     // command running
 
     runners.set(message.author.id, true)
-    eventLogger.debug(`executing command ${command.name} for user ${message.author.tag} in ${message.channel.name}`)
+    eventLogger.debug(`executing command ${command.name} for user ${message.author.tag} in ${message.channel.guild.name}/#${message.channel.name}`)
     command.run(message, args, client)
         .then(() => {
             runners.set(message.author.id, false)
-            eventLogger.info("successfully executed command %s for %s (%s) in %s", command.name, message.author.id, message.author.tag, message.channel.name)
+            eventLogger.info("successfully executed command %s for %s (%s) in %s/%s", command.name, message.author.id, message.author.tag, message.channel.guild.name, '#' + message.channel.name)
         })
         .catch((err) => {
             const errMsg = "Failed to execute command! (" + err + ")"
