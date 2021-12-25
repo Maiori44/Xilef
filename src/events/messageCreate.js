@@ -27,8 +27,6 @@ module.exports = new Event("messageCreate", async (client, message) => {
         }
     }
 
-    
-
     args.shift()
 
     if (!permission)
