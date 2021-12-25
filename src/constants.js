@@ -122,10 +122,6 @@ const funnyFaces = {
     funnyFaces.legendary = funnyKeys.slice(44, 60)
 }
 
-Object.keys(funnyFaces).forEach(value => {
-    funnyFaces[value].forEach(funy => console.log(funy))  
-})
-
 module.exports = {
     economyLogger,
     clientLogger,
