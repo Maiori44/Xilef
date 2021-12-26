@@ -19,11 +19,15 @@ const suspiciousnessMessages = [
 const crewNames = ["red", "blue", "green", "pink", "orange", "yellow", "black", "white", "purple", "cyan"]
 
 class AmongusGame {
+    #crew
+    #impostorIndex
+
     constructor() {
         this.turns = 7
         this.killChance = 0
         this.gameOver = false
-        this.crew = []
+        this.#crew = []
+        this.lastTurn = 7
 
         const suspiciousnesses = [...Array(10).keys()]
         const crewNamesCopy = [...crewNames]
@@ -34,9 +38,9 @@ class AmongusGame {
             const crewName = crewNamesCopy.shift()
 
             if (suspiciousness == 9)
-                this.impostorIndex = iteration
+                this.#impostorIndex = iteration
 
-            this.crew.push({
+            this.#crew.push({
                 color: crewName,
                 suspiciousness: suspiciousness
             })
@@ -46,34 +50,37 @@ class AmongusGame {
     }
 
     getCrewmate(color) {
-        if (this.gameOver)
-            return
-
-        const crewmate = this.crew[this.crew.findIndex(crewmate => crewmate.color == color)]
+        const crewmate = this.#crew.find(crewmate => crewmate.color == color)
 
         if (crewmate.suspiciousness >= 5)
-            this.killChance += ((crewmate.suspiciousness ** 2) / 20)
+            this.killChance += ((crewmate.suspiciousness ** 2) / 15)
+
+        this.check()
 
         return crewmate
     }
 
     nextTurn() {
+        if (this.turns <= 4)
+            this.killChance++
+
+        this.turns--
+
+        this.check()
+
         if (this.gameOver == true)
             return
 
-        if (this.turns < 4)
-            this.killChance++
-
-        this.check()
         return this
     }
 
     getImpostorColor() {
-        return this.crew[this.impostorIndex].color
+        return this.#crew[this.#impostorIndex].color
     }
 
     check() {
-        if (this.killChance > 7) {
+        if (this.turns == 0 || this.killChance > 7) {
+            this.lastTurn = this.turns;
             this.turns = 0
             this.gameOver = true
             return false
@@ -106,15 +113,18 @@ module.exports = [
                     const gameInstance = players.get(message.author.id)
                         ?? players.set(message.author.id, new AmongusGame()).get(message.author.id)
 
+                    const suspiciousness = gameInstance.getCrewmate(args[0]).suspiciousness
+
                     if (gameInstance.gameOver) {
-                        message.reply("The impostor found you!" + "\nThe impostor was " + gameInstance.getImpostorColor())
+                        message.reply(`While you were examining ${args[0]} the impostor found you!` + "\nThe impostor was " + gameInstance.getImpostorColor() + ".")
+                        let user = client.economy.getUser(message.author)
+                        const amount = 30 + (10 * gameInstance.lastTurn)
+                        user.take(amount, () => message.channel.send("You lost " + amount + " DogeCoins."))
                         players.set(message.author.id, new AmongusGame())
                         return
                     }
 
-                    const suspiciousness = gameInstance.getCrewmate(args[0]).suspiciousness
-
-                    message.reply(`${args[0]}${suspiciousnessMessages[suspiciousness]}`)
+                    message.reply(`${args[0]}${suspiciousnessMessages[suspiciousness]}\n${gameInstance.turns} turns left.`)
 
                     gameInstance.nextTurn()
                 }
@@ -143,9 +153,12 @@ module.exports = [
 
                     if (args[0] == impostor) {
                         message.reply("You won!")
-                        userData.give(30, () => { message.channel.send("You earned 30 DogeCoins, use them wisely. ")})
+                        const reward = 360 - (10 * gameInstance.lastTurn)
+                        userData.give(reward, () => { message.channel.send(`You won ${reward} DogeCoins, use them wisely.`)})
                     } else {
-                        message.reply("You lost!")
+                        message.reply("You lost! The real impostor was " + impostor + ".")
+                        const amount = 30 + (10 * gameInstance.lastTurn)
+                        userData.take(amount, () => message.channel.send(`You lost ${amount} DogeCoins.`))
                     }
 
                     players.set(message.author.id, new AmongusGame())
