@@ -16,7 +16,6 @@ const suspiciousnessMessages = [
     " just vented!"
 ]
 
-
 const crewNames = ["red", "blue", "green", "pink", "orange", "yellow", "black", "white", "purple", "cyan"]
 
 class AmongusGame {
@@ -140,10 +139,11 @@ module.exports = [
                     args[0] = args[0].toLowerCase()
 
                     let impostor = gameInstance.getImpostorColor()
-                    // const userData = client.economy.getUser(message.author.id)
+                    const userData = client.economy.getUser(message.author.id)
 
                     if (args[0] == impostor) {
                         message.reply("You won!")
+                        userData.give(30, () => { message.channel.send("You earned 30 DogeCoins, use them wisely. ")})
                     } else {
                         message.reply("You lost!")
                     }
