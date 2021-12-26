@@ -1,3 +1,4 @@
+require('./parser.js')
 const { LocalClient } = require('./structures/client.js')
 const { Intents } = require('discord.js')
 
