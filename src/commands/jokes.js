@@ -1,4 +1,4 @@
-const { Command } = require('../command.js')
+const { Command } = require('../structures/command.js')
 
 module.exports = [
     new Command({

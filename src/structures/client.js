@@ -48,7 +48,7 @@ class LocalClient extends Client {
         fs.readdirSync('./src/events/')
             .filter(file => file.endsWith('.js'))
             .forEach((file) => {
-                const event = require(`./events/${file}`)
+                const event = require(`../events/${file}`)
                 clientLogger.log(`successfully created event ${event.event}`)
                 this.on(event.event, event.run.bind(null, this))
             })

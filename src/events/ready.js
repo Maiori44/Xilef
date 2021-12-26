@@ -1,4 +1,4 @@
-const { Event } = require('../event.js')
+const { Event } = require('../structures/event.js')
 const { eventLogger } = require('../constants.js')
 
 module.exports = new Event("ready", client => {
