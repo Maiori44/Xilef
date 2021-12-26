@@ -54,10 +54,9 @@ module.exports = new Event("messageCreate", async (client, message) => {
         }
     }
 
-    // command running
-
+    // command execution
     runners.set(message.author.id, true)
-    eventLogger.debug(`executing command ${command.name} for user ${message.author.tag} in ${message.channel.guild.name}/#${message.channel.name}`)
+    eventLogger.debug(`executing command %s for user %s in %s/#%s`, command.name, message.author.tag, message.channel.guild.name + "/#", message.channel.name)
     command.run(message, args, client)
         .then(() => {
             runners.set(message.author.id, false)
