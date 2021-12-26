@@ -10,22 +10,22 @@ module.exports = [
         async run(message, args, client) {
             let user = message.mentions.users.first() || message.author
 
-            let userData = client.economy.getUser(user.id)
+            let xilefUser = client.economy.getUser(user.id)
 
             const embeds = [
                 new MessageEmbed()
                     .setColor(message.member.displayHexColor)
                     .setTitle(user.username + "'s statistics")
-                    .setDescription("```lua\nDogeCoins: " + userData.money +
-                        "\nRank: " + userData.rank + "```")
+                    .setDescription("```lua\nDogeCoins: " + xilefUser.data.money +
+                        "\nRank: " + xilefUser.data.rank + "```")
                     .addFields({
                         name: "Achievements: ",
-                        value: userData.achievements.getFormattedBinary(achievements.binary, "❔ ???\n")
+                        value: xilefUser.data.achievements.getFormattedBinary(achievements.binary, "❔ ???\n")
                     }),
                 new MessageEmbed()
                     .setColor(message.member.displayHexColor)
                     .setTitle(user.username + "'s statistics")
-                    .setDescription("Acquired v_s: \n" + userData.vgot.getFormattedBinary(funnyFaces.binary, "❔"))
+                    .setDescription("Acquired v_s: \n" + xilefUser.data.vgot.getFormattedBinary(funnyFaces.binary, "❔"))
                 ]
 
                 /*+

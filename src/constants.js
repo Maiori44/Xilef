@@ -17,7 +17,7 @@ const eventLogger = Logger.create("event", {
 
 fs.stat('./src/data/logs', (err, stat) => {
     if (stat.size > 4096) {
-        fs.rmdirSync('./src/data/logs', { force: true })
+        fs.rmSync('./src/data/logs', { force: true, recursive: true })
         fs.mkdirSync('./src/data/logs')
     }
 })
@@ -121,10 +121,6 @@ const funnyFaces = {
     funnyFaces.epic      = funnyKeys.slice(31, 44)
     funnyFaces.legendary = funnyKeys.slice(44, 60)
 }
-
-Object.keys(funnyFaces).forEach(value => {
-    funnyFaces[value].forEach(funy => console.log(funy))  
-})
 
 module.exports = {
     economyLogger,
