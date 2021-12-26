@@ -1,5 +1,6 @@
 require('dotenv').config()
 
+const { parsedValues } = require('../parser.js')
 const { Client, Collection } = require('discord.js')
 const { clientLogger } = require('../constants.js')
 const { EconomySystem } = require('./economy.js')
@@ -14,7 +15,7 @@ class LocalClient extends Client {
          * @type {Collection<string, Command>}
          */
         this.commands = new Collection()
-        this.debugging = (process.argv[2] == "-debug") ? true : false
+        this.debugging = parsedValues.debugging
         this.prefix = this.debugging ? "beta&" : "&"
         this.logger = clientLogger
         this.economy = new EconomySystem()
