@@ -12,7 +12,7 @@ class RequiredArg {
 		this.errorMsg = options.errorMsg;
 		this.argIndex = options.argIndex;
 		this.argName = options.argName;
-		this.validValues = options.validValues ?? []
+		this.validValues = options.validValues;
 	}
 }
 class Command {
