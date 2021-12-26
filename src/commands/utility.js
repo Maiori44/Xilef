@@ -30,10 +30,10 @@ module.exports = [
                 else parentName += " "
 
                 return client.prefix + parentName + command.name +
-                    command.requiredArgs
-                        .sort((a, b) => a.valueIndex - b.valueIndex)
+                    (command.requiredArgs ?? [])
+                        .sort((a, b) => a.argIndex - b.argIndex)
                         .map(arg =>
-                            ` <${arg.argName}${arg.validValues.length > 0
+                            ` <${arg.argName}${(arg.validValues ?? []).length > 0
                                 ? ` (can be: \`${arg.validValues.join(', ')}\`)`
                                 : ''
                             }> `)
@@ -128,6 +128,7 @@ module.exports = [
                         argName: "ms",
                         argIndex: 0,
                         errorMsg: "You need to specify a valid time (in milliseconds, may not exceed 10'000)",
+                        checkValue: (arg) => parseInt(arg) <= 10000
                     })
                 ],
                 async run(message, args, client) {
