@@ -1,7 +1,9 @@
-const { Collection } = require('discord.js')
+require('dotenv').config()
+const { Collection, User } = require('discord.js')
 const { economyLogger } = require('./constants.js')
 const fs = require('fs')
 const BSON = require('bson')
+
 const saveFilePath = './src/data/economy.bson'
 
 class UserBinaryData {
@@ -87,9 +89,7 @@ class XilefUserData {
 
         this.money = options.money
         this.rank = options.rank
-
         this.vgot = new UserBinaryData(60, options.vgot.binary ?? "0")
-
         this.achievements = new UserBinaryData(9, options.achievements.binary ?? "0")
     }
 
@@ -103,6 +103,86 @@ class XilefUserData {
     }
 }
 
+class XilefUser {
+    #update 
+
+    /**
+     * 
+     * @param {String | User} user 
+     * @param {XilefUserData} userData 
+     * @param {{}} options
+     */
+    constructor(user, userData, options) {
+        if (!userData || !userData instanceof XilefUserData)
+            throw "XilefUser instance creation needs valid user data."
+
+        if (typeof user != 'string' && !user instanceof User) 
+            throw "Argument 'user' is neither a User or string."
+
+        this.user = user
+        this.data = userData
+        this.#update = options.update // currently, this is the safest way i found
+    }
+    
+    /**
+     * 
+     * @param {Number} amount 
+     * @param {(success: success, errMsg?: String) => void} callback
+     */
+    buy(amount, callback) {
+        let success = true
+        let errMsg = ""
+
+        if (amount < 1) {
+            success = false
+            errMsg = "Amount too low."
+        } else if (this.data.money <= amount) {
+            success = false
+            errMsg = `Not enough money (balance: ${this.data.money}; amount: ${amount})`
+        } 
+
+        if (success) {
+            this.data.money -= amount
+            this.#update()
+            economyLogger.debug("success (purchase): successfully bought amount %s as user '%s'", amount.toString(), this.user.tag)
+        } else {
+            economyLogger.debug("failure (purchase): couldn't buy amount %s as user '%s'; error message: %s ", amount.toString(), this.user.tag, errMsg)
+        }
+
+        if (typeof callback == 'function') 
+            callback(success, errMsg)
+    }
+
+    /**
+     * 
+     * @param {Number} amount 
+     * @param {(success: success, errMsg:? String) => void} callback 
+     */
+    give(amount, callback) {
+        let success = true
+        let errMsg = ""
+
+        if (isNaN(parseInt(amount))) {
+            success = false 
+            errMsg = `Arg 'amount' isn't a number (specified amount : ${amount})`
+        } else if (amount <= 0) {
+            success = false
+            errMsg = `Can't give 0 or less coins (amount: ${amount})`
+        }
+
+        if (success) {
+            this.data.money += amount
+            economyLogger.debug("success (purchase): successfully gave %s DogeCoins to user '%s'", amount.toString(), this.user.tag ?? this.user)
+            this.#update()
+        } else {
+            economyLogger.debug("failure (purchase): couldn't give amount %s to user '%s'; error message: %s ", amount.toString(), this.user.tag, errMsg)
+        }
+        
+        if (typeof callback == 'function') 
+            callback(success, errMsg)
+    }
+}
+
 class EconomySystem {
     /**
      * @type {Collection<String, XilefUserData>}
@@ -112,18 +192,17 @@ class EconomySystem {
     constructor() {
         this.#users = new Collection()
 
-        this.setUser("830008177156292609", new XilefUserData({
+        // create backup of economy.bson
+        fs.copyFileSync(saveFilePath, './src/data/backups/_economy.bson')
+
+        this.#users.set("830008177156292609", new XilefUserData({
             money: -1,
             rank: -1,
             vgot: new UserBinaryData(60, "1".repeat(60)),
             achievements: new UserBinaryData(9, "1".repeat(9))
         }))
 
-        try {
-            this.#loadBson()
-        } catch {
-            economyLogger.error("Failed to load BSON " + saveFilePath)
-        }
+        this.#loadBson()
     }
 
     #loadBson() {
@@ -152,19 +231,22 @@ class EconomySystem {
 
     /**
      * 
-     * @param {String} discordId 
+     * @param {String | User} user 
      * @returns Gets a user or creates it if it does not exist
      */
-    getUser(discordId) {
-        if (!this.#users.get(discordId) && typeof discordId == "string") {
-            this.setUser(discordId, XilefUserData.getEmptyUser())
-        }
-        return this.#users.get(discordId)
+    getUser(user) {
+        if (typeof user == 'string' && !this.#users.get(user)) 
+            this.setUser(user, XilefUserData.getEmptyUser())
+            
+        else if (user instanceof User && !this.#users.get(user.id)) 
+            this.setUser(user.id, XilefUserData.getEmptyUser())
+
+        return new XilefUser(user, this.#users.get(user.id ?? user), { update: this.#updateBson.bind(this, null) })
     }
 
     setUser(discordId, xilefUser) {
         if (!this.#users.get(discordId)) {
-            economyLogger.log(`sreated a new instance of a user: \n<${discordId}> {\n ${JSON.stringify({ xilefUser })} \n}\n`)
+            economyLogger.log(`created a new instance of a user: <${discordId}>`)
         }
 
         this.#users.set(discordId, xilefUser)
@@ -175,6 +257,7 @@ class EconomySystem {
 
 module.exports = {
     EconomySystem,
-    XilefUser: XilefUserData
+    XilefUser,
+    XilefUserData
 }
 
