@@ -1,12 +1,12 @@
 require('dotenv').config()
+
 const { parsedValues } = require('../parser.js')
 const { Collection, User } = require('discord.js')
 const { economyLogger } = require('../constants.js')
 const fs = require('fs')
 const BSON = require('bson')
 
-const saveFilePath = './src/data/economy.bson'
-
+const saveFilePath = parsedValues.saveFilePath
 let maxChangeCount = parsedValues.serializeAfter
 
 class UserBinaryData {
