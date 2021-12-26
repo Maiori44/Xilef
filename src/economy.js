@@ -6,6 +6,18 @@ const BSON = require('bson')
 
 const saveFilePath = './src/data/economy.bson'
 
+let maxChangeCount = (() => {
+    let argIndex = process.argv.findIndex(v => v.includes('--max-changes-before-serialization'))
+    if (argIndex == -1)
+        argIndex = process.argv.findIndex(v => v.includes('-mcbs'))
+    if (argIndex == -1 || isNaN(parseInt(process.argv[argIndex].split('=')[1])))
+        return 30
+
+    return parseInt(process.argv[argIndex].split('=')[1]) ?? 30
+})();
+
+economyLogger.info("Maximum change count set to %s", maxChangeCount.toString())
+
 class UserBinaryData {
     /**
      * 
@@ -118,11 +130,24 @@ class XilefUser {
 
         if (typeof user != 'string' && !user instanceof User)
             throw "Argument 'user' is neither a User or string."
+        
+        const userDataProxyHandler = {
+            get: function(target, prop, receiver) {
+                return target[prop]
+            }.bind(this),
+
+            set: function(target, prop, value) {
+                maxChangeCount--
+                economyLogger.debug("Changed property '%s' of XilefUserData instance (belongs to %s) from %s to %s. New maxChangeCount : " + maxChangeCount, prop, this.user.id ?? this.user, target[prop], value)
+                this.#update()
+                target[prop] = value
+                return true
+            }.bind(this)
+        }
 
         this.user = user
-        this.data = userData
+        this.data = new Proxy(userData, userDataProxyHandler)
         this.#update = options.update // currently, this is the safest way i found
-        this.maxChangeCount = options.maxChangeCount
     }
 
     /**
@@ -144,15 +169,27 @@ class XilefUser {
 
         if (success) {
             this.data.money -= amount
-            economyLogger.debug("success (purchase): successfully bought amount %s as user '%s'", amount.toString(), this.user.tag)
-            this.maxChangeCount--
-            this.#update()
+            economyLogger.debug("success(purchase): successfully bought %s DogeCoins as user '%s'", amount.toString(), this.user.tag)
         } else {
-            economyLogger.debug("failure (purchase): couldn't buy amount %s as user '%s'; error message: %s ", amount.toString(), this.user.tag, errMsg)
+            economyLogger.debug("failure(purchase): couldn't buy with %s DogeCoins as user '%s'; error message: %s ", amount.toString(), this.user.tag, errMsg)
         }
 
         if (typeof callback == 'function')
             callback(success, errMsg)
+    }
+
+    /**
+     * 
+     * @param {Number} amount 
+     * @param {(newAmount: Number, oldAmount: Number) => void)} callback 
+     */
+    take(amount, callback) {
+        this.data.money = Math.max(this.data.money - amount, 0)
+
+        economyLogger.debug("success(theft): successfully took %s DogeCoins from '%s'", amount.toString(), this.user.tag)
+
+        if (typeof callback == 'function')
+            callback()
     }
 
     /**
@@ -174,11 +211,9 @@ class XilefUser {
 
         if (success) {
             this.data.money += amount
-            economyLogger.debug("success (purchase): successfully gave %s DogeCoins to user '%s'", amount.toString(), this.user.tag ?? this.user)
-            this.maxChangeCount--
-            this.#update()
+            economyLogger.debug("success(gift): successfully gave %s DogeCoins to user '%s'", amount.toString(), this.user.tag ?? this.user)
         } else {
-            economyLogger.debug("failure (purchase): couldn't give amount %s to user '%s'; error message: %s ", amount.toString(), this.user.tag, errMsg)
+            economyLogger.debug("failure(gift): couldn't give amount %s to user '%s'; error message: %s ", amount.toString(), this.user.tag, errMsg)
         }
 
         if (typeof callback == 'function')
@@ -205,17 +240,6 @@ class EconomySystem {
             achievements: new UserBinaryData(9, "1".repeat(9))
         }))
 
-        let maxChangeCount = (() => {
-            let argIndex = process.argv.findIndex(v => v.includes('--max-changes-before-serialization'))
-            if (argIndex == -1)
-                argIndex = process.argv.findIndex(v => v.includes('-mcbs'))
-            if (argIndex == -1 || isNaN(parseInt(process.argv[argIndex].split('=')[1])))
-                return 30
-
-            return parseInt(process.argv[argIndex].split('=')[1]) ?? 30
-        })();
-
-        economyLogger.info("Maximum change count set to %s", maxChangeCount.toString())
 
         this.#loadBson()
     }
