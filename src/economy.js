@@ -67,9 +67,9 @@ class UserBinaryData {
         for (let i = 0; i < bits.length; i++) {
             if (bits[i] == "0")
                 bits[i] = replace0
-            else 
+            else
                 bits[i] = replace1[i]
-            
+
         }
 
         replace1.reverse()
@@ -104,7 +104,7 @@ class XilefUserData {
 }
 
 class XilefUser {
-    #update 
+    #update
 
     /**
      * 
@@ -116,14 +116,15 @@ class XilefUser {
         if (!userData || !userData instanceof XilefUserData)
             throw "XilefUser instance creation needs valid user data."
 
-        if (typeof user != 'string' && !user instanceof User) 
+        if (typeof user != 'string' && !user instanceof User)
             throw "Argument 'user' is neither a User or string."
 
         this.user = user
         this.data = userData
         this.#update = options.update // currently, this is the safest way i found
+        this.maxChangeCount = options.maxChangeCount
     }
-    
+
     /**
      * 
      * @param {Number} amount 
@@ -139,17 +140,18 @@ class XilefUser {
         } else if (this.data.money <= amount) {
             success = false
             errMsg = `Not enough money (balance: ${this.data.money}; amount: ${amount})`
-        } 
+        }
 
         if (success) {
             this.data.money -= amount
-            this.#update()
             economyLogger.debug("success (purchase): successfully bought amount %s as user '%s'", amount.toString(), this.user.tag)
+            this.maxChangeCount--
+            this.#update()
         } else {
             economyLogger.debug("failure (purchase): couldn't buy amount %s as user '%s'; error message: %s ", amount.toString(), this.user.tag, errMsg)
         }
 
-        if (typeof callback == 'function') 
+        if (typeof callback == 'function')
             callback(success, errMsg)
     }
 
@@ -163,7 +165,7 @@ class XilefUser {
         let errMsg = ""
 
         if (isNaN(parseInt(amount))) {
-            success = false 
+            success = false
             errMsg = `Arg 'amount' isn't a number (specified amount : ${amount})`
         } else if (amount <= 0) {
             success = false
@@ -173,12 +175,13 @@ class XilefUser {
         if (success) {
             this.data.money += amount
             economyLogger.debug("success (purchase): successfully gave %s DogeCoins to user '%s'", amount.toString(), this.user.tag ?? this.user)
+            this.maxChangeCount--
             this.#update()
         } else {
             economyLogger.debug("failure (purchase): couldn't give amount %s to user '%s'; error message: %s ", amount.toString(), this.user.tag, errMsg)
         }
-        
-        if (typeof callback == 'function') 
+
+        if (typeof callback == 'function')
             callback(success, errMsg)
     }
 }
@@ -202,6 +205,18 @@ class EconomySystem {
             achievements: new UserBinaryData(9, "1".repeat(9))
         }))
 
+        let maxChangeCount = (() => {
+            let argIndex = process.argv.findIndex(v => v.includes('--max-changes-before-serialization'))
+            if (argIndex == -1)
+                argIndex = process.argv.findIndex(v => v.includes('-mcbs'))
+            if (argIndex == -1 || isNaN(parseInt(process.argv[argIndex].split('=')[1])))
+                return 30
+
+            return parseInt(process.argv[argIndex].split('=')[1]) ?? 30
+        })();
+
+        economyLogger.info("Maximum change count set to %s", maxChangeCount.toString())
+
         this.#loadBson()
     }
 
@@ -224,6 +239,8 @@ class EconomySystem {
     }
 
     #updateBson() {
+        if (maxChangeCount >= 1) return
+
         fs.writeFileSync(saveFilePath, BSON.serialize(this.#users, { ignoreUndefined: false }))
 
         economyLogger.info("successfully saved entire economy to economy.bson")
@@ -235,19 +252,19 @@ class EconomySystem {
      * @returns Gets a user or creates it if it does not exist
      */
     getUser(user) {
-        if (typeof user == 'string' && !this.#users.get(user)) 
+        if (typeof user == 'string' && !this.#users.get(user))
             this.setUser(user, XilefUserData.getEmptyUser())
-            
-        else if (user instanceof User && !this.#users.get(user.id)) 
+
+        else if (user instanceof User && !this.#users.get(user.id))
             this.setUser(user.id, XilefUserData.getEmptyUser())
 
-        return new XilefUser(user, this.#users.get(user.id ?? user), { update: this.#updateBson.bind(this, null) })
+        return new XilefUser(user, this.#users.get(user.id ?? user), { update: this.#updateBson.bind(this, null), maxChangeCount: this.maxChangeCount })
     }
 
     setUser(discordId, xilefUserData) {
-        if (!xilefUserData instanceof XilefUserData) 
+        if (!xilefUserData instanceof XilefUserData)
             throw "You need to set a valid XilefUserData instance"
-            
+
         if (!this.#users.get(discordId)) {
             economyLogger.log(`created a new instance of a user: <${discordId}>`)
         }
