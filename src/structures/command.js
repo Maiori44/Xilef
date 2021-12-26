@@ -13,6 +13,7 @@ class RequiredArg {
 		this.argIndex = options.argIndex;
 		this.argName = options.argName;
 		this.validValues = options.validValues;
+		this.checkValue = options.checkValue;
 	}
 }
 class Command {
