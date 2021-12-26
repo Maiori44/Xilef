@@ -1,4 +1,4 @@
-const { LocalClient } = require('./client.js')
+const { LocalClient } = require('./structures/client.js')
 const { Intents } = require('discord.js')
 
 const client = new LocalClient(

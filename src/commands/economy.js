@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js')
-const { Command } = require('../command.js')
+const { Command } = require('../structures/command.js')
 const { funnyFaces, achievements } = require('../constants.js')
 
 module.exports = [

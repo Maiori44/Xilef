@@ -1,6 +1,6 @@
 require('dotenv').config()
 const { Collection, User } = require('discord.js')
-const { economyLogger } = require('./constants.js')
+const { economyLogger } = require('../constants.js')
 const fs = require('fs')
 const BSON = require('bson')
 

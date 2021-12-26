@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 const { Client, Collection } = require('discord.js')
-const { clientLogger } = require('./constants.js')
+const { clientLogger } = require('../constants.js')
 const { EconomySystem } = require('./economy.js')
 const fs = require('fs')
 const path = require('path')

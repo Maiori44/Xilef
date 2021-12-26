@@ -1,4 +1,4 @@
-const { Command, RequiredArg } = require('../command.js')
+const { Command, RequiredArg } = require('../structures/command.js')
 const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
 const { run } = require('../events/messageCreate.js');
 

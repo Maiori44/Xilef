@@ -1,5 +1,5 @@
 const { Collection, MessageEmbed } = require('discord.js');
-const { Event } = require('../event.js')
+const { Event } = require('../structures/event.js')
 const { eventLogger, economyLogger } = require('../constants.js');
 
 const runners = new Collection()

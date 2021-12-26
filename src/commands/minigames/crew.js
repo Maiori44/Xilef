@@ -1,4 +1,4 @@
-const { Command, RequiredArg } = require("../../command");
+const { Command, RequiredArg } = require("../../structures/command");
 const { Collection } = require('discord.js')
 
 const players = new Collection()
