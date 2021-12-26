@@ -39,7 +39,7 @@ class LocalClient extends Client {
                 if (!file.endsWith('.js')) continue;
 
                 require(`${file}`).forEach((command) => {
-                    clientLogger.log(`successfully created command ${command.name} (${this.commands.size + 1} commands loaded)`)
+                    clientLogger.log(`successfully created command ${command.name}`.padEnd(40) + `(${this.commands.size + 1} commands loaded)`)
                     this.commands.set(command.name, command)
                 })
             }
