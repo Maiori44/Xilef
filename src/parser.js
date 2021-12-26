@@ -36,8 +36,10 @@ const convertMap = {
         return arg
     },
     maxLogLevel: function (arg) {
-        if (!['DEBUG', 'INFO', 'WARN', 'ERROR', 'NONE'].includes(arg))
+        if (!['DEBUG', 'INFO', 'WARN', 'ERROR', 'NONE'].includes(arg.toUpperCase()))
             return 'INFO'
+        
+        return arg
     }
 }
 
@@ -59,8 +61,9 @@ let args = process.argv.slice(2)
 
 // distribute args
 args.forEach(arg => {
-    const argCorrespondent = argMap.get(arg)
+    const argCorrespondent = argMap.get(arg.split('=')[0])
     const conversionResult = (convertMap[argCorrespondent] ?? (() => null))(arg.split('=')[1])
+    console.log(argCorrespondent + "=" + conversionResult)
     if (argCorrespondent && conversionResult) {
         parsedValues[argCorrespondent] = conversionResult
     }
