@@ -244,7 +244,10 @@ class EconomySystem {
         return new XilefUser(user, this.#users.get(user.id ?? user), { update: this.#updateBson.bind(this, null) })
     }
 
-    setUser(discordId, xilefUser) {
+    setUser(discordId, xilefUserData) {
+        if (!xilefUserData instanceof XilefUserData) 
+            throw "You need to set a valid XilefUserData instance"
+            
         if (!this.#users.get(discordId)) {
             economyLogger.log(`created a new instance of a user: <${discordId}>`)
         }
