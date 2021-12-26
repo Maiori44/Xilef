@@ -278,6 +278,7 @@ class EconomySystem {
 module.exports = {
     EconomySystem,
     XilefUser,
-    XilefUserData
+    XilefUserData,
+    UserBinaryData
 }
 
