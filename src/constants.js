@@ -1,10 +1,9 @@
 require('dotenv').config()
 const fs = require('fs')
 const Logger = require('logplease')
+const { parsedValues } = require('./parser.js')
 
 // loggers
-const _debugging = process.argv[2] == "-debug"
-
 const economyLogger = Logger.create("economy", { 
     color: Logger.Colors.Cyan
 })
@@ -22,7 +21,8 @@ fs.stat('./src/data/logs', (err, stat) => {
     }
 })
 Logger.setLogfile('./src/data/logs/' + new Date().toString())
-Logger.setLogLevel(_debugging ? Logger.LogLevels.DEBUG : Logger.LogLevels.INFO)
+Logger.setLogLevel(parsedValues.debugging ? Logger.LogLevels.DEBUG : Logger.LogLevels.INFO)
+Logger.setLogLevel(parsedValues.maxLogLevel)
 
 economyLogger.info("started up economy logger")
 clientLogger.info("started up client logger")

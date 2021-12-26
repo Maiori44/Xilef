@@ -1,5 +1,6 @@
 require('dotenv').config()
 
+const { parsedValues } = require('../parser.js')
 const { Client, Collection } = require('discord.js')
 const { clientLogger } = require('../constants.js')
 const { EconomySystem } = require('./economy.js')
@@ -14,7 +15,7 @@ class LocalClient extends Client {
          * @type {Collection<string, Command>}
          */
         this.commands = new Collection()
-        this.debugging = (process.argv[2] == "-debug") ? true : false
+        this.debugging = parsedValues.debugging
         this.prefix = this.debugging ? "beta&" : "&"
         this.logger = clientLogger
         this.economy = new EconomySystem()
@@ -38,7 +39,7 @@ class LocalClient extends Client {
                 if (!file.endsWith('.js')) continue;
 
                 require(`${file}`).forEach((command) => {
-                    clientLogger.log(`successfully created command ${command.name} (${this.commands.size + 1} commands loaded)`)
+                    clientLogger.log(`successfully created command ${command.name}`.padEnd(40) + `(${this.commands.size + 1} commands loaded)`)
                     this.commands.set(command.name, command)
                 })
             }
@@ -48,7 +49,7 @@ class LocalClient extends Client {
         fs.readdirSync('./src/events/')
             .filter(file => file.endsWith('.js'))
             .forEach((file) => {
-                const event = require(`./events/${file}`)
+                const event = require(`../events/${file}`)
                 clientLogger.log(`successfully created event ${event.event}`)
                 this.on(event.event, event.run.bind(null, this))
             })

@@ -1,1 +1,1 @@
-start cmd /c "node . -debug & pause"
+start cmd /c "node . debug & pause"

@@ -1,22 +1,13 @@
 require('dotenv').config()
+
+const { parsedValues } = require('../parser.js')
 const { Collection, User } = require('discord.js')
 const { economyLogger } = require('../constants.js')
 const fs = require('fs')
 const BSON = require('bson')
 
-const saveFilePath = './src/data/economy.bson'
-
-let maxChangeCount = (() => {
-    let argIndex = process.argv.findIndex(v => v.includes('--max-changes-before-serialization'))
-    if (argIndex == -1)
-        argIndex = process.argv.findIndex(v => v.includes('-mcbs'))
-    if (argIndex == -1 || isNaN(parseInt(process.argv[argIndex].split('=')[1])))
-        return 30
-
-    return parseInt(process.argv[argIndex].split('=')[1]) ?? 30
-})();
-
-economyLogger.info("Maximum change count set to %s", maxChangeCount.toString())
+const saveFilePath = parsedValues.saveFilePath
+let maxChangeCount = parsedValues.serializeAfter
 
 class UserBinaryData {
     /**
@@ -268,6 +259,8 @@ class EconomySystem {
         fs.writeFileSync(saveFilePath, BSON.serialize(this.#users, { ignoreUndefined: false }))
 
         economyLogger.info("successfully saved entire economy to economy.bson")
+
+        maxChangeCount = parsedValues.serializeAfter
     }
 
     /**

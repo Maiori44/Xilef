@@ -1,4 +1,4 @@
-const { Command } = require('../command.js')
+const { Command } = require('../structures/command.js')
 const { MessageAttachment } = require('discord.js')
 
 const chadImage = new MessageAttachment("./assets/giga chad.jpg")
