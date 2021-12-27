@@ -1,6 +1,6 @@
 const { Collection, MessageEmbed } = require('discord.js');
 const { Event } = require('../structures/event.js')
-const { eventLogger, economyLogger } = require('../constants.js');
+const { eventLogger } = require('../constants.js');
 
 const runners = new Collection()
 
@@ -42,17 +42,21 @@ module.exports = new Event("messageCreate", async (client, message) => {
             let requiredArg = command.requiredArgs[i]
 
             if (
-                !requiredArg.validValues            
-                || requiredArg.validValues.length == 0 // validValues exists or it isn't an empty array
+                (!requiredArg.validValues
+                    || requiredArg.validValues.length == 0) // validValues does not exist or is an empty array
+                && // and 
+                !requiredArg.checkValue // checkValue does not exist
             )
                 indexesToSplice.push(i)
             else if (
                 args[requiredArg.argIndex]                                      // there's an argument at the pos it's needed
-                && requiredArg.validValues.includes(args[requiredArg.argIndex]) // validValues possesses that argument
+                && ((requiredArg.validValues ?? []).includes(args[requiredArg.argIndex]) // validValues possesses that argument
+                    || requiredArg.checkValue(args[requiredArg.argIndex]))           // or the check is successful
+                || (requiredArg.checkValue(args[requiredArg.argIndex]) === true)
             )
                 indexesToSplice.push(i)
-            
-            
+
+
         }
 
         indexesToSplice.forEach(index => {
@@ -60,14 +64,22 @@ module.exports = new Event("messageCreate", async (client, message) => {
         })
 
         if (missingArgs.length != 0) {
+            let description = `__Error message__ : ${missingArgs[0].errorMsg}\n`
+            if (missingArgs[0].validValues) {
+                description += `__Valid values__ : \`${missingArgs[0].validValues.join(', ')}\`\n`
+            }
+            if (missingArgs[0].checkValue) {
+                description += `__Value check function__: \`${missingArgs[0].checkValue.toString()}\`\n`
+            }
+
             return message.reply({
                 embeds: [
-                    new MessageEmbed() 
+                    new MessageEmbed()
                         .setColor(message.member.displayHexColor)
                         .setTimestamp()
                         .setFooter(missingArgs.length + " missing arguments.")
                         .setTitle(`Missing / unmatched required argument \`${missingArgs[0].argName}\``)
-                        .setDescription(`__Error message__ : ${missingArgs[0].errorMsg}\n__Valid values__ : ${missingArgs[0].validValues.join(', ')}` )
+                        .setDescription(description)
                 ]
             })
         }
