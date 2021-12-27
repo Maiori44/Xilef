@@ -85,5 +85,6 @@ module.exports = new Event("messageCreate", async (client, message) => {
             const errMsg = "Failed to execute command! (" + err + ")"
             message.reply(errMsg)
             eventLogger.error(errMsg)
+            runners.set(message.author.id, false)
         })
 });
