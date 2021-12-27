@@ -222,7 +222,11 @@ class EconomySystem {
         this.#users = new Collection()
 
         // create backup of economy.bson
-        fs.copyFileSync(saveFilePath, './src/data/backups/_economy.bson')
+        try { 
+            fs.copyFileSync(saveFilePath, './src/data/backups/_economy.bson') 
+        } catch (err) {
+            economyLogger.error("Couldn't make backup of economy.bson automatically, beware! (error reason : '%s')", err)
+        }
 
         this.#users.set("830008177156292609", new XilefUserData({
             money: -1,
