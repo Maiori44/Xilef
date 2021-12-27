@@ -32,7 +32,7 @@ const convertMap = {
 
         process.exit(0)
     },
-    saeFilePath: function (arg) {
+    saveFilePath: function (arg) {
         return arg
     },
     maxLogLevel: function (arg) {
