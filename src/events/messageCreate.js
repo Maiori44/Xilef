@@ -33,13 +33,6 @@ module.exports = new Event("messageCreate", async (client, message) => {
         }
     }
 
-    // permission handling
-    const permission = message.member.permissions.has(command.permission, true);
-    if (!permission)
-        return message.reply(
-            `You do not have the permission \`${command.permission}\` to run this command!`
-        );
-
     // requiredarg handling
     if (command.requiredArgs && command.requiredArgs.length != 0) {
         let missingArgs = [...command.requiredArgs]
