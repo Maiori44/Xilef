@@ -258,7 +258,17 @@ Commands.clash = new Command("Build your village and attack other's!\n\n" + Clas
 				message.channel.send("Now these positions you just gave me...they are out of bounds")
 				return
 			}
-			const [B1, B2] = [ClashMatrix.at(xStart, yStart), ClashMatrix.at(xEnd, yEnd)]
+			const [B1, B2] = [ClashMatrix.at(xStart, yStart), ClashMatrix.at(xEnd, yEnd)];
+
+			if (B1 === 'T' && yEnd !== 0) {
+				message.channel.send("https://tenor.com/view/ltg-low-tier-god-yskysn-ltg-thunder-thunder-gif-23523876");
+				return;
+			}
+			if (B2 === 'T' && yStart !== 0) {
+				message.channel.send("https://tenor.com/view/ltg-low-tier-god-yskysn-ltg-thunder-thunder-gif-23523876");
+				return;
+			}
+
 			ClashMatrix.set(xEnd, yEnd, B1)
 			ClashMatrix.set(xStart, yStart, B2)
 			message.channel.send("Swapped the 2 tiles with no problemo")
