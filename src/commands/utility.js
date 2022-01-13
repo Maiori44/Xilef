@@ -2,7 +2,7 @@ const { Command, RequiredArg } = require('../structures/command.js')
 const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
 const { run } = require('../events/messageCreate.js');
 
-const Buttons = new MessageActionRow({
+const buttons = new MessageActionRow({
     components: [
         new MessageButton()
             .setStyle("LINK")
@@ -17,7 +17,7 @@ const Buttons = new MessageActionRow({
             .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=275415091200&scope=bot")
             .setLabel("Invite bot"),
     ]
-})
+});
 
 module.exports = [
     new Command({
@@ -32,15 +32,55 @@ module.exports = [
                 return client.prefix + parentName + command.name +
                     (command.requiredArgs ?? [])
                         .sort((a, b) => a.argIndex - b.argIndex)
-                        .map(arg =>
-                            ` <${arg.argName}${(arg.validValues ?? []).length > 0
+                        .map(arg => {
+                            const validValues = ` ${(arg.validValues ?? []).length > 0
                                 ? ` (can be: \`${arg.validValues.join(', ')}\`)`
                                 : ''
-                            }> `)
+                                }> `
+                            
+                            const checkValue = ` <${arg.argName}${(arg.checkValue !== undefined 
+                                ? ` (value check condition : \`${arg.checkValue.toString()}\`) `
+                                : ''
+                            )}> `
+
+                            return checkValue ?? validValues
+                        })
             }
 
+            const categoryMap = {}
+
+            client.commands.forEach(command => {
+                if (!categoryMap[command.category])
+                    categoryMap[command.category] = []
+                categoryMap[command.category].push(command.name)
+            })
+
             if (args[0]) {
-                const requestedCommand = client.commands.get(args[0])
+                if (Object.keys(categoryMap).includes((() => {
+
+                    let capitalized = args[0].at(0)
+                    capitalized = capitalized.toUpperCase()
+                    args[0] = capitalized + args[0].slice(1).toLowerCase()
+                    return args[0]
+
+                })())) {
+                    const categoryEmbed = new MessageEmbed()
+                        .setTimestamp()
+                        .setFooter("Category : " + args[0])
+                        .setTitle("Commands in the " + args[0] + " category")
+
+                    let description = ""
+                    categoryMap[args[0]].forEach(command => {
+                        description += getCmdData(client.commands.get(command)) + '\n'
+                    })
+
+                    categoryEmbed.setDescription(description)
+
+                    message.channel.send({ embeds: [categoryEmbed] })
+                    return 
+                }
+
+                const requestedCommand = client.commands.get(args[0].toLowerCase())
 
                 if (requestedCommand) {
                     const commandDataEmbed = new MessageEmbed()
@@ -65,10 +105,28 @@ module.exports = [
                         .setFooter(client.commands.size + " total commands")
                     message.channel.send({ embeds: [commandDataEmbed] })
                 } else {
-                    message.reply("That command does not exist! Use `help` without arguments at all to get a list of ")
+                    message.reply("That command does not exist! Use `&help` without any arguments to get a list of all commands.")
                 }
             } else {
+                const globalCommandListEmbed = new MessageEmbed()
+                    .setColor(message.author.hexAccentColor)
+                    .setFooter(client.commands.size + " total commands")
+                    .setTimestamp()
+                    .setTitle("List of all commands: ")
+                    .setDescription("You can do `&help (command name)` to have a detailed description of that command.")
 
+                Object.keys(categoryMap).forEach(key => {
+                    globalCommandListEmbed.addField(
+                        key + " commands:",
+                        "`" + categoryMap[key].join('\n') + "`",
+                        true
+                    )
+                })
+
+                message.channel.send({
+                    embeds: [globalCommandListEmbed],
+                    components: [buttons]
+                })
             }
         }
     }),
@@ -77,22 +135,6 @@ module.exports = [
         description: "Shows info about the bot and this server's prefix",
         category: "Utility",
         async run(message, args, client) {
-            const buttons = new MessageActionRow({
-                components: [
-                    new MessageButton()
-                        .setStyle("LINK")
-                        .setURL("https://github.com/Felix-44/Xilef")
-                        .setLabel("Github page"),
-                    new MessageButton()
-                        .setStyle("LINK")
-                        .setURL("https://discord.gg/Qyz5HgrxWg")
-                        .setLabel("Official server"),
-                    new MessageButton()
-                        .setStyle("LINK")
-                        .setURL("https://discord.com/api/oauth2/authorize?client_id=852882606629847050&permissions=275415091200&scope=bot")
-                        .setLabel("Invite bot"),
-                ]
-            });
             message.channel.send({
                 embeds: [
                     new MessageEmbed()
@@ -115,7 +157,7 @@ module.exports = [
                 argName: "time",
                 argIndex: 0,
                 errorMsg: "You need to specify a valid time (in seconds, from one to ten) to sleep for.",
-                validValues: [...Array(10).keys()].map(t => (t + 1).toString())
+                checkValue: (arg) => parseInt(arg) <= 10
             })
         ],
         subCommands: [
