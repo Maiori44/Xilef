@@ -89,7 +89,8 @@ const aliasHelp = `
 Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, async (message, [command, ...args]) => {
     switch (command) {
         case "set": {
-            const [name, substitute] = args;
+            const name = args[0].trim();
+            const substitute = args[1].trim();
 
             if (name in Commands)
                 return void message.channel.send("A command already uses that name");
