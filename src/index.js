@@ -103,6 +103,7 @@ client.on("messageCreate", (message) => {
         let args = [...message.content.matchAll(regex)]
             .map(el => el[1] || el[0] || "")
         let command = args.shift()
+        const rawCommand = command;
         command = command ? command.toLowerCase() : undefined
         if (command == "") {
             message.channel.send('Wow great command, " ", makes complete sense');
@@ -189,10 +190,10 @@ client.on("messageCreate", (message) => {
             }
         } else if (aliases.get(message.author.id)?.[command]) {
             const replaced = message.content
-                .replace(command, aliases.get(message.author.id)[command])
+                .replace(rawCommand, aliases.get(message.author.id)[command])
 
             message.channel.send(`Parsed to: ${message.content
-                .replace(command, '**' + aliases.get(message.author.id)[command] + '**')}`)
+                .replace(rawCommand, '**' + aliases.get(message.author.id)[command] + '**')}`)
 
             handler(Object.assign(message, {content: replaced}))
         } else {

@@ -89,8 +89,8 @@ const aliasHelp = `
 Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, async (message, [command, ...args]) => {
     switch (command) {
         case "set": {
-            const name = args[0].trim();
-            const substitute = args[1].trim();
+            const name = args[0].trim().toLowerCase();
+            const substitute = args[1].trim().toLowerCase();
 
             if (name in Commands)
                 return void message.channel.send("A command already uses that name");
@@ -291,10 +291,10 @@ Commands.alias = new Command("Manage command aliases\n\n" + aliasHelp, async (me
                                         }`
                                     ).join('\n')
                                 + '\n```' : '```\n<empty>\n```'
-                                    .setFooter(`${Object.keys(aliases.get(message.author.id) ?? {}).length} aliases`))
-                                    ]
-            }
-            )
+                        )
+                        .setFooter(`${Object.keys(aliases.get(message.author.id) ?? {}).length} aliases`)
+                ]
+            })
             break;
         default:
             message.channel.send(aliasHelp.replace(/&/g, Prefix.get(message.guild.id)))
