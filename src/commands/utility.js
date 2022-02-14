@@ -37,8 +37,8 @@ module.exports = [
                                 ? ` (can be: \`${arg.validValues.join(', ')}\`)`
                                 : ''
                                 }> `
-                            
-                            const checkValue = ` <${arg.argName}${(arg.checkValue !== undefined 
+
+                            const checkValue = ` <${arg.argName}${(arg.checkValue !== undefined
                                 ? ` (value check condition : \`${arg.checkValue.toString()}\`) `
                                 : ''
                             )}> `
@@ -77,7 +77,7 @@ module.exports = [
                     categoryEmbed.setDescription(description)
 
                     message.channel.send({ embeds: [categoryEmbed] })
-                    return 
+                    return
                 }
 
                 const requestedCommand = client.commands.get(args[0].toLowerCase())
@@ -181,6 +181,16 @@ module.exports = [
         ],
         async run(message, args, client) {
             await new Promise(resolve => setTimeout(() => resolve(message.reply("Ended sleep")), parseInt(args[0]) * 1000));
+        }
+    }),
+    new Command({
+        name: "matrix-test",
+        description: "Tests the bot's matrix handling or whatever bro",
+        category: "Utility",
+        async run(message, args, client) {
+            let matrix = new (require('../structures/matrix').Matrix)(8, 8, "deez nuts nuts nuts nuts");
+
+            message.channel.send("```\n" + matrix.getDebugView() + "```\n");
         }
     })
 ]
