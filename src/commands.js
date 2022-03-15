@@ -513,12 +513,8 @@ Commands.leaderboard = new Command("See the users with the highest ranks", (mess
 }, "Economy")
 
 Commands.color = new Command("Output the given color",(message, args)=>{
-    if (args.length != 1){
-        message.channel.send("Invalid hex code")
-        return
-    }
     if (args[0].match(/[a-fA-F0-9]{6}/) == null){
-        message.channel.send("Invalid hex code")
+        message.channel.send("Use #rrggbb")
         return
     }
     let buf = fs.readFileSync("./src/Pictures/1x1.bmp")
@@ -533,6 +529,6 @@ Commands.color = new Command("Output the given color",(message, args)=>{
             e.delete()
         })
     })
-})
+}, "Utility", [new RequiredArg (0, "damn \"\" sure is a nice color", "color (#rrggbb)")])
 
 require("./xilefunds")
