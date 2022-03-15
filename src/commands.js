@@ -513,7 +513,7 @@ Commands.leaderboard = new Command("See the users with the highest ranks", (mess
 }, "Economy")
 
 Commands.color = new Command("Output the given color",(message, args)=>{
-    let buf = fs.readFileSync("1x1.bmp")
+    let buf = fs.readFileSync("Images/1x1.bmp")
     if (args.length != 1){
         message.channel.send("invalid hex code")
         return
