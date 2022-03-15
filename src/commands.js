@@ -2,6 +2,8 @@
 const Discord = require('discord.js')
 const fs = require('fs');
 const { inspect } = require('util');
+const numCommands = 45
+// Please update with each new command
 
 class RequiredArg {
     constructor(argnum, errormsg, name, notrequired) {
@@ -24,7 +26,7 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/44"))
+        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/"+numCommands))
     }
 
     call(message, args) {
