@@ -2,6 +2,8 @@
 const Discord = require('discord.js')
 const fs = require('fs');
 const { inspect } = require('util');
+const numCommands = 45
+// Please update with each new command
 
 class RequiredArg {
     constructor(argnum, errormsg, name, notrequired) {
@@ -24,7 +26,7 @@ class Command {
         this.category = category
         this.requiredargs = requiredargs
         this.link = link
-        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/44"))
+        console.log("- " + Colors.green.colorize("Loaded command ") + Colors.hgreen.colorize((Object.keys(Commands).length + 1) + "/"+numCommands))
     }
 
     call(message, args) {
@@ -511,5 +513,24 @@ Commands.leaderboard = new Command("See the users with the highest ranks", (mess
     }
     message.channel.send({ embeds: [LeaderBoard] })
 }, "Economy")
+
+Commands.color = new Command("Output the given color",(message, args)=>{
+    if (args[0].match(/[a-fA-F0-9]{6}/) == null){
+        message.channel.send("Use #rrggbb")
+        return
+    }
+    let buf = fs.readFileSync("./src/Pictures/1x1.bmp")
+    let color = parseInt(args[0].match(/[a-fA-F0-9]{6}/)[0], 16)
+    let r = (color & 0xFF0000) / (256*256)
+    let g = (color & 0x00FF00) / (256)
+    let b = (color & 0x0000FF)
+    let col = Buffer.from([b,g,r])
+    col.copy(buf, 0x8a)
+    message.guild.emojis.create(buf,"temp_xilef_color").then((e)=>{
+        message.channel.send("<:temp_xilef_color:"+e.id+">").then((x)=>{
+            e.delete()
+        })
+    })
+}, "Utility", [new RequiredArg (0, "damn \"\" sure is a nice color", "color (#rrggbb)")])
 
 require("./xilefunds")
