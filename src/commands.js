@@ -515,15 +515,15 @@ Commands.leaderboard = new Command("See the users with the highest ranks", (mess
 Commands.color = new Command("Output the given color",(message, args)=>{
     let buf = fs.readFileSync("Images/1x1.bmp")
     if (args.length != 1){
-        message.channel.send("invalid hex code")
+        message.channel.send("Invalid hex code")
         return
     }
     if (args[0].match(/[a-fA-F0-9]{6}/) == null){
-        message.channel.send("invalid hex code")
+        message.channel.send("Invalid hex code")
         return
     }
     let buf = fs.readFileSync("1x1.bmp")
-    let color = parseInt(args[0], 16)
+    let color = parseInt(args[0].match(/[a-fA-F0-9]{6}/)[0], 16)
     let r = (color & 0xFF0000) / (256*256)
     let g = (color & 0x00FF00) / (256)
     let b = (color & 0x0000FF)
