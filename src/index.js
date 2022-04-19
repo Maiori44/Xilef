@@ -170,7 +170,7 @@ function handler(message,content) {
         message.channel.send(`Parsed to: ${message.content
             .replace(rawCommand, '**' + aliases.get(message.author.id)[command] + '**')}`)
 
-        handler(Object.assign(message, {content: replaced}))
+        handler(message,replaced)
     } else {
         message.channel.send(`That command doesn't exist buddy, use \`${prefix}help\` for a list of commands`)
     }
