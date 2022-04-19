@@ -2,7 +2,7 @@
 const Discord = require('discord.js')
 const fs = require('fs');
 const { inspect } = require('util');
-const numCommands = 45
+const numCommands = 46
 // Please update with each new command
 
 class RequiredArg {
