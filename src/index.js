@@ -69,14 +69,14 @@ require("./buttons.js")
 require("./minigames.js")
 require('./developer')
 
-function handler(message) {
+function handler(message,content) {
     let start = Date.now()
     // create a regular expresion that matches either any string inside of doublequotes,   or any string without spaces that is outside of double quotes
     let regex = /"([^"]*?)"|[^ ]+/gm
     // make the output of .matchAll into an array, since .matchAll returns an iterator
     // then map each value (an array that contains strings or null) into a singlestring
     // index 0 being the full match, and the rest being the capturing groups
-    let args = [...message.content.matchAll(regex)].map(el => el[1] || el[0] || "")
+    let args = [...content.matchAll(regex)].map(el => el[1] || el[0] || "")
     let command = args.shift()
     const rawCommand = command;
     command = command ? command.toLowerCase() : undefined
@@ -175,6 +175,12 @@ function handler(message) {
         message.channel.send(`That command doesn't exist buddy, use \`${prefix}help\` for a list of commands`)
     }
 }
+Commands.chain = new Command("Executes multiple commands",(message,args)=>{
+    for(int v=0;v<args.length;v++){
+        handler(message,args[v])
+    }
+    message.channel.send(`Executed ${args.length} commands`)
+}, "Utility", [new RequiredArg(0,"Too many commands",undefined,false)])
 
 client.on("ready", (message) => {
     console.log("- Bot ready")
@@ -200,5 +206,5 @@ client.on("messageCreate", (message) => {
 
     if (!message.content.startsWith(prefix)) return;
 
-    handler(Object.assign(message, { content: message.content.slice(prefix.length) }))
+    handler(message,message.content.slice(prefix.length))
 })
