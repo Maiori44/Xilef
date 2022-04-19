@@ -176,7 +176,7 @@ function handler(message,content) {
     }
 }
 Commands.chain = new Command("Executes multiple commands",(message,args)=>{
-    for(int v=0;v<args.length;v++){
+    for(let v=0;v<args.length;v++){
         handler(message,args[v])
     }
     message.channel.send(`Executed ${args.length} commands`)
