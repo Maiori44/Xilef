@@ -175,12 +175,14 @@ function handler(message,content) {
         message.channel.send(`That command doesn't exist buddy, use \`${prefix}help\` for a list of commands`)
     }
 }
-Commands.chain = new Command("Executes multiple commands",(message,args)=>{
+Commands.chain = new Commands.say.constructor("Executes multiple commands",(message,args)=>{
     for(let v=0;v<args.length;v++){
-        handler(message,args[v])
+        try{
+            handler(message,args[v])
+        }catch{}
     }
     message.channel.send(`Executed ${args.length} commands`)
-}, "Utility", [new RequiredArg(0,"Too many commands",undefined,false)])
+}, "Utility")
 
 client.on("ready", (message) => {
     console.log("- Bot ready")
