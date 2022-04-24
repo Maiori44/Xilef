@@ -2,7 +2,7 @@
 const Discord = require('discord.js')
 const fs = require('fs');
 const { inspect } = require('util');
-const numCommands = 45
+const numCommands = 46
 // Please update with each new command
 
 class RequiredArg {
@@ -167,7 +167,6 @@ Commands.comfort = new Command("Comforts the person you want", (message, args) =
 Commands.say = new Command("Says whatever you want", (message, args) => {
     if (!args.join(" ")) { args[0] = "** **" }
     message.channel.send(args.join(" ").slice(0, 1900))
-    message.delete()
 }, "Joke", [new RequiredArg(0, "I can't just say nothing, can I?", "...text")])
 
 Commands.hentai = new Command("Totally sends you hentai", (message, args) => {
