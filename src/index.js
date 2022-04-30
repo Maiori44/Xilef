@@ -69,14 +69,40 @@ require("./buttons.js")
 require("./minigames.js")
 require('./developer')
 
+function argparse(text){
+  let escaped=false;
+  let quotes="";
+  let argl=[];
+  let current="";
+  var i="";
+
+  push=(s,a)=>{if(s.length!=0){a.push(s)}};
+
+  if(text.length==0){return [];}
+  for(let j=0;j<text.length;j++){
+    i=text.charAt(j);
+    if(!escaped){
+      if(i=="\\"){escaped=true}
+      else if(i=='"'){if(quotes=='"'){quotes=""}else if(quotes==""){quotes='"'}else{current+='"'}}
+      else if(i=="'"){if(quotes=="'"){quotes=""}else if(quotes==""){quotes="'"}else{current+="'"}}
+      else if(i=="`"){if(quotes=="`"){quotes=""}else if(quotes==""){quotes="`"}else{current+="`"}}
+      else if(i==" "||i=="\n"||i=="\t"){if(quotes==""){push(current,argl);current=""}else{current+=i;}}
+      else{current+=i}
+    }else{
+      escaped=false;
+      if(i=="n"){current+="\n"}
+      else if(i=="t"){current+="    "}
+      else{current+=i}
+    }
+  }
+  push(current,argl)
+  return argl
+} 
+
+
 function handler(message,content) {
     let start = Date.now()
-    // create a regular expresion that matches either any string inside of doublequotes,   or any string without spaces that is outside of double quotes
-    let regex = /"([^"]*?)"|[^ ]+/gm
-    // make the output of .matchAll into an array, since .matchAll returns an iterator
-    // then map each value (an array that contains strings or null) into a singlestring
-    // index 0 being the full match, and the rest being the capturing groups
-    let args = [...content.matchAll(regex)].map(el => el[1] || el[0] || "")
+    let args = argparse(content)
     let command = args.shift()
     const rawCommand = command;
     command = command ? command.toLowerCase() : undefined
