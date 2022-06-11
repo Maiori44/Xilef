@@ -118,7 +118,7 @@ dist
 .pnp.*
 
 # Data files
-src/Data
+src/data/
 
 # Lua stuff
-src/Lua
+src/lua/

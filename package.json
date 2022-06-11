@@ -4,12 +4,16 @@
   "description": "a funi bot",
   "main": "src/index.js",
   "scripts": {
-    "test": "test"
+    "start": "node src/index.js loglvl=INFO savePath=./src/data/production/economy.bson",
+    "help": "node src/index.js help",
+    "dev": "node src/index.js debug=true loglvl=DEBUG safter=1"
   },
   "author": "Felix44",
   "license": "gpl3",
   "dependencies": {
+    "bson": "^4.6.0",
     "discord.js": "^13.3.0",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "logplease": "^1.2.15"
   }
 }

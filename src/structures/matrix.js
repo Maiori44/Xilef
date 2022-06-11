@@ -29,14 +29,29 @@ class Matrix {
     * @param {any} start - default value given to every cell in the Matrix
     */
     constructor(x, y, start) {
+        if (x === undefined || y === undefined || start === undefined) throw new Error("obligatory matrix constructor parameters are undefined")
+
         this.width = x
         this.height = y
-        for (let cy = 0; cy < y; cy++) {
-            this.#matrix[cy] = []
-            for (let cx = 0; cx < x; cx++) {
-                this.#matrix[cy][cx] = start
-            }
-        }
+        
+        this.#matrix = [...Array(x)].map(x => Array(y).fill(start))   
+    }
+
+    getDebugView() {
+        let result = "";
+
+        this.#matrix.forEach((_value, index) => {
+            let line = index.toString() + ": "
+
+            _value.forEach(value => {
+                line += JSON.stringify(value).substring(0, Math.max(20, this.width)) + " / "
+            })
+
+            line += "\n"
+            result += line;
+        })
+
+        return result;
     }
 
     #checkSingleBounds(n, name, length, lname) {
@@ -172,4 +187,6 @@ class Matrix {
     }
 }
 
-exports.Matrix = Matrix
+module.exports = {
+    Matrix
+}
