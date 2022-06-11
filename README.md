@@ -2,7 +2,7 @@
 Small bot with minigames, an economy system and miscellaneous commands
 
 # Notice 
-This bot is in active development.
+This bot is kinda inactive on development, any help is appreciated.
 
 # Our Discord server
 Official discord server join link : https://discord.gg/Qyz5HgrxWg
@@ -16,5 +16,6 @@ Official discord server join link : https://discord.gg/Qyz5HgrxWg
 - Reversi : A (slightly) rarer board game played with two people.
 - Roshambo : Simply rock paper scissors.
 - BrainFuck: Figure out this esoteric language!
-- Clash: build a small village and fight other's! (COMING SOON)
+- Clash: build a small village and fight other's!
 - Mafia: Among Us with roles (and other players) (COMING SOON)
+
