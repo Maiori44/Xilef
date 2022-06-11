@@ -17,4 +17,4 @@ Official discord server join link : https://discord.gg/Qyz5HgrxWg
 - Roshambo : Simply rock paper scissors.
 - BrainFuck: Figure out this esoteric language!
 - Clash: build a small village and fight other's! (COMING SOON)
-- More coming soon.
+- Mafia: Among Us with roles (and other players) (COMING SOON)

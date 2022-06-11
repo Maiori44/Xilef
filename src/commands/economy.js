@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js')
-const { Command } = require('../command.js')
-const { XilefUser } = require('../economy.js')
+const { Command } = require('../structures/command.js')
+const { funnyFaces, achievements } = require('../constants.js')
 
 module.exports = [
     new Command({
@@ -10,25 +10,26 @@ module.exports = [
         async run(message, args, client) {
             let user = message.mentions.users.first() || message.author
 
-            let userData = client.economy.getUser(user.id)
+            let xilefUser = client.economy.getUser(user.id)
 
             const embeds = [
                 new MessageEmbed()
                     .setColor(message.member.displayHexColor)
                     .setTitle(user.username + "'s statistics")
-                    .setDescription("```lua\nDogeCoins: " + userData.money +
-                        "\nRank: " + userData.rank + "```")
+                    .setDescription("```lua\nDogeCoins: " + xilefUser.data.money +
+                        "\nRank: " + xilefUser.data.rank + "```")
                     .addFields({
-                        name: "Acquired v_s: ",
-                        value: userData.vgot.getFormattedBinary(client.funnyFaces.binary, "❔")
-                    },
-                    {
                         name: "Achievements: ",
-                        value: userData.achievements.getFormattedBinary(client.achievements.binary, "❔ ???\n")
-                    })
-                        
-                        /*+
-                        "\nXilefunds: " + userData.xilefunds + "```")*/
+                        value: xilefUser.data.achievements.getFormattedBinary(achievements.binary, "❔ ???\n")
+                    }),
+                new MessageEmbed()
+                    .setColor(message.member.displayHexColor)
+                    .setTitle(user.username + "'s statistics")
+                    .setDescription("Acquired v_s: \n" + xilefUser.data.vgot.getFormattedBinary(funnyFaces.binary, "❔"))
+                ]
+
+                /*+
+                "\nXilefunds: " + userData.xilefunds + "```")*/
                 // .addFields(
                 //     {
                 //         name: "Singleplayer stats:",
@@ -52,7 +53,6 @@ module.exports = [
                 //         value: EconomySystem.achievments.getBinary(Achievements.binary, "❔ ???\n")
                 //     }
                 // )
-            ]
 
             message.channel.send({ embeds: embeds })
         }

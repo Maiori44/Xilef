@@ -1,7 +1,7 @@
-const { Event } = require('../event.js')
-const { ColorMap } = require('../logger.js')
+const { Event } = require('../structures/event.js')
+const { eventLogger } = require('../constants.js')
 
 module.exports = new Event("ready", client => {
-    client.logger._write("Client is now ready\n\n", "clientReady")
-    if (client.debugging) client.logger.warning("The bot is in debug mode, changes are not to be saved.")
+    if (client.debugging) eventLogger.warn("The bot is in debug mode, changes are not to be saved.")
+    eventLogger.info("client is ready!")
 })
