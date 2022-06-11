@@ -2,7 +2,7 @@
 Small bot with minigames, an economy system and miscellaneous commands
 
 # Notice 
-This bot is no longer in active development.
+This bot is kinda inactive on development, any help is appreciated.
 
 # Our Discord server
 Official discord server join link : https://discord.gg/Qyz5HgrxWg
