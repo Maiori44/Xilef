@@ -300,7 +300,7 @@ const basecode = fs.readFileSync("./src/Lua/base.lua", "utf8")
 
 Commands.lua = new Command("Runs the given Lua code, and returns the stdout", (message, args) => {
     const code = (basecode.slice(0, 22) + (message.content.match(/```(?:lua)\n([^]*)\n```/i)?.[1] ?? args.join(" ")) + basecode.slice(21)).replaceAll("\"", "'")
-    const luaprocess = spawn("/src/Lua/luajit/bin/luajit-exec", ["-e", code])
+    const luaprocess = spawn("./src/Lua/luajit/bin/luajit-exec", ["-e", code])
     const timeout = setTimeout(() => {
         luaprocess.kill()
         const ErrorEmbed = new Discord.MessageEmbed()
