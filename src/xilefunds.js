@@ -24,6 +24,7 @@ Stocks = {
 }
 
 Commands.stocks = new Command("Buy and sell Xilefunds\n\n" + Stocks.help, (message, args) => {
+    return void message.channel.send("This command is temporarely deactivated.")
     const EconomySystem = Economy.getEconomySystem(message.author)
     switch (args[0]) {
         case "show": {
