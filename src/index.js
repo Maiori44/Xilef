@@ -35,12 +35,13 @@ class Colorizer {
 	}
 
 	colorize(text) {
-		return this.color + text + Colors.white.color + Colors.hblack.color
+		return this.color + text + Colors.reset.color
 	}
 }
 
 Colors = {
-	white: new Colorizer("\033[97m"),
+	reset: new Colorizer("\x1B[0m"),
+	white: new Colorizer("\x1B[97m"),
 	green: new Colorizer("\x1B[92m"),
 	red: new Colorizer("\x1B[31m"),
 	blue: new Colorizer("\x1B[34m"),
