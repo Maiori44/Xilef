@@ -40,21 +40,21 @@ class Colorizer {
 }
 
 Colors = {
-	reset: new Colorizer("\x1B[0m"),
-	white: new Colorizer("\x1B[97m"),
-	green: new Colorizer("\x1B[92m"),
-	red: new Colorizer("\x1B[31m"),
-	blue: new Colorizer("\x1B[34m"),
-	yellow: new Colorizer("\x1B[33m"),
-	purple: new Colorizer("\x1B[35m"),
-	cyan: new Colorizer("\x1B[36m"),
-	hblack: new Colorizer("\x1B[40m"),
-	hred: new Colorizer("\x1B[41m"),
-	hgreen: new Colorizer("\x1B[42m"),
-	hyellow: new Colorizer("\x1B[43m"),
-	hblue: new Colorizer("\x1B[44m"),
-	hpurple: new Colorizer("\x1B[45m"),
-	hcyan: new Colorizer("\x1B[46m"),
+	reset: new Colorizer("\033[0m"),
+	white: new Colorizer("\033[97m"),
+	green: new Colorizer("\033[92m"),
+	red: new Colorizer("\033[31m"),
+	blue: new Colorizer("\033[34m"),
+	yellow: new Colorizer("\033[33m"),
+	purple: new Colorizer("\033[35m"),
+	cyan: new Colorizer("\033[36m"),
+	hblack: new Colorizer("\033[40m\033[0m"),
+	hred: new Colorizer("\033[41m\033[0m"),
+	hgreen: new Colorizer("\033[42m\033[0m"),
+	hyellow: new Colorizer("\033[43m\033[0m"),
+	hblue: new Colorizer("\033[44m\033[0m"),
+	hpurple: new Colorizer("\033[45m\033[0m"),
+	hcyan: new Colorizer("\033[46m\033[0m"),
 }
 
 GetPercentual = () => {
