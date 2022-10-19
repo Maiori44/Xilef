@@ -48,13 +48,13 @@ Colors = {
 	yellow: new Colorizer("\033[33m"),
 	purple: new Colorizer("\033[35m"),
 	cyan: new Colorizer("\033[36m"),
-	hblack: new Colorizer("\033[40m\033[0m"),
-	hred: new Colorizer("\033[41m\033[0m"),
-	hgreen: new Colorizer("\033[42m\033[0m"),
-	hyellow: new Colorizer("\033[43m\033[0m"),
-	hblue: new Colorizer("\033[44m\033[0m"),
-	hpurple: new Colorizer("\033[45m\033[0m"),
-	hcyan: new Colorizer("\033[46m\033[0m"),
+	hblack: new Colorizer("\033[40m\033[97m"),
+	hred: new Colorizer("\033[41m\033[97m"),
+	hgreen: new Colorizer("\033[42m\033[97m"),
+	hyellow: new Colorizer("\033[43m\033[97m"),
+	hblue: new Colorizer("\033[44m\033[97m"),
+	hpurple: new Colorizer("\033[45m\033[97m"),
+	hcyan: new Colorizer("\033[46m\033[97m"),
 }
 
 GetPercentual = () => {
